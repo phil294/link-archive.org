@@ -11,6 +11,7 @@ import phil294.ls.api.auth.JWT;
 import phil294.ls.api.model.User;
 import phil294.ls.api.model.UserRepository;
 
+import javax.validation.Valid;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 
@@ -31,7 +32,7 @@ public class LoginController
 	
 	@PostMapping("/login")
 	public ResponseEntity<User> login(
-			@RequestBody User user
+			@RequestBody @Valid User user
 	) throws UnsupportedEncodingException, NoSuchAlgorithmException
 	{
 		

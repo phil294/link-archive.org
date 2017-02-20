@@ -1,5 +1,6 @@
 package phil294.ls.api.auth;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,7 +23,7 @@ public class AuthenticatorInterceptor extends HandlerInterceptorAdapter
 	{
 		String auth = req.getHeader("Authorization");
 		if(auth == null) {
-			resp.setStatus(401);
+			resp.setStatus(HttpStatus.UNAUTHORIZED.value());
 			return false;
 		}
 		String bearer = auth.substring(7);
@@ -36,7 +37,7 @@ public class AuthenticatorInterceptor extends HandlerInterceptorAdapter
 			req.setAttribute("userId", id);
 			return true;
 		} else {
-			resp.setStatus(401);
+			resp.setStatus(HttpStatus.UNAUTHORIZED.value());
 			return false;
 		}
 	}
