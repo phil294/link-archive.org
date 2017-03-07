@@ -17,8 +17,8 @@ import phil294.ls.api.model.*;
  * . --"-"--
  */
 @RestController
-@RequestMapping("/product")
-public class ProductController
+@RequestMapping("/search")
+public class SearchController
 {
 	@Autowired
 	private ProductRepository productRepository;
