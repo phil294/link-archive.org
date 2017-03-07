@@ -24,7 +24,7 @@ public class JWT
 	private static Key getSecretKey()
 	{
 		byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(
-				"3GTNWUZZZo63NVW98gh4NUOT98Q4WUfi98h54TWU3494T8U398G"
+				"3GTNWUZZZo63N67jjj64rh6r6drrQ'QBwdrfi98h!?3494T8U398Gl"
 		);
 		Key key = new SecretKeySpec(apiKeySecretBytes, SignatureAlgorithm.HS512.getJcaName());
 		return key;

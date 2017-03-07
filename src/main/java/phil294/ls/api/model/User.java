@@ -56,12 +56,12 @@ public class User implements Serializable
 		return id;
 	}
 	
-	public void setId(Long id)
+	public void setId(long id)
 	{
 		this.id = id;
 	}
 	
-	public void setId(long id)
+	public void setId(Long id)
 	{
 		this.id = id;
 	}
