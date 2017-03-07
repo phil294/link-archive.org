@@ -1,13 +1,13 @@
 package phil294.ls.api.product;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.ArrayList;
-import java.util.List;
+import phil294.ls.api.model.Product;
+import phil294.ls.api.model.ProductRepository;
 
 /**
  * User: phi
@@ -21,15 +21,14 @@ import java.util.List;
 @RequestMapping("/product")
 public class ProductController
 {
+	@Autowired
+	private ProductRepository productRepository;
 	@GetMapping
-	public ResponseEntity<List<Integer>> getIrgnedwas(
-			//@RequestAttribute("userId") long userId
+	public ResponseEntity getIrgnedwas(
+			//@RequestAttribute("userId") int userId
 	)
 	{
-		List<Integer> ret = new ArrayList<>();
-		ret.add(2);
-		ret.add(4);
-		ret.add(6);
-		return new ResponseEntity<>(ret, HttpStatus.OK);
+		Iterable<Product> products = productRepository.findAll();
+		return new ResponseEntity<>(products, HttpStatus.OK);
 	}
 }

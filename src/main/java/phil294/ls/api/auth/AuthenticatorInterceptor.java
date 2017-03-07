@@ -27,7 +27,7 @@ public class AuthenticatorInterceptor extends HandlerInterceptorAdapter
 			return false;
 		}
 		String bearer = auth.substring(7);
-		long id = - 1;
+		int id = - 1;
 		try {
 			id = JWT.getId(bearer);
 		} catch(Exception e) {

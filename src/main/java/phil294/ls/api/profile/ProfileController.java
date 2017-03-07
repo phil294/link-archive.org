@@ -28,7 +28,7 @@ public class ProfileController
 	
 	@GetMapping
 	public ResponseEntity<String> getIrgnedwas(
-			@RequestAttribute("userId") long userId)
+			@RequestAttribute("userId") int userId)
 	{
 		User user = userRepository.findOne(userId);
 		return new ResponseEntity<>("hi " + user.getName(), HttpStatus.OK);

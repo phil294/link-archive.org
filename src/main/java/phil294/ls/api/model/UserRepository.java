@@ -10,7 +10,7 @@ import org.springframework.data.repository.CrudRepository;
  * . /)___)
  * . --"-"--
  */
-public interface UserRepository extends CrudRepository<User, Long>
+public interface UserRepository extends CrudRepository<User, Integer>
 {
 	User findByNameAndPassword(String name, String password); // todo dont return pass
 	

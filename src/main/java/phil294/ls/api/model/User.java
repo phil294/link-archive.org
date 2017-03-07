@@ -17,11 +17,11 @@ import java.io.Serializable;
 public class User implements Serializable
 {
 	
-	public static final long ADMIN_ID = 1;
+	public static final int ADMIN_ID = 1;
 	
 	@Id
 	@GeneratedValue
-	private Long id;
+	private Integer id;
 	@Size(min = 1, max = 64)
 	private String name;
 	@Size(min = 1, max = 64)
@@ -33,7 +33,7 @@ public class User implements Serializable
 	{
 	} // JPA // todo
 	
-	public User(long id)
+	public User(int id)
 	{ // todo
 		this.id = id;
 	}
@@ -51,17 +51,17 @@ public class User implements Serializable
 		this.password = password;
 	}
 	
-	public long getId()
+	public int getId()
 	{
 		return id;
 	}
 	
-	public void setId(long id)
+	public void setId(Integer id)
 	{
 		this.id = id;
 	}
 	
-	public void setId(Long id)
+	public void setId(int id)
 	{
 		this.id = id;
 	}

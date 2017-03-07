@@ -30,7 +30,7 @@ public class JWT
 		return key;
 	}
 	
-	public static String create(long id)
+	public static String create(int id)
 	{
 		
 		Map<String, Object> claims = new HashMap<>();
@@ -45,13 +45,13 @@ public class JWT
 		return compactJws;
 	}
 	
-	public static long getId(String compactJws) throws Exception
+	public static int getId(String compactJws) throws Exception
 	{ // throws: make unchecked checked
 		Jws<Claims> claims = Jwts.parser()
 				.setSigningKey(getSecretKey())
 				.parseClaimsJws(compactJws);
 		
-		long id = Long.parseLong(claims.getBody().get("id").toString());
+		int id = Integer.parseInt(claims.getBody().get("id").toString());
 		return id;
 	}
 }
