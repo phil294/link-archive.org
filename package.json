@@ -1,0 +1,43 @@
+{
+  "name": "ls_web",
+  "version": "0.1.0",
+  "license": "MIT",
+  "angular-cli": {},
+  "scripts": {
+    "start": "ng serve",
+    "lint": "tslint \"src/**/*.ts\""
+  },
+  "private": true,
+  "dependencies": {
+    "@angular/common": "^2.4.9",
+    "@angular/compiler": "^2.4.9",
+    "@angular/compiler-cli": "^2.4.1",
+    "@angular/core": "^2.4.9",
+    "@angular/flex-layout": "^2.0.0-rc.1",
+    "@angular/forms": "^2.4.9",
+    "@angular/http": "^2.4.9",
+    "@angular/platform-browser": "^2.4.9",
+    "@angular/platform-browser-dynamic": "^2.4.9",
+    "@angular/router": "^3.4.9",
+    "@ngtools/webpack": "^1.2.12",
+    "core-js": "^2.4.1",
+    "normalize.css": "^5.0.0",
+    "rxjs": "^5.2.0",
+    "ts-helpers": "^1.1.2",
+    "ts-node": "^2.0.0",
+    "tslint": "^4.5.1",
+    "typescript": "^2.1.4",
+    "webdriver-manager": "^11.1.0",
+    "webpack": "^2.2.1",
+    "zone.js": "^0.7.7"
+  },
+  "devDependencies": {
+	"@angular/cli": "1.0.0-rc.1",
+    "@angular/compiler-cli": "2.4.9",
+    "@types/node": "^7.0.5",
+    "codelyzer": "~3.0.0-beta.3",
+    "ts-node": "2.1.0",
+    "typescript": "~2.2.1",
+    "webdriver-manager": "12.0.2"
+  }
+}
