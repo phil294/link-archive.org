@@ -27,7 +27,7 @@ public class Product implements Serializable // todo seri notw?
 	private Integer user;
 	@Size(min = 1, max = 64)
 	private String name;
-	@Size(min = 1, max = 64)
+	@Size(min = 1, max = 255)
 	private String description;
 	@Size(min = 1, max = 64)
 	private String picture;
