@@ -1,3 +1,6 @@
 /** VARS */
+#result {
+  border-collapse: collapse;
+  border: 1px black; }
 
 /*# sourceMappingURL=products.component.css.map */

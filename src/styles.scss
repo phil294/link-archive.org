@@ -7,17 +7,56 @@
 html, body {
   padding: 0;
   margin: 0;
-  color: $test;
-}
-
-html {
   height: 100%;
+
 }
 
 body {
-  height: 100%;
+  font-family: 'Jaldi', sans-serif;
+  font-size: 16.5px;
 }
 
 h1, h2, h3, h4, h5, h6 {
   margin: 0;
+  text-transform: uppercase;
+}
+
+.padding {
+  padding: 1vh;
+}
+
+.padding-lg {
+  padding: 2vh;
+}
+
+.padding-xl {
+  padding: 4vh;
+}
+
+.margin {
+  margin: 1vh;
+}
+
+.margin-lg {
+  margin: 2vh;
+}
+
+.margin-xl {
+  margin: 4vh;
+}
+
+.background-image {
+  background-image: url('assets/car.png');
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.box {
+  border: $border;
+  box-shadow: $shadow;
+  border-radius: 4px;
+  background-color: rgba($smoke, 0.65);
+  margin: 1.5%;
 }

@@ -1,23 +1,27 @@
-<h3>products</h3>
-<table id="result" *ngIf="!empty(searchResponse.products)">
-	<tr>
-		<td>Name</td>
-		<td *ngFor="let attribute of searchResponse.attributes">
-			{{attribute.name}}: {{attribute.description}}
-		</td>
-	</tr>
-	<tr *ngFor="let product of searchResponse.products">
-		<td>
-			{{product.name}}: {{product.description}}.
-		</td>
-		<td *ngFor="let attribute of searchResponse.attributes">
-			<div *ngIf="!empty(product.productData.get(attribute.id))">
-				{{ product.productData.get(attribute.id).value }} {{ attribute.unit }}
-			</div>
-			<div *ngIf="empty(product.productData.get(attribute.id))">
-				?
-			</div>
-		</td>
-	</tr>
-</table>
-<div *ngIf="empty(searchResponse.products)">No results</div>
+<div fxLayout="column" fxLayoutAlign="center center">
+	<div class="box padding">
+		<h3 class="padding">products</h3>
+		<table id="result" *ngIf="!empty(searchResponse.products)" class="padding">
+			<tr class="padding">
+				<th class="padding">Name</th>
+				<th *ngFor="let attribute of searchResponse.attributes" class="padding">
+					{{attribute.name}}: {{attribute.description}}
+				</th>
+			</tr>
+			<tr *ngFor="let product of searchResponse.products">
+				<td class="padding">
+					{{product.name}}: {{product.description}}.
+				</td>
+				<td *ngFor="let attribute of searchResponse.attributes" class="padding">
+					<div *ngIf="!empty(product.productData.get(attribute.id))">
+						{{ product.productData.get(attribute.id).value }} {{ attribute.unit }}
+					</div>
+					<div *ngIf="empty(product.productData.get(attribute.id))">
+						?
+					</div>
+				</td>
+			</tr>
+		</table>
+		<div *ngIf="empty(searchResponse.products)">No results</div>
+	</div>
+</div>

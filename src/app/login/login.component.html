@@ -4,5 +4,9 @@
 	<input type="text" id="name" name="name" [(ngModel)]="user.name"/>
 	<label for="password">Password</label>
 	<input type="password" id="password" name="password" [(ngModel)]="user.password"/>
-	<input type="submit" value="Login"/>
+	<p *ngIf="invalid">Login incorrect!</p>
+	<div class="padding">
+		<input type="submit" value="Login" [disabled]="loading"/>
+		<p *ngIf="loading">loading...</p>
+	</div>
 </form>

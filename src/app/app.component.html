@@ -1,1 +1,13 @@
-<router-outlet></router-outlet>
+<div id="container" class="background-image">
+	<div id="header" fxLayout="row" fxLayoutAlign="center center">
+		<div fxFlex>
+		</div>
+		<div fxFlex="20%" fxLayoutAlign="end center">
+			<span fxHide fxShow.gt-xs>Logged in as {{currentUser.name}}. </span> <!-- todo fxshow buggy -->
+			<a [routerLink]="['/login']" class="padding-lg">Logout</a>
+		</div>
+	</div>
+	<div id="content">
+		<router-outlet></router-outlet>
+	</div>
+</div>

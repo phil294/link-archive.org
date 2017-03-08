@@ -19,12 +19,12 @@ export class ProductsComponent implements OnInit {
 	searchResponse: SearchResponse = new SearchResponse;
 	empty = empty;
 
-	constructor(private productsService: SearchService) {
+	constructor(private searchService: SearchService) {
 
 	}
 
 	ngOnInit(): void {
-		this.productsService.search()
+		this.searchService.search()
 			.subscribe((products: any) => this.searchResponse = products);
 	}
 

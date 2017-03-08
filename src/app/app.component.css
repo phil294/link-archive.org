@@ -1,1 +1,12 @@
+/** VARS */
+#container {
+  height: 100%; }
+
+#header {
+  height: 7vh;
+  background: linear-gradient(rgba(245, 245, 245, 0.9), rgba(245, 245, 245, 0.7), rgba(245, 245, 245, 0)); }
+
+#content {
+  height: calc(100% - 7vh); }
+
 /*# sourceMappingURL=app.component.css.map */
