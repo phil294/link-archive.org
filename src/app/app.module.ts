@@ -21,12 +21,14 @@ import {ProductsComponent} from "./products/products.component";
 import {LoginComponent} from "./login/login.component";
 import {ProfileComponent} from "./profile/profile.component";
 import {SearchService} from "./products.service";
+import {EditableValueDialogComponent} from "./products/editable-value-dialog/editable-value-dialog.component";
 
 @NgModule({
 	declarations: [
 		AppComponent,
 		CheckboxComponent,
 		ProductsComponent,
+		EditableValueDialogComponent,
 		LoginComponent,
 		ProfileComponent,
 	],

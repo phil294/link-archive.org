@@ -47,4 +47,11 @@ h1, h2, h3, h4, h5, h6 {
   background-color: rgba(245, 245, 245, 0.65);
   margin: 1.5%; }
 
+.clickable {
+  cursor: pointer !important;
+  text-shadow: 4px 3px 5px #aaaaaa; }
+
+.hoverable:hover, .clickable:hover {
+  text-shadow: 4px 3px 5px #484848; }
+
 /*# sourceMappingURL=styles.css.map */

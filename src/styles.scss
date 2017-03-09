@@ -60,3 +60,15 @@ h1, h2, h3, h4, h5, h6 {
   background-color: rgba($smoke, 0.65);
   margin: 1.5%;
 }
+
+.clickable {
+  @extend .hoverable;
+  cursor: pointer !important;
+  text-shadow: $shadow;
+}
+
+.hoverable:hover {
+  //border: $border;
+  //background-color: $darksmoke;
+  text-shadow: $shadow_dark;
+}

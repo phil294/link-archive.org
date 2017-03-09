@@ -1,4 +1,4 @@
-import {value} from "../helpers";
+import {val} from "../helpers";
 /**
  * User: phi
  * Date: 07.03.17
@@ -16,7 +16,7 @@ export class Attribute {
 
 	static fromJsons(attributes_json: any): Attribute[] {
 		let attributes: Attribute[] = [];
-		if(value(attributes_json)) {
+		if(val(attributes_json)) {
 			for(let attribute_json of attributes_json) {
 				attributes.push(Attribute.fromJson(attribute_json));
 			}

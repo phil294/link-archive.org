@@ -1,27 +1,31 @@
 <div fxLayout="column" fxLayoutAlign="center center">
 	<div class="box padding">
 		<h3 class="padding">products</h3>
-		<table id="result" *ngIf="value(searchResponse.products)" class="padding">
+		<table id="result" *ngIf="val(searchResponse.products); else noResultsTempl; let products" class="padding">
 			<tr class="padding">
 				<th class="padding">Name</th>
 				<th *ngFor="let attribute of searchResponse.attributes" class="padding">
 					{{attribute.name}}: {{attribute.description}}
 				</th>
 			</tr>
-			<tr *ngFor="let product of searchResponse.products">
+			<tr *ngFor="let product of products">
 				<td class="padding">
-					{{product.name}}: {{product.description}}.
+					<editable-value-dialog
+							[value]="product.name"
+							(valueChanged)="changeProductName(product, $event)">
+					</editable-value-dialog>
 				</td>
 				<td *ngFor="let attribute of searchResponse.attributes" class="padding">
-					<div *ngIf="value(product.productData.get(attribute.id)); else noProductValue; let productValue">
-						{{ productValue.value }} {{ attribute.unit }}
-					</div>
-					<ng-template #noProductValue>
-						?
-					</ng-template>
+					<editable-value-dialog
+							[value]="val(product.productData.get(attribute.id))? product.productData.get(attribute.id).value : ''"
+							[unit]="attribute.unit"
+							(valueChanged)="changeProductValue(product, attribute, $event)">
+					</editable-value-dialog>
 				</td>
 			</tr>
 		</table>
-		<div *ngIf="!value(searchResponse.products)">No results</div>
+		<ng-template #noResultsTempl>
+			No results
+		</ng-template>
 	</div>
 </div>

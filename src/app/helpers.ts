@@ -6,7 +6,7 @@
  * --"-"--
  */
 /** returns false or v [ = true ] */
-export function value(v) {
+export function val(v) {
 	let type = typeof v;
 	if (type === 'undefined')
 		return false;

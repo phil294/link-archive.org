@@ -1,0 +1,17 @@
+<!-- p -->
+<div (click)="editDialog=true" *ngIf="!editDialog" class="clickable">
+	<p *ngIf="val(value); else noValueTempl">
+		{{ value }} {{ unit }}
+	</p>
+	<ng-template #noValueTempl>
+		?
+	</ng-template>
+</div>
+<!-- input -->
+<div *ngIf="editDialog">
+	<label>
+		<input type="text" value="{{value}}" #valueInput
+		   (blur)="editDialog=false ; valueChanged.emit(valueInput.value);"/>
+		{{ unit }}
+	</label>
+</div>
