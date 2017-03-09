@@ -7,7 +7,7 @@
  */
 import {Component, OnInit} from "@angular/core";
 import {SearchService} from "../products.service";
-import {empty} from "../helpers";
+import {value} from "../helpers";
 import {SearchResponse} from "../model/search-response";
 
 @Component({
@@ -17,7 +17,7 @@ import {SearchResponse} from "../model/search-response";
 export class ProductsComponent implements OnInit {
 
 	searchResponse: SearchResponse = new SearchResponse;
-	empty = empty;
+	value = value;
 
 	constructor(private searchService: SearchService) {
 

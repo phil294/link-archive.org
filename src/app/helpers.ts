@@ -5,33 +5,33 @@
  * /)___)
  * --"-"--
  */
-
-export function empty(v) {
+/** returns false or v [ = true ] */
+export function value(v) {
 	let type = typeof v;
 	if (type === 'undefined')
-		return true;
-	if (type === 'boolean')
 		return false;
+	if (type === 'boolean')
+		return v;
 	if (v === null)
-		return true;
+		return false;
 	if (v == undefined)
-		return true;
+		return false;
 	if (v instanceof Array) {
 		if (v.length < 1)
-			return true;
+			return false;
 	}
 	else if (type === 'string') {
 		if (v.length < 1)
-			return true;
+			return false;
 		else if (parseInt(v) === 0)
-			return true;
+			return false;
 	}
 	else if (type === 'object') {
 		if (Object.keys(v).length < 1)
-			return true;
+			return false;
 	}
 	else if (type === 'number') {
-		return false;
+		return v;
 	}
-	return false;
+	return v;
 }

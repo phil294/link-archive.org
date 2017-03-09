@@ -1,7 +1,7 @@
 <div fxLayout="column" fxLayoutAlign="center center">
 	<div class="box padding">
 		<h3 class="padding">products</h3>
-		<table id="result" *ngIf="!empty(searchResponse.products)" class="padding">
+		<table id="result" *ngIf="value(searchResponse.products)" class="padding">
 			<tr class="padding">
 				<th class="padding">Name</th>
 				<th *ngFor="let attribute of searchResponse.attributes" class="padding">
@@ -13,15 +13,15 @@
 					{{product.name}}: {{product.description}}.
 				</td>
 				<td *ngFor="let attribute of searchResponse.attributes" class="padding">
-					<div *ngIf="!empty(product.productData.get(attribute.id))">
-						{{ product.productData.get(attribute.id).value }} {{ attribute.unit }}
+					<div *ngIf="value(product.productData.get(attribute.id)); else noProductValue; let productValue">
+						{{ productValue.value }} {{ attribute.unit }}
 					</div>
-					<div *ngIf="empty(product.productData.get(attribute.id))">
+					<ng-template #noProductValue>
 						?
-					</div>
+					</ng-template>
 				</td>
 			</tr>
 		</table>
-		<div *ngIf="empty(searchResponse.products)">No results</div>
+		<div *ngIf="!value(searchResponse.products)">No results</div>
 	</div>
 </div>

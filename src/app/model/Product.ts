@@ -1,5 +1,5 @@
 import {ProductValue} from "./ProductValue";
-import {empty} from "../helpers";
+import {value} from "../helpers";
 /**
  * User: phi
  * Date: 07.03.17
@@ -26,7 +26,7 @@ export class Product {
 		let product = Object.assign(new Product(), product_json);
 		let productData_json = product_json.productData;
 		let productData = new Map<number, ProductValue>();
-		if(!empty(productData_json)) {
+		if(value(productData_json)) {
 			for(let key_attribute in productData_json) {
 				if(productData_json.hasOwnProperty(key_attribute)) {
 					let productValue_json = productData_json[key_attribute];
