@@ -3,6 +3,7 @@ package phil294.ls.api.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.HashMap;
@@ -24,10 +25,11 @@ public class Product implements Serializable // todo seri notw?
 	@GeneratedValue
 	private Integer id;
 	@JsonIgnore // geht den endnutzer nichts an
+	@Min(1)
 	private Integer user;
 	@Size(min = 1, max = 64)
 	private String name;
-	@Size(min = 1, max = 255)
+	@Size(min = 0, max = 255)
 	private String description;
 	@Size(min = 1, max = 64)
 	private String picture;
@@ -39,6 +41,21 @@ public class Product implements Serializable // todo seri notw?
 	
 	///////////////////////////////
 	
+	public void setUser(Integer user)
+	{
+		this.user = user;
+	}
+	
+	public Integer getId()
+	{
+		return id;
+	}
+	
+	public void setId(Integer id)
+	{
+		this.id = id;
+	}
+	
 	public Map<Integer, ProductValue> getProductData()
 	{
 		return productData;
@@ -47,16 +64,6 @@ public class Product implements Serializable // todo seri notw?
 	public void setProductData(Map<Integer, ProductValue> productData)
 	{
 		this.productData = productData;
-	}
-	
-	public int getId()
-	{
-		return id;
-	}
-	
-	public void setId(int id)
-	{
-		this.id = id;
 	}
 	
 	public int getUser()

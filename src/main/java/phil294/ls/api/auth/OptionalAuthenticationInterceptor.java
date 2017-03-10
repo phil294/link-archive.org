@@ -11,28 +11,29 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * User: phi
- * Date: 17.02.17
+ * Date: 10.03.2017
  * .  .___.
  * .  {o,o}
  * . /)___)
  * . --"-"--
  */
-public class AuthenticatorInterceptor extends HandlerInterceptorAdapter
+public class OptionalAuthenticationInterceptor extends HandlerInterceptorAdapter
 {
-	@Autowired private UserRepository userRepository;
+	@Autowired
+	private UserRepository userRepository;
 	
 	@Override
 	public boolean preHandle(
 			HttpServletRequest req, HttpServletResponse resp, Object handler)
 	{
-		String auth = req.getHeader("Authorization");
+		String auth = req.getHeader("Authorization"); // todo duplicate code
 		if(auth == null) {
 			resp.setStatus(HttpStatus.UNAUTHORIZED.value());
 			return false;
 		}
 		if(auth.length() < 7) {
-			resp.setStatus(HttpStatus.UNAUTHORIZED.value());
-			return false;
+			req.setAttribute("user", new User());
+			return true;
 		}
 		String bearer = auth.substring(7);
 		int id = - 1;
@@ -44,10 +45,9 @@ public class AuthenticatorInterceptor extends HandlerInterceptorAdapter
 		if(id > 0) {
 			User user = userRepository.findOne(id);
 			req.setAttribute("user", user);
-			return true;
 		} else {
-			resp.setStatus(HttpStatus.UNAUTHORIZED.value());
-			return false;
+			req.setAttribute("user", new User());
 		}
+		return true;
 	}
 }

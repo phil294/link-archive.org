@@ -16,9 +16,6 @@ import java.io.Serializable;
 @Table(name = "users")
 public class User implements Serializable
 {
-	
-	public static final int ADMIN_ID = 1;
-	
 	@Id
 	@GeneratedValue
 	private Integer id;
@@ -28,8 +25,9 @@ public class User implements Serializable
 	private String password;
 	@Transient // /@JsonIgnore todo ?
 	private String token;
+	private Boolean admin = false;
 	
-	protected User()
+	public User()
 	{
 	} // JPA // todo
 	
@@ -40,6 +38,16 @@ public class User implements Serializable
 	
 	///////////////////////////
 	
+	
+	public Boolean getAdmin()
+	{
+		return admin;
+	}
+	
+	public void setAdmin(Boolean admin)
+	{
+		this.admin = admin;
+	}
 	
 	public String getPassword()
 	{
@@ -56,12 +64,12 @@ public class User implements Serializable
 		return id;
 	}
 	
-	public void setId(Integer id)
+	public void setId(int id)
 	{
 		this.id = id;
 	}
 	
-	public void setId(int id)
+	public void setId(Integer id)
 	{
 		this.id = id;
 	}
