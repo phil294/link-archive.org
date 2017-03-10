@@ -20,8 +20,9 @@ import {CheckboxComponent} from "./checkbox/checkbox.component";
 import {ProductsComponent} from "./products/products.component";
 import {LoginComponent} from "./login/login.component";
 import {ProfileComponent} from "./profile/profile.component";
-import {SearchService} from "./products.service";
+import {SearchService} from "./search.service";
 import {EditableValueDialogComponent} from "./products/editable-value-dialog/editable-value-dialog.component";
+import {ProductService} from "./product.service";
 
 @NgModule({
 	declarations: [
@@ -42,14 +43,15 @@ import {EditableValueDialogComponent} from "./products/editable-value-dialog/edi
 	],
 	providers: [
 		AuthGuard,
-		AuthenticationService,
-		GlobalService,
-		SearchService,
 		{
 			provide: HttpApi,
 			useFactory: httpApiFactory,
 			deps: [XHRBackend, RequestOptions, GlobalService]
 		},
+		AuthenticationService,
+		GlobalService,
+		SearchService,
+		ProductService,
 	],
 	bootstrap: [AppComponent]
 })

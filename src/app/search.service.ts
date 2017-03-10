@@ -4,7 +4,7 @@
  *  {o,o}
  * /)___)
  * --"-"--
- * 20.02.17
+ * 10.03.17
  */
 import {Injectable} from "@angular/core";
 import "rxjs/add/operator/map";

@@ -23,6 +23,17 @@
 					</editable-value-dialog>
 				</td>
 			</tr>
+			<tr class="padding">
+				<i class="material-icons clickable" (click)="showAddDialog=true" *ngIf="!showAddDialog">add_box</i>
+				<i class="material-icons clickable" (click)="showAddDialog=false" *ngIf="showAddDialog">remove_circle</i>
+				<div *ngIf="showAddDialog">
+					<form (ngSubmit)="showAddDialog=false ; addProduct(newProduct)">
+						<label>Add new entry:
+							<input type="text" [(ngModel)]="newProduct.name" name="name" /></label>
+						<input type="submit" value="Ok" />
+					</form>
+				</div>
+			</tr>
 		</table>
 		<ng-template #noResultsTempl>
 			No results

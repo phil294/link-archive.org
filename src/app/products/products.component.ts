@@ -6,11 +6,12 @@
  * --"-"--
  */
 import {Component, OnInit} from "@angular/core";
-import {SearchService} from "../products.service";
+import {SearchService} from "../search.service";
 import {val} from "../helpers";
 import {SearchResponse} from "../model/search-response";
 import {Product} from "../model/Product";
 import {Attribute} from "../model/Attribute";
+import {ProductService} from "../product.service";
 
 @Component({
 	templateUrl: './products.component.html',
@@ -19,9 +20,10 @@ import {Attribute} from "../model/Attribute";
 export class ProductsComponent implements OnInit {
 
 	searchResponse: SearchResponse = new SearchResponse;
+	newProduct: Product = new Product();
 	val = val;
 
-	constructor(private searchService: SearchService) {
+	constructor(private searchService: SearchService, private productService: ProductService) {
 
 	}
 
@@ -34,7 +36,9 @@ export class ProductsComponent implements OnInit {
 		if(product.name == name) {
 			return; // no change
 		}
-		console.dir("change product id "+product.id+" name to "+name);
+		product.name = name;
+		this.productService.changeProduct(product)
+			.subscribe();
 	}
 
 	changeProductValue(product: Product, attribute: Attribute, value: string) {
@@ -45,7 +49,16 @@ export class ProductsComponent implements OnInit {
 		if(previousValue == value) {
 			return; // no change
 		}
-		console.dir("change prod "+product.id+" attr "+attribute.id+" to "+value);
+		product.productData.get(attribute.id).value = value;
+		this.productService.changeProduct(product)
+			.subscribe();
 	}
 
+	addProduct(product: Product):void {
+		this.productService.addProduct(product)
+			.subscribe((addedProduct: Product) => {
+				this.newProduct = new Product();
+				this.searchResponse.products.push(addedProduct);
+			});
+	}
 }
