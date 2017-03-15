@@ -87,4 +87,17 @@ public class ProductController
 		productRepository.save(product);
 		return new ResponseEntity<>(product, HttpStatus.OK);
 	}
+	
+	@DeleteMapping("/{productId}") // notwendig weil nicht komplettes objekt übergeben da attributmenge lückenhaft und evlt sehr groß <-- widerspricht rest todo konflikt
+	public ResponseEntity deleteProduct(
+			@RequestAttribute("user") User user,
+			@PathVariable("productId") Integer productId
+	)
+	{
+		if( ! user.getAdmin()) {
+			return new ResponseEntity<Product>(HttpStatus.UNAUTHORIZED);
+		}
+		productRepository.delete(productId);
+		return new ResponseEntity(HttpStatus.OK);
+	}
 }
