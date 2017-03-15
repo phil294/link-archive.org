@@ -25,9 +25,7 @@ export class ProductService {
 		return this.http.put("/product", JSON.stringify(product))
 			.map((resp:Response) => Product.fromJson(resp.json()));
 	}
-	/*
 	changeProductValue(productId: number, attributeId: number, newValue: string) {
 		return this.http.put(`/product/${productId}/attribute/${attributeId}`, newValue)
 	}
-	*/
 }

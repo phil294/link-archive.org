@@ -31,6 +31,21 @@ export class ProductsComponent implements OnInit {
 	ngOnInit(): void {
 		this.searchService.search()
 			.subscribe((products: any) => this.searchResponse = products);
+/*		let map = new Map;
+		map.set("a", "a");
+		map.set("b", "b");
+		this.test = {
+			object: {
+				a: "a",
+				b: "b",
+				c: false,
+				d: true
+			},
+			array: [ "a","b" ],
+				literal: "ab",
+			map: map,
+			null: null
+		}; */
 	}
 
 	changeProductName(product: Product, name: string) {
@@ -43,17 +58,25 @@ export class ProductsComponent implements OnInit {
 	}
 
 	changeProductValue(product: Product, attribute: Attribute, value: string) {
-		let previousValue = "";
 		if(val(product.productData[attribute.id])) {
-			previousValue = product.productData[attribute.id].value;
+			let previousValue = product.productData[attribute.id].value;
+			if(previousValue == value) {
+				return; // no change
+			}
+		} else {
+			// no value yet
+			if(value=="") {
+				return;
+			}
+			product.productData[attribute.id] = new ProductValue();
 		}
-		if(previousValue == value) {
-			return; // no change
-		}
-		let productValue = new ProductValue();
-		productValue.value = value;
-		product.productData[attribute.id] = productValue;
-		this.productService.changeProduct(product)
+		//let productValue = new ProductValue();
+		//productValue.value = value;
+		//product.productData[attribute.id] = productValue;
+		//this.productService.changeProduct(product)
+		//	.subscribe();
+		product.productData[attribute.id].value = value;
+		this.productService.changeProductValue(product.id, attribute.id, value)
 			.subscribe();
 	}
 

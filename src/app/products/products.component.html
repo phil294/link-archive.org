@@ -1,7 +1,7 @@
 <div fxLayout="column" fxLayoutAlign="center center">
 	<div class="box padding">
 		<h3 class="padding">products</h3>
-		<table id="result" *ngIf="val(searchResponse.products); else noResultsTempl" class="padding">
+		<table id="result" *ngIf="val(searchResponse.products); else noResultsTempl; let products" class="padding">
 			<tr class="padding">
 				<th class="padding">Name</th>
 				<th *ngFor="let attribute of searchResponse.attributes" class="padding">
