@@ -4,10 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import phil294.ls.api.model.AttributeRepository;
-import phil294.ls.api.model.Product;
-import phil294.ls.api.model.ProductRepository;
-import phil294.ls.api.model.User;
+import phil294.ls.api.model.*;
 
 import javax.validation.Valid;
 
@@ -58,32 +55,36 @@ public class ProductController
 	)
 	{
 		if( ! user.getAdmin()) {
-			return new ResponseEntity<Product>(HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		Product product = new Product();
 		product.setName(input.getName()); // todo duplicate code
 		product.setDescription(input.getDescription());
 		product.setPicture(input.getPicture());
 		product.setId(input.getId());
+		product.setProductData(input.getProductData());
 		
 		product.setUser(user.getId());
 		productRepository.save(product);
 		return new ResponseEntity<>(product, HttpStatus.OK);
 	}
-	/*
-	@PutMapping("/{productId}/attribute/{attributeId}")
+	
+	@PutMapping("/{productId}/attribute/{attributeId}") // notwendig weil nicht komplettes objekt übergeben da attributmenge lückenhaft und evlt sehr groß <-- widerspricht rest todo konflikt
 	public ResponseEntity<Product> updateProductValue(
 			@RequestAttribute("user") User user,
-			@PathParam("productId") int productId,
-			@PathParam("attributeId") int attributeId,
+			@PathVariable("productId") Integer productId,
+			@PathVariable("attributeId") Integer attributeId,
 			@RequestBody String newValue
 	)
 	{
 		if( ! user.getAdmin()) {
 			return new ResponseEntity<Product>(HttpStatus.UNAUTHORIZED);
 		}
+		Product product = productRepository.findOne(productId);
+		ProductValue productValue = new ProductValue();
+		productValue.setValue(newValue);
+		product.getProductData().put(attributeId, productValue);
 		productRepository.save(product);
 		return new ResponseEntity<>(product, HttpStatus.OK);
 	}
-	*/
 }

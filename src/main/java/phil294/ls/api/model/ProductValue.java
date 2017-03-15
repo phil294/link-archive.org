@@ -1,5 +1,6 @@
 package phil294.ls.api.model;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.sql.Timestamp;
 
@@ -14,22 +15,12 @@ import java.sql.Timestamp;
 @Embeddable
 public class ProductValue
 {
-	private Integer id;
 	private String value;
+	@Column(insertable = false)
 	private Timestamp submitted;
-	private Integer interest;
+	private Integer interest = 1;
 	
 	/////////////////
-	
-	public int getId()
-	{
-		return id;
-	}
-	
-	public void setId(int id)
-	{
-		this.id = id;
-	}
 	
 	public String getValue()
 	{
