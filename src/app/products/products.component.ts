@@ -12,6 +12,7 @@ import {SearchResponse} from "../model/search-response";
 import {Product} from "../model/Product";
 import {Attribute} from "../model/Attribute";
 import {ProductService} from "../product.service";
+import {ProductValue} from "../model/ProductValue";
 
 @Component({
 	templateUrl: './products.component.html',
@@ -43,13 +44,15 @@ export class ProductsComponent implements OnInit {
 
 	changeProductValue(product: Product, attribute: Attribute, value: string) {
 		let previousValue = "";
-		if(val(product.productData.get(attribute.id))) {
-			previousValue = product.productData.get(attribute.id).value;
+		if(val(product.productData[attribute.id])) {
+			previousValue = product.productData[attribute.id].value;
 		}
 		if(previousValue == value) {
 			return; // no change
 		}
-		product.productData.get(attribute.id).value = value;
+		let productValue = new ProductValue();
+		productValue.value = value;
+		product.productData[attribute.id] = productValue;
 		this.productService.changeProduct(product)
 			.subscribe();
 	}

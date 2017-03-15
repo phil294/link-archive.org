@@ -1,5 +1,3 @@
-import {ProductValue} from "./ProductValue";
-import {val} from "../helpers";
 /**
  * User: phi
  * Date: 07.03.17
@@ -13,7 +11,8 @@ export class Product {
 	name: string;
 	description: string;
 	picture: string;
-	productData: Map<number, ProductValue>; // <attributeId, prodVal>
+	//productData: Map<number, ProductValue> = new Map(); // <attributeId, prodVal>
+	productData: Object;
 
 	static fromJsons(products_json: any): Product[] {
 		let products: Product[] = [];
@@ -24,7 +23,7 @@ export class Product {
 	}
 	static fromJson(product_json: any): Product {
 		let product = Object.assign(new Product(), product_json);
-		let productData_json = product_json.productData;
+	/*	let productData_json = product_json.productData;
 		let productData = new Map<number, ProductValue>();
 		if(val(productData_json)) {
 			for(let key_attribute in productData_json) {
@@ -35,7 +34,7 @@ export class Product {
 				}
 			}
 		}
-		product.productData = productData;
+		product.productData = productData; */
 		return product;
 	}
 }

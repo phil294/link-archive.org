@@ -1,14 +1,14 @@
 <div fxLayout="column" fxLayoutAlign="center center">
 	<div class="box padding">
 		<h3 class="padding">products</h3>
-		<table id="result" *ngIf="val(searchResponse.products); else noResultsTempl; let products" class="padding">
+		<table id="result" *ngIf="val(searchResponse.products); else noResultsTempl" class="padding">
 			<tr class="padding">
 				<th class="padding">Name</th>
 				<th *ngFor="let attribute of searchResponse.attributes" class="padding">
 					{{attribute.name}}: {{attribute.description}}
 				</th>
 			</tr>
-			<tr *ngFor="let product of products">
+			<tr *ngFor="let product of searchResponse.products">
 				<td class="padding">
 					<editable-value-dialog
 							[value]="product.name"
@@ -17,7 +17,7 @@
 				</td>
 				<td *ngFor="let attribute of searchResponse.attributes" class="padding">
 					<editable-value-dialog
-							[value]="val(product.productData.get(attribute.id))? product.productData.get(attribute.id).value : ''"
+							[value]="val(product.productData[attribute.id])? product.productData[attribute.id].value : ''"
 							[unit]="attribute.unit"
 							(valueChanged)="changeProductValue(product, attribute, $event)">
 					</editable-value-dialog>
