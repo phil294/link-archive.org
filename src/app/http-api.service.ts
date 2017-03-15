@@ -76,7 +76,7 @@ export class HttpApi extends Http {
 			if (res.status === 401 || res.status === 403) {
 				// not authd
 			} else {
-				alert("an error happened"); //////todo
+				alert("Server error"); //////todo
 			}
 			return Observable.throw(res);
 		};

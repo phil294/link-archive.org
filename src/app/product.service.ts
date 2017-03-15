@@ -26,6 +26,9 @@ export class ProductService {
 			.map((resp:Response) => Product.fromJson(resp.json()));
 	}
 	changeProductValue(productId: number, attributeId: number, newValue: string) {
-		return this.http.put(`/product/${productId}/attribute/${attributeId}`, newValue)
+		return this.http.put(`/product/${productId}/attribute/${attributeId}`, newValue);
+	}
+	deleteProduct(productId: number) {
+		return this.http.delete(`/product/${productId}`);
 	}
 }

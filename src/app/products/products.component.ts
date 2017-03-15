@@ -87,4 +87,14 @@ export class ProductsComponent implements OnInit {
 				this.searchResponse.products.push(addedProduct);
 			});
 	}
+
+	deleteProduct(product: Product): void {
+		if(!confirm("Delete product '"+product.name+"'?")) {
+			return;
+		}
+		this.productService.deleteProduct(product.id)
+			.subscribe(wat => {
+				this.searchResponse.products = this.searchResponse.products.filter(p => p.id != product.id); // remove successfully deleted item
+			});
+	}
 }

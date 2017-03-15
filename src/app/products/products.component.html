@@ -9,7 +9,8 @@
 				</th>
 			</tr>
 			<tr *ngFor="let product of searchResponse.products">
-				<td class="padding">
+				<td class="padding" fxLayout="row" fxLayoutAlign="start center">
+					<i class="material-icons" (click)="deleteProduct(product)">delete</i>
 					<editable-value-dialog
 							[value]="product.name"
 							(valueChanged)="changeProductName(product, $event)">
@@ -24,8 +25,8 @@
 				</td>
 			</tr>
 			<tr class="padding">
-				<i class="material-icons clickable" (click)="showAddDialog=true" *ngIf="!showAddDialog">add_box</i>
-				<i class="material-icons clickable" (click)="showAddDialog=false" *ngIf="showAddDialog">remove_circle</i>
+				<i class="material-icons" (click)="showAddDialog=true" *ngIf="!showAddDialog">add_box</i>
+				<i class="material-icons" (click)="showAddDialog=false" *ngIf="showAddDialog">remove_circle</i>
 				<div *ngIf="showAddDialog">
 					<form (ngSubmit)="showAddDialog=false ; addProduct(newProduct)">
 						<label>Add new entry:
