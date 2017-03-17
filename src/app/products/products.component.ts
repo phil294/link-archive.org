@@ -14,6 +14,7 @@ import {Attribute} from "../model/Attribute";
 import {ProductService} from "../product.service";
 import {ProductValue} from "../model/ProductValue";
 import {AttributeService} from "../attribute.service";
+import {GlobalService} from "../global.service";
 
 @Component({
 	templateUrl: './products.component.html',
@@ -25,8 +26,9 @@ export class ProductsComponent implements OnInit {
 	newProduct: Product = new Product();
 	newAttribute: Attribute = new Attribute();
 	val = val;
+	isAdmin: boolean;
 
-	constructor(private searchService: SearchService, private productService: ProductService, private attributeService: AttributeService) {
+	constructor(private searchService: SearchService, private productService: ProductService, private attributeService: AttributeService, private globalService: GlobalService) {
 
 	}
 
@@ -48,6 +50,7 @@ export class ProductsComponent implements OnInit {
 			map: map,
 			null: null
 		}; */
+		this.isAdmin = this.globalService.getCurrentlyLoggedInUser().admin;
 	}
 
 	changeProductName(product: Product, name: string) {
