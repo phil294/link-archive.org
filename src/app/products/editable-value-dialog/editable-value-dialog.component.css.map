@@ -1,7 +1,7 @@
 {
 "version": 3,
-"mappings": "AAAA,WAAW",
-"sources": ["../../../styles_variables.scss"],
+"mappings": "AAAA,WAAW;ACEX,KAAM;EACJ,SAAS,EAAC,IAAI",
+"sources": ["../../../styles_variables.scss","editable-value-dialog.component.scss"],
 "names": [],
 "file": "editable-value-dialog.component.css"
 }

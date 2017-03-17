@@ -23,8 +23,8 @@ export function val(v) {
 	else if (type === 'string') {
 		if (v.length < 1)
 			return false;
-		else if (parseInt(v) === 0)
-			return false;
+		//else if (parseInt(v) === 0)
+		//	return false;
 	}
 	else if (type === 'object') {
 		if (Object.keys(v).length < 1)

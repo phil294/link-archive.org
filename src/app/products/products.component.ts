@@ -13,6 +13,7 @@ import {Product} from "../model/Product";
 import {Attribute} from "../model/Attribute";
 import {ProductService} from "../product.service";
 import {ProductValue} from "../model/ProductValue";
+import {AttributeService} from "../attribute.service";
 
 @Component({
 	templateUrl: './products.component.html',
@@ -22,9 +23,10 @@ export class ProductsComponent implements OnInit {
 
 	searchResponse: SearchResponse = new SearchResponse;
 	newProduct: Product = new Product();
+	newAttribute: Attribute = new Attribute();
 	val = val;
 
-	constructor(private searchService: SearchService, private productService: ProductService) {
+	constructor(private searchService: SearchService, private productService: ProductService, private attributeService: AttributeService) {
 
 	}
 
@@ -95,6 +97,33 @@ export class ProductsComponent implements OnInit {
 		this.productService.deleteProduct(product.id)
 			.subscribe(wat => {
 				this.searchResponse.products = this.searchResponse.products.filter(p => p.id != product.id); // remove successfully deleted item
+			});
+	}
+
+	changeAttributeName(attribute: Attribute, newName: string): void {
+		if(attribute.name == newName) {
+			return; //nochange
+		}
+		attribute.name = newName;
+		this.attributeService.changeAttribute(attribute)
+			.subscribe();
+	}
+
+	addAttribute(attribute: Attribute): void {
+		this.attributeService.addAttribute(attribute)
+			.subscribe((addedAttribute: Attribute) => {
+				this.newAttribute = new Attribute();
+				this.searchResponse.attributes.push(addedAttribute);
+			});
+	}
+
+	deleteAttribute(attribute: Attribute): void {
+		if(!confirm("Delete attribute '"+attribute.name+"'?")) {
+			return;
+		}
+		this.attributeService.deleteAttribute(attribute.id)
+			.subscribe(wat => {
+				this.searchResponse.attributes = this.searchResponse.attributes.filter(a => a.id != attribute.id); // remove successfully deleted attr
 			});
 	}
 }

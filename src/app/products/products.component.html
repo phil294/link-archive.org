@@ -1,43 +1,73 @@
 <div fxLayout="column" fxLayoutAlign="center center">
-	<div class="box padding">
-		<h3 class="padding">products</h3>
-		<table id="result" *ngIf="val(searchResponse.products); else noResultsTempl; let products" class="padding">
-			<tr class="padding">
-				<th class="padding">Name</th>
-				<th *ngFor="let attribute of searchResponse.attributes" class="padding">
-					{{attribute.name}}: {{attribute.description}}
-				</th>
-			</tr>
-			<tr *ngFor="let product of searchResponse.products">
-				<td class="padding" fxLayout="row" fxLayoutAlign="start center">
-					<i class="material-icons" (click)="deleteProduct(product)">delete</i>
-					<editable-value-dialog
-							[value]="product.name"
-							(valueChanged)="changeProductName(product, $event)">
-					</editable-value-dialog>
-				</td>
-				<td *ngFor="let attribute of searchResponse.attributes" class="padding">
-					<editable-value-dialog
-							[value]="val(product.productData[attribute.id])? product.productData[attribute.id].value : ''"
-							[unit]="attribute.unit"
-							(valueChanged)="changeProductValue(product, attribute, $event)">
-					</editable-value-dialog>
-				</td>
-			</tr>
-			<tr class="padding">
-				<i class="material-icons" (click)="showAddDialog=true" *ngIf="!showAddDialog">add_box</i>
-				<i class="material-icons" (click)="showAddDialog=false" *ngIf="showAddDialog">remove_circle</i>
-				<div *ngIf="showAddDialog">
-					<form (ngSubmit)="showAddDialog=false ; addProduct(newProduct)">
+	<div class="box" fxLayout="column" fxLayoutAlign="center center">
+		<div class="padding">
+			<h3 class="padding">Cars</h3>
+			<table id="result" *ngIf="val(searchResponse.products); else noResultsTempl; let products">
+				<tr class="padding">
+					<th class="padding">Name</th>
+					<th *ngFor="let attribute of searchResponse.attributes" class="padding">
+						<div fxLayout="row" fxLayoutAlign="start center">
+							<i class="material-icons" (click)="deleteAttribute(attribute)">delete</i>
+							<abbr title="{{attribute.description}}">
+								<editable-value-dialog
+									[value]="attribute.name"
+									(valueChanged)="changeAttributeName(attribute, $event)">
+								</editable-value-dialog>
+							</abbr>
+						</div>
+					</th>
+					<th>
+						<div fxLayout="column" fxLayoutAlign="center start">
+							<div fxLayout="row" fxLayoutAlign="start center">
+								<i class="material-icons padding" (click)="showAddAttributeDialog=true" *ngIf="!showAddAttributeDialog">add_box</i>
+								<i class="material-icons padding" (click)="showAddAttributeDialog=false" *ngIf="showAddAttributeDialog">remove_circle</i>
+								<h4 *ngIf="showAddAttributeDialog">Add new attribute</h4>
+							</div>
+							<div *ngIf="showAddAttributeDialog">
+								<form (ngSubmit)="showAddAttributeDialog=false ; addAttribute(newAttribute)" fxLayout="column" fxLayoutAlign="center center">
+									<label>Name
+										<input type="text" [(ngModel)]="newAttribute.name" name="name" /></label>
+									<label>Description
+										<input type="text" [(ngModel)]="newAttribute.description" name="description" /></label>
+									<label>Unit
+										<input type="text" [(ngModel)]="newAttribute.unit" name="unit" /></label>
+									<input type="submit" value="Ok" />
+								</form>
+							</div>
+						</div>
+					</th>
+				</tr>
+				<tr *ngFor="let product of products">
+					<td class="padding" fxLayout="row" fxLayoutAlign="start center">
+						<i class="material-icons" (click)="deleteProduct(product)">delete</i>
+						<editable-value-dialog
+								[value]="product.name"
+								(valueChanged)="changeProductName(product, $event)">
+						</editable-value-dialog>
+					</td>
+					<td *ngFor="let attribute of searchResponse.attributes" class="padding">
+						<editable-value-dialog
+								[value]="val(product.productData[attribute.id])? product.productData[attribute.id].value : ''"
+								[unit]="attribute.unit"
+								(valueChanged)="changeProductValue(product, attribute, $event)">
+						</editable-value-dialog>
+					</td>
+				</tr>
+			</table>
+			<ng-template #noResultsTempl>
+				No results
+			</ng-template>
+			<div fxLayout="row" fxLayoutAlign="start center">
+				<i class="material-icons padding" (click)="showAddProductDialog=true" *ngIf="!showAddProductDialog">add_box</i>
+				<i class="material-icons padding" (click)="showAddProductDialog=false" *ngIf="showAddProductDialog">remove_circle</i>
+				<div *ngIf="showAddProductDialog">
+					<form (ngSubmit)="showAddProductDialog=false ; addProduct(newProduct)">
 						<label>Add new entry:
 							<input type="text" [(ngModel)]="newProduct.name" name="name" /></label>
 						<input type="submit" value="Ok" />
 					</form>
 				</div>
-			</tr>
-		</table>
-		<ng-template #noResultsTempl>
-			No results
-		</ng-template>
+			</div>
+		</div>
 	</div>
 </div>

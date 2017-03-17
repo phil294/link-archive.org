@@ -22,7 +22,7 @@ export class ProductService {
 			.map((resp:Response) => Product.fromJson(resp.json()));
 	}
 	changeProduct(product: Product) {
-		return this.http.put("/product", JSON.stringify(product))
+		return this.http.put(`/product/${product.id}`, JSON.stringify(product))
 			.map((resp:Response) => Product.fromJson(resp.json()));
 	}
 	changeProductValue(productId: number, attributeId: number, newValue: string) {

@@ -23,6 +23,7 @@ import {ProfileComponent} from "./profile/profile.component";
 import {SearchService} from "./search.service";
 import {EditableValueDialogComponent} from "./products/editable-value-dialog/editable-value-dialog.component";
 import {ProductService} from "./product.service";
+import {AttributeService} from "./attribute.service";
 
 @NgModule({
 	declarations: [
@@ -52,6 +53,7 @@ import {ProductService} from "./product.service";
 		GlobalService,
 		SearchService,
 		ProductService,
+		AttributeService,
 	],
 	bootstrap: [AppComponent]
 })
