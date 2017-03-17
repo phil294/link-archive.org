@@ -34,7 +34,15 @@ public class Attribute
 	@Min(1)
 	private Integer interest = 1;
 	@Size(min = 1, max = 64)
-	private String unit;
+	private String unit = "";
+	
+	public String getUnit()
+	{
+		if(unit == null) {
+			return "";
+		}
+		return unit;
+	}
 	
 	//////////////////////////
 	
@@ -86,11 +94,6 @@ public class Attribute
 	public void setInterest(Integer interest)
 	{
 		this.interest = interest;
-	}
-	
-	public String getUnit()
-	{
-		return unit;
 	}
 	
 	public void setUnit(String unit)
