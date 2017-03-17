@@ -8,9 +8,20 @@
 import {Injectable} from "@angular/core";
 import {User} from "./model/user";
 import {BehaviorSubject} from "rxjs";
+import {val} from "./helpers";
+
 @Injectable()
 export class GlobalService {
-	private loggedInUserSource = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('ls_currentUser')));
+	private loggedInUserSource = new BehaviorSubject<User>(this.initUser());
+
+	private initUser(): User {
+		let storedUser = JSON.parse(localStorage.getItem('ls_currentUser'));
+		if(val(storedUser)) {
+			return storedUser;
+		} else {
+			return new User();
+		}
+	}
 	// Observable string stream
 	loggedInUser$ = this.loggedInUserSource.asObservable();
 	// Service message command
