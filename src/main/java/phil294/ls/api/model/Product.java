@@ -30,7 +30,7 @@ public class Product implements Serializable // todo seri notw?
 	@Size(min = 1, max = 64)
 	private String name;
 	@Size(min = 0, max = 255)
-	private String description;
+	private String description = "";
 	@Size(min = 1, max = 64)
 	private String picture;
 	@ElementCollection(targetClass = ProductValue.class) // targetclass notwendig? todo ? el col?

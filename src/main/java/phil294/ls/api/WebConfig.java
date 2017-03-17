@@ -28,7 +28,8 @@ public class WebConfig extends WebMvcConfigurerAdapter
 				).addPathPatterns("/profile/**"); // todo
 		registry.addInterceptor(
 				getOptionalAuthenticationInterceptor()
-				).addPathPatterns("/product/**");
+				).addPathPatterns("/product/**")
+				.addPathPatterns("/attribute/**");
 	}
 	@Bean
 	public AuthenticatorInterceptor getAuthenticatorInterceptor() {

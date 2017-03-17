@@ -48,10 +48,11 @@ public class ProductController
 		return new ResponseEntity<>(product, HttpStatus.OK);
 	}
 	
-	@PutMapping
+	@PutMapping("/{productId}")
 	public ResponseEntity<Product> updateProduct(
 			@RequestAttribute("user") User user,
-			@RequestBody @Valid Product input
+			@RequestBody @Valid Product input,
+			@PathVariable("productId") Integer productId
 	)
 	{
 		if( ! user.getAdmin()) {
@@ -61,9 +62,9 @@ public class ProductController
 		product.setName(input.getName()); // todo duplicate code
 		product.setDescription(input.getDescription());
 		product.setPicture(input.getPicture());
-		product.setId(input.getId());
-		product.setProductData(input.getProductData());
+		//product.setProductData(input.getProductData());
 		
+		product.setId(productId);
 		product.setUser(user.getId());
 		productRepository.save(product);
 		return new ResponseEntity<>(product, HttpStatus.OK);
@@ -88,7 +89,7 @@ public class ProductController
 		return new ResponseEntity<>(product, HttpStatus.OK);
 	}
 	
-	@DeleteMapping("/{productId}") // notwendig weil nicht komplettes objekt übergeben da attributmenge lückenhaft und evlt sehr groß <-- widerspricht rest todo konflikt
+	@DeleteMapping("/{productId}")
 	public ResponseEntity deleteProduct(
 			@RequestAttribute("user") User user,
 			@PathVariable("productId") Integer productId

@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 
 /**
@@ -24,13 +25,14 @@ public class Attribute
 	@GeneratedValue
 	private Integer id;
 	@JsonIgnore // geht enduser nichts an
-	@Size(min = 1, max = 64)
+	@Min(1)
 	private Integer user;
 	@Size(min = 1, max = 64)
 	private String name;
-	@Size(min = 1, max = 255)
-	private String description;
-	private Integer interest;
+	@Size(min = 0, max = 255)
+	private String description = "";
+	@Min(1)
+	private Integer interest = 1;
 	@Size(min = 1, max = 64)
 	private String unit;
 	

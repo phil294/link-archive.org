@@ -2,6 +2,8 @@ package phil294.ls.api.model;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 import java.sql.Timestamp;
 
 /**
@@ -15,9 +17,11 @@ import java.sql.Timestamp;
 @Embeddable
 public class ProductValue
 {
-	private String value;
+	@Size(min = 1, max = 64) // todo sizes usw mit frontend abgleichen
+	private String value; // todo datentyp
 	@Column(insertable = false)
 	private Timestamp submitted;
+	@Min(1)
 	private Integer interest = 1;
 	
 	/////////////////
