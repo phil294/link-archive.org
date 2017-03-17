@@ -14,7 +14,8 @@ import {GlobalService} from "./global.service";
 
 @Injectable()
 export class HttpApi extends Http {
-	private BASE_URI = 'http://localhost:8080';
+	//private BASE_URI = 'http://localhost:8080';
+	private BASE_URI = 'http://85.214.135.29:8080';
 
 	constructor(backend: XHRBackend, options: RequestOptions, private globalService: GlobalService) {
 		super(backend, options);

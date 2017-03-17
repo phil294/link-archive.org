@@ -24,6 +24,7 @@ import {SearchService} from "./search.service";
 import {EditableValueDialogComponent} from "./products/editable-value-dialog/editable-value-dialog.component";
 import {ProductService} from "./product.service";
 import {AttributeService} from "./attribute.service";
+import {LocationStrategy, HashLocationStrategy} from "@angular/common";
 
 @NgModule({
 	declarations: [
@@ -43,6 +44,11 @@ import {AttributeService} from "./attribute.service";
 		routing,
 	],
 	providers: [
+		{
+			// routing paths to index.html
+			provide: LocationStrategy,
+			useClass: HashLocationStrategy,
+		},
 		AuthGuard,
 		{
 			provide: HttpApi,
