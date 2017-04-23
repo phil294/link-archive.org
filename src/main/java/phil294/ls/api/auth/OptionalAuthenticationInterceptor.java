@@ -1,7 +1,6 @@
 package phil294.ls.api.auth;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import phil294.ls.api.model.User;
 import phil294.ls.api.model.UserRepository;
@@ -28,8 +27,8 @@ public class OptionalAuthenticationInterceptor extends HandlerInterceptorAdapter
 	{
 		String auth = req.getHeader("Authorization"); // todo duplicate code
 		if(auth == null) {
-			resp.setStatus(HttpStatus.UNAUTHORIZED.value());
-			return false;
+			req.setAttribute("user", new User());
+			return true;
 		}
 		if(auth.length() < 7) {
 			req.setAttribute("user", new User());

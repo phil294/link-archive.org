@@ -29,7 +29,8 @@ public class WebConfig extends WebMvcConfigurerAdapter
 		registry.addInterceptor(
 				getOptionalAuthenticationInterceptor()
 				).addPathPatterns("/product/**")
-				.addPathPatterns("/attribute/**");
+				.addPathPatterns("/attribute/**")
+				.addPathPatterns("/search/**");
 	}
 	@Bean
 	public AuthenticatorInterceptor getAuthenticatorInterceptor() {
