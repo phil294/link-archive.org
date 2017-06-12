@@ -4,7 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import phil294.ls.api.model.*;
+import phil294.ls.api.model.AttributeRepository;
+import phil294.ls.api.model.Product;
+import phil294.ls.api.model.ProductRepository;
+import phil294.ls.api.model.User;
 
 import javax.validation.Valid;
 
@@ -69,7 +72,7 @@ public class ProductController
 		productRepository.save(product);
 		return new ResponseEntity<>(product, HttpStatus.OK);
 	}
-	
+	/*
 	@PutMapping("/{productId}/attribute/{attributeId}") // notwendig weil nicht komplettes objekt übergeben da attributmenge lückenhaft und evlt sehr groß <-- widerspricht rest todo konflikt
 	public ResponseEntity<Product> updateProductValue(
 			@RequestAttribute("user") User user,
@@ -88,6 +91,7 @@ public class ProductController
 		productRepository.save(product);
 		return new ResponseEntity<>(product, HttpStatus.OK);
 	}
+	*/
 	
 	@DeleteMapping("/{productId}")
 	public ResponseEntity deleteProduct(

@@ -8,9 +8,10 @@ import phil294.ls.api.model.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
+import javax.persistence.Query;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * User: phi
@@ -64,40 +65,61 @@ public class SearchController
 				.map(Integer::parseInt).collect(Collectors.toSet());
 		
 		// MAIN QUERY JPQL
-		String queryString = "SELECT p from Product p join p.productValueList pvs " +
-				" where ";
-		// FILTERS
-		// where conditions ors
-		List<String> conditions = new ArrayList<>();
+		String queryString = "" +
+				"SELECT * FROM ( " +
+				// pivot
+				"SELECT p.id,p.user,p.name,p.description,p.picture,";
+		// all attributes in the pivot table, from which to filter & sort afterwards
+		// order matters: == view order on website: 1st sorters, 2nd showers, 3rd filters
+		Set<Integer> pivot_attrs = Stream.concat(sorters.keySet().stream(), Stream.concat(showers.stream(), filters.keySet().stream()))
+				.collect(Collectors.toSet());
+		Collection<String> pivot_snippets = new ArrayList<>();
+		for(int attr : pivot_attrs) {
+			pivot_snippets.add("MAX( CASE WHEN attribute = " + attr + " THEN value END ) as attr" + attr + " ");
+		}
+		queryString += String.join(", ", pivot_snippets);
+		queryString += "" +
+				"FROM products p INNER JOIN product_data pvs ON pvs.product = p.id " +
+				"GROUP BY p.id " +
+				") AS pivot " +
+				"WHERE ";
+		// select from pivot table: FILTERS
+		List<String> filter_snippets = new ArrayList<>();
 		int i = 0;
-		for(int k = 0; k < filters.size(); k++) {
-			conditions.add(" (pvs.attribute = ?" + (++ i) + " and pvs.value = ?" + (++ i) + ") "); // parameter placeholders
+		for(int filterAttr : filters.keySet()) {
+			filter_snippets.add("attr" + filterAttr + " = ?" + (++ i) + " "); // parameter placeholders
 		}
-		String or_conditions = String.join(" or ", conditions); // .. OR ... OR ..
-		queryString += or_conditions;
-		// having count = filters.size() ^= must have all conditions
-		queryString += " group by p.id having count(*) = " + filters.size();
-		// make query
-		TypedQuery<Product> query = entityManager.createQuery(queryString, Product.class);
-		// filters: set params
+		queryString += String.join(" AND ", filter_snippets);
+		// SORTERS
+		queryString += "ORDER BY ";
+		for(Map.Entry<Integer, SortingOrder> sorterEntry : sorters.entrySet()) {
+			queryString += "attr" + sorterEntry.getKey() + " " + sorterEntry.getValue().name() + " ";
+		}
+		// (SHOWERS): -> happens via pivot_attrs
+		Query query = entityManager.createNativeQuery(queryString);
 		i = 0;
-		for(Map.Entry<Integer, String> filterEntry : filters.entrySet()) {
-			query.setParameter(++ i, filterEntry.getKey()); // fill parameter placeholders
-			query.setParameter(++ i, filterEntry.getValue());
+		for(String filterValue : filters.values()) {
+			query.setParameter(++ i, filterValue); // fill parameter placeholders
 		}
-		/*
-		SELECT p from Product p join p.productValueList pvs  where  (pvs.attribute = ?1 and pvs.value = ?2)  or  (pvs.attribute = ?3 and pvs.value = ?4)  group by p.id having count(*) = 2
-		
-SELECT p from products p inner join product_data pvs on pvs.product = p.id
-where
-	(pvs.attribute = 8 and pvs.value = "2") OR
-	(pvs.attribute = 5 and pvs.value = "Coupe")
-group by p.id having count(*) = 2
-		 */
 		// get result
-		List<Product> results = query.getResultList();
+		List<Product> products = new ArrayList<>();
+		List<Object> objs = query.getResultList();
+		for(Object obj : objs) {
+			Object[] o = (Object[]) obj;
+			i = - 1; Product product = new Product();
+			// product infos: ...SELECT p.id,p.user,p.name,p.description,p.picture
+			product.setId((int) o[++ i]);
+			product.setUser((int) o[++ i]);
+			product.setName((String) o[++ i]);
+			product.setDescription((String) o[++ i]);
+			product.setPicture((String) o[++ i]);
+			// product values
+			for(int attr : pivot_attrs) {
+				product.getProductData().put(attr, (String) o[++ i]);
+			}
+			products.add(product);
+		}
 		
-		Iterable<Product> products = productRepository.findAll();
 		Iterable<Attribute> attributes = attributeRepository.findAll();
 		SearchResponse response = new SearchResponse(products, attributes);
 		return new ResponseEntity<>(response, HttpStatus.OK);
