@@ -23,7 +23,7 @@ export class ProductsComponent implements OnInit {
 	private filters: Map<number,string> = new Map<number,string>();
 	private sorters: Map<number, SortingOrder> = new Map<number, SortingOrder>();
 	private showAttributes: Set<number> = new Set<number>();
-	private limit: number = 5;
+	private rows: number = 5;
 	private columns: number = 5;
 
 	constructor(private searchService: SearchService, private attributeService: AttributeService) {
@@ -36,9 +36,9 @@ export class ProductsComponent implements OnInit {
 		this.sorters.set(7, SortingOrder.DESC);
 		this.showAttributes.add(14);
 		this.showAttributes.add(17);
-		this.limit = 4;
-		this.columns = 8;
-		this.searchService.search(this.filters, this.sorters, this.showAttributes, this.limit, this.columns)
+		this.rows = 1;
+		this.columns = 10;
+		this.searchService.search(this.filters, this.sorters, this.showAttributes, this.rows, this.columns)
 			.subscribe((products: any) => {
 				this.searchResponse = products;
 			});
