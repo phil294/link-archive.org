@@ -1,6 +1,7 @@
 package phil294.ls.api.product;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -40,17 +41,17 @@ public class SearchController
 	
 	/**
 	 * todo docu überall
-	 * http://localhost:8080/search?filter=8:2,5:Coupe&sorting=7:1&show=14,17&limit=4&columns=8
+	 * http://localhost:8080/search?filter=8:2,5:Coupe&sorting=7:1&show=14,17&rows=4&columns=8
 	 */
 	@GetMapping
 	public ResponseEntity<SearchResponse> search(
 			@RequestAttribute("user") User opionalUser,
-			// search(filterAttributes: Map<number,string>, sortingAttributes: Map<number, SortingOrder>, showAttributes: Set<number>, limit: number, columns: number) {
-			// 	return this.http.get(`/search?filter=${filterQ}&sorting=${sortingQ}&show=${showingQ}&limit=${limit}&columns=${columns}`)
+			// search(filterAttributes: Map<number,string>, sortingAttributes: Map<number, SortingOrder>, showAttributes: Set<number>, rows: number, columns: number) {
+			// 	return this.http.get(`/search?filter=${filterQ}&sorting=${sortingQ}&show=${showingQ}&rows=${rows}&columns=${columns}`)
 			@RequestParam("filter") String filterQ,
 			@RequestParam("sorting") String sortingQ,
 			@RequestParam("show") String showingQ,
-			@RequestParam("limit") int limit,
+			@RequestParam("rows") int rows,
 			@RequestParam("columns") int columns
 	)
 	{
@@ -63,16 +64,22 @@ public class SearchController
 				.collect(Collectors.toMap(s -> Integer.parseInt(s[0]), s -> SortingOrder.values()[Integer.parseInt(s[1])]));
 		Set<Integer> showers = Arrays.stream(showingQ.split(","))
 				.map(Integer::parseInt).collect(Collectors.toSet());
+		// all attributes in the pivot table, from which to filter & sort afterwards, fillers etc
+		// order matters: == view order on website: 1st sorters, 2nd showers, 3rd filters, 4th fillers
+		Set<Integer> relevant_attrs = Stream.concat(sorters.keySet().stream(), Stream.concat(showers.stream(), filters.keySet().stream()))
+				.collect(Collectors.toSet());
+		int fillers_size = columns - relevant_attrs.size();
+		if(fillers_size > 0) {
+			List<Integer> fillers = attributeRepository.findByIdNotInOrderByInterestDesc(relevant_attrs, new PageRequest(0, fillers_size))
+					.stream().map(Attribute::getId).collect(Collectors.toList());
+			relevant_attrs.addAll(fillers);
+		}
 		
 		// MAIN QUERY JPQL
 		String queryString = "" +
 				"SELECT * FROM ( " +
 				// pivot
 				"SELECT p.id,p.user,p.name,p.description,p.picture,";
-		// all attributes in the pivot table, from which to filter & sort afterwards
-		// order matters: == view order on website: 1st sorters, 2nd showers, 3rd filters
-		Set<Integer> relevant_attrs = Stream.concat(sorters.keySet().stream(), Stream.concat(showers.stream(), filters.keySet().stream()))
-				.collect(Collectors.toSet());
 		Collection<String> pivot_snippets = new ArrayList<>();
 		for(int attr : relevant_attrs) {
 			pivot_snippets.add("MAX( CASE WHEN attribute = " + attr + " THEN value END ) as attr" + attr + " ");

@@ -1,6 +1,10 @@
 package phil294.ls.api.model;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
+
+import java.util.List;
+import java.util.Set;
 
 /**
  * User: phi
@@ -12,5 +16,5 @@ import org.springframework.data.repository.CrudRepository;
  */
 public interface AttributeRepository extends CrudRepository<Attribute, Integer>
 {
-	
+	List<Attribute> findByIdNotInOrderByInterestDesc(Set<Integer> attributeIds, Pageable pageable);
 }
