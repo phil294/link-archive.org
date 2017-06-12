@@ -1,7 +1,8 @@
 package phil294.ls.api.model;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 import java.sql.Timestamp;
@@ -14,9 +15,13 @@ import java.sql.Timestamp;
  * . /)___)
  * . --"-"--
  */
-@Embeddable
+@Table(name = "product_data")
+@Entity
 public class ProductValue
 {
+	@Id
+	@GeneratedValue
+	private Integer id;
 	@Size(min = 1, max = 64) // todo sizes usw mit frontend abgleichen
 	private String value; // todo datentyp
 	@Column(insertable = false)
@@ -24,7 +29,51 @@ public class ProductValue
 	@Min(1)
 	private Integer interest = 1;
 	
+	@Min(1)
+	private Integer attribute;
+	
+	@ManyToOne
+	@JoinColumn(name = "product")
+	@JsonIgnore
+	private Product product;
+	
 	/////////////////
+	
+	
+	public Integer getId()
+	{
+		return id;
+	}
+	
+	public void setId(Integer id)
+	{
+		this.id = id;
+	}
+	
+	public Product getProduct()
+	{
+		return product;
+	}
+	
+	public void setProduct(Product product)
+	{
+		this.product = product;
+	}
+	
+	public void setInterest(Integer interest)
+	{
+		this.interest = interest;
+	}
+	
+	public Integer getAttribute()
+	{
+		return attribute;
+	}
+	
+	public void setAttribute(Integer attribute)
+	{
+		this.attribute = attribute;
+	}
 	
 	public String getValue()
 	{

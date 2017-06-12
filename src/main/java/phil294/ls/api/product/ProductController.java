@@ -84,7 +84,7 @@ public class ProductController
 		Product product = productRepository.findOne(productId);
 		ProductValue productValue = new ProductValue();
 		productValue.setValue(newValue);
-		product.getProductData().put(attributeId, productValue);
+		//product.getProductData().put(attributeId, productValue); // fixme
 		productRepository.save(product);
 		return new ResponseEntity<>(product, HttpStatus.OK);
 	}

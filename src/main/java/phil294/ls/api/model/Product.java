@@ -7,6 +7,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -33,13 +34,37 @@ public class Product implements Serializable // todo seri notw?
 	private String description = "";
 	@Size(min = 1, max = 64)
 	private String picture;
-	@ElementCollection(targetClass = ProductValue.class) // targetclass notwendig? todo ? el col?
-	@CollectionTable(name="product_data", joinColumns=@JoinColumn(name="product"))
-	@MapKeyJoinColumn(name = "attribute")
-	@MapKeyColumn(name = "attribute")
+	
+	// a nice readable map
+	@Transient
 	private Map<Integer, ProductValue> productData = new HashMap<>(); // <attributeId, prodDat>
 	
+	// "all" values for joining (?todo)
+	@OneToMany(mappedBy = "product")
+	@JsonIgnore
+	private List<ProductValue> productValueList;
+	
 	///////////////////////////////
+	
+	public Map<Integer, ProductValue> getProductData()
+	{
+		return productData;
+	}
+	
+	public void setProductData(Map<Integer, ProductValue> productData)
+	{
+		this.productData = productData;
+	}
+	
+	public List<ProductValue> getProductValueList()
+	{
+		return productValueList;
+	}
+	
+	public void setProductValueList(List<ProductValue> productValueList)
+	{
+		this.productValueList = productValueList;
+	}
 	
 	public void setUser(Integer user)
 	{
@@ -54,16 +79,6 @@ public class Product implements Serializable // todo seri notw?
 	public void setId(Integer id)
 	{
 		this.id = id;
-	}
-	
-	public Map<Integer, ProductValue> getProductData()
-	{
-		return productData;
-	}
-	
-	public void setProductData(Map<Integer, ProductValue> productData)
-	{
-		this.productData = productData;
 	}
 	
 	public int getUser()
