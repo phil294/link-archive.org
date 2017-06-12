@@ -56,21 +56,31 @@ public class SearchController
 	)
 	{
 		// parse inputs into collections
-		Map<Integer, String> filters = Arrays.stream(filterQ.split(","))
+		Map<Integer, String> filters = filterQ.isEmpty() ? new HashMap<>() :
+				Arrays.stream(filterQ.split(","))
 				.map(s -> s.split(":"))
-				.collect(Collectors.toMap(s -> Integer.parseInt(s[0]), s -> s[1]));
-		Map<Integer, SortingOrder> sorters = Arrays.stream(sortingQ.split(","))
+						.collect(Collectors.toMap(s -> Integer.valueOf(s[0]), s -> s[1]));
+		Map<Integer, SortingOrder> sorters = sortingQ.isEmpty() ? new HashMap<>() :
+				Arrays.stream(sortingQ.split(","))
 				.map(s -> s.split(":"))
 				.collect(Collectors.toMap(s -> Integer.parseInt(s[0]), s -> SortingOrder.values()[Integer.parseInt(s[1])]));
-		Set<Integer> showers = Arrays.stream(showingQ.split(","))
+		Set<Integer> showers = showingQ.isEmpty() ? new HashSet<>() :
+				Arrays.stream(showingQ.split(","))
 				.map(Integer::parseInt).collect(Collectors.toSet());
 		// all attributes in the pivot table, from which to filter & sort afterwards, fillers etc
 		// order matters: == view order on website: 1st sorters, 2nd showers, 3rd filters, 4th fillers
 		Set<Integer> relevant_attrs = Stream.concat(sorters.keySet().stream(), Stream.concat(showers.stream(), filters.keySet().stream()))
 				.collect(Collectors.toSet());
+		// COLUMNS: FILLERS
 		int fillers_size = columns - relevant_attrs.size();
 		if(fillers_size > 0) {
-			List<Integer> fillers = attributeRepository.findByIdNotInOrderByInterestDesc(relevant_attrs, new PageRequest(0, fillers_size))
+			Set<Integer> dontFindMe = new HashSet<>();
+			if(relevant_attrs.isEmpty()) {
+				dontFindMe.add(- 1); // todo JPA bug?? "ByIdNotIn[emptySet]" returns 0
+			} else {
+				dontFindMe = relevant_attrs;
+			}
+			List<Integer> fillers = attributeRepository.findByIdNotInOrderByInterestDesc(dontFindMe, new PageRequest(0, fillers_size))
 					.stream().map(Attribute::getId).collect(Collectors.toList());
 			relevant_attrs.addAll(fillers);
 		}
@@ -88,21 +98,26 @@ public class SearchController
 		queryString += "" +
 				"FROM products p INNER JOIN product_data pvs ON pvs.product = p.id " +
 				"GROUP BY p.id " +
-				") AS pivot " +
-				"WHERE ";
+				") AS pivot ";
 		// select from pivot table: FILTERS
 		List<String> filter_snippets = new ArrayList<>();
 		int i = 0;
 		for(int filterAttr : filters.keySet()) {
 			filter_snippets.add("attr" + filterAttr + " = ?" + (++ i) + " "); // parameter placeholders
 		}
-		queryString += String.join(" AND ", filter_snippets);
+		if(! filter_snippets.isEmpty()) {
+			queryString += "WHERE " + String.join(" AND ", filter_snippets);
+		}
 		// SORTERS
-		queryString += "ORDER BY ";
-		for(Map.Entry<Integer, SortingOrder> sorterEntry : sorters.entrySet()) {
-			queryString += "attr" + sorterEntry.getKey() + " " + sorterEntry.getValue().name() + " ";
+		if(! sorters.isEmpty()) {
+			queryString += "ORDER BY ";
+			for(Map.Entry<Integer, SortingOrder> sorterEntry : sorters.entrySet()) {
+				queryString += "attr" + sorterEntry.getKey() + " " + sorterEntry.getValue().name() + " ";
+			}
 		}
 		// (SHOWERS): -> happens via relevant_attrs
+		// ROWS
+		queryString += "LIMIT " + rows + " ";
 		Query query = entityManager.createNativeQuery(queryString);
 		i = 0;
 		for(String filterValue : filters.values()) {
