@@ -25,12 +25,14 @@ import {EditableValueDialogComponent} from "./products/editable-value-dialog/edi
 import {ProductService} from "./product.service";
 import {AttributeService} from "./attribute.service";
 import {LocationStrategy, HashLocationStrategy} from "@angular/common";
+import {ResultTableComponent} from "./products/result-table/result-table.component";
 
 @NgModule({
 	declarations: [
 		AppComponent,
 		CheckboxComponent,
 		ProductsComponent,
+		ResultTableComponent,
 		EditableValueDialogComponent,
 		LoginComponent,
 		ProfileComponent,
