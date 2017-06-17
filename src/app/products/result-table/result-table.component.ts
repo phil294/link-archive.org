@@ -6,7 +6,7 @@
  * --"-"--
  * 10.04.17
  */
-import {Component, OnInit, Input} from "@angular/core";
+import {Component, OnInit, Input, EventEmitter, Output} from "@angular/core";
 import {val} from "../../helpers";
 import {SearchResponse} from "../../model/search-response";
 import {Product} from "../../model/Product";
@@ -15,6 +15,7 @@ import {ProductService} from "../../product.service";
 import {ProductValue} from "../../model/ProductValue";
 import {AttributeService} from "../../attribute.service";
 import {GlobalService} from "../../global.service";
+import {SortingOrder} from "../../search.service";
 
 @Component({
 	templateUrl: './result-table.component.html',
@@ -25,10 +26,21 @@ export class ResultTableComponent implements OnInit
 {
 
 	@Input() searchResponse: SearchResponse = new SearchResponse;
-	newProduct: Product = new Product();
-	newAttribute: Attribute = new Attribute();
+	private newProduct: Product = new Product();
+	private newAttribute: Attribute = new Attribute();
 	val = val;
-	isAdmin: boolean;
+	SortingOrder = SortingOrder;
+	private isAdmin: boolean;
+	private sorters: Array<[number, SortingOrder]> = []; // array of tuples
+	@Output() sortersChanged: EventEmitter<[number, SortingOrder][]> = new EventEmitter();
+
+	private sortersFind(attribute: number) {
+		return this.sorters.find((sorter: [number, SortingOrder]) => sorter[0] == attribute);
+	}
+
+	private sortersFindIndex(attribute: number) {
+		return this.sorters.findIndex((sorter: [number, SortingOrder]) => sorter[0] == attribute);
+	}
 
 	constructor(private productService: ProductService, private attributeService: AttributeService, private globalService: GlobalService) {
 

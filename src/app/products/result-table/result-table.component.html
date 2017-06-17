@@ -2,7 +2,7 @@
 	<tr class="padding">
 		<th class="padding">Name</th>
 		<th *ngFor="let attribute of searchResponse.attributes" class="padding">
-			<div fxLayout="row" fxLayoutAlign="start center">
+			<div fxLayout="row" fxLayoutAlign="center center">
 				<i class="material-icons" (click)="deleteAttribute(attribute)" *ngIf="isAdmin">delete</i>
 				<abbr title="{{attribute.description}}">
 					<editable-value-dialog
@@ -11,7 +11,31 @@
 							(valueChanged)="changeAttributeName(attribute, $event)">
 					</editable-value-dialog>
 				</abbr>
-
+				<div title="Sorting order"> <!-- todo language -->
+					<div class="sortingIsset" fxLayout="row" fxLayoutAlign="center center"
+						 *ngIf="sortersFindIndex(attribute.id)!=-1 ; else notSortedTempl">
+						<!-- sorting number is set -->
+						<i class="material-icons"
+						   *ngIf="sortersFind(attribute.id)[1]==SortingOrder.DESC ; else isAscTempl"
+						   (click)="sorters.splice(sortersFindIndex(attribute.id),1); sorters.push([attribute.id, SortingOrder.ASC]); sortersChanged.emit(sorters);">
+							<!-- sorting is DESC, onclick=NONEthenASC -->
+							expand_less</i>
+						<ng-template #isAscTempl>
+							<i class="material-icons"
+							   (click)="sorters.splice(sortersFindIndex(attribute.id),1); sortersChanged.emit(sorters);">
+								<!-- sorting is ASC, onclick=NONE -->
+								expand_more</i>
+						</ng-template>
+						<!-- sorting index visible to user -->
+						<span class="veryimportant">{{ sortersFindIndex(attribute.id) + 1 }}</span>
+					</div>
+					<ng-template #notSortedTempl>
+						<i class="material-icons inactive"
+						   (click)="sorters.push([attribute.id, SortingOrder.DESC]); sortersChanged.emit(sorters);">
+							<!-- sorting is NONE, onclick=DESC -->
+							expand_more</i>
+					</ng-template>
+				</div>
 			</div>
 		</th>
 		<th *ngIf="isAdmin">

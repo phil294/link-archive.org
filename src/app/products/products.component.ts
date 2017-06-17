@@ -21,7 +21,7 @@ export class ProductsComponent implements OnInit {
 	val = val;
 
 	private filters: Map<number,string> = new Map<number,string>();
-	private sorters: Map<number, SortingOrder> = new Map<number, SortingOrder>();
+	private sorters: Array<[number, SortingOrder]> = [];
 	private showAttributes: Set<number> = new Set<number>();
 	private rows: number = 5;
 	private columns: number = 5;
@@ -30,7 +30,12 @@ export class ProductsComponent implements OnInit {
 
 	}
 
-	ngOnInit(): void {
+	private sortersChanged(sorters: Array<[number, SortingOrder]>) {
+		this.sorters = sorters;
+		this.doSearch();
+	}
+
+	private doSearch(): void {
 		//	this.filters.set(8, "2");
 		//	this.filters.set(5, "Coupe");
 		//	this.sorters.set(7, SortingOrder.DESC);
@@ -42,5 +47,9 @@ export class ProductsComponent implements OnInit {
 			.subscribe((products: any) => {
 				this.searchResponse = products;
 			});
+	}
+
+	ngOnInit(): void {
+		this.doSearch();
 	}
 }

@@ -32,7 +32,7 @@ export class SearchService {
 	 * 4. limit
 	 * 5. desired column amount
 	 */
-	search(filterAttributes: Map<number,string>, sortingAttributes: Map<number, SortingOrder>, showAttributes: Set<number>, rows: number, columns: number) {
+	search(filterAttributes: Map<number,string>, sortingAttributes: Array<[number, SortingOrder]>, showAttributes: Set<number>, rows: number, columns: number) {
 		// filter map to "filter1:value1,filter2:value2,..."-string
 		let filterQ: string = Array.from(filterAttributes).map(([attributeId, filter]) => `${attributeId}:${filter}`).join(',');
 		// same for sorting map
