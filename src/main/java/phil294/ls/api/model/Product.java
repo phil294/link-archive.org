@@ -36,16 +36,16 @@ public class Product implements Serializable // todo seri notw?
 	// fixme 20170612 interest
 	
 	@Transient
-	private Map<Integer, String> productData = new HashMap<>(); // <attributeId, value>
+	private Map<Integer, Object> productData = new HashMap<>(); // <attributeId, value>
 	
 	///////////////////////////////
 	
-	public Map<Integer, String> getProductData()
+	public Map<Integer, Object> getProductData()
 	{
 		return productData;
 	}
 	
-	public void setProductData(Map<Integer, String> productData)
+	public void setProductData(Map<Integer, Object> productData)
 	{
 		this.productData = productData;
 	}

@@ -74,21 +74,22 @@ public class SearchController
 						.collect(Collectors.toCollection(LinkedHashSet::new));
 		// all attributes in the pivot table, from which to filter & sort afterwards, fillers etc
 		// order matters: == view order on website: 1st sorters, 2nd showers, 3rd filters, 4th fillers
-		Set<Integer> relevant_attrs = Stream.concat(sorters.keySet().stream(), Stream.concat(showers.stream(), filters.keySet().stream()))
+		Set<Integer> relevant_attrs_ids = Stream.concat(sorters.keySet().stream(), Stream.concat(showers.stream(), filters.keySet().stream()))
 				.collect(Collectors.toSet());
 		// COLUMNS: FILLERS
-		int fillers_size = columns - relevant_attrs.size();
+		int fillers_size = columns - relevant_attrs_ids.size();
 		if(fillers_size > 0) {
 			Set<Integer> dontFindMe = new HashSet<>();
-			if(relevant_attrs.isEmpty()) {
+			if(relevant_attrs_ids.isEmpty()) {
 				dontFindMe.add(-1); // todo JPA bug?? "ByIdNotIn[emptySet]" returns 0
 			} else {
-				dontFindMe = relevant_attrs;
+				dontFindMe = relevant_attrs_ids;
 			}
 			List<Integer> fillers = attributeRepository.findByIdNotInOrderByInterestDesc(dontFindMe, new PageRequest(0, fillers_size))
 					.stream().map(Attribute::getId).collect(Collectors.toList());
-			relevant_attrs.addAll(fillers);
+			relevant_attrs_ids.addAll(fillers);
 		}
+		Iterable<Attribute> relevant_attrs = attributeRepository.findAll(relevant_attrs_ids);
 		
 		// MAIN QUERY JPQL
 		String queryString = "" +
@@ -96,8 +97,9 @@ public class SearchController
 				// pivot
 				"SELECT p.id,p.user,p.name,p.description,p.picture,";
 		Collection<String> pivot_snippets = new ArrayList<>();
-		for(int attr : relevant_attrs) {
-			pivot_snippets.add("MAX( CASE WHEN attribute = " + attr + " THEN value END ) as attr" + attr + " ");
+		for(Attribute attr : relevant_attrs) {
+			String value_col = attr.getType() == AttributeType.NUMBER ? "value_number" : "value_string";
+			pivot_snippets.add("MAX( CASE WHEN attribute = " + attr.getId() + " THEN " + value_col + " END ) as attr" + attr.getId() + " ");
 		}
 		queryString += String.join(", ", pivot_snippets);
 		queryString += "" +
@@ -142,8 +144,8 @@ public class SearchController
 			product.setDescription((String) o[++i]);
 			product.setPicture((String) o[++i]);
 			// product values
-			for(int attr : relevant_attrs) {
-				product.getProductData().put(attr, (String) o[++i]);
+			for(Attribute attr : relevant_attrs) {
+				product.getProductData().put(attr.getId(), o[++i]); // no casting, return as objs
 			}
 			products.add(product);
 		}
