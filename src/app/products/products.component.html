@@ -2,6 +2,42 @@
 	<div class="box" fxLayout="column" fxLayoutAlign="center center">
 		<div class="padding">
 			<h3 class="padding">Cars</h3>
+			<div id="addFilter" fxLayout="row">
+				<div id="attributeChooser">
+					<label fxLayout="column">Available attributes
+						<input type="text" [(ngModel)]="filterbox"/>
+						<select
+								[(ngModel)]="filterattribute"
+								size="{{attributes.length<10?attributes.length:10}}"> <!-- todo mobilefriendly -->
+							<ng-container *ngFor="let attribute of attributes">
+								<option [ngValue]="attribute" *ngIf="attribute.name.includes(filterbox)">
+									{{ attribute.name }}
+								</option>
+							</ng-container>
+						</select>
+					</label>
+				</div>
+				<form *ngIf="val(filterattribute)" id="filterConfigurator" fxLayout="column" fxLayoutAlign="center center"
+					  (ngSubmit)="addFilter(filterattribute)">
+					<label>Specify value
+						<input type="radio" name="type" [value]="FilterType.VALUE" [(ngModel)]="filtertype"/>
+					</label>
+					<div *ngIf="filtertype==FilterType.VALUE">
+						<input [type]="filterattribute.type==AttributeType.number?'number':'text'" name="filtervalue" [(ngModel)]="filtervalue"/>
+					</div>
+
+					<label *ngIf="filterattribute.type==AttributeType.number">Specify range
+						<input type="radio" name="type" [value]="FilterType.RANGE" [(ngModel)]="filtertype"/>
+					</label>
+					<div *ngIf="filtertype==FilterType.RANGE" fxLayout="column" fxLayoutAlign="center center">
+						<input type="number" name="filterrange_from" [(ngModel)]="filterrange_from"/>
+						<span>-</span>
+						<input type="number" name="filterrange_to" [(ngModel)]="filterrange_to"/>
+					</div>
+
+					<input type="submit" [disabled]="!val(filterattribute) || !filterattribute.name.includes(filterbox)" value="Add filter"/>
+				</form>
+			</div>
 			<result-table
 					[products]="products"
 					[relevantAttributes]="relevantAttributes"

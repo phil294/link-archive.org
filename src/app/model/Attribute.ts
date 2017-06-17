@@ -7,9 +7,14 @@ import {val} from "../helpers";
  * . /)___)
  * . --"-"--
  */
+export enum AttributeType { // literals used in html-inputs
+	number,
+	string
+}
 export class Attribute {
 	id: number;
 	name: string;
+	type: AttributeType;
 	description: string;
 	interest: number;
 	unit: string;

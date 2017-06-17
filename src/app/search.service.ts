@@ -16,6 +16,10 @@ export enum SortingOrder {
 	ASC,
 	DESC
 }
+export enum FilterType {
+	VALUE,
+	RANGE
+}
 
 @Injectable()
 export class SearchService {

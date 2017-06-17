@@ -6,10 +6,10 @@
  * --"-"--
  */
 import {Component, OnInit} from "@angular/core";
-import {SearchService, SortingOrder} from "../search.service";
+import {SearchService, SortingOrder, FilterType} from "../search.service";
 import {val} from "../helpers";
 import {AttributeService} from "../attribute.service";
-import {Attribute} from "../model/Attribute";
+import {Attribute, AttributeType} from "../model/Attribute";
 import {Product} from "../model/Product";
 
 @Component({
@@ -23,7 +23,10 @@ export class ProductsComponent implements OnInit
 	private attributes: Attribute[] = [];
 	private relevantAttributes: Attribute[] = [];
 	val = val;
-
+	FilterType = FilterType;
+	AttributeType = AttributeType;
+	private filterbox: string = "";
+	private filtertype: FilterType = FilterType.VALUE;
 	private filters: Map<number,string> = new Map<number,string>();
 	private sorters: Array<[number, SortingOrder]> = [];
 	private showAttributes: Set<number> = new Set<number>();
@@ -32,6 +35,10 @@ export class ProductsComponent implements OnInit
 
 	constructor(private searchService: SearchService, private attributeService: AttributeService) {
 
+	}
+
+	private addFilter(attribute: Attribute) {
+		alert(attribute.name);
 	}
 
 	private sortersChanged(sorters: Array<[number, SortingOrder]>) {
@@ -57,6 +64,7 @@ export class ProductsComponent implements OnInit
 	private getAttributes(): void {
 		this.attributeService.getAttributes()
 			.subscribe((attributes: Attribute[]) => {
+				attributes.forEach(a => a.type = AttributeType.number); // fixme
 				this.attributes = attributes;
 				this.setRelevantAttributes();
 			})
