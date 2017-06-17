@@ -58,15 +58,20 @@ public class SearchController
 		// parse inputs into collections
 		Map<Integer, String> filters = filterQ.isEmpty() ? new HashMap<>() :
 				Arrays.stream(filterQ.split(","))
-				.map(s -> s.split(":"))
+						.map(s -> s.split(":"))
 						.collect(Collectors.toMap(s -> Integer.valueOf(s[0]), s -> s[1]));
-		Map<Integer, SortingOrder> sorters = sortingQ.isEmpty() ? new HashMap<>() :
+		Map<Integer, SortingOrder> sorters = sortingQ.isEmpty() ? new LinkedHashMap<>() :
 				Arrays.stream(sortingQ.split(","))
-				.map(s -> s.split(":"))
-				.collect(Collectors.toMap(s -> Integer.parseInt(s[0]), s -> SortingOrder.values()[Integer.parseInt(s[1])]));
-		Set<Integer> showers = showingQ.isEmpty() ? new HashSet<>() :
+						.map(s -> s.split(":"))
+						.collect(Collectors.toMap(
+								s -> Integer.parseInt(s[0]),
+								s -> SortingOrder.values()[Integer.parseInt(s[1])],
+								(v1, v2) -> v1,
+								LinkedHashMap::new));
+		Set<Integer> showers = showingQ.isEmpty() ? new LinkedHashSet<>() :
 				Arrays.stream(showingQ.split(","))
-				.map(Integer::parseInt).collect(Collectors.toSet());
+						.map(Integer::parseInt)
+						.collect(Collectors.toCollection(LinkedHashSet::new));
 		// all attributes in the pivot table, from which to filter & sort afterwards, fillers etc
 		// order matters: == view order on website: 1st sorters, 2nd showers, 3rd filters, 4th fillers
 		Set<Integer> relevant_attrs = Stream.concat(sorters.keySet().stream(), Stream.concat(showers.stream(), filters.keySet().stream()))
@@ -76,7 +81,7 @@ public class SearchController
 		if(fillers_size > 0) {
 			Set<Integer> dontFindMe = new HashSet<>();
 			if(relevant_attrs.isEmpty()) {
-				dontFindMe.add(- 1); // todo JPA bug?? "ByIdNotIn[emptySet]" returns 0
+				dontFindMe.add(-1); // todo JPA bug?? "ByIdNotIn[emptySet]" returns 0
 			} else {
 				dontFindMe = relevant_attrs;
 			}
@@ -103,17 +108,18 @@ public class SearchController
 		List<String> filter_snippets = new ArrayList<>();
 		int i = 0;
 		for(int filterAttr : filters.keySet()) {
-			filter_snippets.add("attr" + filterAttr + " = ?" + (++ i) + " "); // parameter placeholders
+			filter_snippets.add("attr" + filterAttr + " = ?" + (++i) + " "); // parameter placeholders
 		}
-		if(! filter_snippets.isEmpty()) {
+		if(!filter_snippets.isEmpty()) {
 			queryString += "WHERE " + String.join(" AND ", filter_snippets);
 		}
 		// SORTERS
-		if(! sorters.isEmpty()) {
-			queryString += "ORDER BY ";
-			for(Map.Entry<Integer, SortingOrder> sorterEntry : sorters.entrySet()) {
-				queryString += "attr" + sorterEntry.getKey() + " " + sorterEntry.getValue().name() + " ";
-			}
+		List<String> order_snippets = new ArrayList<>();
+		for(Map.Entry<Integer, SortingOrder> sorterEntry : sorters.entrySet()) {
+			order_snippets.add("attr" + sorterEntry.getKey() + " " + sorterEntry.getValue().name() + " ");
+		}
+		if(!order_snippets.isEmpty()) {
+			queryString += "ORDER BY " + String.join(", ", order_snippets);
 		}
 		// (SHOWERS): -> happens via relevant_attrs
 		// ROWS
@@ -121,28 +127,29 @@ public class SearchController
 		Query query = entityManager.createNativeQuery(queryString);
 		i = 0;
 		for(String filterValue : filters.values()) {
-			query.setParameter(++ i, filterValue); // fill parameter placeholders
+			query.setParameter(++i, filterValue); // fill parameter placeholders
 		}
 		// get result
 		List<Product> products = new ArrayList<>();
 		List<Object> objs = query.getResultList();
 		for(Object obj : objs) {
 			Object[] o = (Object[]) obj;
-			i = - 1; Product product = new Product();
+			i = -1; Product product = new Product();
 			// product infos: ...SELECT p.id,p.user,p.name,p.description,p.picture
-			product.setId((int) o[++ i]);
-			product.setUser((int) o[++ i]);
-			product.setName((String) o[++ i]);
-			product.setDescription((String) o[++ i]);
-			product.setPicture((String) o[++ i]);
+			product.setId((int) o[++i]);
+			product.setUser((int) o[++i]);
+			product.setName((String) o[++i]);
+			product.setDescription((String) o[++i]);
+			product.setPicture((String) o[++i]);
 			// product values
 			for(int attr : relevant_attrs) {
-				product.getProductData().put(attr, (String) o[++ i]);
+				product.getProductData().put(attr, (String) o[++i]);
 			}
 			products.add(product);
 		}
 		
-		Iterable<Attribute> attributes = attributeRepository.findAll(relevant_attrs);
+		//Iterable<Attribute> attributes = attributeRepository.findAll(relevant_attrs);
+		Iterable<Attribute> attributes = attributeRepository.findAll(); // return all
 		SearchResponse response = new SearchResponse(products, attributes);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
