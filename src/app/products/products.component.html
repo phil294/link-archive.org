@@ -2,9 +2,8 @@
 	<div class="box" fxLayout="column" fxLayoutAlign="center center">
 		<div class="padding">
 			<h3 class="padding">Cars</h3>
-			attribute usw
 			<result-table
-					[searchResponse]="searchResponse"
+					[products]="products"
 					[relevantAttributes]="relevantAttributes"
 					(sortersChanged)="sortersChanged($event)">
 			</result-table>

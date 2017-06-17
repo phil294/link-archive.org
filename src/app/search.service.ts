@@ -10,7 +10,7 @@ import {Injectable} from "@angular/core";
 import "rxjs/add/operator/map";
 import {HttpApi} from "./http-api.service";
 import {Response} from "@angular/http";
-import {SearchResponse} from "./model/search-response";
+import {Product} from "./model/Product";
 
 export enum SortingOrder {
 	ASC,
@@ -40,6 +40,6 @@ export class SearchService {
 		// show map to "a,b,c,..."-string
 		let showingQ: string = Array.from(showAttributes).join(',');
 		return this.http.get(`/search?filter=${filterQ}&sorting=${sortingQ}&show=${showingQ}&rows=${rows}&columns=${columns}`)
-			.map((resp:Response) => SearchResponse.fromJson(resp.json()));
+			.map((resp: Response) => Product.fromJsons(resp.json()));
 	}
 }

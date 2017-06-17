@@ -8,17 +8,19 @@
 import {Component, OnInit} from "@angular/core";
 import {SearchService, SortingOrder} from "../search.service";
 import {val} from "../helpers";
-import {SearchResponse} from "../model/search-response";
 import {AttributeService} from "../attribute.service";
 import {Attribute} from "../model/Attribute";
+import {Product} from "../model/Product";
 
 @Component({
 	templateUrl: './products.component.html',
 	styleUrls: ['./products.component.css'],
 })
-export class ProductsComponent implements OnInit {
+export class ProductsComponent implements OnInit
+{
 
-	private searchResponse: SearchResponse = new SearchResponse;
+	private products: Product[] = [];
+	private attributes: Attribute[] = [];
 	private relevantAttributes: Attribute[] = [];
 	val = val;
 
@@ -47,15 +49,29 @@ export class ProductsComponent implements OnInit {
 		this.columns = 10;
 		this.searchService.search(this.filters, this.sorters, this.showAttributes, this.rows, this.columns)
 			.subscribe((products: any) => {
-				this.searchResponse = products;
-				if(val(this.searchResponse.products)) {
-					// for table: shown attributes
-					this.relevantAttributes = this.searchResponse.attributes.filter((a: Attribute) => this.searchResponse.products[0].productData.hasOwnProperty(a.id))
-				}
+				this.products = products;
+				this.setRelevantAttributes();
 			});
+	}
+
+	private getAttributes(): void {
+		this.attributeService.getAttributes()
+			.subscribe((attributes: Attribute[]) => {
+				this.attributes = attributes;
+				this.setRelevantAttributes();
+			})
+	}
+
+	private setRelevantAttributes(): void {
+		// when both initialized
+		if(val(this.products) && val(this.attributes)) {
+			// for table: shown attributes
+			this.relevantAttributes = this.attributes.filter((a: Attribute) => this.products[0].productData.hasOwnProperty(a.id));
+		}
 	}
 
 	ngOnInit(): void {
 		this.doSearch();
+		this.getAttributes();
 	}
 }

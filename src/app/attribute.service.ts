@@ -17,6 +17,11 @@ export class AttributeService {
 	constructor(protected http: HttpApi) {
 
 	}
+
+	getAttributes() {
+		return this.http.get("/attribute")
+			.map((resp: Response) => Attribute.fromJsons(resp.json()));
+	}
 	addAttribute(attribute: Attribute) {
 		return this.http.post("/attribute", JSON.stringify(attribute))
 			.map((resp:Response) => Attribute.fromJson(resp.json()));

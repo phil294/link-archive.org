@@ -8,7 +8,6 @@
  */
 import {Component, OnInit, Input, EventEmitter, Output} from "@angular/core";
 import {val} from "../../helpers";
-import {SearchResponse} from "../../model/search-response";
 import {Product} from "../../model/Product";
 import {Attribute} from "../../model/Attribute";
 import {ProductService} from "../../product.service";
@@ -25,7 +24,7 @@ import {SortingOrder} from "../../search.service";
 export class ResultTableComponent implements OnInit
 {
 
-	@Input() searchResponse: SearchResponse = new SearchResponse;
+	@Input() products: Product[] = [];
 	@Input() relevantAttributes: Attribute[] = [];
 	private newProduct: Product = new Product();
 	private newAttribute: Attribute = new Attribute();
@@ -87,7 +86,7 @@ export class ResultTableComponent implements OnInit
 		this.productService.addProduct(product)
 			.subscribe((addedProduct: Product) => {
 				this.newProduct = new Product();
-				this.searchResponse.products.push(addedProduct);
+				this.products.push(addedProduct);
 			});
 	}
 
@@ -97,7 +96,7 @@ export class ResultTableComponent implements OnInit
 		}
 		this.productService.deleteProduct(product.id)
 			.subscribe(wat => {
-				this.searchResponse.products = this.searchResponse.products.filter(p => p.id != product.id); // remove successfully deleted item
+				this.products = this.products.filter(p => p.id != product.id); // remove successfully deleted item
 			});
 	}
 
@@ -114,7 +113,8 @@ export class ResultTableComponent implements OnInit
 		this.attributeService.addAttribute(attribute)
 			.subscribe((addedAttribute: Attribute) => {
 				this.newAttribute = new Attribute();
-				this.searchResponse.attributes.push(addedAttribute);
+				//this.searchResponse.attributes.push(addedAttribute); // 20170617 atributes werden hier nicht verwaltet, gibt nur relevant attributes. -> neue anfrage
+				this.sortersChanged.emit(this.sorters); // todo klappt aber wäre anders besser
 			});
 	}
 
@@ -124,7 +124,8 @@ export class ResultTableComponent implements OnInit
 		}
 		this.attributeService.deleteAttribute(attribute.id)
 			.subscribe(wat => {
-				this.searchResponse.attributes = this.searchResponse.attributes.filter(a => a.id != attribute.id); // remove successfully deleted attr
+				// this.searchResponse.attributes = this.searchResponse.attributes.filter(a => a.id != attribute.id); // remove successfully deleted attr // 20170617 s.o.
+				this.sortersChanged.emit(this.sorters); // todo klappt aber wäre anders besser
 			});
 	}
 }

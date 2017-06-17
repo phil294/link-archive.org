@@ -1,4 +1,4 @@
-<table id="result" *ngIf="val(searchResponse.products); else noResultsTempl; let products">
+<table id="result" *ngIf="val(products); else noResultsTempl; let products">
 	<tr class="padding">
 		<th class="padding">Name</th>
 		<th *ngFor="let attribute of relevantAttributes" class="padding">
@@ -17,8 +17,8 @@
 						<!-- sorting number is set -->
 						<i class="material-icons"
 						   *ngIf="sortersFind(attribute.id)[1]==SortingOrder.DESC ; else isAscTempl"
-						   (click)="sorters.splice(sortersFindIndex(attribute.id),1); sorters.push([attribute.id, SortingOrder.ASC]); sortersChanged.emit(sorters);">
-							<!-- sorting is DESC, onclick=NONEthenASC -->
+						   (click)="sortersFind(attribute.id)[1]=SortingOrder.ASC; sortersChanged.emit(sorters);">
+							<!-- sorting is DESC, onclick=ASC -->
 							expand_less</i>
 						<ng-template #isAscTempl>
 							<i class="material-icons"
