@@ -17,6 +17,7 @@ import {val} from "../../helpers";
 export class EditableValueDialogComponent {
 
 	val = val;
+	@Input() editable: boolean = false;
 	@Input() value: string = "";
 	@Input() unit: string = "";
 	private editDialog: boolean = false;

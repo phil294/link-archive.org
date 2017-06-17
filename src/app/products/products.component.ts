@@ -31,12 +31,12 @@ export class ProductsComponent implements OnInit {
 	}
 
 	ngOnInit(): void {
-		this.filters.set(8, "2");
-		this.filters.set(5, "Coupe");
-		this.sorters.set(7, SortingOrder.DESC);
-		this.showAttributes.add(14);
-		this.showAttributes.add(17);
-		this.rows = 1;
+		//	this.filters.set(8, "2");
+		//	this.filters.set(5, "Coupe");
+		//	this.sorters.set(7, SortingOrder.DESC);
+		//	this.showAttributes.add(14);
+		//	this.showAttributes.add(17);
+		this.rows = 100;
 		this.columns = 10;
 		this.searchService.search(this.filters, this.sorters, this.showAttributes, this.rows, this.columns)
 			.subscribe((products: any) => {

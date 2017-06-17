@@ -12,9 +12,9 @@ import {val} from "./helpers";
 
 @Injectable()
 export class GlobalService {
-	private loggedInUserSource = new BehaviorSubject<User>(this.initUser());
+	private loggedInUserSource = new BehaviorSubject<User>(GlobalService.initUser());
 
-	private initUser(): User {
+	private static initUser(): User {
 		let storedUser = JSON.parse(localStorage.getItem('ls_currentUser'));
 		if(val(storedUser)) {
 			return storedUser;

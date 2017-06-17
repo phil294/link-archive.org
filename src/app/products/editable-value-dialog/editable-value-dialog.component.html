@@ -1,10 +1,12 @@
 <!-- p -->
-<div (click)="editDialog=true" *ngIf="!editDialog" class="clickable">
-	<p *ngIf="val(value); else noValueTempl">
+<div (click)="editDialog=editable" *ngIf="!editDialog" class="clickable">
+	<span *ngIf="val(value); else noValueTempl" fxLayoutAlign="center center">
 		{{ value }} {{ unit }}
-	</p>
+	</span>
 	<ng-template #noValueTempl>
-		?
+		<span class="inactive" fxLayoutAlign="center center">
+			?
+		</span>
 	</ng-template>
 </div>
 <!-- input -->

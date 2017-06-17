@@ -58,4 +58,12 @@ h1, h2, h3, h4, h5, h6 {
 .hoverable:hover, .clickable:hover, .material-icons:hover {
   text-shadow: 4px 3px 5px #484848; }
 
+.inactive {
+	opacity: 0.5;
+}
+
+.important {
+	font-weight: bold;
+}
+
 /*# sourceMappingURL=styles.css.map */

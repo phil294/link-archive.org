@@ -79,3 +79,11 @@ h1, h2, h3, h4, h5, h6 {
   //background-color: $darksmoke;
   text-shadow: $shadow_dark;
 }
+
+.inactive {
+  opacity: 0.5;
+}
+
+.important {
+  font-weight: bold;
+}
