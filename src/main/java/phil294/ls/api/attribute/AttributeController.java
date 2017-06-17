@@ -26,6 +26,14 @@ public class AttributeController
 	@Autowired
 	private AttributeRepository attributeRepository;
 	
+	@GetMapping
+	public ResponseEntity<Iterable<Attribute>> getAttributes(
+			@RequestAttribute("user") User optionalUser
+	)
+	{
+		return new ResponseEntity<>(attributeRepository.findAll(), HttpStatus.OK);
+	}
+	
 	///////////////////////////////////////////
 	//////////////// ADMIN FUNCTIONS //////////
 	///////////////////////////////////////////

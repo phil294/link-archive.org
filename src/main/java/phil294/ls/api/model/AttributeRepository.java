@@ -17,4 +17,6 @@ import java.util.Set;
 public interface AttributeRepository extends CrudRepository<Attribute, Integer>
 {
 	List<Attribute> findByIdNotInOrderByInterestDesc(Set<Integer> attributeIds, Pageable pageable);
+	
+	//List<Attribute> findAllOrderByInterest
 }

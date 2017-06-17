@@ -44,7 +44,7 @@ public class SearchController
 	 * http://localhost:8080/search?filter=8:2,5:Coupe&sorting=7:1&show=14,17&rows=4&columns=8
 	 */
 	@GetMapping
-	public ResponseEntity<SearchResponse> search(
+	public ResponseEntity<List<Product>> search(
 			@RequestAttribute("user") User opionalUser,
 			// search(filterAttributes: Map<number,string>, sortingAttributes: Map<number, SortingOrder>, showAttributes: Set<number>, rows: number, columns: number) {
 			// 	return this.http.get(`/search?filter=${filterQ}&sorting=${sortingQ}&show=${showingQ}&rows=${rows}&columns=${columns}`)
@@ -147,10 +147,6 @@ public class SearchController
 			}
 			products.add(product);
 		}
-		
-		//Iterable<Attribute> attributes = attributeRepository.findAll(relevant_attrs);
-		Iterable<Attribute> attributes = attributeRepository.findAll(); // return all
-		SearchResponse response = new SearchResponse(products, attributes);
-		return new ResponseEntity<>(response, HttpStatus.OK);
+		return new ResponseEntity<>(products, HttpStatus.OK);
 	}
 }
