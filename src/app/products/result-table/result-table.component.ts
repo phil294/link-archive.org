@@ -26,6 +26,7 @@ export class ResultTableComponent implements OnInit
 {
 
 	@Input() searchResponse: SearchResponse = new SearchResponse;
+	@Input() relevantAttributes: Attribute[] = [];
 	private newProduct: Product = new Product();
 	private newAttribute: Attribute = new Attribute();
 	val = val;

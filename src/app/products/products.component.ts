@@ -10,6 +10,7 @@ import {SearchService, SortingOrder} from "../search.service";
 import {val} from "../helpers";
 import {SearchResponse} from "../model/search-response";
 import {AttributeService} from "../attribute.service";
+import {Attribute} from "../model/Attribute";
 
 @Component({
 	templateUrl: './products.component.html',
@@ -17,7 +18,8 @@ import {AttributeService} from "../attribute.service";
 })
 export class ProductsComponent implements OnInit {
 
-	searchResponse: SearchResponse = new SearchResponse;
+	private searchResponse: SearchResponse = new SearchResponse;
+	private relevantAttributes: Attribute[] = [];
 	val = val;
 
 	private filters: Map<number,string> = new Map<number,string>();
@@ -46,6 +48,10 @@ export class ProductsComponent implements OnInit {
 		this.searchService.search(this.filters, this.sorters, this.showAttributes, this.rows, this.columns)
 			.subscribe((products: any) => {
 				this.searchResponse = products;
+				if(val(this.searchResponse.products)) {
+					// for table: shown attributes
+					this.relevantAttributes = this.searchResponse.attributes.filter((a: Attribute) => this.searchResponse.products[0].productData.hasOwnProperty(a.id))
+				}
 			});
 	}
 

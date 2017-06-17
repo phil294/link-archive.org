@@ -1,7 +1,7 @@
 <table id="result" *ngIf="val(searchResponse.products); else noResultsTempl; let products">
 	<tr class="padding">
 		<th class="padding">Name</th>
-		<th *ngFor="let attribute of searchResponse.attributes" class="padding">
+		<th *ngFor="let attribute of relevantAttributes" class="padding">
 			<div fxLayout="row" fxLayoutAlign="center center">
 				<i class="material-icons" (click)="deleteAttribute(attribute)" *ngIf="isAdmin">delete</i>
 				<abbr title="{{attribute.description}}">
@@ -68,7 +68,7 @@
 								   (valueChanged)="changeProductName(product, $event)">
 			</editable-value-dialog>
 		</td>
-		<td *ngFor="let attribute of searchResponse.attributes" class="padding">
+		<td *ngFor="let attribute of relevantAttributes" class="padding">
 			<editable-value-dialog
 					[value]="product.productData[attribute.id]"
 					[unit]="attribute.unit"
