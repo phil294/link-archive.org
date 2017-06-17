@@ -64,9 +64,10 @@ export class ProductsComponent implements OnInit
 	private getAttributes(): void {
 		this.attributeService.getAttributes()
 			.subscribe((attributes: Attribute[]) => {
-				attributes.forEach(a => a.type = AttributeType.number); // fixme
+				//attributes.forEach(a => a.type = AttributeType.number); // fixme
 				this.attributes = attributes;
 				this.setRelevantAttributes();
+				console.log(attributes);
 			})
 	}
 

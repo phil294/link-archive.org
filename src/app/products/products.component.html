@@ -23,10 +23,10 @@
 						<input type="radio" name="type" [value]="FilterType.VALUE" [(ngModel)]="filtertype"/>
 					</label>
 					<div *ngIf="filtertype==FilterType.VALUE">
-						<input [type]="filterattribute.type==AttributeType.number?'number':'text'" name="filtervalue" [(ngModel)]="filtervalue"/>
+						<input [type]="filterattribute.type==AttributeType.NUMBER?'number':'text'" name="filtervalue" [(ngModel)]="filtervalue"/>
 					</div>
 
-					<label *ngIf="filterattribute.type==AttributeType.number">Specify range
+					<label *ngIf="filterattribute.type==AttributeType.NUMBER">Specify range
 						<input type="radio" name="type" [value]="FilterType.RANGE" [(ngModel)]="filtertype"/>
 					</label>
 					<div *ngIf="filtertype==FilterType.RANGE" fxLayout="column" fxLayoutAlign="center center">

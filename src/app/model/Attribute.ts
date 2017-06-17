@@ -8,8 +8,8 @@ import {val} from "../helpers";
  * . --"-"--
  */
 export enum AttributeType { // literals used in html-inputs
-	number,
-	string
+	NUMBER,
+	STRING
 }
 export class Attribute {
 	id: number;
