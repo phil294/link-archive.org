@@ -18,5 +18,7 @@ public interface AttributeRepository extends CrudRepository<Attribute, Integer>
 {
 	List<Attribute> findByIdNotInOrderByInterestDesc(Set<Integer> attributeIds, Pageable pageable);
 	
+	List<Attribute> findAllByOrderByInterestDesc();
+	
 	//List<Attribute> findAllOrderByInterest
 }

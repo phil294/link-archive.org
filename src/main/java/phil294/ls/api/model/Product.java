@@ -6,8 +6,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.LinkedHashMap;
 
 /**
  * User: phi
@@ -36,16 +35,16 @@ public class Product implements Serializable // todo seri notw?
 	// fixme 20170612 interest
 	
 	@Transient
-	private Map<Integer, Object> productData = new HashMap<>(); // <attributeId, value>
+	private LinkedHashMap<Integer, Object> productData = new LinkedHashMap<>(); // <attributeId, value> // jackson bug 20170618 todo: LinkedHashMap wird wie TreeMap serialisiert. Daher workaround mit attributeOrder in SearchResponse.....
 	
 	///////////////////////////////
 	
-	public Map<Integer, Object> getProductData()
+	public LinkedHashMap<Integer, Object> getProductData()
 	{
 		return productData;
 	}
 	
-	public void setProductData(Map<Integer, Object> productData)
+	public void setProductData(LinkedHashMap<Integer, Object> productData)
 	{
 		this.productData = productData;
 	}

@@ -41,10 +41,10 @@ public class SearchController
 	
 	/**
 	 * todo docu überall
-	 * http://localhost:8080/search?filter=8:2,5:Coupe&sorting=7:1&show=14,17&rows=4&columns=8
+	 * http://localhost:8080/search?filter=8:2,5:Coupe&sorting=7:1&show=14,17&rows=4&columns=8 // todo veraltet
 	 */
 	@GetMapping
-	public ResponseEntity<List<Product>> search(
+	public ResponseEntity<SearchResponse> search(
 			@RequestAttribute("user") User opionalUser,
 			// search(filterAttributes: Map<number,string>, sortingAttributes: Map<number, SortingOrder>, showAttributes: Set<number>, rows: number, columns: number) {
 			// 	return this.http.get(`/search?filter=${filterQ}&sorting=${sortingQ}&show=${showingQ}&rows=${rows}&columns=${columns}`)
@@ -56,12 +56,17 @@ public class SearchController
 	)
 	{
 		// parse inputs into collections
-		Map<Integer, String> filters = filterQ.isEmpty() ? new HashMap<>() :
-				Arrays.stream(filterQ.split(","))
+		Map<Integer, Filter> filters = filterQ.isEmpty() ? new HashMap<>() :
+				Arrays.stream(filterQ.split(",")) // 8:_3_7,11:3__
 						.map(s -> s.split(":"))
-						.collect(Collectors.toMap(s -> Integer.valueOf(s[0]), s -> s[1]));
+						.collect(Collectors.toMap(
+								s -> Integer.valueOf(s[0]), // filter attribute id
+								s -> { // _y_z (value) or x__ (range)
+									String[] conditions = s[1].split("_", -1);
+									return new Filter(conditions[0], conditions[1], conditions[2]);
+								}));
 		Map<Integer, SortingOrder> sorters = sortingQ.isEmpty() ? new LinkedHashMap<>() :
-				Arrays.stream(sortingQ.split(","))
+				Arrays.stream(sortingQ.split(",")) // 9:0,10:0,11:1
 						.map(s -> s.split(":"))
 						.collect(Collectors.toMap(
 								s -> Integer.parseInt(s[0]),
@@ -69,13 +74,13 @@ public class SearchController
 								(v1, v2) -> v1,
 								LinkedHashMap::new));
 		Set<Integer> showers = showingQ.isEmpty() ? new LinkedHashSet<>() :
-				Arrays.stream(showingQ.split(","))
+				Arrays.stream(showingQ.split(",")) // 5,7,2
 						.map(Integer::parseInt)
 						.collect(Collectors.toCollection(LinkedHashSet::new));
 		// all attributes in the pivot table, from which to filter & sort afterwards, fillers etc
 		// order matters: == view order on website: 1st sorters, 2nd showers, 3rd filters, 4th fillers
 		Set<Integer> relevant_attrs_ids = Stream.concat(sorters.keySet().stream(), Stream.concat(showers.stream(), filters.keySet().stream()))
-				.collect(Collectors.toSet());
+				.collect(Collectors.toCollection(LinkedHashSet::new));
 		// COLUMNS: FILLERS
 		int fillers_size = columns - relevant_attrs_ids.size();
 		if(fillers_size > 0) {
@@ -89,7 +94,15 @@ public class SearchController
 					.stream().map(Attribute::getId).collect(Collectors.toList());
 			relevant_attrs_ids.addAll(fillers);
 		}
-		Iterable<Attribute> relevant_attrs = attributeRepository.findAll(relevant_attrs_ids);
+		// messes up ordering
+		Iterable<Attribute> relevant_attrs_iter = attributeRepository.findAll(relevant_attrs_ids);
+		// iterable to list
+		List<Attribute> relevant_attrs_messy = new ArrayList<>();
+		relevant_attrs_iter.forEach(relevant_attrs_messy::add);
+		// restore ordering of messy list into relevant attrs
+		final List<Attribute> relevant_attrs = relevant_attrs_ids.stream().map(attr ->
+				relevant_attrs_messy.stream().filter(attribute -> attribute.getId() == attr)
+						.findFirst().get()).collect(Collectors.toList());
 		
 		// MAIN QUERY JPQL
 		String queryString = "" +
@@ -108,9 +121,27 @@ public class SearchController
 				") AS pivot ";
 		// select from pivot table: FILTERS
 		List<String> filter_snippets = new ArrayList<>();
+		Map<Integer, String> filterStringValues = new LinkedHashMap<>();
 		int i = 0;
-		for(int filterAttr : filters.keySet()) {
-			filter_snippets.add("attr" + filterAttr + " = ?" + (++i) + " "); // parameter placeholders
+		for(Map.Entry<Integer, Filter> filterEntry : filters.entrySet()) {
+			int filterAttr = filterEntry.getKey();
+			Filter filter = filterEntry.getValue();
+			if(filter.value.isEmpty()) {
+				// range filter: between
+				if(filter.range_from.isEmpty() || filter.range_to.isEmpty()) {
+					throw new IllegalArgumentException("Invalid filter range.");
+				}
+				Attribute matchingAttribute = relevant_attrs.stream().filter(attribute -> attribute.getId() == filterAttr).findFirst().get();
+				if(matchingAttribute.getType() != AttributeType.NUMBER) {
+					throw new IllegalArgumentException("Requested range for non-number-type attribute " + filterAttr);
+				}
+				filter_snippets.add("attr" + filterAttr + " BETWEEN " + filter.range_from + " AND " + filter.range_to + " ");
+			} else {
+				// value filter
+				i++;
+				filter_snippets.add("attr" + filterAttr + " = ?" + i + " "); // parameter placeholders
+				filterStringValues.put(i, filter.value);
+			}
 		}
 		if(!filter_snippets.isEmpty()) {
 			queryString += "WHERE " + String.join(" AND ", filter_snippets);
@@ -127,13 +158,13 @@ public class SearchController
 		// ROWS
 		queryString += "LIMIT " + rows + " ";
 		Query query = entityManager.createNativeQuery(queryString);
-		i = 0;
-		for(String filterValue : filters.values()) {
-			query.setParameter(++i, filterValue); // fill parameter placeholders
+		for(Map.Entry<Integer, String> filterEntry : filterStringValues.entrySet()) {
+			query.setParameter(filterEntry.getKey(), filterEntry.getValue()); // fill parameter placeholders
 		}
 		// get result
 		List<Product> products = new ArrayList<>();
 		List<Object> objs = query.getResultList();
+		i = 0;
 		for(Object obj : objs) {
 			Object[] o = (Object[]) obj;
 			i = -1; Product product = new Product();
@@ -149,6 +180,8 @@ public class SearchController
 			}
 			products.add(product);
 		}
-		return new ResponseEntity<>(products, HttpStatus.OK);
+		List<Integer> attributeOrder = relevant_attrs.stream().map(attribute -> attribute.getId()).collect(Collectors.toList());
+		SearchResponse response = new SearchResponse(products, attributeOrder);
+		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 }

@@ -31,7 +31,7 @@ public class AttributeController
 			@RequestAttribute("user") User optionalUser
 	)
 	{
-		return new ResponseEntity<>(attributeRepository.findAll(), HttpStatus.OK);
+		return new ResponseEntity<>(attributeRepository.findAllByOrderByInterestDesc(), HttpStatus.OK);
 	}
 	
 	///////////////////////////////////////////
