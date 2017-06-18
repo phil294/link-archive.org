@@ -6,7 +6,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 
@@ -36,7 +35,6 @@ public class Attribute
 	private Integer interest = 1;
 	@Size(min = 1, max = 64)
 	private String unit = "";
-	@Min(0) @Max(1)
 	private AttributeType type;
 	
 	public String getUnit()
