@@ -24,8 +24,6 @@ public class ProductController
 	private ProductRepository productRepository;
 	@Autowired
 	private AttributeRepository attributeRepository;
-	@Autowired
-	private ProductValueRepository productValueRepository;
 	
 	///////////////////////////////////////////
 	//////////////// ADMIN FUNCTIONS //////////
@@ -72,7 +70,7 @@ public class ProductController
 		return new ResponseEntity<>(product, HttpStatus.OK);
 	}
 	@PutMapping("/{productId}/attribute/{attributeId}") // notwendig weil nicht komplettes objekt übergeben da attributmenge lückenhaft und evlt sehr groß <-- widerspricht rest todo konflikt
-	public ResponseEntity<Product> updateProductValue(
+	public ResponseEntity<ProductValue> updateProductValue(
 			@RequestAttribute("user") User user,
 			@PathVariable("productId") Integer productId,
 			@PathVariable("attributeId") Integer attributeId,
@@ -80,7 +78,7 @@ public class ProductController
 	)
 	{
 		if( ! user.getAdmin()) {
-			return new ResponseEntity<Product>(HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		if(newValue.isEmpty()) {
 			throw new IllegalArgumentException("New value cannot be empty."); // (s. deleteProductValue)
@@ -90,27 +88,8 @@ public class ProductController
 		if(product == null || attribute == null) {
 			throw new IllegalArgumentException("Argument or product could not be found.");
 		}
-		ProductValue productValue;
-		productValue = productValueRepository.findOneByProductAndAttribute(product.getId(), attribute.getId());
-		if(productValue == null) {
-			// new
-			productValue = new ProductValue();
-			productValue.setAttribute(attribute.getId());
-			productValue.setProduct(product.getId());
-			productValue.setUser(user.getId());
-		} else {
-			// existing, update. id is set.
-		}
-		if(attribute.getType() == AttributeType.NUMBER) {
-			int value_number = Integer.parseInt(newValue); // may throw on invalid input
-			productValue.setValue_number(value_number);
-		} else {
-			productValue.setValue_string(newValue);
-		}
-		//product.getProductData().put(attributeId, productValue);
-		//productRepository.save(product);
-		productValueRepository.save(productValue);
-		return new ResponseEntity<>(product, HttpStatus.OK);
+		// fixme do mongo things
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/{productId}/attribute/{attributeId}")
@@ -123,11 +102,7 @@ public class ProductController
 		if(!user.getAdmin()) {
 			return new ResponseEntity<Product>(HttpStatus.UNAUTHORIZED);
 		}
-		ProductValue productValue = productValueRepository.findOneByProductAndAttribute(productId, attributeId);
-		if(productValue == null) {
-			throw new IllegalArgumentException("Product Value not found");
-		}
-		productValueRepository.delete(productValue);
+		// fixme
 		return new ResponseEntity(HttpStatus.OK);
 	}
 	

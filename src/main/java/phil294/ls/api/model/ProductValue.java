@@ -1,11 +1,5 @@
 package phil294.ls.api.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.Size;
 import java.sql.Timestamp;
 
 /**
@@ -16,33 +10,28 @@ import java.sql.Timestamp;
  * . /)___)
  * . --"-"--
  */
-@Entity
-@Table(name = "product_data")
 public class ProductValue
 {
-	@Id
-	@GeneratedValue
-	private Integer id;
-	@Min(1)
+	private String id;
 	private Integer product;
-	@Min(1)
 	private Integer attribute;
 	private Integer user = null;
-	@Size(min = 1, max = 255)
-	private String value_string = null;
-	private Integer value_number = null;
+	private Object value = null;
 	private Timestamp submitted;
 	private Integer interest;
+	
+	public ProductValue()
+	{/*mongoKeep*/}
 	
 	//////////////////////
 	
 	
-	public Integer getId()
+	public String getId()
 	{
 		return id;
 	}
 	
-	public void setId(Integer id)
+	public void setId(String id)
 	{
 		this.id = id;
 	}
@@ -77,24 +66,14 @@ public class ProductValue
 		this.user = user;
 	}
 	
-	public String getValue_string()
+	public Object getValue()
 	{
-		return value_string;
+		return value;
 	}
 	
-	public void setValue_string(String value_string)
+	public void setValue(Object value)
 	{
-		this.value_string = value_string;
-	}
-	
-	public Integer getValue_number()
-	{
-		return value_number;
-	}
-	
-	public void setValue_number(Integer value_number)
-	{
-		this.value_number = value_number;
+		this.value = value;
 	}
 	
 	public Timestamp getSubmitted()
