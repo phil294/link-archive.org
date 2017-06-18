@@ -4,7 +4,7 @@
 			<h3 class="padding">Cars</h3>
 
 			<div id="configuration" fxLayout="row">
-				<div id="filters" class="box">
+				<div id="filters" class="box padding">
 					<h4>Filters</h4>
 					<div fxLayout="row">
 						<div id="addFilter" fxLayout="row">
@@ -22,8 +22,8 @@
 									</select>
 								</label>
 							</div>
-							<form *ngIf="val(filterattribute)" id="filterConfigurator" fxLayout="column" fxLayoutAlign="center center" #filterConfiguratorForm="ngForm"
-								  (ngSubmit)="addFilter($event, filterattribute, newFilter)">
+							<form *ngIf="val(filterattribute)" id="filterConfigurator" fxLayout="column" fxLayoutAlign="center center" class="padding"
+								  #filterConfiguratorForm="ngForm" (ngSubmit)="addFilter($event, filterattribute, newFilter)">
 								<h5>{{filterattribute.name}}</h5>
 
 								<!-- value-->
@@ -35,6 +35,7 @@
 									<input [type]="filterattribute.type==AttributeType.NUMBER?'number':'text'" name="filtervalue" [(ngModel)]="newFilter.value" minlength="1"/>
 									<span>{{ filterattribute.unit }}</span>
 								</div>
+								<br/>
 
 								<!-- range -->
 								<label *ngIf="filterattribute.type==AttributeType.NUMBER">
@@ -52,17 +53,17 @@
 										<span>{{ filterattribute.unit }}</span>
 									</div>
 								</div>
+								<br/>
 
 								<input type="submit" [disabled]="!val(filterattribute) || !filterattribute.name.includes(filterbox) || !filterConfiguratorForm.form.valid || !newFilter.valid()"
 									   value="Add filter"/>
 							</form>
 						</div>
-
-						<ul id="filterList" fxLayout="column">
+						<ul id="filterList" fxLayout="column" class="padding">
 							<li *ngFor="let filterEntry of filtersToIterable()" fxLayout="row" fxLayoutAlign="start center">
 								<i class="material-icons" (click)="removeFilter(filterEntry.attribute)">remove_circle</i>
-								{{ attributeById(filterEntry.attribute).name }}:
-								<span *ngIf="val(filterEntry.filter.value); else filterRangeTempl">
+								{{ attributeById(filterEntry.attribute).name + ":"}}
+								<span *ngIf="val(filterEntry.filter.value); else filterRangeTempl" class="displayedFilerValue">
 									{{ filterEntry.filter.value +" "+attributeById(filterEntry.attribute).unit }}
 								</span>
 								<ng-template #filterRangeTempl>
@@ -77,10 +78,10 @@
 
 				<div fxFlex></div>
 
-				<div id="showers" class="box">
+				<div id="showers" class="box padding">
 					<h4>Display attributes</h4>
 					<div fxLayout="row">
-						<div fxLayout="column">
+						<div fxLayout="column" class="padding">
 							<ul id="showerList" fxLayout="column">
 								<li *ngFor="let shower of showers" fxLayout="row" fxLayoutAlign="start center">
 									<i class="material-icons" (click)="removeShower(shower)">remove_circle</i>
@@ -121,7 +122,8 @@
 			<result-table
 					[products]="products"
 					[relevantAttributes]="relevantAttributes"
-					(sortersChanged)="sortersChanged($event)">
+					(sortersChanged)="sortersChanged($event)"
+					(attributesChanged)="attributesChanged()">
 			</result-table>
 		</div>
 	</div>

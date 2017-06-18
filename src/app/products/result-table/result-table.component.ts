@@ -9,9 +9,8 @@
 import {Component, OnInit, Input, EventEmitter, Output} from "@angular/core";
 import {val} from "../../helpers";
 import {Product} from "../../model/Product";
-import {Attribute} from "../../model/Attribute";
+import {Attribute, AttributeType} from "../../model/Attribute";
 import {ProductService} from "../../product.service";
-import {ProductValue} from "../../model/ProductValue";
 import {AttributeService} from "../../attribute.service";
 import {GlobalService} from "../../global.service";
 import {SortingOrder} from "../../search.service";
@@ -30,9 +29,11 @@ export class ResultTableComponent implements OnInit
 	private newAttribute: Attribute = new Attribute();
 	val = val;
 	SortingOrder = SortingOrder;
+	AttributeType = AttributeType;
 	private isAdmin: boolean;
 	private sorters: Array<[number, SortingOrder]> = []; // array of tuples
 	@Output() sortersChanged: EventEmitter<[number, SortingOrder][]> = new EventEmitter();
+	@Output() attributesChanged = new EventEmitter();
 
 	private sortersFind(attribute: number) {
 		return this.sorters.find((sorter: [number, SortingOrder]) => sorter[0] == attribute);
@@ -61,7 +62,7 @@ export class ResultTableComponent implements OnInit
 
 	changeProductValue(product: Product, attribute: Attribute, value: string) {
 		if(val(product.productData[attribute.id])) {
-			let previousValue = product.productData[attribute.id].value;
+			let previousValue = product.productData[attribute.id];
 			if(previousValue == value) {
 				return; // no change
 			}
@@ -70,16 +71,23 @@ export class ResultTableComponent implements OnInit
 			if(value == "") {
 				return;
 			}
-			product.productData[attribute.id] = new ProductValue();
+			product.productData[attribute.id] = "";
 		}
 		//let productValue = new ProductValue();
 		//productValue.value = value;
 		//product.productData[attribute.id] = productValue;
 		//this.productService.changeProduct(product)
 		//	.subscribe();
-		product.productData[attribute.id].value = value;
-		this.productService.changeProductValue(product.id, attribute.id, value)
-			.subscribe();
+		product.productData[attribute.id] = value;
+		if(value == "") {
+			// delete
+			this.productService.deleteProductValue(product.id, attribute.id)
+				.subscribe();
+		} else {
+			// update
+			this.productService.changeProductValue(product.id, attribute.id, value)
+				.subscribe();
+		}
 	}
 
 	addProduct(product: Product): void {
@@ -113,8 +121,8 @@ export class ResultTableComponent implements OnInit
 		this.attributeService.addAttribute(attribute)
 			.subscribe((addedAttribute: Attribute) => {
 				this.newAttribute = new Attribute();
-				//this.searchResponse.attributes.push(addedAttribute); // 20170617 atributes werden hier nicht verwaltet, gibt nur relevant attributes. -> neue anfrage
-				this.sortersChanged.emit(this.sorters); // todo klappt aber wäre anders besser
+				//this.searchResponse.attributes.push(addedAttribute); // 20170617 atributes werden hier nicht verwaltet, gibt nur relevant attributes. -> neue anfrage (und neue attrs holen)
+				this.attributesChanged.emit();
 			});
 	}
 
@@ -125,7 +133,7 @@ export class ResultTableComponent implements OnInit
 		this.attributeService.deleteAttribute(attribute.id)
 			.subscribe(wat => {
 				// this.searchResponse.attributes = this.searchResponse.attributes.filter(a => a.id != attribute.id); // remove successfully deleted attr // 20170617 s.o.
-				this.sortersChanged.emit(this.sorters); // todo klappt aber wäre anders besser
+				this.attributesChanged.emit();
 			});
 	}
 }

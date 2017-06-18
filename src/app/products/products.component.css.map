@@ -1,6 +1,6 @@
 {
 "version": 3,
-  "mappings": "AAAA,WAAW;ACEX,OAAQ;EACN,eAAe,EAAC,QAAQ;EACxB,MAAM,EAAE,SAAS;;AAGnB,YAAa;EACX,SAAS,EAAE,KAAK;EAChB,kBAAM;IACP,MAAM,EAAE,IAAI",
+  "mappings": "AAAA,WAAW;ACEX,OAAQ;EACN,eAAe,EAAC,QAAQ;EACxB,MAAM,EAAE,SAAS;;AAGnB,YAAa;EACX,SAAS,EAAE,KAAK;EAChB,kBAAM;IACP,MAAM,EAAE,IAAI;;AAIb,oBAAqB;EACnB,WAAW,EAAE,MAAM",
 "sources": ["../../styles_variables.scss","products.component.scss"],
 "names": [],
 "file": "products.component.css"

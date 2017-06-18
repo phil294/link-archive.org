@@ -24,7 +24,6 @@ export class SearchResponse
 		let searchResponse: SearchResponse = Object.assign(new SearchResponse(), search_response_json);
 		let products = Product.fromJsons(search_response_json.products);
 		searchResponse.products = products;
-		console.log(searchResponse);
 		return searchResponse;
 	}
 }

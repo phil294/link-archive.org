@@ -91,6 +91,11 @@ export class ProductsComponent implements OnInit
 		this.doSearch();
 	}
 
+	private attributesChanged() {
+		this.getAttributes();
+		this.doSearch();
+	}
+
 	private doSearch(): void {
 		this.searchService.search(this.filters, this.sorters, this.showers, this.rows, this.determineColumns())
 			.subscribe((searchResponse: SearchResponse) => {
@@ -105,6 +110,17 @@ export class ProductsComponent implements OnInit
 	}
 
 	private getAttributes(): void {
+		// reset everything attributes
+		this.attributeOrder = [];
+		this.attributes = [];
+		this.relevantAttributes = [];
+		this.sorters = [];
+		this.showers = new Set<number>();
+		this.filters = new Map<number,Filter>();
+		this.newFilter = new Filter();
+		this.filterattribute = null;
+		this.showerattribute = null;
+
 		this.attributeService.getAttributes()
 			.subscribe((attributes: Attribute[]) => {
 				//attributes.forEach(a => a.type = AttributeType.number); // fixme

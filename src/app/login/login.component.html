@@ -3,9 +3,9 @@
 		<h3>login</h3>
 		<form (ngSubmit)="login()" fxLayout="column" fxLayoutAlign="center center">
 			<label for="name">Name</label>
-			<input type="text" id="name" name="name" [(ngModel)]="user.name"/>
+			<input type="text" class="margin" id="name" name="name" [(ngModel)]="user.name"/>
 			<label for="password">Password</label>
-			<input type="password" id="password" name="password" [(ngModel)]="user.password"/>
+			<input type="password" class="margin" id="password" name="password" [(ngModel)]="user.password"/>
 			<p *ngIf="invalid">Login incorrect!</p>
 			<div class="padding">
 				<input type="submit" value="Login" [disabled]="loading"/>

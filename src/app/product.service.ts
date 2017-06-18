@@ -28,6 +28,10 @@ export class ProductService {
 	changeProductValue(productId: number, attributeId: number, newValue: string) {
 		return this.http.put(`/product/${productId}/attribute/${attributeId}`, newValue);
 	}
+
+	deleteProductValue(productId: number, attributeId: number) {
+		return this.http.delete(`/product/${productId}/attribute/${attributeId}`);
+	}
 	deleteProduct(productId: number) {
 		return this.http.delete(`/product/${productId}`);
 	}

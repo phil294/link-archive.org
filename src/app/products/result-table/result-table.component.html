@@ -45,15 +45,20 @@
 					<i class="material-icons padding" (click)="showAddAttributeDialog=false" *ngIf="showAddAttributeDialog">remove_circle</i>
 					<h4 *ngIf="showAddAttributeDialog">Add new attribute</h4>
 				</div>
-				<div *ngIf="showAddAttributeDialog">
-					<form (ngSubmit)="showAddAttributeDialog=false ; addAttribute(newAttribute)" fxLayout="column" fxLayoutAlign="center center">
+				<div *ngIf="showAddAttributeDialog" class="box padding">
+					<form (ngSubmit)="showAddAttributeDialog=false ; addAttribute(newAttribute)" fxLayout="column" fxLayoutAlign="center center"
+						  #addAttributeForm="ngForm">
 						<label>Name
-							<input type="text" [(ngModel)]="newAttribute.name" name="name"/></label>
+							<input type="text" [(ngModel)]="newAttribute.name" name="name" class="margin" required/></label>
 						<label>Description
-							<input type="text" [(ngModel)]="newAttribute.description" name="description"/></label>
+							<input type="text" [(ngModel)]="newAttribute.description" name="description" class="margin" required/></label>
 						<label>Unit
-							<input type="text" [(ngModel)]="newAttribute.unit" name="unit"/></label>
-						<input type="submit" value="Ok"/>
+							<input type="text" [(ngModel)]="newAttribute.unit" name="unit" class="margin" required/></label>
+						<select [(ngModel)]="newAttribute.type" name="type" class="margin" required>
+							<option [value]="AttributeType.NUMBER" selected>Number</option>
+							<option [value]="AttributeType.STRING">Text</option>
+						</select>
+						<input type="submit" value="Ok" [disabled]="!addAttributeForm.form.valid"/>
 					</form>
 				</div>
 			</div>

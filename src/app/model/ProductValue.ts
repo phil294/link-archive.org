@@ -6,14 +6,15 @@
  * . /)___)
  * . --"-"--
  */
-export class ProductValue {
+export class ProductValueOLD
+{
 	id: number;
 	value: string;
 	submitted: number;
 	interest: number;
 
-	static fromJson(productValue_json: any): ProductValue {
-		let productValue = Object.assign(new ProductValue(), productValue_json);
+	static fromJson(productValue_json: any): ProductValueOLD {
+		let productValue = Object.assign(new ProductValueOLD(), productValue_json);
 		return productValue;
 	}
 }
