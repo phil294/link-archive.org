@@ -116,7 +116,7 @@ public class SearchController
 		}
 		queryString += String.join(", ", pivot_snippets);
 		queryString += "" +
-				"FROM products p INNER JOIN product_data pvs ON pvs.product = p.id " +
+				"FROM products p LEFT JOIN product_data pvs ON pvs.product = p.id " +
 				"GROUP BY p.id " +
 				") AS pivot ";
 		// select from pivot table: FILTERS
