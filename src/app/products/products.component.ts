@@ -40,7 +40,7 @@ export class ProductsComponent implements OnInit
 
 	private sorters: Array<[number, SortingOrder]> = [];
 	private showers: Set<number> = new Set<number>();
-	private rows: number = 50;
+	private rows: number = 20;
 	private columns: number = 5;
 
 	constructor(private searchService: SearchService, private attributeService: AttributeService) {

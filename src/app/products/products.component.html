@@ -112,6 +112,12 @@
 				</div>
 			</div>
 
+			<div id="rowsChooser">
+				<span>Show </span>
+				<input type="number" min="1" max="100" [(ngModel)]="rows" (change)="doSearch()"/>
+				<span> results</span>
+			</div>
+
 			<result-table
 					[products]="products"
 					[relevantAttributes]="relevantAttributes"

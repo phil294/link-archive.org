@@ -3,4 +3,12 @@
   border-collapse: collapse;
   border: 1px black; }
 
+#rowsChooser {
+	font-size: 0.7em;
+}
+
+#rowsChooser input {
+	height: 10px;
+}
+
 /*# sourceMappingURL=products.component.css.map */
