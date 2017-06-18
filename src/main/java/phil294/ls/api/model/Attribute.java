@@ -35,7 +35,6 @@ public class Attribute
 	private Integer interest = 1;
 	@Size(max = 64)
 	private String unit = "";
-	private AttributeType type;
 	
 	public String getUnit()
 	{
@@ -46,16 +45,6 @@ public class Attribute
 	}
 	
 	//////////////////////////
-	
-	public AttributeType getType()
-	{
-		return type;
-	}
-	
-	public void setType(AttributeType type)
-	{
-		this.type = type;
-	}
 	
 	public Integer getId()
 	{

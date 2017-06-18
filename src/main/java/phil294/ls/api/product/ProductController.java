@@ -1,15 +1,18 @@
 package phil294.ls.api.product;
 
+import org.bson.Document;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import phil294.ls.api.model.AttributeRepository;
-import phil294.ls.api.model.Product;
-import phil294.ls.api.model.ProductValue;
-import phil294.ls.api.model.User;
+import phil294.ls.api.model.*;
 
 import javax.validation.Valid;
+
+import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Updates.set;
+import static com.mongodb.client.model.Updates.unset;
 
 /**
  * User: phi
@@ -45,7 +48,12 @@ public class ProductController
 		product.setPicture(input.getPicture());
 		
 		product.setUser(user.getId());
-		// fixme add product
+		Document newProductDocument = Product.toDocument(product);
+		MongoInstance.getProductCollection().insertOne(
+				newProductDocument
+		);
+		product.setId(((ObjectId) newProductDocument.get("_id")).toHexString()); // damit frontend gleich die richtige id mit bekommt
+		
 		return new ResponseEntity<>(product, HttpStatus.OK);
 	}
 	
@@ -65,9 +73,13 @@ public class ProductController
 		product.setPicture(input.getPicture());
 		//product.setProductData(input.getProductData());
 		
-		product.set_id(productId);
+		product.setId(productId);
 		product.setUser(user.getId());
-		// fixme
+		MongoInstance.getProductCollection().updateOne(
+				eq("_id", new ObjectId(productId)),
+				//set(Product.toDocument(product)) //?
+				new Document("$set", Product.toDocument(product))
+		);
 		return new ResponseEntity<>(product, HttpStatus.OK);
 	}
 	@PutMapping("/{productId}/attribute/{attributeId}") // notwendig weil nicht komplettes objekt übergeben da attributmenge lückenhaft und evlt sehr groß <-- widerspricht rest todo konflikt
@@ -84,7 +96,9 @@ public class ProductController
 		if(newValue.isEmpty()) {
 			throw new IllegalArgumentException("New value cannot be empty."); // (s. deleteProductValue)
 		}
-		// fixme do mongo things
+		MongoInstance.getProductCollection().updateOne(
+				eq("_id", new ObjectId(productId)),
+				set("productData." + attributeId + ".value", newValue));
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
@@ -98,7 +112,10 @@ public class ProductController
 		if(!user.getAdmin()) {
 			return new ResponseEntity<Product>(HttpStatus.UNAUTHORIZED);
 		}
-		// fixme
+		MongoInstance.getProductCollection().updateOne(
+				eq("_id", new ObjectId(productId)),
+				unset("productData." + attributeId + ".value") // todo ohne .value geht es nicht? und mit .value eigentlich blöd weil ganzes data dokument gelöscht gehört
+		);
 		return new ResponseEntity(HttpStatus.OK);
 	}
 	
@@ -111,7 +128,9 @@ public class ProductController
 		if( ! user.getAdmin()) {
 			return new ResponseEntity<Product>(HttpStatus.UNAUTHORIZED);
 		}
-		// fixme
+		MongoInstance.getProductCollection().deleteOne(
+				eq("_id", new ObjectId(productId))
+		);
 		return new ResponseEntity(HttpStatus.OK);
 	}
 }

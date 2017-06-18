@@ -2,7 +2,6 @@ package phil294.ls.api.product;
 
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Sorts;
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -97,8 +96,7 @@ public class SearchController
 		Map<Integer, SortingOrder> sorters = this.parseSorters(sortingQ);
 		Set<Integer> showers = this.parseShowers(showingQ);
 		
-		MongoDatabase db = MongoInstance.getDatabase();
-		MongoCollection<Document> db_products = db.getCollection("products");
+		MongoCollection<Document> db_products = MongoInstance.getProductCollection();
 		
 		// order matters: == view order on website: 1st sorters, 2nd showers, 3rd filters, 4th fillers
 		Set<Integer> relevant_attrs_ids = Stream.concat(sorters.keySet().stream(), Stream.concat(showers.stream(), filters.keySet().stream()))
@@ -160,7 +158,7 @@ public class SearchController
 				db_order = Sorts.ascending("productData." + sorterAttr + ".value");
 			}
 			db_sorters.add(
-					sorterEntry.getKey(), db_order
+					db_order
 			);
 		}
 		

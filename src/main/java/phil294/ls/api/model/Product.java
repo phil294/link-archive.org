@@ -1,6 +1,5 @@
 package phil294.ls.api.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.bson.Document;
 
 import javax.persistence.GeneratedValue;
@@ -21,8 +20,7 @@ public class Product implements Serializable // todo seri notw?
 {
 	@Id
 	@GeneratedValue
-	private String _id;
-	@JsonIgnore
+	private String id;
 	private Integer user;
 	private String name;
 	private String description = "";
@@ -33,7 +31,7 @@ public class Product implements Serializable // todo seri notw?
 	public static Product fromDocument(Document doc)
 	{
 		Product p = new Product();
-		p.set_id(doc.getObjectId("_id").toHexString());
+		p.setId(doc.getObjectId("_id").toHexString());
 		p.setUser(doc.getInteger("user"));
 		p.setName(doc.getString("name"));
 		p.setDescription(doc.getString("description"));
@@ -51,6 +49,23 @@ public class Product implements Serializable // todo seri notw?
 		}
 		
 		return p;
+	}
+	
+	public static Document toDocument(Product p)
+	{
+		Document d = new Document();
+		if(p.getId() != null) { // mongo generates automatically
+			//	d.put("_id", p.getId()); // fixme entkommentieren
+		}
+		d.put("user", p.getUser());
+		d.put("name", p.getName());
+		d.put("description", p.getDescription());
+		d.put("picture", p.getPicture());
+		Document dataDoc = new Document();
+		
+		d.put("productData", p.getProductData());
+		
+		return d;
 	}
 	
 	///////////////////////////////
@@ -71,24 +86,19 @@ public class Product implements Serializable // todo seri notw?
 		this.user = user;
 	}
 	
-	public String get_id()
+	public String getId()
 	{
-		return _id;
+		return id;
 	}
 	
-	public void set_id(String _id)
+	public void setId(String id)
 	{
-		this._id = _id;
+		this.id = id;
 	}
 	
-	public int getUser()
+	public Integer getUser()
 	{
 		return user;
-	}
-	
-	public void setUser(int user)
-	{
-		this.user = user;
 	}
 	
 	public String getName()
