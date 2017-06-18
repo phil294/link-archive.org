@@ -33,7 +33,7 @@ public class Attribute
 	private String description = "";
 	@Min(1)
 	private Integer interest = 1;
-	@Size(min = 1, max = 64)
+	@Size(max = 64)
 	private String unit = "";
 	private AttributeType type;
 	

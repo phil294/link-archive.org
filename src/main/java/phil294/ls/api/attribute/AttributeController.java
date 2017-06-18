@@ -72,6 +72,7 @@ public class AttributeController
 		attribute.setDescription(input.getDescription()); // todo duplicate code
 		attribute.setName(input.getName());
 		attribute.setUnit(input.getUnit());
+		attribute.setType(input.getType());
 		
 		attribute.setId(attributeId);
 		attribute.setUser(user.getId());
