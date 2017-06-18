@@ -31,7 +31,8 @@ export function val(v) {
 			return false;
 	}
 	else if (type === 'number') {
-		return v;
+		//return v;
+		return "" + v; // todo wenn 0 sonst returns false..
 	}
 	return v;
 }
