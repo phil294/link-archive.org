@@ -9,7 +9,7 @@ import {Component, OnInit} from "@angular/core";
 import {SearchService, SortingOrder, FilterType} from "../search.service";
 import {val} from "../helpers";
 import {AttributeService} from "../attribute.service";
-import {Attribute, AttributeType} from "../model/Attribute";
+import {Attribute} from "../model/Attribute";
 import {Product} from "../model/Product";
 import {Filter} from "../model/Filter";
 import {SearchResponse} from "../model/SearchResponse";
@@ -27,7 +27,6 @@ export class ProductsComponent implements OnInit
 	private relevantAttributes: Attribute[] = [];
 	val = val;
 	FilterType = FilterType;
-	AttributeType = AttributeType;
 
 	private filterbox: string = "";
 	private filtertype: FilterType = FilterType.VALUE;

@@ -9,7 +9,7 @@
 import {Component, OnInit, Input, EventEmitter, Output} from "@angular/core";
 import {val} from "../../helpers";
 import {Product} from "../../model/Product";
-import {Attribute, AttributeType} from "../../model/Attribute";
+import {Attribute} from "../../model/Attribute";
 import {ProductService} from "../../product.service";
 import {AttributeService} from "../../attribute.service";
 import {GlobalService} from "../../global.service";
@@ -29,7 +29,6 @@ export class ResultTableComponent implements OnInit
 	private newAttribute: Attribute = new Attribute();
 	val = val;
 	SortingOrder = SortingOrder;
-	AttributeType = AttributeType;
 	private isAdmin: boolean;
 	private sorters: Array<[number, SortingOrder]> = []; // array of tuples
 	@Output() sortersChanged: EventEmitter<[number, SortingOrder][]> = new EventEmitter();
@@ -62,7 +61,7 @@ export class ResultTableComponent implements OnInit
 
 	changeProductValue(product: Product, attribute: Attribute, value: string) {
 		if(val(product.productData[attribute.id])) {
-			let previousValue = product.productData[attribute.id];
+			let previousValue = product.productData[attribute.id].value;
 			if(previousValue == value) {
 				return; // no change
 			}
@@ -71,14 +70,14 @@ export class ResultTableComponent implements OnInit
 			if(value == "") {
 				return;
 			}
-			product.productData[attribute.id] = "";
+			product.productData[attribute.id] = {};
 		}
 		//let productValue = new ProductValue();
 		//productValue.value = value;
 		//product.productData[attribute.id] = productValue;
 		//this.productService.changeProduct(product)
 		//	.subscribe();
-		product.productData[attribute.id] = value;
+		product.productData[attribute.id].value = value;
 		if(value == "") {
 			// delete
 			this.productService.deleteProductValue(product.id, attribute.id)

@@ -32,13 +32,13 @@
 									<input type="radio" name="type" [value]="FilterType.VALUE" [(ngModel)]="filtertype" (click)="newFilter.range_from='';newFilter.range_to=''"/>
 								</label>
 								<div *ngIf="filtertype==FilterType.VALUE" fxLayout="row">
-									<input [type]="filterattribute.type==AttributeType.NUMBER?'number':'text'" name="filtervalue" [(ngModel)]="newFilter.value" minlength="1"/>
+									<input [type]="text" name="filtervalue" [(ngModel)]="newFilter.value" minlength="1"/>
 									<span>{{ filterattribute.unit }}</span>
 								</div>
 								<br/>
 
 								<!-- range -->
-								<label *ngIf="filterattribute.type==AttributeType.NUMBER">
+								<label>
 									Range:
 									<input type="radio" name="type" [value]="FilterType.RANGE" [(ngModel)]="filtertype" (click)="newFilter.value=''"/>
 								</label>

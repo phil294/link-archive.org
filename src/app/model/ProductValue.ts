@@ -6,7 +6,7 @@
  * . /)___)
  * . --"-"--
  */
-export class ProductValueOLD
+export class ProductValueOLD // todo löschen?
 {
 	id: number;
 	value: string;

@@ -48,16 +48,12 @@
 				<div *ngIf="showAddAttributeDialog" class="box padding">
 					<form (ngSubmit)="showAddAttributeDialog=false ; addAttribute(newAttribute)" fxLayout="column" fxLayoutAlign="center center"
 						  #addAttributeForm="ngForm">
-						<label>Name
+						<label>Name<br/>
 							<input type="text" [(ngModel)]="newAttribute.name" name="name" class="margin" required/></label>
-						<label>Description
+						<label>Description<br/>
 							<input type="text" [(ngModel)]="newAttribute.description" name="description" class="margin" required/></label>
-						<label>Unit
+						<label>Unit<br/>
 							<input type="text" [(ngModel)]="newAttribute.unit" name="unit" class="margin" required/></label>
-						<select [(ngModel)]="newAttribute.type" name="type" class="margin" required>
-							<option [value]="AttributeType.NUMBER" selected>Number</option>
-							<option [value]="AttributeType.STRING">Text</option>
-						</select>
 						<input type="submit" value="Ok" [disabled]="!addAttributeForm.form.valid"/>
 					</form>
 				</div>
@@ -75,7 +71,7 @@
 		</td>
 		<td *ngFor="let attribute of relevantAttributes" class="padding">
 			<editable-value-dialog
-					[value]="product.productData[attribute.id]"
+					[value]="val(product.productData[attribute.id])? product.productData[attribute.id].value : ''"
 					[unit]="attribute.unit"
 					[editable]="isAdmin"
 					(valueChanged)="changeProductValue(product, attribute, $event)">
@@ -83,17 +79,21 @@
 		</td>
 	</tr>
 </table>
-<ng-template #noResultsTempl>
-	No results
-</ng-template>
-<div fxLayout="row" fxLayoutAlign="start center" *ngIf="isAdmin">
-	<i class="material-icons padding" (click)="showAddProductDialog=true" *ngIf="!showAddProductDialog">add_box</i>
-	<i class="material-icons padding" (click)="showAddProductDialog=false" *ngIf="showAddProductDialog">remove_circle</i>
-	<div *ngIf="showAddProductDialog">
-		<form (ngSubmit)="showAddProductDialog=false ; addProduct(newProduct)">
-			<label>Add new entry:
-				<input type="text" [(ngModel)]="newProduct.name" name="name"/></label>
-			<input type="submit" value="Ok"/>
-		</form>
+<div>
+	<ng-template #noResultsTempl>
+		<div class="padding" fxFlex fxLayout="row" fxLayoutAlign="center center">
+			<div>No results</div>
+		</div>
+	</ng-template>
+	<div fxLayout="row" fxLayoutAlign="start center" *ngIf="isAdmin">
+		<i class="material-icons padding" (click)="showAddProductDialog=true" *ngIf="!showAddProductDialog">add_box</i>
+		<i class="material-icons padding" (click)="showAddProductDialog=false" *ngIf="showAddProductDialog">remove_circle</i>
+		<div *ngIf="showAddProductDialog">
+			<form (ngSubmit)="showAddProductDialog=false ; addProduct(newProduct)">
+				<label>Add new entry:
+					<input type="text" [(ngModel)]="newProduct.name" name="name"/></label>
+				<input type="submit" value="Ok"/>
+			</form>
+		</div>
 	</div>
 </div>
