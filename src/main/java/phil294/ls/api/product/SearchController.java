@@ -3,6 +3,7 @@ package phil294.ls.api.product;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Sorts;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.springframework.http.ResponseEntity;
@@ -109,8 +110,8 @@ public class SearchController
 		SELECT p.id,p.user,p.name,p.description,p.picture, values
 			FROM ALL relevant_attrs_ids
 */
-		// FILTERS
 		
+		// FILTERS
 		List<Bson> db_filters = new ArrayList<>();
 		for(Map.Entry<Integer, Filter> filterEntry : filters.entrySet()) {
 			int filterAttr = filterEntry.getKey();
@@ -119,18 +120,20 @@ public class SearchController
 				if(filter.range_from.isEmpty() || filter.range_to.isEmpty()) {
 					throw new IllegalArgumentException("Invalid filter range.");
 				}
-				// BETWEEN filter.range_from AND filter.range_to
-				/* // klappt nicht, aus irgend einem grunde nicht kompatibel mit find(new Document("$and", db_filters)
 				db_filters.add(and(
-						gt(filterAttr+"", filter.range_from),
-						lt(filterAttr+"", filter.range_to)));
-						*/
-				db_filters.add(and(
-						gte("data." + filterAttr + ".value", Float.parseFloat(filter.range_from)),
+						gte("data." + filterAttr + ".value", Float.parseFloat(filter.range_from)), // may throw
 						lte("data." + filterAttr + ".value", Float.parseFloat(filter.range_to))));
 			} else {
 				// value filter: WHERE =
-				db_filters.add(eq(filterAttr + "", filter.value));
+				Object value;
+				try {
+					// try number
+					value = Float.parseFloat(filter.value);
+				} catch(NumberFormatException nfe) {
+					// else string
+					value = value = filter.value;
+				}
+				db_filters.add(eq("data." + filterAttr + ".value", value));
 			}
 		}
 		/*
@@ -144,14 +147,12 @@ public class SearchController
 		*/
 		//criteria.add(new BasicDBObject("totalmarks", new BasicDBObject("$ne", 15)));
 		
+		
 		FindIterable<Document> result = db_products.find(
-				//new BasicDBObject("$and", db_filters)
-				and(db_filters)
-		)
-				//		.sort(
-				//		Sorts.descending("data.4.value")
-				//)
-				;
+				!db_filters.isEmpty() ? and(db_filters) : new Document()
+		).sort(
+				Sorts.ascending("data.4.value")
+		);
 		
 		for(Document i : result) {
 			System.out.println(i.toJson());
