@@ -18,6 +18,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.mongodb.client.model.Filters.*;
+import static com.mongodb.client.model.Projections.fields;
+import static com.mongodb.client.model.Projections.include;
 
 /**
  * User: phi
@@ -120,6 +122,7 @@ public class SearchController
 				if(filter.range_from.isEmpty() || filter.range_to.isEmpty()) {
 					throw new IllegalArgumentException("Invalid filter range.");
 				}
+				// range filter: BETWEEEN
 				db_filters.add(and(
 						gte("data." + filterAttr + ".value", Float.parseFloat(filter.range_from)), // may throw
 						lte("data." + filterAttr + ".value", Float.parseFloat(filter.range_to))));
@@ -133,26 +136,50 @@ public class SearchController
 					// else string
 					value = value = filter.value;
 				}
-				db_filters.add(eq("data." + filterAttr + ".value", value));
+				db_filters.add(
+						eq("data." + filterAttr + ".value", value)
+				);
 			}
 		}
-		/*
+		
 		// SORTERS
+		List<Bson> db_sorters = new ArrayList<>();
 		for(Map.Entry<Integer, SortingOrder> sorterEntry : sorters.entrySet()) {
-			ORDER sorterEntry.getKey() BY sorterEntry.getValue()
+			int sorterAttr = sorterEntry.getKey();
+			SortingOrder order = sorterEntry.getValue();
+			// ORDER BY
+			Bson db_order;
+			if(order == SortingOrder.DESC) {
+				db_order = Sorts.descending("data." + sorterAttr + ".value");
+			} else {
+				db_order = Sorts.ascending("data." + sorterAttr + ".value");
+			}
+			db_sorters.add(
+					sorterEntry.getKey(), db_order
+			);
 		}
-		// SHOWERS s. select relevant_attrs_ids
+		
+		// SHOWERS
+		List<String> db_showers = new ArrayList<>();
+		db_showers.addAll(Arrays.asList("name", "description", "picture", "data"));
+		for(int attr : relevant_attrs_ids) {
+			db_showers.add("data." + attr);
+		}
+		
 		// ROWS
-		LIMIT rows;
-		*/
+		//LIMIT rows;
+				
 		//criteria.add(new BasicDBObject("totalmarks", new BasicDBObject("$ne", 15)));
 		
 		
 		FindIterable<Document> result = db_products.find(
 				!db_filters.isEmpty() ? and(db_filters) : new Document()
 		).sort(
-				Sorts.ascending("data.4.value")
-		);
+				!sorters.isEmpty() ? and(db_sorters) : new Document()
+		).projection(fields(
+				include(db_showers)
+				// elemMatch("data", size("6",3))
+		));
 		
 		for(Document i : result) {
 			System.out.println(i.toJson());
