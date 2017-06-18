@@ -1,6 +1,6 @@
 package phil294.ls.api.model;
 
-import java.sql.Timestamp;
+import java.util.Date;
 
 /**
  * User: phi
@@ -17,7 +17,7 @@ public class ProductValue
 	private Integer attribute;
 	private Integer user = null;
 	private Object value = null;
-	private Timestamp submitted;
+	private Date submitted;
 	private Integer interest;
 	
 	public ProductValue()
@@ -76,12 +76,12 @@ public class ProductValue
 		this.value = value;
 	}
 	
-	public Timestamp getSubmitted()
+	public Date getSubmitted()
 	{
 		return submitted;
 	}
 	
-	public void setSubmitted(Timestamp submitted)
+	public void setSubmitted(Date submitted)
 	{
 		this.submitted = submitted;
 	}

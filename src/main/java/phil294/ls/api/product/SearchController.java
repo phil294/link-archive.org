@@ -6,13 +6,14 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Sorts;
 import org.bson.Document;
 import org.bson.conversions.Bson;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import phil294.ls.api.model.Filter;
-import phil294.ls.api.model.MongoInstance;
-import phil294.ls.api.model.SearchResponse;
-import phil294.ls.api.model.User;
+import phil294.ls.api.model.*;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -33,6 +34,9 @@ import static com.mongodb.client.model.Projections.include;
 @RequestMapping("/search")
 public class SearchController
 {
+	@Autowired
+	AttributeRepository attributeRepository;
+	
 	private enum SortingOrder
 	{
 		ASC,
@@ -86,7 +90,7 @@ public class SearchController
 			@RequestParam("show") String showingQ,
 			@RequestParam("rows") int rows,
 			@RequestParam("columns") int columns
-	)
+	) throws IOException
 	{
 		// parse inputs into collections
 		Map<Integer, Filter> filters = this.parseFilters(filterQ);
@@ -100,18 +104,19 @@ public class SearchController
 		Set<Integer> relevant_attrs_ids = Stream.concat(sorters.keySet().stream(), Stream.concat(showers.stream(), filters.keySet().stream()))
 				.collect(Collectors.toCollection(LinkedHashSet::new));
 		
-		/*
 		// COLUMNS: FILLERS
 		int fillers_size = columns - relevant_attrs_ids.size();
 		if(fillers_size > 0) {
-			List<Integer> fillers = findByIdNotInOrderByInterestDesc(relevant_attrs_ids, fillers_size)
+			Set<Integer> dontFindMe = new HashSet<>();
+			if(relevant_attrs_ids.isEmpty()) {
+				dontFindMe.add(-1); // todo JPA bug?? "ByIdNotIn[emptySet]" returns 0
+			} else {
+				dontFindMe = relevant_attrs_ids;
+			}
+			List<Integer> fillers = attributeRepository.findByIdNotInOrderByInterestDesc(dontFindMe, new PageRequest(0, fillers_size))
 					.stream().map(Attribute::getId).collect(Collectors.toList());
 			relevant_attrs_ids.addAll(fillers);
 		}
-		
-		SELECT p.id,p.user,p.name,p.description,p.picture, values
-			FROM ALL relevant_attrs_ids
-*/
 		
 		// FILTERS
 		List<Bson> db_filters = new ArrayList<>();
@@ -124,8 +129,8 @@ public class SearchController
 				}
 				// range filter: BETWEEEN
 				db_filters.add(and(
-						gte("data." + filterAttr + ".value", Float.parseFloat(filter.range_from)), // may throw
-						lte("data." + filterAttr + ".value", Float.parseFloat(filter.range_to))));
+						gte("productData." + filterAttr + ".value", Float.parseFloat(filter.range_from)), // may throw
+						lte("productData." + filterAttr + ".value", Float.parseFloat(filter.range_to))));
 			} else {
 				// value filter: WHERE =
 				Object value;
@@ -137,7 +142,7 @@ public class SearchController
 					value = value = filter.value;
 				}
 				db_filters.add(
-						eq("data." + filterAttr + ".value", value)
+						eq("productData." + filterAttr + ".value", value)
 				);
 			}
 		}
@@ -150,9 +155,9 @@ public class SearchController
 			// ORDER BY
 			Bson db_order;
 			if(order == SortingOrder.DESC) {
-				db_order = Sorts.descending("data." + sorterAttr + ".value");
+				db_order = Sorts.descending("productData." + sorterAttr + ".value");
 			} else {
-				db_order = Sorts.ascending("data." + sorterAttr + ".value");
+				db_order = Sorts.ascending("productData." + sorterAttr + ".value");
 			}
 			db_sorters.add(
 					sorterEntry.getKey(), db_order
@@ -161,39 +166,34 @@ public class SearchController
 		
 		// SHOWERS
 		List<String> db_showers = new ArrayList<>();
-		db_showers.addAll(Arrays.asList("name", "description", "picture", "data"));
+		db_showers.addAll(Arrays.asList("name", "description", "picture"));
 		for(int attr : relevant_attrs_ids) {
-			db_showers.add("data." + attr);
-		}
+			db_showers.add("productData." + attr);
+		} ;
 		
-		// ROWS
-		//LIMIT rows;
-				
-		//criteria.add(new BasicDBObject("totalmarks", new BasicDBObject("$ne", 15)));
-		
-		
+		// QUERY
 		FindIterable<Document> result = db_products.find(
 				!db_filters.isEmpty() ? and(db_filters) : new Document()
 		).sort(
 				!sorters.isEmpty() ? and(db_sorters) : new Document()
 		).projection(fields(
 				include(db_showers)
-				// elemMatch("data", size("6",3))
-		));
+		)).limit(
+				rows
+		);
 		
-		for(Document i : result) {
-			System.out.println(i.toJson());
+		List<Product> products = new ArrayList<>();
+		for(Document doc : result) {
+			//Product product = gson.fromJson(doc.toJson(), Product.class); // gson
+			// Product product = mapper.readValue(doc.toJson(), Product.class); // jackson objectmapper class
+			Product product = Product.fromDocument(doc);
+			products.add(product);
 		}
 		
-		/*
-		products = ;
-		
 		List<Integer> attributeOrder = new ArrayList<>();
-		attributeOrder.addAll(relevant_attrs_ids); // todo
+		attributeOrder.addAll(relevant_attrs_ids);
 		
 		SearchResponse response = new SearchResponse(products, attributeOrder);
 		return new ResponseEntity<>(response, HttpStatus.OK);
-		*/
-		return null;
 	}
 }
