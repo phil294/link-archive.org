@@ -41,7 +41,6 @@ export class ProductsComponent implements OnInit
 	private sorters: Array<[number, SortingOrder]> = [];
 	private showers: Set<number> = new Set<number>();
 	private rows: number = 20;
-	private columns: number = 5;
 
 	constructor(private searchService: SearchService, private attributeService: AttributeService) {
 
@@ -93,19 +92,16 @@ export class ProductsComponent implements OnInit
 	}
 
 	private doSearch(): void {
-		//	this.filters.set(8, "2");
-		//	this.filters.set(5, "Coupe");
-		//	this.sorters.set(7, SortingOrder.DESC);
-		//	this.showAttributes.add(14);
-		//	this.showAttributes.add(17);
-		//  this.rows = 100;
-		//  this.columns = 10;
-		this.searchService.search(this.filters, this.sorters, this.showers, this.rows, this.columns)
+		this.searchService.search(this.filters, this.sorters, this.showers, this.rows, this.determineColumns())
 			.subscribe((searchResponse: SearchResponse) => {
 				this.products = searchResponse.products;
 				this.attributeOrder = searchResponse.attributeOrder;
 				this.setRelevantAttributes();
 			});
+	}
+
+	private determineColumns(): number {
+		return Math.round(window.innerWidth / 165);
 	}
 
 	private getAttributes(): void {
