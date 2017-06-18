@@ -24,17 +24,19 @@ export class Product {
 	static fromJson(product_json: any): Product {
 		let product = Object.assign(new Product(), product_json);
 	/*	let productData_json = product_json.productData;
-		let productData = new Map<number, ProductValue>();
+	 let productData = new Map<number, any>();
 		if(val(productData_json)) {
 			for(let key_attribute in productData_json) {
 				if(productData_json.hasOwnProperty(key_attribute)) {
 					let productValue_json = productData_json[key_attribute];
-					let productValue = ProductValue.fromJson(productValue_json);
+	 let productValue = productValue_json;
 					productData.set(+key_attribute, productValue);
+	 console.log(key_attribute+" => "+productValue);
 				}
 			}
 		}
-		product.productData = productData; */
+	 //product.productData = productData;
+	 */
 		return product;
 	}
 }

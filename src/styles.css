@@ -15,6 +15,10 @@ h1, h2, h3, h4, h5, h6 {
   margin: 0;
   text-transform: uppercase; }
 
+li {
+	list-style-type: none;
+}
+
 .padding {
   padding: 1vh; }
 
@@ -34,14 +38,11 @@ h1, h2, h3, h4, h5, h6 {
   margin: 4vh; }
 
 .background-image {
-	/*
-	background-image: url('assets/car.png');
+	background-image: url("assets/car.png");
 	background-attachment: fixed;
 	background-position: center;
 	background-repeat: no-repeat;
 	background-size: cover;
-	*/
-	background-color: powderblue;
 }
 
 .box {

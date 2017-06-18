@@ -10,7 +10,8 @@ import {Injectable} from "@angular/core";
 import "rxjs/add/operator/map";
 import {HttpApi} from "./http-api.service";
 import {Response} from "@angular/http";
-import {Product} from "./model/Product";
+import {Filter} from "./model/Filter";
+import {SearchResponse} from "./model/SearchResponse";
 
 export enum SortingOrder {
 	ASC,
@@ -36,14 +37,14 @@ export class SearchService {
 	 * 4. limit
 	 * 5. desired column amount
 	 */
-	search(filterAttributes: Map<number,string>, sortingAttributes: Array<[number, SortingOrder]>, showAttributes: Set<number>, rows: number, columns: number) {
+	search(filterAttributes: Map<number,Filter>, sortingAttributes: Array<[number, SortingOrder]>, showAttributes: Set<number>, rows: number, columns: number) {
 		// filter map to "filter1:value1,filter2:value2,..."-string
-		let filterQ: string = Array.from(filterAttributes).map(([attributeId, filter]) => `${attributeId}:${filter}`).join(',');
+		let filterQ: string = Array.from(filterAttributes).map(([attributeId, filter]) => `${attributeId}:${filter.value}_${filter.range_from}_${filter.range_to}`).join(',');
 		// same for sorting map
 		let sortingQ: string = Array.from(sortingAttributes).map(([attributeId, sortingOrder]) => `${attributeId}:${sortingOrder}`).join(',');
 		// show map to "a,b,c,..."-string
 		let showingQ: string = Array.from(showAttributes).join(',');
 		return this.http.get(`/search?filter=${filterQ}&sorting=${sortingQ}&show=${showingQ}&rows=${rows}&columns=${columns}`)
-			.map((resp: Response) => Product.fromJsons(resp.json()));
+			.map((resp: Response) => SearchResponse.fromJson(resp.json()));
 	}
 }
