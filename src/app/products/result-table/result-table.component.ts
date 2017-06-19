@@ -15,6 +15,11 @@ import {AttributeService} from "../../attribute.service";
 import {GlobalService} from "../../global.service";
 import {SortingOrder} from "../../search.service";
 
+/**
+ * Rendering der Suchabfrage-Ergebnisse.
+ * Bietet Administratoren Editier-Möglichkeiten.
+ * Sortier-Reihenfolgen werden hier konfiguriert und via @Output() sortersChanged hochgebubbelt.
+ */
 @Component({
 	templateUrl: './result-table.component.html',
 	styleUrls: ['./result-table.component.css'],
@@ -34,23 +39,28 @@ export class ResultTableComponent implements OnInit
 	@Output() sortersChanged: EventEmitter<[number, SortingOrder][]> = new EventEmitter();
 	@Output() attributesChanged = new EventEmitter();
 
+	constructor(private productService: ProductService, private attributeService: AttributeService, private globalService: GlobalService) {
+
+	}
+
 	private sortersFind(attribute: number) {
 		return this.sorters.find((sorter: [number, SortingOrder]) => sorter[0] == attribute);
 	}
-
 	private sortersFindIndex(attribute: number) {
 		return this.sorters.findIndex((sorter: [number, SortingOrder]) => sorter[0] == attribute);
-	}
-
-	constructor(private productService: ProductService, private attributeService: AttributeService, private globalService: GlobalService) {
-
 	}
 
 	ngOnInit(): void {
 		this.isAdmin = this.globalService.getCurrentlyLoggedInUser().admin;
 	}
 
-	changeProductName(product: Product, name: string) {
+	/**
+	 * Adminfunktion
+	 * Produktname Änderung abschicken
+	 * @param product
+	 * @param name
+	 */
+	private changeProductName(product: Product, name: string) {
 		if(product.name == name) {
 			return; // no change
 		}
@@ -59,7 +69,14 @@ export class ResultTableComponent implements OnInit
 			.subscribe();
 	}
 
-	changeProductValue(product: Product, attribute: Attribute, value: string) {
+	/**
+	 * Adminfunktion
+	 * Produktwert Änderung abschicken. Resultiert in Änderung (WERT) oder Löschung (LEER).
+	 * @param product
+	 * @param attribute
+	 * @param value
+	 */
+	private changeProductValue(product: Product, attribute: Attribute, value: string) {
 		if(val(product.productData[attribute.id])) {
 			let previousValue = product.productData[attribute.id].value;
 			if(previousValue == value) {
@@ -89,7 +106,12 @@ export class ResultTableComponent implements OnInit
 		}
 	}
 
-	addProduct(product: Product): void {
+	/**
+	 * Adminfunktion
+	 * Produkt hinzufügen.
+	 * @param product
+	 */
+	private addProduct(product: Product): void {
 		this.productService.addProduct(product)
 			.subscribe((addedProduct: Product) => {
 				this.newProduct = new Product();
@@ -97,7 +119,12 @@ export class ResultTableComponent implements OnInit
 			});
 	}
 
-	deleteProduct(product: Product): void {
+	/**
+	 * Adminfunktion
+	 * Produkt löschen.
+	 * @param product
+	 */
+	private deleteProduct(product: Product): void {
 		if(!confirm("Delete product '" + product.name + "'?")) {
 			return;
 		}
@@ -107,7 +134,13 @@ export class ResultTableComponent implements OnInit
 			});
 	}
 
-	changeAttributeName(attribute: Attribute, newName: string): void {
+	/**
+	 * Adminfunktion
+	 * Attributname Änderung abschicken.
+	 * @param attribute
+	 * @param newName
+	 */
+	private changeAttributeName(attribute: Attribute, newName: string): void {
 		if(attribute.name == newName) {
 			return; //nochange
 		}
@@ -116,7 +149,12 @@ export class ResultTableComponent implements OnInit
 			.subscribe();
 	}
 
-	addAttribute(attribute: Attribute): void {
+	/**
+	 * Adminfunktion
+	 * Attribut hinzufügen.
+	 * @param attribute
+	 */
+	private addAttribute(attribute: Attribute): void {
 		this.attributeService.addAttribute(attribute)
 			.subscribe((addedAttribute: Attribute) => {
 				this.newAttribute = new Attribute();
@@ -125,7 +163,12 @@ export class ResultTableComponent implements OnInit
 			});
 	}
 
-	deleteAttribute(attribute: Attribute): void {
+	/**
+	 * Adminfunktion
+	 * Attribut löschen.
+	 * @param attribute
+	 */
+	private deleteAttribute(attribute: Attribute): void {
 		if(!confirm("Delete attribute '" + attribute.name + "'?")) {
 			return;
 		}

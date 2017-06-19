@@ -1,3 +1,3 @@
 export * from './app.component';
 export * from './app.module';
-// todo wtf is das
+// todo wtf ist das

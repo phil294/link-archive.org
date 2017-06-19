@@ -14,6 +14,11 @@ export class Attribute {
 	interest: number;
 	unit: string;
 
+	/**
+	 * Serialisierung.
+	 * @param attributes_json
+	 * @returns {Attribute[]}
+	 */
 	static fromJsons(attributes_json: any): Attribute[] {
 		let attributes: Attribute[] = [];
 		if(val(attributes_json)) {
@@ -23,6 +28,12 @@ export class Attribute {
 		}
 		return attributes;
 	}
+
+	/**
+	 * Serialisierung.
+	 * @param attribute_json
+	 * @returns {Attribute}
+	 */
 	static fromJson(attribute_json: any): Attribute {
 		let attribute = Object.assign(new Attribute(), attribute_json);
 		return attribute;

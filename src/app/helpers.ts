@@ -1,11 +1,11 @@
 /**
+ * @return false when no "value" found or the value itself otherwise. Similar to PHPs empty() function.
  * User: phi
  *  .___.
  *  {o,o}
  * /)___)
  * --"-"--
  */
-/** returns false or v [ = true ] */
 export function val(v) {
 	let type = typeof v;
 	if (type === 'undefined')

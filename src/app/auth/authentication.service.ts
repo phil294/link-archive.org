@@ -19,6 +19,11 @@ export class AuthenticationService {
 
 	}
 
+	/**
+	 * Frage Server, ob die eingegebenen Daten stimmen.
+	 * @param user
+	 * @returns {Observable<R>}
+	 */
 	login(user: User) {
 		return this.http.post('/login',
 			JSON.stringify(user))

@@ -12,6 +12,9 @@ import {HttpApi} from "./http-api.service";
 import {Response} from "@angular/http";
 import {Attribute} from "./model/Attribute";
 
+/**
+ * Serverinteraktionen. Macht von HttpApi-Service gebrauch.
+ */
 @Injectable()
 export class AttributeService {
 	constructor(protected http: HttpApi) {

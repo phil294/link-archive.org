@@ -10,6 +10,9 @@ import {User} from "./model/user";
 import {BehaviorSubject} from "rxjs";
 import {val} from "./helpers";
 
+/**
+ * Verfügt über Objekte, die in der gesamten Applikation sichtbar sein sollen. Möglichst vermeiden.
+ */
 @Injectable()
 export class GlobalService {
 	private loggedInUserSource = new BehaviorSubject<User>(GlobalService.initUser());

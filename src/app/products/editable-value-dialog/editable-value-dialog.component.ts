@@ -9,6 +9,10 @@
 import {Component, Input, EventEmitter, Output} from "@angular/core";
 import {val} from "../../helpers";
 
+/**
+ * Editieren möglich oder nicht - @Input editable.
+ * Meldet sich bei focusLost via @Output valueChanged.
+ */
 @Component({
 	templateUrl: './editable-value-dialog.component.html',
 	styleUrls: ['./editable-value-dialog.component.css'],

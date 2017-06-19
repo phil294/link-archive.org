@@ -1,6 +1,7 @@
 <table id="result" *ngIf="val(products); else noResultsTempl; let products">
 	<tr class="padding">
 		<th class="padding">Name</th>
+		<!-- Attributnamen -->
 		<th *ngFor="let attribute of relevantAttributes" class="padding">
 			<div fxLayout="row" fxLayoutAlign="center center">
 				<i class="material-icons" (click)="deleteAttribute(attribute)" *ngIf="isAdmin">delete</i>
@@ -11,7 +12,7 @@
 							(valueChanged)="changeAttributeName(attribute, $event)">
 					</editable-value-dialog>
 				</abbr>
-				<div title="Sorting order"> <!-- todo language -->
+				<div title="Sorting order"> <!-- toto language -->
 					<div class="sortingIsset" fxLayout="row" fxLayoutAlign="center center"
 						 *ngIf="sortersFindIndex(attribute.id)!=-1 ; else notSortedTempl">
 						<!-- sorting number is set -->
@@ -38,6 +39,7 @@
 				</div>
 			</div>
 		</th>
+		<!-- Admin: Attribut hinzufügen -->
 		<th *ngIf="isAdmin">
 			<div fxLayout="column" fxLayoutAlign="center start">
 				<div fxLayout="row" fxLayoutAlign="start center">
@@ -60,7 +62,9 @@
 			</div>
 		</th>
 	</tr>
+	<!-- einzelne Produkte des Ergebnisses -->
 	<tr *ngFor="let product of products">
+		<!-- Produktname -->
 		<td class="padding" fxLayout="row" fxLayoutAlign="start center">
 			<i class="material-icons" (click)="deleteProduct(product)" *ngIf="isAdmin">delete</i>
 			<editable-value-dialog class="important"
@@ -69,6 +73,7 @@
 								   (valueChanged)="changeProductName(product, $event)">
 			</editable-value-dialog>
 		</td>
+		<!-- Produktwerte -->
 		<td *ngFor="let attribute of relevantAttributes" class="padding">
 			<editable-value-dialog
 					[value]="val(product.productData[attribute.id])? product.productData[attribute.id].value : ''"
@@ -85,6 +90,7 @@
 			<div>No results</div>
 		</div>
 	</ng-template>
+	<!-- Produkt hinzufügen -->
 	<div fxLayout="row" fxLayoutAlign="start center" *ngIf="isAdmin">
 		<i class="material-icons padding" (click)="showAddProductDialog=true" *ngIf="!showAddProductDialog">add_box</i>
 		<i class="material-icons padding" (click)="showAddProductDialog=false" *ngIf="showAddProductDialog">remove_circle</i>

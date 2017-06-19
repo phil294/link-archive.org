@@ -12,6 +12,9 @@ import {HttpApi} from "./http-api.service";
 import {Response} from "@angular/http";
 import {Product} from "./model/Product";
 
+/**
+ * Serverinteraktionen. Macht von HttpApi-Service gebrauch.
+ */
 @Injectable()
 export class ProductService {
 	constructor(protected http: HttpApi) {

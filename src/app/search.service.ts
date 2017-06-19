@@ -22,6 +22,9 @@ export enum FilterType {
 	RANGE
 }
 
+/**
+ * Serverinteraktionen. Macht von HttpApi-Service gebrauch.
+ */
 @Injectable()
 export class SearchService {
 	constructor(protected http: HttpApi) {

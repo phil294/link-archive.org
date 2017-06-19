@@ -14,6 +14,11 @@ export class Product {
 	//productData: Map<number, ProductValue> = new Map(); // <attributeId, prodVal>
 	productData: Object;
 
+	/**
+	 * Serialisierung.
+	 * @param products_json
+	 * @returns {Product[]}
+	 */
 	static fromJsons(products_json: any): Product[] {
 		let products: Product[] = [];
 		for(let product_json of products_json) {
@@ -21,22 +26,14 @@ export class Product {
 		}
 		return products;
 	}
+
+	/**
+	 * Serialisierung.
+	 * @param product_json
+	 * @returns {Product&U}
+	 */
 	static fromJson(product_json: any): Product {
 		let product = Object.assign(new Product(), product_json);
-	/*	let productData_json = product_json.productData;
-	 let productData = new Map<number, any>();
-		if(val(productData_json)) {
-			for(let key_attribute in productData_json) {
-				if(productData_json.hasOwnProperty(key_attribute)) {
-					let productValue_json = productData_json[key_attribute];
-	 let productValue = productValue_json;
-					productData.set(+key_attribute, productValue);
-	 console.log(key_attribute+" => "+productValue);
-				}
-			}
-		}
-	 //product.productData = productData;
-	 */
 		return product;
 	}
 }

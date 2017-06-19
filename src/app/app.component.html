@@ -3,7 +3,7 @@
 		<div fxFlex>
 		</div>
 		<div fxFlex="20%" fxLayoutAlign="end center">
-			<span fxHide fxShow.gt-xs>Logged in as {{currentUser.name}}. </span> <!-- todo fxshow buggy -->
+			<span fxHide fxShow.gt-xs>Logged in as {{currentUser.name}}. </span> <!--  fxshow bug https://github.com/angular/flex-layout/issues/181 // edit fixed (?) -->
 			<a [routerLink]="['/login']" class="padding-lg">Logout</a>
 		</div>
 	</div>

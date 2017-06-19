@@ -14,6 +14,12 @@ import {Product} from "../model/Product";
 import {Filter} from "../model/Filter";
 import {SearchResponse} from "../model/SearchResponse";
 
+/**
+ * Hauptsicht.
+ * Filter konfigurieren,
+ * Anzeige-Attribute (showers) konfigurieren,
+ * Limit (rows) konfigurieren.
+ */
 @Component({
 	templateUrl: './products.component.html',
 	styleUrls: ['./products.component.css'],
@@ -45,11 +51,19 @@ export class ProductsComponent implements OnInit
 
 	}
 
+	/**
+	 * Entferne Anzeigeattribut und schicke Suchanfrage ab
+	 * @param attribute
+	 */
 	private removeShower(attribute: number) {
 		this.showers.delete(attribute);
 		this.doSearch();
 	}
 
+	/**
+	 * Füge Anzeigeattribut hinzu und schicke Suchanfrage ab
+	 * @param attribute
+	 */
 	private addShower(attribute: Attribute) {
 		this.showers.add(attribute.id);
 		this.showerattribute = null;
@@ -72,6 +86,12 @@ export class ProductsComponent implements OnInit
 		return this.attributes.find(a => a.id == id);
 	}
 
+	/**
+	 * Füge konfigurierten Filter hinzu und schicke Suchanfrage ab
+	 * @param event
+	 * @param attribute
+	 * @param filter
+	 */
 	private addFilter(event: Event, attribute: Attribute, filter) {
 		event.preventDefault();
 		this.filters.set(attribute.id, filter);
@@ -80,21 +100,35 @@ export class ProductsComponent implements OnInit
 		this.doSearch();
 	}
 
+	/**
+	 * Entferne Filter und schicke Suchanfrage ab
+	 * @param attribute
+	 */
 	private removeFilter(attribute: number) {
 		this.filters.delete(attribute);
 		this.doSearch();
 	}
 
+	/**
+	 * Sortierreihenfolge hat sich in irgend einer Art geändert. Neue Suchanfrage.
+	 * @param sorters
+	 */
 	private sortersChanged(sorters: Array<[number, SortingOrder]>) {
 		this.sorters = sorters;
 		this.doSearch();
 	}
 
+	/**
+	 * Attributmenge hat sich in irgend einer Art geändert (durch Administrator-Interaktion). Neue Suchanfrage.
+	 */
 	private attributesChanged() {
 		this.getAttributes();
 		this.doSearch();
 	}
 
+	/**
+	 * Suchanfrage abschicken. Schickt Filter, Sortierer, Anzeigeattribute, Zeilenlimit und minimale Spaltenanzahl (s. determineColumns()) mit.
+	 */
 	private doSearch(): void {
 		this.searchService.search(this.filters, this.sorters, this.showers, this.rows, this.determineColumns())
 			.subscribe((searchResponse: SearchResponse) => {
@@ -104,12 +138,19 @@ export class ProductsComponent implements OnInit
 			});
 	}
 
+	/**
+	 * Bestimme minimale Spaltenanzahl in Abhängigkeit der Fenstergröße.
+	 * @returns {number}
+	 */
 	private determineColumns(): number {
 		return Math.round(window.innerWidth / 165);
 	}
 
+	/**
+	 * Setze alle Attribut-Konfigurationen zurück (nach Administrator-Interaktion) und
+	 * Hole einmalig alle Attribute vom Server.
+	 */
 	private getAttributes(): void {
-		// reset everything attributes
 		this.attributeOrder = [];
 		this.attributes = [];
 		this.relevantAttributes = [];
@@ -122,12 +163,14 @@ export class ProductsComponent implements OnInit
 
 		this.attributeService.getAttributes()
 			.subscribe((attributes: Attribute[]) => {
-				//attributes.forEach(a => a.type = AttributeType.number); // fixme
 				this.attributes = attributes;
 				this.setRelevantAttributes();
 			})
 	}
 
+	/**
+	 * Relevante Attribute sind jene, die in den Produktwerten enthalten sind, also in der result-table Tabelle angezeigt werden.
+	 */
 	private setRelevantAttributes(): void {
 		// when both initialized
 		if(val(this.attributeOrder) && val(this.attributes)) {

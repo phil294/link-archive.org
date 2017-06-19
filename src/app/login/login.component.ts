@@ -32,7 +32,7 @@ export class LoginComponent implements OnInit {
 		this.loading = true;
 		this.authenticationService.login(this.user)
 			.subscribe(wat => {
-				this.router.navigate(['/']); // todo ? & '' ?
+				this.router.navigate(['/']); // toto ? & '' ?
 			}, (error:Response) => {
 				this.loading = false;
 				if(error.status >= 400 && error.status < 500) {

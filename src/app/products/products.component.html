@@ -13,7 +13,7 @@
 									<input type="text" [(ngModel)]="filterbox"/>
 									<select
 											[(ngModel)]="filterattribute"
-											size="{{attributes.length<10?attributes.length:10}}"> <!-- todo mobilefriendly -->
+											size="{{attributes.length<10?attributes.length:10}}">
 										<ng-container *ngFor="let attribute of attributes">
 											<option [ngValue]="attribute" *ngIf="attribute.name.includes(filterbox) && !filters.has(attribute.id)"> <!-- filterbox string matching && no duplicate filters -->
 												{{ attribute.name }}
@@ -99,7 +99,7 @@
 									<input type="text" [(ngModel)]="showerbox"/>
 									<select
 											[(ngModel)]="showerattribute"
-											size="{{attributes.length<10?attributes.length:10}}"> <!-- todo mobilefriendly -->
+											size="{{attributes.length<10?attributes.length:10}}">
 										<ng-container *ngFor="let attribute of attributes">
 											<option [ngValue]="attribute" *ngIf="attribute.name.includes(showerbox) && !showers.has(attribute.id)"> <!-- filterbox string matching && no duplicate filters -->
 												{{ attribute.name }}
