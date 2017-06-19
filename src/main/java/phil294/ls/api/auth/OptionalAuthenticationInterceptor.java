@@ -21,11 +21,18 @@ public class OptionalAuthenticationInterceptor extends HandlerInterceptorAdapter
 	@Autowired
 	private UserRepository userRepository;
 	
+	/**
+	 * Authentificate with token, else set empty user
+	 * @param req
+	 * @param resp
+	 * @param handler
+	 * @return
+	 */
 	@Override
 	public boolean preHandle(
 			HttpServletRequest req, HttpServletResponse resp, Object handler)
 	{
-		String auth = req.getHeader("Authorization"); // todo duplicate code
+		String auth = req.getHeader("Authorization"); // duplicate code
 		if(auth == null) {
 			req.setAttribute("user", new User());
 			return true;

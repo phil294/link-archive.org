@@ -33,7 +33,7 @@ public class App
 		config.setAllowCredentials(true);
 		config.addAllowedOrigin("*");
 		config.addAllowedHeader("*");
-		config.addAllowedMethod("GET"); // todo release: raus
+		config.addAllowedMethod("GET"); // todo on release
 		config.addAllowedMethod("PUT");
 		config.addAllowedMethod("POST");
 		config.addAllowedMethod("DELETE");

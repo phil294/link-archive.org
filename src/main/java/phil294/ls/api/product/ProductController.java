@@ -33,6 +33,12 @@ public class ProductController
 	//////////////// ADMIN FUNCTIONS //////////
 	///////////////////////////////////////////
 	
+	/**
+	 * Produkt hinzufügen
+	 * @param user
+	 * @param input
+	 * @return
+	 */
 	@PostMapping
 	public ResponseEntity<Product> addProduct(
 			@RequestAttribute("user") User user,
@@ -57,6 +63,13 @@ public class ProductController
 		return new ResponseEntity<>(product, HttpStatus.OK);
 	}
 	
+	/**
+	 * Produkt bearbeiten (schließt ProductValues NICHT ein)
+	 * @param user
+	 * @param input
+	 * @param productId
+	 * @return
+	 */
 	@PutMapping("/{productId}")
 	public ResponseEntity<Product> updateProduct(
 			@RequestAttribute("user") User user,
@@ -68,7 +81,7 @@ public class ProductController
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		Product product = new Product();
-		product.setName(input.getName()); // todo duplicate code
+		product.setName(input.getName()); // duplicate code
 		product.setDescription(input.getDescription());
 		product.setPicture(input.getPicture());
 		//product.setProductData(input.getProductData());
@@ -82,7 +95,16 @@ public class ProductController
 		);
 		return new ResponseEntity<>(product, HttpStatus.OK);
 	}
-	@PutMapping("/{productId}/attribute/{attributeId}") // notwendig weil nicht komplettes objekt übergeben da attributmenge lückenhaft und evlt sehr groß <-- widerspricht rest todo konflikt
+	
+	/**
+	 * ProductValue bearbeiten
+	 * @param user
+	 * @param productId
+	 * @param attributeId
+	 * @param newValue
+	 * @return
+	 */
+	@PutMapping("/{productId}/attribute/{attributeId}")
 	public ResponseEntity<ProductValue> updateProductValue(
 			@RequestAttribute("user") User user,
 			@PathVariable("productId") String productId,
@@ -102,6 +124,13 @@ public class ProductController
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
+	/**
+	 * ProductValue löschen
+	 * @param user
+	 * @param productId
+	 * @param attributeId
+	 * @return
+	 */
 	@DeleteMapping("/{productId}/attribute/{attributeId}")
 	public ResponseEntity deleteProductValue(
 			@RequestAttribute("user") User user,
@@ -114,11 +143,18 @@ public class ProductController
 		}
 		MongoInstance.getProductCollection().updateOne(
 				eq("_id", new ObjectId(productId)),
-				unset("productData." + attributeId + ".value") // todo ohne .value geht es nicht? und mit .value eigentlich blöd weil ganzes data dokument gelöscht gehört
+				// todo unset attrId oder attrId.value, was macht mehr sinn?
+				unset("productData." + attributeId + ".value")
 		);
 		return new ResponseEntity(HttpStatus.OK);
 	}
 	
+	/**
+	 * Produkt löschen.
+	 * @param user
+	 * @param productId
+	 * @return
+	 */
 	@DeleteMapping("/{productId}")
 	public ResponseEntity deleteProduct(
 			@RequestAttribute("user") User user,

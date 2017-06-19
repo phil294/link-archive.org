@@ -12,6 +12,6 @@ import org.springframework.data.repository.CrudRepository;
  */
 public interface UserRepository extends CrudRepository<User, Integer>
 {
-	User findByNameAndPassword(String name, String password); // todo dont return pass
+	User findByNameAndPassword(String name, String password); // todo dont return (hashed)pass
 	
 }

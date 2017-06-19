@@ -1,6 +1,7 @@
 package phil294.ls.api.model;
 
 /**
+ * Ein Filter definiert entweder einen zu suchenden Wert oder einen numerischen Suchbereich.
  * User: phi
  * Date: 14.06.17
  * .  .___.

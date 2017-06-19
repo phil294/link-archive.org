@@ -3,6 +3,7 @@ package phil294.ls.api.model;
 import java.util.Date;
 
 /**
+ * Stellt Beziehung Produkt-Attribut her.
  * User: phi
  * Date: 13.06.17
  * .  .___.

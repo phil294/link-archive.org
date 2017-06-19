@@ -24,12 +24,17 @@ public class JWT
 	private static Key getSecretKey()
 	{
 		byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(
-				"3GTNWUZZZo63N67jjj64rh6r6drrQ'QBwdrfi98h!?3494T8U398Gl"
+				"supidupisecretkey" // todo production
 		);
 		Key key = new SecretKeySpec(apiKeySecretBytes, SignatureAlgorithm.HS512.getJcaName());
 		return key;
 	}
 	
+	/**
+	 * Erstelle JWT
+	 * @param id
+	 * @return
+	 */
 	public static String create(int id)
 	{
 		
@@ -45,6 +50,12 @@ public class JWT
 		return compactJws;
 	}
 	
+	/**
+	 * Prüfe Token. Throws wenn invalid.
+	 * @param compactJws Im Token enthaltene Id.
+	 * @return
+	 * @throws Exception
+	 */
 	public static int getId(String compactJws) throws Exception
 	{ // throws: make unchecked checked
 		Jws<Claims> claims = Jwts.parser()

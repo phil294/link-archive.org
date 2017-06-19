@@ -16,7 +16,7 @@ import java.util.Map;
  * . /)___)
  * . --"-"--
  */
-public class Product implements Serializable // todo seri notw?
+public class Product implements Serializable // toto seri notw?
 {
 	@Id
 	@GeneratedValue
@@ -25,9 +25,14 @@ public class Product implements Serializable // todo seri notw?
 	private String name;
 	private String description = "";
 	private String picture;
-	// fixme 20170612 interest
-	private LinkedHashMap<Integer, ProductValue> productData = new LinkedHashMap<>(); // <attributeId, value> // jackson bug 20170618 todo: LinkedHashMap wird wie TreeMap serialisiert. Daher workaround mit attributeOrder in SearchResponse.....
 	
+	private LinkedHashMap<Integer, ProductValue> productData = new LinkedHashMap<>(); // <attributeId, value> // 20170618 todo jackson bug : LinkedHashMap wird wie TreeMap serialisiert. Daher workaround mit attributeOrder in SearchResponse.....
+	
+	/**
+	 * Parse Product -> BSON Document für MongoDB Weiterverwendung
+	 * @param doc
+	 * @return Product
+	 */
 	public static Product fromDocument(Document doc)
 	{
 		Product p = new Product();
@@ -51,11 +56,16 @@ public class Product implements Serializable // todo seri notw?
 		return p;
 	}
 	
+	/**
+	 * Parse BSON-Document -> Product für POJO-Weiterverarbeitung von MongoDB-Dokumenten
+	 * @param p
+	 * @return
+	 */
 	public static Document toDocument(Product p)
 	{
 		Document d = new Document();
 		if(p.getId() != null) { // mongo generates automatically
-			//	d.put("_id", p.getId()); // fixme entkommentieren
+			// d.put("_id", p.getId());
 		}
 		d.put("user", p.getUser());
 		d.put("name", p.getName());

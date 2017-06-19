@@ -15,6 +15,11 @@ import java.security.NoSuchAlgorithmException;
  */
 public class Helpers
 {
+	/**
+	 * String to 32-char-hex-MD5
+	 * @param s
+	 * @return
+	 */
 	public static String md5(String s)
 	{
 		if(s.isEmpty()) {

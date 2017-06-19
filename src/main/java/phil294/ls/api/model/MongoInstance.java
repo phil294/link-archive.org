@@ -29,6 +29,9 @@ public class MongoInstance
 		mongoProductCollection = mongoDatabase.getCollection("products");
 	}
 	
+	/**
+	 * @return MongoCollection der Collection "products" der stehenden Verbindung zur Datenbank
+	 */
 	public static MongoCollection<Document> getProductCollection()
 	{
 		return mongoProductCollection;

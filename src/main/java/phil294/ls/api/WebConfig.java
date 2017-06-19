@@ -22,10 +22,12 @@ public class WebConfig extends WebMvcConfigurerAdapter
 	@Override
 	public void addInterceptors(InterceptorRegistry registry)
 	{
+		// Login verpflichtend
 		registry.addInterceptor(
 				//new AuthenticatorInterceptor()
 				getAuthenticatorInterceptor()
-				).addPathPatterns("/profile/**"); // todo
+		).addPathPatterns("/profile/**");
+		// Login optional
 		registry.addInterceptor(
 				getOptionalAuthenticationInterceptor()
 				).addPathPatterns("/product/**")
@@ -40,11 +42,4 @@ public class WebConfig extends WebMvcConfigurerAdapter
 	public OptionalAuthenticationInterceptor getOptionalAuthenticationInterceptor() {
 		return new OptionalAuthenticationInterceptor();
 	}
-	/*
-	@Bean
-	public SessionFactory sessionFactory(HibernateEntityManagerFactory hemf){
-		return hemf.getSessionFactory();
-	}
-	*/
-	
 }

@@ -33,6 +33,9 @@ public class Attribute
 	private String description = "";
 	@Min(1)
 	private Integer interest = 1;
+	/**
+	 * Reiner Informationswert.
+	 */
 	@Size(max = 64)
 	private String unit = "";
 	

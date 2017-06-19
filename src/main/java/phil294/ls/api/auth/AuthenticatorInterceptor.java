@@ -21,6 +21,13 @@ public class AuthenticatorInterceptor extends HandlerInterceptorAdapter
 {
 	@Autowired private UserRepository userRepository;
 	
+	/**
+	 * Authentificate with token, else deny access
+	 * @param req
+	 * @param resp
+	 * @param handler
+	 * @return
+	 */
 	@Override
 	public boolean preHandle(
 			HttpServletRequest req, HttpServletResponse resp, Object handler)

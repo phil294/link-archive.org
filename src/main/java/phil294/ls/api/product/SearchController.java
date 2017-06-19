@@ -42,10 +42,15 @@ public class SearchController
 		DESC
 	}
 	
+	/**
+	 * Erstellt eine Attribut->Filter -Map anhand des Query-Strings
+	 * @param filterQ der Form "8:_3_7,11:3__"
+	 * @return
+	 */
 	private Map<Integer, Filter> parseFilters(String filterQ)
 	{
 		return filterQ.isEmpty() ? new HashMap<>() :
-				Arrays.stream(filterQ.split(",")) // 8:_3_7,11:3__
+				Arrays.stream(filterQ.split(","))
 						.map(s -> s.split(":"))
 						.collect(Collectors.toMap(
 								s -> Integer.valueOf(s[0]), // filter attribute id
@@ -55,10 +60,15 @@ public class SearchController
 								}));
 	}
 	
+	/**
+	 * Erstellt eine Attribut->Order -Map anhand des Query-Strings
+	 * @param sortingQ der Form "9:0,10:0,11:1"
+	 * @return
+	 */
 	private Map<Integer, SortingOrder> parseSorters(String sortingQ)
 	{
 		return sortingQ.isEmpty() ? new LinkedHashMap<>() :
-				Arrays.stream(sortingQ.split(",")) // 9:0,10:0,11:1
+				Arrays.stream(sortingQ.split(","))
 						.map(s -> s.split(":"))
 						.collect(Collectors.toMap(
 								s -> Integer.parseInt(s[0]),
@@ -67,17 +77,30 @@ public class SearchController
 								LinkedHashMap::new));
 	}
 	
+	/**
+	 * Erstellt ein Anzeige-Attribute-Set anhand des Query-Strings
+	 * @param showingQ der Form "5,7,2"
+	 * @return
+	 */
 	private Set<Integer> parseShowers(String showingQ)
 	{
 		return showingQ.isEmpty() ? new LinkedHashSet<>() :
-				Arrays.stream(showingQ.split(",")) // 5,7,2
+				Arrays.stream(showingQ.split(","))
 						.map(Integer::parseInt)
 						.collect(Collectors.toCollection(LinkedHashSet::new));
 	}
 	
 	/**
-	 * todo docu überall
-	 * http://localhost:8080/search?filter=8:2,5:Coupe&sorting=7:1&show=14,17&rows=4&columns=8 // todo veraltet
+	 * Suche in allen Produkten.
+	 * @param opionalUser
+	 * Query-Params:
+	 * @param filterQ Bedingungen für die zurückgegebenen Produkte
+	 * @param sortingQ Sortier-Reihenfolgen (mehrere möglich)
+	 * @param showingQ Anzeige-Attribute, die definitiv in den Rückggabe-Produktwerten zur Anzeige enthalten sein sollen (sofern Werte vorhanden)
+	 * @param rows Rückgabe Anzahl Limit
+	 * @param columns Minimale Anzeige-Attribute-Menge. Kann wegen oberer Parameter überschritten werden. Wenn nicht, werden Attribute über Füll-Attribute aufgefüllt, bis colums erreicht ist.
+	 * @return SearchResponse
+	 * @throws IOException
 	 */
 	@GetMapping
 	public ResponseEntity<SearchResponse> search(

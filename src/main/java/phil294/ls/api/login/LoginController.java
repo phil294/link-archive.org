@@ -30,6 +30,13 @@ public class LoginController
 	@Autowired
 	private UserRepository userRepository;
 	
+	/**
+	 * Authentifizieren, Token abholen
+	 * @param user
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 * @throws NoSuchAlgorithmException
+	 */
 	@PostMapping("/login")
 	public ResponseEntity<User> login(
 			@RequestBody @Valid User user
@@ -38,7 +45,7 @@ public class LoginController
 		
 		User actualUser = userRepository.findByNameAndPassword(
 				user.getName(),
-				Helpers.md5(user.getPassword()));  //fixme md5
+				Helpers.md5(user.getPassword()));  //todo vernünftige verschlüsselung
 		if(actualUser == null) {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}

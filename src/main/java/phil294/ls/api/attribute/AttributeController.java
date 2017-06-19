@@ -38,6 +38,12 @@ public class AttributeController
 	//////////////// ADMIN FUNCTIONS //////////
 	///////////////////////////////////////////
 	
+	/**
+	 * Attribut hinzufügen
+	 * @param user
+	 * @param input
+	 * @return
+	 */
 	@PostMapping
 	public ResponseEntity<Attribute> addAttribute(
 			@RequestAttribute("user") User user,
@@ -57,6 +63,13 @@ public class AttributeController
 		return new ResponseEntity<>(attribute, HttpStatus.OK);
 	}
 	
+	/**
+	 * Attribut aktualisieren
+	 * @param user
+	 * @param attributeId
+	 * @param input
+	 * @return
+	 */
 	@PutMapping("/{attributeId}")
 	public ResponseEntity<Attribute> updateAttribute(
 			@RequestAttribute("user") User user,
@@ -68,7 +81,7 @@ public class AttributeController
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		Attribute attribute = new Attribute();
-		attribute.setDescription(input.getDescription()); // todo duplicate code
+		attribute.setDescription(input.getDescription()); // duplicate code :[
 		attribute.setName(input.getName());
 		attribute.setUnit(input.getUnit());
 		
@@ -78,6 +91,12 @@ public class AttributeController
 		return new ResponseEntity<>(attribute, HttpStatus.OK);
 	}
 	
+	/**
+	 * Attribut löschen
+	 * @param user
+	 * @param attributeId
+	 * @return
+	 */
 	@DeleteMapping("/{attributeId}")
 	public ResponseEntity deleteAttribute(
 			@RequestAttribute("user") User user,
