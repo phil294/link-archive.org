@@ -1,21 +1,28 @@
 <template>
     <section id="app">
+        <div
+            v-if="loginModal"
+            id="login">
+            <login/>
+        </div>
         <header class="padding">
             <nav>
-                a bc nav
+                Navigation etc.
             </nav>
             <div
                 v-if="loadingCounter"
                 id="loading">
-                {{ loadingCounter }}
+                global-loading-counter-{{ loadingCounter }}
             </div>
             <div
                 v-if="isLoggedIn"
                 id="loginStatus">
-                bla {{ username }} {{ email }}
+                Logged in as {{ username }}, {{ email }}.
                 <logout/>
             </div>
-            <login v-if="!isLoggedIn" />
+            <div v-if="!isLoggedIn && !loginModal">
+                <one-time-button @click="SHOW_LOGIN_MODAL">Open login dialog</one-time-button>
+            </div>
         </header>
         <main>
             <router-view/>
@@ -24,18 +31,21 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex';
+import { mapState, mapGetters, mapMutations } from 'vuex';
+import { SHOW_LOGIN_MODAL } from '@/store/mutations';
 import Login from '@/components/Login';
 import Logout from '@/components/Logout';
+import OneTimeButton from '@/components/OneTimeButton';
 
 export default {
     name: 'App',
     components: {
-        Login, Logout,
+        Login, Logout, OneTimeButton,
     },
     computed: {
         ...mapState([
             'loadingCounter',
+            'loginModal',
         ]),
         ...mapState('session', [
             'username',
@@ -43,6 +53,11 @@ export default {
         ]),
         ...mapGetters('session', [
             'isLoggedIn',
+        ]),
+    },
+    methods: {
+        ...mapMutations([
+            SHOW_LOGIN_MODAL,
         ]),
     },
 };

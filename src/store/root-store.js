@@ -1,6 +1,6 @@
 import Vuex from 'vuex';
 import Vue from 'vue';
-import { LOADING_INCREMENT, LOADING_DECREMENT } from './mutations';
+import { SHOW_LOGIN_MODAL, HIDE_LOGIN_MODAL } from './mutations';
 import session from './session-store';
 
 Vue.use(Vuex);
@@ -9,13 +9,14 @@ const store = new Vuex.Store({
     strict: process.env.NODE_ENV !== 'production',
     state: {
         loadingCounter: 0,
+        loginModal: false,
     },
     mutations: {
-        [LOADING_INCREMENT](state) {
-            state.loadingCounter++;
+        [SHOW_LOGIN_MODAL](state) {
+            state.loginModal = true;
         },
-        [LOADING_DECREMENT](state) {
-            state.loadingCounter--;
+        [HIDE_LOGIN_MODAL](state) {
+            state.loginModal = false;
         },
     },
     modules: {

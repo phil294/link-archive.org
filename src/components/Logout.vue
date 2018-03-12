@@ -1,26 +1,19 @@
 <template>
     <div id="logout">
-        <button @click="logout">logout</button>
+        <button @click="SESSION_LOGOUT">Logout</button>
     </div>
 </template>
 
 <script>
 import { SESSION_LOGOUT } from '@/store/mutations';
-// const LOGOUT = 'LOGOUT';
+import { mapMutations } from 'vuex';
 
 export default {
     name: 'Logout',
-
-    data: () => ({
-
-    }),
-    computed: {
-
-    },
     methods: {
-        logout() {
-            this.$store.commit(`session/${SESSION_LOGOUT}`);
-        },
+        ...mapMutations('session', [
+            SESSION_LOGOUT,
+        ]),
     },
 };
 </script>

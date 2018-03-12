@@ -1,5 +1,5 @@
 import storageService from '@/services/storage-service';
-import { LOADING_INCREMENT, LOADING_DECREMENT, SESSION_LOGIN_SUCCESS, SESSION_LOGIN_PENDING, SESSION_LOGIN_FAILURE, SESSION_LOGOUT } from './mutations';
+import { SESSION_LOGIN_SUCCESS, SESSION_LOGIN_PENDING, SESSION_LOGIN_FAILURE, SESSION_LOGOUT, HIDE_LOGIN_MODAL } from './mutations';
 
 export default {
     namespaced: true,
@@ -37,20 +37,17 @@ export default {
     actions: {
         async loginCredentials({ commit }) {
             commit(SESSION_LOGIN_PENDING);
-            commit(LOADING_INCREMENT, null, { root: true }); // todo zu http verschieben
-            // todo commit global readonly for all interactive elements (und bei succ/fail wieder weg)
-            await new Promise(((resolve) => {
+            await new Promise(((resolve) => { // todo
                 setTimeout(() => {
-                    /* if error
-                    const cause = 'login error description';
-                    commit(LOGIN_FAILURE, cause);
-                    else */
+                    /* if error {
+                    commit(LOGIN_FAILURE, cause); }
+                    else { */
                     commit(SESSION_LOGIN_SUCCESS, {
-                        username: 'dummy',
-                        email: 'e@mail.com',
+                        username: 'Dummyuser',
+                        email: 'user@example.com',
                     });
                     // }
-                    commit(LOADING_DECREMENT, null, { root: true });
+                    commit(HIDE_LOGIN_MODAL, null, { root: true });
                     resolve();
                 }, 1000);
             }));

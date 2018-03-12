@@ -1,37 +1,45 @@
 <template>
     <div id="login">
-        <button @click="loginCredentials">login</button>
-        <div v-if="loginPending">loading</div>
+        <one-time-button @click="HIDE_LOGIN_MODAL">Close login dialog</one-time-button>
+        <one-time-button @click="loginCredentials">Login credentials</one-time-button>
         <div>{{ errorMessage }}</div>
     </div>
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapActions, mapMutations } from 'vuex';
+import { HIDE_LOGIN_MODAL } from '@/store/mutations';
+import OneTimeButton from '@/components/OneTimeButton';
 
 export default {
     name: 'Login',
-
-    data: () => ({
-        loginPending: false,
-    }),
+    components: {
+        OneTimeButton,
+    },
     computed: {
         ...mapState('session', [
             'errorMessage',
         ]),
     },
     methods: {
-        async loginCredentials() {
-            this.$data.loginPending = true;
-            await this.$store.dispatch('session/loginCredentials');
-            this.$data.loginPending = false;
-        },
+        ...mapActions('session', [
+            'loginCredentials',
+        ]),
+        ...mapMutations([
+            HIDE_LOGIN_MODAL,
+        ]),
     },
 };
 </script>
 
 <style scoped>
 #login {
-    background:lightsalmon;
+    position:fixed;
+    z-index:9998;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background: rgba(0,0,0,0.5);
 }
 </style>
