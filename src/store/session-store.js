@@ -1,5 +1,5 @@
 import storageService from '@/services/storage-service';
-import { SESSION_LOGIN_SUCCESS, SESSION_LOGIN_PENDING, SESSION_LOGIN_FAILURE, SESSION_LOGOUT, HIDE_LOGIN_MODAL } from './mutations';
+import { SESSION_LOGIN_CREDENTIALS, SESSION_LOGOUT, HIDE_LOGIN_MODAL } from './actions';
 
 export default {
     namespaced: true,
@@ -14,43 +14,48 @@ export default {
         },
     },
     mutations: {
-        [SESSION_LOGIN_PENDING](state) {
-            state.errorMessage = '';
-        },
-        [SESSION_LOGIN_SUCCESS](state, sessionPayload) {
-            state.username = sessionPayload.username;
-            storageService.setUsername(sessionPayload.username);
-            state.email = sessionPayload.email;
-            storageService.setEmail(sessionPayload.email);
-            // state.token = sessionPayload.token; // using httpOnly-cookie instead
-        },
-        [SESSION_LOGIN_FAILURE](state, cause) {
+        setErrorMessage(state, cause) {
             state.errorMessage = cause;
         },
-        [SESSION_LOGOUT](state) {
-            state.username = null;
-            storageService.setUsername(null);
-            state.email = null;
-            storageService.setEmail(null);
+        resetErrorMessage(state) {
+            state.errorMessage = '';
+        },
+        setUsername(state, username) {
+            state.username = username;
+        },
+        setEmail(state, email) {
+            state.email = email;
         },
     },
     actions: {
-        async loginCredentials({ commit }) {
-            commit(SESSION_LOGIN_PENDING);
+        async [SESSION_LOGIN_CREDENTIALS]({ commit, dispatch }) {
+            commit('resetErrorMessage');
             await new Promise(((resolve) => { // todo
                 setTimeout(() => {
                     /* if error {
-                    commit(LOGIN_FAILURE, cause); }
+                    commit('setErrorMessage', cause); }
                     else { */
-                    commit(SESSION_LOGIN_SUCCESS, {
+                    const session = {
                         username: 'Dummyuser',
                         email: 'user@example.com',
-                    });
+                    };
+                    commit('setUsername', session.username);
+                    commit('setEmail', session.email);
+                    // commit token... // using httpOnly-cookie instead
+                    storageService.setUsername(session.username);
+                    storageService.setEmail(session.email);
                     // }
-                    commit(HIDE_LOGIN_MODAL, null, { root: true });
+                    dispatch(HIDE_LOGIN_MODAL, null, { root: true });
                     resolve();
                 }, 1000);
             }));
         },
+        [SESSION_LOGOUT]({ commit }) {
+            commit('setUsername', null);
+            commit('setEmail', null);
+            storageService.setUsername(null);
+            storageService.setEmail(null);
+        },
     },
 };
+

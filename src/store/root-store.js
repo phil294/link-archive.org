@@ -1,6 +1,6 @@
 import Vuex from 'vuex';
 import Vue from 'vue';
-import { SHOW_LOGIN_MODAL, HIDE_LOGIN_MODAL } from './mutations';
+import { SHOW_LOGIN_MODAL, HIDE_LOGIN_MODAL } from './actions';
 import session from './session-store';
 
 Vue.use(Vuex);
@@ -12,11 +12,16 @@ const store = new Vuex.Store({
         loginModal: false,
     },
     mutations: {
-        [SHOW_LOGIN_MODAL](state) {
-            state.loginModal = true;
+        toggleLoginModal(state, show) {
+            state.loginModal = show;
         },
-        [HIDE_LOGIN_MODAL](state) {
-            state.loginModal = false;
+    },
+    actions: {
+        [SHOW_LOGIN_MODAL]({ commit }) {
+            commit('toggleLoginModal', true);
+        },
+        [HIDE_LOGIN_MODAL]({ commit }) {
+            commit('toggleLoginModal', false);
         },
     },
     modules: {

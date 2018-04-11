@@ -18,7 +18,7 @@
                 v-if="isLoggedIn"
                 id="loginStatus">
                 Logged in as {{ username }}, {{ email }}.
-                <logout/>
+                <one-time-button @click="SESSION_LOGOUT">Logout</one-time-button>
             </div>
             <div v-if="!isLoggedIn && !loginModal">
                 <one-time-button @click="SHOW_LOGIN_MODAL">Open login dialog</one-time-button>
@@ -31,16 +31,15 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapMutations } from 'vuex';
-import { SHOW_LOGIN_MODAL } from '@/store/mutations';
+import { mapState, mapGetters, mapActions } from 'vuex';
+import { SHOW_LOGIN_MODAL, SESSION_LOGOUT } from '@/store/actions';
 import Login from '@/components/Login';
-import Logout from '@/components/Logout';
 import OneTimeButton from '@/components/OneTimeButton';
 
 export default {
     name: 'App',
     components: {
-        Login, Logout, OneTimeButton,
+        Login, OneTimeButton,
     },
     computed: {
         ...mapState([
@@ -56,8 +55,11 @@ export default {
         ]),
     },
     methods: {
-        ...mapMutations([
+        ...mapActions([
             SHOW_LOGIN_MODAL,
+        ]),
+        ...mapActions('session', [
+            SESSION_LOGOUT,
         ]),
     },
 };

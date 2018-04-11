@@ -27,6 +27,7 @@ export default {
             this.$data.loading = true;
             this.$emit('click');
         },
+        /** Consider using a normal button instead */
         reset() {
             this.$data.loading = false;
         },
@@ -35,6 +36,7 @@ export default {
 </script>
 
 <style scoped>
+    /* todo style buttons globally instead */
     #loading {
         background:blue;
         color:aqua;
