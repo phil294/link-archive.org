@@ -2,13 +2,15 @@
     <div id="login">
         <h4>login dialog</h4>
         <one-time-button @click="HIDE_LOGIN_MODAL">Close login dialog</one-time-button>
-        <one-time-button @click="SESSION_LOGIN_CREDENTIALS">Login with credentials</one-time-button>
+        <one-time-button
+            ref="loginButton"
+            @click="loginWithCredentials">Login with credentials</one-time-button>
         <div>{{ errorMessage }}</div>
     </div>
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
+import { mapActions } from 'vuex';
 import { HIDE_LOGIN_MODAL, SESSION_LOGIN_CREDENTIALS } from '@/store/actions';
 import OneTimeButton from '@/components/OneTimeButton';
 
@@ -17,18 +19,21 @@ export default {
     components: {
         OneTimeButton,
     },
-    computed: {
-        ...mapState('session', [
-            'errorMessage',
-        ]),
-    },
+    data: () => ({
+        errorMessage: '',
+    }),
     methods: {
         ...mapActions([
             HIDE_LOGIN_MODAL,
         ]),
-        ...mapActions('session', [
-            SESSION_LOGIN_CREDENTIALS,
-        ]),
+        loginWithCredentials() {
+            this.$data.errorMessage = '';
+            this.$store.dispatch(`session/${SESSION_LOGIN_CREDENTIALS}`)
+                .catch((e) => {
+                    this.$data.errorMessage = e;
+                    this.$refs.loginButton.reset();
+                });
+        },
     },
 };
 </script>

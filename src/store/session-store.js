@@ -14,12 +14,6 @@ export default {
         },
     },
     mutations: {
-        setErrorMessage(state, cause) {
-            state.errorMessage = cause;
-        },
-        resetErrorMessage(state) {
-            state.errorMessage = '';
-        },
         setUsername(state, username) {
             state.username = username;
         },
@@ -29,12 +23,8 @@ export default {
     },
     actions: {
         async [SESSION_LOGIN_CREDENTIALS]({ commit, dispatch }) {
-            commit('resetErrorMessage');
-            await new Promise(((resolve) => { // todo
+            await new Promise(((resolve, reject) => { // todo
                 setTimeout(() => {
-                    /* if error {
-                    commit('setErrorMessage', cause); }
-                    else { */
                     const session = {
                         username: 'Dummyuser',
                         email: 'user@example.com',
@@ -44,10 +34,10 @@ export default {
                     // commit token... // using httpOnly-cookie instead
                     storageService.setUsername(session.username);
                     storageService.setEmail(session.email);
-                    // }
                     dispatch(HIDE_LOGIN_MODAL, null, { root: true });
                     resolve();
                 }, 1000);
+                // reject('nö');
             }));
         },
         [SESSION_LOGOUT]({ commit }) {

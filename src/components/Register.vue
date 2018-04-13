@@ -1,6 +1,6 @@
 <template>
-    <div id="login">
-        <one-time-button @clickk="loginCredentials">login</one-time-button>
+    <div id="register">
+        <one-time-button @click="registerCredentials">register</one-time-button>
         <div>{{ errorMessage }}</div>
     </div>
 </template>

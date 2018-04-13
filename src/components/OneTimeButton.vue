@@ -1,15 +1,15 @@
 <template>
     <div id="onetimebutton">
         <button
-            v-if="!loading"
+            :disabled="loading"
             @click="clicked">
-            <slot>
+            <slot v-if="!loading">
                 Click me
             </slot>
+            <span v-if="loading">
+                loading...
+            </span>
         </button>
-        <div
-            v-if="loading"
-            id="loading">loading...</div>
     </div>
 </template>
 

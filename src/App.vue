@@ -20,9 +20,10 @@
                 Logged in as {{ username }}, {{ email }}.
                 <one-time-button @click="SESSION_LOGOUT">Logout</one-time-button>
             </div>
-            <div v-if="!isLoggedIn && !loginModal">
-                <one-time-button @click="SHOW_LOGIN_MODAL">Open login dialog</one-time-button>
-            </div>
+            <button
+                v-if="!isLoggedIn"
+                @click="SHOW_LOGIN_MODAL">Open login dialog
+            </button>
         </header>
         <main>
             <router-view/>
