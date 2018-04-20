@@ -2,6 +2,7 @@
     <div id="onetimebutton">
         <button
             :disabled="loading"
+            type="button"
             @click="clicked">
             <slot v-if="!loading">
                 Click me

@@ -6,7 +6,6 @@ export default {
     state: {
         username: storageService.getUsername(),
         email: storageService.getEmail(),
-        errorMessage: '',
     },
     getters: {
         isLoggedIn(state) {
@@ -23,6 +22,7 @@ export default {
     },
     actions: {
         async [SESSION_LOGIN_CREDENTIALS]({ commit, dispatch }) {
+            /* eslint-disable */
             await new Promise(((resolve, reject) => { // todo
                 setTimeout(() => {
                     const session = {

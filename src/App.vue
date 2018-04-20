@@ -27,6 +27,7 @@
         </header>
         <main>
             <router-view/>
+            sdfsdf
         </main>
     </section>
 </template>
