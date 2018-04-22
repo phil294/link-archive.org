@@ -52,5 +52,7 @@ module.exports = {
     'max-len': 'off',
     'vue/html-indent': ['error', 4],
     'no-plusplus': 'off',
+    'vue/max-attributes-per-line': 'off',
+    'vue/no-multi-spaces': 'off',
   }
 }

@@ -1,46 +1,31 @@
 <template>
     <main> <!-- todo ? -->
-        <one-time-button @click="HIDE_LOGIN_MODAL"><i class="material-icons">close</i></one-time-button>
+        <one-time-button @click="HIDE_LOGIN_MODAL">
+            <i class="material-icons">close</i>
+        </one-time-button>
         <h1>Create account or log in</h1>
         <form id="registerOrLogin">
             <fieldset>
-                <legend>Your e-mail</legend>
-                <input
-                    v-model="email"
-                    type="email"
-                    placeholder="email@example.com">
-                <input
-                    v-model="password"
-                    type="password"
-                    placeholder="password">
-                <one-time-button
-                    id="register"
-                    ref="registerButton"
-                    @click="registerWithCredentials">
-                    Create account<br>
-                    <div class="note">
-                        <span
-                            v-if="passwordStrength===1"
-                            class="password-weak">
-                            weak
-                        </span>
-                        <span
-                            v-else-if="passwordStrength===2"
-                            class="password-medium">
-                            medium
-                        </span>
-                        <span
-                            v-else-if="passwordStrength===3"
-                            class="password-strong">
-                            strong
-                        </span>
-                        password
-                    </div>
-                </one-time-button>
-                <one-time-button
-                    ref="loginButton"
-                    @click="loginWithCredentials">Log in</one-time-button>
-                <div>{{ errorMessage }}</div>
+                <legend>With e-mail</legend>
+                <label for="email">E-mail</label>
+                <input id="email" v-model="email" type="email" placeholder="email@example.com">
+                <label for="password">Password <em>(optional)</em></label>
+                <input id="password" v-model="password" type="password" placeholder="password">
+                <div id="submit">
+                    <one-time-button id="register" ref="registerButton"
+                                     @click="registerWithCredentials">
+                        Create account
+                        <div v-if="password" class="note">
+                            <span      v-if="passwordStrength===1" class="password-weak">weak</span>
+                            <span v-else-if="passwordStrength===2" class="password-medium">medium</span>
+                            <span v-else-if="passwordStrength===3" class="password-strong">strong</span>
+                            password
+                        </div>
+                    </one-time-button>
+                    <one-time-button id="login" ref="loginButton"
+                                     @click="loginWithCredentials">Log in</one-time-button>
+                </div>
+                <div id="error" class="error note">{{ errorMessage }}</div>
             </fieldset>
         </form>
     </main>
@@ -48,7 +33,7 @@
 
 <script>
 import { mapActions } from 'vuex';
-import { HIDE_LOGIN_MODAL, SESSION_LOGIN_CREDENTIALS } from '@/store/actions';
+import { HIDE_LOGIN_MODAL, SESSION_REGISTER_WITH_CREDENTIALS, SESSION_LOGIN_WITH_CREDENTIALS } from '@/store/actions';
 import OneTimeButton from '@/components/OneTimeButton';
 
 export default {
@@ -57,9 +42,9 @@ export default {
         OneTimeButton,
     },
     data: () => ({
-        errorMessage: '',
         password: '',
         email: '',
+        errorMessage: '',
     }),
     computed: {
         passwordStrength() {
@@ -71,12 +56,24 @@ export default {
         ...mapActions([
             HIDE_LOGIN_MODAL,
         ]),
-        loginWithCredentials() {
+        registerWithCredentials() {
             this.$data.errorMessage = '';
-            this.$store.dispatch(`session/${SESSION_LOGIN_CREDENTIALS}`)
+            this.$refs.loginButton.setLoading();
+            this.$store.dispatch(`session/${SESSION_REGISTER_WITH_CREDENTIALS}`)
                 .catch((e) => {
                     this.$data.errorMessage = e;
                     this.$refs.loginButton.reset();
+                    this.$refs.registerButton.reset();
+                });
+        },
+        loginWithCredentials() {
+            this.$data.errorMessage = '';
+            this.$refs.registerButton.setLoading();
+            this.$store.dispatch(`session/${SESSION_LOGIN_WITH_CREDENTIALS}`)
+                .catch((e) => {
+                    this.$data.errorMessage = e;
+                    this.$refs.loginButton.reset();
+                    this.$refs.registerButton.reset();
                 });
         },
     },
@@ -95,7 +92,11 @@ main {
     box-sizing: border-box;
     background: rgba(255,255,255,0.8);
 }
-
+fieldset {
+    width: 30%;
+    min-width: 340px;
+    margin: 0 auto;
+}
 .password-weak, .password-medium, .password-strong {
     font-weight: bold;
 }
@@ -107,6 +108,15 @@ main {
 }
 .password-strong {
     color: lightgreen;
+}
+#submit {
+    width: 100%;
+}
+#login, #register {
+    display: inline-block;
+}
+#submit, #error {
+    text-align:center;
 }
 #register > .note { /* fixme */
     text-transform: uppercase;
