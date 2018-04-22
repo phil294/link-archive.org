@@ -1,15 +1,8 @@
 <template>
     <div id="onetimebutton">
-        <button
-            :disabled="loading"
-            type="button"
-            @click="clicked">
-            <slot v-if="!loading">
-                Click me
-            </slot>
-            <span v-if="loading">
-                loading...
-            </span>
+        <button :disabled="loading" type="button" @click="clicked">
+            <slot v-if="!loading">Click me</slot>
+            <span v-else>loading...</span>
         </button>
     </div>
 </template>
@@ -31,6 +24,9 @@ export default {
         /** Consider using a normal button instead */
         reset() {
             this.$data.loading = false;
+        },
+        setLoading() {
+            this.$data.loading = true;
         },
     },
 };
