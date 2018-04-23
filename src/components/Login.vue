@@ -1,10 +1,10 @@
 <template>
     <main> <!-- todo ? -->
-        <one-time-button @click="HIDE_LOGIN_MODAL">
+        <button type="button" @click="HIDE_LOGIN_MODAL">
             <i class="material-icons">close</i>
-        </one-time-button>
+        </button>
         <h1>Create account or log in</h1>
-        <form id="registerOrLogin">
+        <form id="register-or-login">
             <fieldset>
                 <legend>With e-mail</legend>
                 <label for="email">E-mail</label>
@@ -26,6 +26,14 @@
                                      @click="loginWithCredentials">Log in</one-time-button>
                 </div>
                 <div id="error" class="error note">{{ errorMessage }}</div>
+                <div v-if="showNextStepsRegister" id="next-steps-register">
+                    <button class="close" type="button" @click="showNextStepsRegister=false">
+                        <i class="material-icons">close</i>
+                    </button>
+                    <div>
+                        An e-mail has been sent to <em>{{ email }}</em>. You can log in by clicking the link in the e-mail.
+                    </div>
+                </div>
             </fieldset>
         </form>
     </main>
@@ -45,10 +53,12 @@ export default {
         password: '',
         email: '',
         errorMessage: '',
+        showNextStepsRegister: false,
     }),
     computed: {
         passwordStrength() {
             // TODO
+            // https://github.com/dropbox/zxcvbn
             return Math.max(1, Math.min(3, Math.round(this.$data.password.length / 2.3)));
         },
     },
@@ -60,8 +70,13 @@ export default {
             this.$data.errorMessage = '';
             this.$refs.loginButton.setLoading();
             this.$store.dispatch(`session/${SESSION_REGISTER_WITH_CREDENTIALS}`)
-                .catch((e) => {
-                    this.$data.errorMessage = e;
+                .then(() => {
+                    this.$data.showNextStepsRegister = true;
+                })
+                .catch((error) => {
+                    this.$data.errorMessage = error;
+                })
+                .finally(() => {
                     this.$refs.loginButton.reset();
                     this.$refs.registerButton.reset();
                 });
@@ -70,8 +85,11 @@ export default {
             this.$data.errorMessage = '';
             this.$refs.registerButton.setLoading();
             this.$store.dispatch(`session/${SESSION_LOGIN_WITH_CREDENTIALS}`)
-                .catch((e) => {
-                    this.$data.errorMessage = e;
+                .then(() => {
+                    this.$store.dispatch(HIDE_LOGIN_MODAL, null, { root: true }); // go fkn kys
+                })
+                .catch((error) => {
+                    this.$data.errorMessage = error;
                     this.$refs.loginButton.reset();
                     this.$refs.registerButton.reset();
                 });
@@ -119,6 +137,26 @@ fieldset {
     text-align:center;
 }
 #register > .note { /* fixme */
-    text-transform: uppercase;
+text-transform: uppercase;
+}
+#register-or-login > fieldset {
+    position:relative;
+}
+#next-steps-register {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    padding: 5%;
+    background:rgba(255,255,255,0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#next-steps-register > button.close {
+    position:absolute;
+    top:0;
+    right:0;
 }
 </style>
