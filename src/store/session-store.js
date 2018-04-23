@@ -1,5 +1,5 @@
 import storageService from '@/services/storage-service';
-import { SESSION_LOGIN_WITH_CREDENTIALS, SESSION_REGISTER_WITH_CREDENTIALS, SESSION_LOGOUT, HIDE_LOGIN_MODAL } from './actions';
+import { SESSION_LOGIN_WITH_CREDENTIALS, SESSION_REGISTER_WITH_CREDENTIALS, SESSION_LOGOUT } from './actions';
 
 export default {
     namespaced: true,
@@ -21,7 +21,7 @@ export default {
         },
     },
     actions: {
-        async [SESSION_LOGIN_WITH_CREDENTIALS]({ commit, dispatch }) {
+        async [SESSION_LOGIN_WITH_CREDENTIALS]({ commit }) {
             /* eslint-disable-next-line no-unused-vars */
             await new Promise(((resolve, reject) => { // todo
                 setTimeout(() => {
@@ -34,16 +34,16 @@ export default {
                     // commit token... // using httpOnly-cookie instead
                     storageService.setUsername(session.username);
                     storageService.setEmail(session.email);
-                    dispatch(HIDE_LOGIN_MODAL, null, { root: true });
                     resolve();
-                }, 300);
+                }, 500);
             }));
         },
         async [SESSION_REGISTER_WITH_CREDENTIALS]() {
+            /* eslint-disable-next-line no-unused-vars */
             await new Promise(((resolve, reject) => { // todo
                 setTimeout(() => {
-                    reject('register disabled');
-                }, 300);
+                    resolve();
+                }, 500);
             }));
         },
         [SESSION_LOGOUT]({ commit }) {
