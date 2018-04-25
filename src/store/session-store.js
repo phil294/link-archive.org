@@ -4,41 +4,31 @@ import { SESSION_LOGIN_WITH_CREDENTIALS, SESSION_REGISTER_WITH_CREDENTIALS, SESS
 export default {
     namespaced: true,
     state: {
-        username: storageService.getUsername(),
         email: storageService.getEmail(),
     },
     getters: {
         isLoggedIn(state) {
-            return state.username !== null;
+            return state.email !== null;
         },
     },
     mutations: {
-        setUsername(state, username) {
-            state.username = username;
-        },
         setEmail(state, email) {
             state.email = email;
         },
     },
     actions: {
-        async [SESSION_LOGIN_WITH_CREDENTIALS]({ commit }) {
+        async [SESSION_LOGIN_WITH_CREDENTIALS]({ commit }, { email, password }) {
             /* eslint-disable-next-line no-unused-vars */
             await new Promise(((resolve, reject) => { // todo
                 setTimeout(() => {
-                    const session = {
-                        username: 'Dummyuser',
-                        email: 'user@example.com',
-                    };
-                    commit('setUsername', session.username);
-                    commit('setEmail', session.email);
+                    commit('setEmail', email);
                     // commit token... // using httpOnly-cookie instead
-                    storageService.setUsername(session.username);
-                    storageService.setEmail(session.email);
+                    storageService.setEmail(email);
                     resolve();
                 }, 500);
             }));
         },
-        async [SESSION_REGISTER_WITH_CREDENTIALS]() {
+        async [SESSION_REGISTER_WITH_CREDENTIALS](_, { email, password }) {
             /* eslint-disable-next-line no-unused-vars */
             await new Promise(((resolve, reject) => { // todo
                 setTimeout(() => {
@@ -47,9 +37,7 @@ export default {
             }));
         },
         [SESSION_LOGOUT]({ commit }) {
-            commit('setUsername', null);
             commit('setEmail', null);
-            storageService.setUsername(null);
             storageService.setEmail(null);
         },
     },

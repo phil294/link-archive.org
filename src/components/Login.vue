@@ -4,27 +4,30 @@
             <i class="material-icons">close</i>
         </button>
         <h1>Create account or log in</h1>
-        <form id="register-or-login">
-            <fieldset>
+        <div id="register-or-login">
+            <fieldset id="with-email">
                 <legend>With e-mail</legend>
-                <label for="email">E-mail</label>
-                <input id="email" v-model="email" type="email" placeholder="email@example.com">
-                <label for="password">Password <em>(optional)</em></label>
-                <input id="password" v-model="password" type="password" placeholder="password">
-                <div id="submit">
-                    <one-time-button id="register" ref="registerButton"
-                                     @click="registerWithCredentials">
-                        Create account
-                        <div v-if="password" class="note">
-                            <span      v-if="passwordStrength===1" class="password-weak">weak</span>
-                            <span v-else-if="passwordStrength===2" class="password-medium">medium</span>
-                            <span v-else-if="passwordStrength===3" class="password-strong">strong</span>
-                            password
-                        </div>
-                    </one-time-button>
-                    <one-time-button id="login" ref="loginButton"
-                                     @click="loginWithCredentials">Log in</one-time-button>
-                </div>
+                <form ref="form" @submit.prevent="registerOrLoginCredentials($event)">
+                    <label for="email">E-mail</label>
+                    <input id="email"  v-model="email" type="email" name="email" placeholder="email@example.com" required>
+                    <label for="password">Password <em>(optional)</em></label>
+                    <input id="password" v-model="password" type="password" name="password" placeholder="password" autocomplete="new-password"> <!-- todo remove new-password -->
+                    <div id="submit" :disabled="loading">
+                        <!-- todo without click listener https://stackoverflow.com/q/3577469 ...maybe some day. :( -->
+                        <button id="register" ref="registerButton" type="submit" @click="registerOrLogin='register'">
+                            Create account
+                            <div v-if="password" class="note">
+                                <span      v-if="passwordStrength===1" class="password-weak">weak</span>
+                                <span v-else-if="passwordStrength===2" class="password-medium">medium</span>
+                                <span v-else-if="passwordStrength===3" class="password-strong">strong</span>
+                                password
+                            </div>
+                        </button>
+                        <button id="login" ref="loginButton" type="submit" @click="registerOrLogin='login'">
+                            Log in
+                        </button>
+                    </div>
+                </form>
                 <div id="error" class="error note">{{ errorMessage }}</div>
                 <div v-if="showNextStepsRegister" id="next-steps-register">
                     <button class="close" type="button" @click="showNextStepsRegister=false">
@@ -35,7 +38,7 @@
                     </div>
                 </div>
             </fieldset>
-        </form>
+        </div>
     </main>
 </template>
 
@@ -50,8 +53,10 @@ export default {
         OneTimeButton,
     },
     data: () => ({
-        password: '',
         email: '',
+        password: '',
+        registerOrLogin: 'register',
+        loading: false,
         errorMessage: '',
         showNextStepsRegister: false,
     }),
@@ -66,33 +71,29 @@ export default {
         ...mapActions([
             HIDE_LOGIN_MODAL,
         ]),
-        registerWithCredentials() {
+        registerOrLoginCredentials(event) {
             this.$data.errorMessage = '';
-            this.$refs.loginButton.setLoading();
-            this.$store.dispatch(`session/${SESSION_REGISTER_WITH_CREDENTIALS}`)
-                .then(() => {
+            let action;
+            if (this.$data.registerOrLogin === 'register') {
+                action = async () => {
+                    await this.$store.dispatch(`session/${SESSION_REGISTER_WITH_CREDENTIALS}`, {
+                        email: event.target.elements.email.value,
+                        password: event.target.elements.password.value,
+                    });
                     this.$data.showNextStepsRegister = true;
-                })
-                .catch((error) => {
-                    this.$data.errorMessage = error;
-                })
-                .finally(() => {
-                    this.$refs.loginButton.reset();
-                    this.$refs.registerButton.reset();
-                });
-        },
-        loginWithCredentials() {
-            this.$data.errorMessage = '';
-            this.$refs.registerButton.setLoading();
-            this.$store.dispatch(`session/${SESSION_LOGIN_WITH_CREDENTIALS}`)
-                .then(() => {
+                };
+            } else {
+                action = async () => {
+                    await this.$store.dispatch(`session/${SESSION_LOGIN_WITH_CREDENTIALS}`, {
+                        email: event.target.elements.email.value,
+                        password: event.target.elements.password.value,
+                    });
                     this.$store.dispatch(HIDE_LOGIN_MODAL, null, { root: true }); // go fkn kys
-                })
-                .catch((error) => {
-                    this.$data.errorMessage = error;
-                    this.$refs.loginButton.reset();
-                    this.$refs.registerButton.reset();
-                });
+                };
+            }
+            action().catch((error) => {
+                this.$data.errorMessage = error;
+            });
         },
     },
 };
@@ -139,7 +140,7 @@ fieldset {
 #register > .note { /* fixme */
 text-transform: uppercase;
 }
-#register-or-login > fieldset {
+#with-email {
     position:relative;
 }
 #next-steps-register {

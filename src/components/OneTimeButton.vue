@@ -1,6 +1,6 @@
 <template>
     <div id="onetimebutton">
-        <button :disabled="loading" type="button" @click="clicked">
+        <button :disabled="loading" :type="type">
             <slot v-if="!loading">Click me</slot>
             <span v-else>loading...</span>
         </button>
@@ -13,6 +13,12 @@
  */
 export default {
     name: 'OneTimeButton',
+    props: {
+        type: {
+            type: String,
+            default: 'button',
+        },
+    },
     data: () => ({
         loading: false,
     }),
