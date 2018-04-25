@@ -12,9 +12,10 @@
                     <input id="email"  v-model="email" type="email" name="email" placeholder="email@example.com" required>
                     <label for="password">Password <em>(optional)</em></label>
                     <input id="password" v-model="password" type="password" name="password" placeholder="password" autocomplete="new-password"> <!-- todo remove new-password -->
-                    <div id="submit" :disabled="loading">
+                    <div id="submit">
                         <!-- todo without click listener https://stackoverflow.com/q/3577469 ...maybe some day. :( -->
-                        <button id="register" ref="registerButton" type="submit" @click="registerOrLogin='register'">
+                        <button id="register" ref="registerButton" :disabled="loading" type="submit"
+                                @click="registerOrLogin='register'">
                             Create account
                             <div v-if="password" class="note">
                                 <span      v-if="passwordStrength===1" class="password-weak">weak</span>
@@ -23,7 +24,8 @@
                                 password
                             </div>
                         </button>
-                        <button id="login" ref="loginButton" type="submit" @click="registerOrLogin='login'">
+                        <button id="login" ref="loginButton" :disabled="loading" type="submit"
+                                @click="registerOrLogin='login'">
                             Log in
                         </button>
                     </div>
@@ -73,6 +75,7 @@ export default {
         ]),
         registerOrLoginCredentials(event) {
             this.$data.errorMessage = '';
+            this.$data.loading = true;
             let action;
             if (this.$data.registerOrLogin === 'register') {
                 action = async () => {
@@ -93,6 +96,8 @@ export default {
             }
             action().catch((error) => {
                 this.$data.errorMessage = error;
+            }).finally(() => {
+                this.$data.loading = false;
             });
         },
     },
