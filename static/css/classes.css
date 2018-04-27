@@ -1,6 +1,9 @@
 .padding {
     padding: 0.5vw;
 }
+.padding-l {
+    padding: 1vw;
+}
 .note {
     font-size:80%;
     opacity:0.8;

@@ -77,7 +77,7 @@ export default {
 }
 #app > header {
     grid-area: header;
-    border-bottom: 1px solid lightgrey;
+    border-bottom: 1px solid lightgrey; /* todo should this be done with an hr element? grid disapproves */
     display: flex;
     flex-direction: row;
     justify-content: space-between;

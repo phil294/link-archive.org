@@ -1,5 +1,5 @@
 import storageService from '@/services/storage-service';
-import { SESSION_LOGIN_WITH_CREDENTIALS, SESSION_REGISTER_WITH_CREDENTIALS, SESSION_LOGOUT } from './actions';
+import { SESSION_REQUEST_TOKEN_MAIL, SESSION_LOGOUT } from './actions';
 
 export default {
     namespaced: true,
@@ -17,8 +17,8 @@ export default {
         },
     },
     actions: {
-        async [SESSION_LOGIN_WITH_CREDENTIALS]({ commit }, { email, password }) {
-            /* eslint-disable-next-line no-unused-vars */
+        /* async [SESSION_LOGIN_WITH_CREDENTIALS]({ commit }, { email, password }) {
+            /* eslint-disable-next-line no-unused-vars
             await new Promise(((resolve, reject) => { // todo
                 setTimeout(() => {
                     commit('setEmail', email);
@@ -27,8 +27,8 @@ export default {
                     resolve();
                 }, 500);
             }));
-        },
-        async [SESSION_REGISTER_WITH_CREDENTIALS](_, { email, password }) {
+        }, */
+        async [SESSION_REQUEST_TOKEN_MAIL](_, email) {
             /* eslint-disable-next-line no-unused-vars */
             await new Promise(((resolve, reject) => { // todo
                 setTimeout(() => {
@@ -42,4 +42,3 @@ export default {
         },
     },
 };
-
