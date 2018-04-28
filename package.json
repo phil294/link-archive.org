@@ -5,11 +5,12 @@
   "license": "MIT",
   "scripts": {
     "lint": "eslint",
-    "start": "node index.js"
+    "dev": "node  --nolazy --inspect-brk=9229 index.js"
   },
   "dependencies": {
     "body-parser": "^1.18.2",
     "express": "^4.16.3",
+    "jwt-simple": "^0.5.1",
     "mongoose": "^5.0.13",
     "nodemailer": "^4.6.4"
   },
