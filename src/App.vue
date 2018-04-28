@@ -1,9 +1,9 @@
 <template>
     <section id="app">
         <div
-            v-if="loginModal"
-            id="login">
-            <login/>
+            v-if="authenticateModal"
+            id="authenticate">
+            <authenticate/>
         </div>
         <header class="padding">
             <nav>
@@ -22,7 +22,7 @@
             </div>
             <button
                 v-if="!isLoggedIn"
-                @click="SHOW_LOGIN_MODAL">Open login dialog
+                @click="SHOW_AUTHENTICATE_MODAL">Open authenticate dialog
             </button>
         </header>
         <main>
@@ -34,19 +34,19 @@
 
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex';
-import { SHOW_LOGIN_MODAL, SESSION_LOGOUT } from '@/store/actions';
-import Login from '@/components/Login';
+import { SHOW_AUTHENTICATE_MODAL, SESSION_LOGOUT } from '@/store/actions';
+import Authenticate from '@/components/Authenticate';
 import OneTimeButton from '@/components/OneTimeButton';
 
 export default {
     name: 'App',
     components: {
-        Login, OneTimeButton,
+        Authenticate, OneTimeButton,
     },
     computed: {
         ...mapState([
             'loadingCounter',
-            'loginModal',
+            'authenticateModal',
         ]),
         ...mapState('session', [
             'email',
@@ -57,7 +57,7 @@ export default {
     },
     methods: {
         ...mapActions([
-            SHOW_LOGIN_MODAL,
+            SHOW_AUTHENTICATE_MODAL,
         ]),
         ...mapActions('session', [
             SESSION_LOGOUT,

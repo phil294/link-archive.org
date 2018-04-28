@@ -1,79 +1,26 @@
 <template>
-    <main> <!-- todo ? -->
-        <button type="button" @click="HIDE_LOGIN_MODAL">
-            <i class="material-icons">close</i>
-        </button>
-        <h1>Log in or create account</h1>
-        <div id="register-or-login">
-            <fieldset id="with-email">
-                <legend>With e-mail</legend>
-                <form v-if="!showNextSteps" @submit.prevent="requestMail($event)">
-                    <label for="email">E-mail</label>
-                    <input id="email" v-model="email" type="email" name="email" placeholder="email@example.com" required>
-                    <button :disabled="loading" type="submit">Request mail to log in</button>
-                </form>
-                <div v-else class="padding-l">
-                    <div>
-                        An e-mail has been sent to <em>{{ email }}</em>. You can log in by clicking the link in the e-mail.
-                    </div>
-                    <br>
-                    <a @click="showNextSteps=false">
-                        Send another mail
-                    </a>
-                </div>
-            </fieldset>
-        </div>
-    </main>
+    <div>
+        Logging in...
+    </div>
 </template>
 
 <script>
-import { mapActions } from 'vuex';
-import { HIDE_LOGIN_MODAL, SESSION_REQUEST_TOKEN_MAIL } from '@/store/actions';
-import OneTimeButton from '@/components/OneTimeButton';
+import { SESSION_LOGIN_WITH_TOKEN, HIDE_AUTHENTICATE_MODAL } from '@/store/actions';
 
+/** Callback handler for email links, google and alike */
 export default {
     name: 'Login',
-    components: {
-        OneTimeButton,
-    },
-    data: () => ({
-        email: '',
-        loading: false,
-        showNextSteps: false,
-    }),
-    methods: {
-        ...mapActions([
-            HIDE_LOGIN_MODAL,
-        ]),
-        requestMail(event) {
-            this.$data.loading = true;
-            this.$store.dispatch(`session/${SESSION_REQUEST_TOKEN_MAIL}`,
-                event.target.elements.email.value) // use form data, not v-model
-                .then(() => {
-                    this.$data.showNextSteps = true;
-                }).finally(() => {
-                    this.$data.loading = false;
-                });
-        },
+    created() {
+        // in case user entered the link manually while having login modal open
+        this.$store.dispatch(HIDE_AUTHENTICATE_MODAL);
+        if (this.$route.query.token) {
+            this.$store.dispatch(`session/${SESSION_LOGIN_WITH_TOKEN}`, this.$route.query.token);
+            this.$router.push('/');
+        }
     },
 };
 </script>
 
 <style scoped>
-main {
-    position:fixed;
-    z-index:9998;
-    top:0;
-    left:0;
-    padding: 5%;
-    width:100%;
-    height:100%;
-    box-sizing: border-box;
-    background: rgba(255,255,255,0.8);
-}
-fieldset {
-    width: 30%;
-    min-width: 340px;
-    margin: 0 auto;
-}
+
 </style>

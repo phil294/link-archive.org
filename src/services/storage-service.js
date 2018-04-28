@@ -1,15 +1,15 @@
-const STORAGE_USERNAME = 'username';
+const STORAGE_TOKEN = 'token';
 const STORAGE_EMAIL = 'email';
 
 export default {
-    getUsername() {
-        return localStorage.getItem(STORAGE_USERNAME);
+    getToken() {
+        return localStorage.getItem(STORAGE_TOKEN);
     },
-    setUsername(username) {
-        if (username === null) {
-            localStorage.removeItem(STORAGE_USERNAME);
+    setToken(token) {
+        if (token === null) {
+            localStorage.removeItem(STORAGE_TOKEN);
         } else {
-            localStorage.setItem(STORAGE_USERNAME, username);
+            localStorage.setItem(STORAGE_TOKEN, token);
         }
     },
     getEmail() {
