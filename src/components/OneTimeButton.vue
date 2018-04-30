@@ -44,4 +44,8 @@ export default {
         background:blue;
         color:aqua;
     }
+    button {
+        display: flex;
+        align-items: center;
+    }
 </style>

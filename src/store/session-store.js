@@ -25,7 +25,7 @@ export default {
         [SESSION_LOGIN_WITH_TOKEN]({ commit }, token) {
             let payload;
             try {
-                payload = JSON.parse(window.atob(token.trim().token.split('.')[1].replace('-', '+').replace('_', '/')));
+                payload = JSON.parse(window.atob(token.trim().split('.')[1].replace('-', '+').replace('_', '/')));
             } catch (error) {
                 throw new Error('Malformed token');
             }

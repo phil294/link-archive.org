@@ -4,6 +4,9 @@
 .padding-l {
     padding: 1vw;
 }
+.padding-xl {
+    padding: 3vw;
+}
 .note {
     font-size:80%;
     opacity:0.8;
@@ -18,4 +21,8 @@
     border: 2px solid #eeeeee;
     box-shadow: 3px 3px 4px #dddddd;
     background: rgba(255,255,255,0.8);
+}
+.material-icons {
+    display: inline-flex;
+    vertical-align:middle;
 }

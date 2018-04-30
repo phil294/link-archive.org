@@ -1,11 +1,12 @@
 <template>
     <div id="modal">
-        <main class="box padding-l"> <!-- todo ? -->
+        <main class="box padding-xl"> <!-- todo ? -->
             <button id="close" type="button" @click="HIDE_AUTHENTICATE_MODAL">
                 <i class="material-icons">close</i>
             </button>
             <h1>Log in or create account</h1>
             <div id="register-or-login">
+
                 <fieldset id="with-email" class="box">
                     <legend>With e-mail</legend>
                     <form v-if="!showNextSteps" @submit.prevent="requestMail($event)">
@@ -16,7 +17,7 @@
                     <div v-else id="next-steps" class="padding-l">
                         <div>
                             <p>An e-mail has been sent to <em>{{ email }}</em>.</p>
-                            <p>You can log in by clicking the link in the e-mail</p>
+                            <p>You can log in by clicking the link in the e&#8209;mail</p>
                             <p class="center"><strong>- OR -</strong></p>
                             <form id="insert-code" @submit.prevent="loginWithToken($event)">
                                 <div>
@@ -27,12 +28,25 @@
                             </form>
                             <div class="error">{{ tokenError }}</div>
                         </div>
-                        <br>
+                        <hr>
                         <a @click="showNextSteps=false">
-                            Send another mail
+                            <i class="material-icons">keyboard_arrow_left</i> Send another mail
                         </a>
                     </div>
                 </fieldset>
+
+                <fieldset id="with-google" class="box">
+                    <legend>With Google</legend>
+                    <one-time-button v-if="!googleLoaded" @click="loadGoogle">
+                        <img src="/static/google.png" class="google-logo">
+                        Google
+                    </one-time-button>
+                    <button v-else @click="loginWithGoogle">
+                        <img src="/static/google.png" class="google-logo">
+                        Log in with Google
+                    </button>
+                </fieldset>
+
             </div>
         </main>
     </div>
@@ -42,6 +56,8 @@
 import { mapActions } from 'vuex';
 import { HIDE_AUTHENTICATE_MODAL, SESSION_REQUEST_TOKEN_MAIL, SESSION_LOGIN_WITH_TOKEN } from '@/store/actions';
 import OneTimeButton from '@/components/OneTimeButton';
+
+let googleAuth;
 
 export default {
     name: 'Authenticate',
@@ -53,6 +69,7 @@ export default {
         loading: false,
         showNextSteps: false,
         tokenError: '',
+        googleLoaded: false,
     }),
     methods: {
         ...mapActions([
@@ -75,6 +92,39 @@ export default {
                 this.$data.tokenError = `Login failed! (${error})`;
             }
         },
+        loadGoogle() {
+            const gapiScript = document.createElement('script');
+            gapiScript.onload = () => {
+                window.gapi.load('auth2', () => {
+                    window.gapi.auth2.init({
+                        client_id: process.env.GOOGLE_CLIENT_ID,
+                    }).then((auth) => {
+                        googleAuth = auth;
+                        // starting googleAuth.signIn from here typically fails: popups are blocked if not invoked by direct user action. from within a timeout, it does work however. but not from a repeated one or from an interval
+                        this.loginWithGoogle()
+                            .catch(() => {
+                                this.$data.googleLoaded = true; // -> require the user to click two times if error
+                            });
+                    });
+                });
+            };
+            gapiScript.src = 'https://apis.google.com/js/api.js'; // todo is this functionality available as a module?
+            document.head.appendChild(gapiScript);
+        },
+        async loginWithGoogle() {
+            let googleUser;
+            try {
+                googleUser = await googleAuth.signIn();
+            } catch (error) {
+                throw error; // todo
+            }
+            const googleBasicProfile = googleUser.getBasicProfile();
+            const email = googleBasicProfile.getEmail();
+            const name = googleBasicProfile.getName();
+            const image = googleBasicProfile.getImageUrl();
+            alert(`hi ${name}!`);
+            // ... todo
+        },
     },
 };
 </script>
@@ -85,25 +135,25 @@ export default {
     z-index:9998;
     top:0;
     left:0;
-    padding: 3%;
+    padding: 2%;
     width:100%;
     height:100%;
     box-sizing: border-box;
-    background: rgba(0,0,0,0.3);
+    background: rgba(0,0,0,0.08);
 }
 main {
     height:100%;
+    max-width:400px;
+    margin: 0 auto;
     position: relative;
+}
+fieldset {
+    margin-bottom:20px;
 }
 #close {
     position: absolute;
     top:0 ;
     right:0;
-}
-fieldset {
-    width: 30%;
-    min-width: 340px;
-    margin: 0 auto;
 }
 #insert-code {
     display: flex;
@@ -114,5 +164,12 @@ fieldset {
 }
 #insert-code input {
     margin-bottom: 0;
+}
+#with-google button {
+    display: flex;
+    align-items: center;
+}
+#with-google .google-logo {
+    margin-right: 5px;
 }
 </style>
