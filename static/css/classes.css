@@ -11,3 +11,11 @@
 .error {
     color: darkred;
 }
+.center {
+    text-align:center;
+}
+.box {
+    border: 2px solid #eeeeee;
+    box-shadow: 3px 3px 4px #dddddd;
+    background: rgba(255,255,255,0.8);
+}

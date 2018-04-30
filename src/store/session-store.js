@@ -23,16 +23,21 @@ export default {
     },
     actions: {
         [SESSION_LOGIN_WITH_TOKEN]({ commit }, token) {
-            // we trust the given token to be valid and set it as standard authentification header & session email
-            const payload = JSON.parse(window.atob(token.split('.')[1].replace('-', '+').replace('_', '/')));
-            const email = payload.email;
+            let payload;
+            try {
+                payload = JSON.parse(window.atob(token.trim().token.split('.')[1].replace('-', '+').replace('_', '/')));
+            } catch (error) {
+                throw new Error('Malformed token');
+            }
+            const email = payload.sub;
+            if (!email) throw new Error('Invalid token: no email contained');
             commit('setToken', token);
             commit('setEmail', email);
             storageService.setEmail(email);
             storageService.setToken(token);
         },
         async [SESSION_REQUEST_TOKEN_MAIL](_, email) {
-            await httpService.get(`requesttokenmail?email=${email}`);
+            await httpService.get(`authentication/requesttokenmail?email=${email}`);
         },
         [SESSION_LOGOUT]({ commit }) {
             commit('setEmail', null);
