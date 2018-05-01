@@ -35,16 +35,15 @@
                     </div>
                 </fieldset>
 
-                <fieldset id="with-google" class="box">
-                    <legend>With Google</legend>
-                    <one-time-button v-if="!googleLoaded" @click="loadGoogle">
-                        <img src="/static/google.png" class="google-logo">
-                        Google
-                    </one-time-button>
-                    <button v-else @click="loginWithGoogle">
-                        <img src="/static/google.png" class="google-logo">
-                        Log in with Google
-                    </button>
+                <fieldset id="with-external" class="box">
+                    <legend>Or</legend>
+                    <div>
+                        <button v-if="googleLoaded" @click="loginWithGoogle">
+                            <img src="/static/google.png" class="logo">
+                            Log in with Google
+                        </button>
+                        <div v-else class="note">Downloading Google scripts...</div>
+                    </div>
                 </fieldset>
 
             </div>
@@ -69,8 +68,22 @@ export default {
         loading: false,
         showNextSteps: false,
         tokenError: '',
-        googleLoaded: false,
+        googleLoaded: !!(window.gapi || {}).auth2,
     }),
+    created() {
+        if (!this.$data.googleLoaded) {
+            const gapiScript = document.createElement('script');
+            gapiScript.onload = () => {
+                window.gapi.load('auth2', () => {
+                    this.initGoogle();
+                });
+            };
+            gapiScript.src = 'https://apis.google.com/js/api.js'; // todo is this functionality available as a module?
+            document.head.appendChild(gapiScript);
+        } else {
+            this.initGoogle();
+        }
+    },
     methods: {
         ...mapActions([
             HIDE_AUTHENTICATE_MODAL,
@@ -92,24 +105,13 @@ export default {
                 this.$data.tokenError = `Login failed! (${error})`;
             }
         },
-        loadGoogle() {
-            const gapiScript = document.createElement('script');
-            gapiScript.onload = () => {
-                window.gapi.load('auth2', () => {
-                    window.gapi.auth2.init({
-                        client_id: process.env.GOOGLE_CLIENT_ID,
-                    }).then((auth) => {
-                        googleAuth = auth;
-                        // starting googleAuth.signIn from here typically fails: popups are blocked if not invoked by direct user action. from within a timeout, it does work however. but not from a repeated one or from an interval
-                        this.loginWithGoogle()
-                            .catch(() => {
-                                this.$data.googleLoaded = true; // -> require the user to click two times if error
-                            });
-                    });
-                });
-            };
-            gapiScript.src = 'https://apis.google.com/js/api.js'; // todo is this functionality available as a module?
-            document.head.appendChild(gapiScript);
+        initGoogle() {
+            window.gapi.auth2.init({
+                client_id: process.env.GOOGLE_CLIENT_ID,
+            }).then((auth) => {
+                googleAuth = auth;
+                this.$data.googleLoaded = true;
+            });
         },
         async loginWithGoogle() {
             let googleUser;
@@ -122,6 +124,7 @@ export default {
             const email = googleBasicProfile.getEmail();
             const name = googleBasicProfile.getName();
             const image = googleBasicProfile.getImageUrl();
+            const googleToken = googleUser.getAuthResponse().id_token;
             alert(`hi ${name}!`);
             // ... todo
         },
@@ -165,11 +168,11 @@ fieldset {
 #insert-code input {
     margin-bottom: 0;
 }
-#with-google button {
+#with-external button {
     display: flex;
     align-items: center;
 }
-#with-google .google-logo {
+#with-external button img.logo {
     margin-right: 5px;
 }
 </style>
