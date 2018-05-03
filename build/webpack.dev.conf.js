@@ -21,6 +21,9 @@ const devWebpackConfig = merge(baseWebpackConfig, {
 
     // these devServer options should be customized in /config/index.js
     devServer: {
+        // //////// 20180501
+        https: true,
+        // /////////
         clientLogLevel: 'warning',
         historyApiFallback: {
             rewrites: [

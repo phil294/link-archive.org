@@ -37,12 +37,19 @@
 
                 <fieldset id="with-external" class="box">
                     <legend>Or</legend>
-                    <div>
-                        <button v-if="googleLoaded" @click="loginWithGoogle">
+                    <div id="google-login">
+                        <button v-if="googleInitialized" @click="loginWithGoogle">
                             <img src="/static/google.png" class="logo">
                             Log in with Google
                         </button>
                         <div v-else class="note">Downloading Google scripts...</div>
+                    </div>
+                    <div id="facebook-login">
+                        <button v-if="facebookInitialized" @click="loginWithFacebook">
+                            <img src="/static/google.png" class="logo">
+                            Log in with Facebook
+                        </button>
+                        <div v-else class="note">Downloading Facebook scripts...</div>
                     </div>
                 </fieldset>
 
@@ -53,10 +60,10 @@
 
 <script>
 import { mapActions } from 'vuex';
-import { HIDE_AUTHENTICATE_MODAL, SESSION_REQUEST_TOKEN_MAIL, SESSION_LOGIN_WITH_TOKEN } from '@/store/actions';
+import { HIDE_AUTHENTICATE_MODAL, SESSION_REQUEST_TOKEN_MAIL, SESSION_LOGIN_WITH_TOKEN, SESSION_GOOGLE_TOKEN_LOGIN, SESSION_FACEBOOK_TOKEN_LOGIN } from '@/store/actions';
 import OneTimeButton from '@/components/OneTimeButton';
 
-let googleAuth;
+let googleAuth; // todo
 
 export default {
     name: 'Authenticate',
@@ -68,20 +75,23 @@ export default {
         loading: false,
         showNextSteps: false,
         tokenError: '',
-        googleLoaded: !!(window.gapi || {}).auth2,
+        googleInitialized: false,
+        facebookInitialized: false,
     }),
     created() {
-        if (!this.$data.googleLoaded) {
-            const gapiScript = document.createElement('script');
-            gapiScript.onload = () => {
-                window.gapi.load('auth2', () => {
-                    this.initGoogle();
-                });
-            };
-            gapiScript.src = 'https://apis.google.com/js/api.js'; // todo is this functionality available as a module?
-            document.head.appendChild(gapiScript);
+        // google: load once, initialize upon component creation
+        if (!(window.gapi || {}).auth2) {
+            this.loadGoogle()
+                .then(this.initializeGoogle);
         } else {
-            this.initGoogle();
+            this.initializeGoogle();
+        }
+        // facebook: load once, initialize once (needs to happen globally)
+        if (!(window.FB || {}).login) {
+            this.loadFacebook()
+                .then(this.initializeFacebook);
+        } else {
+            this.facebookInitialized = true;
         }
     },
     methods: {
@@ -98,6 +108,7 @@ export default {
                 });
         },
         loginWithToken(event) {
+            this.$data.tokenError = '';
             try {
                 this.$store.dispatch(`session/${SESSION_LOGIN_WITH_TOKEN}`, event.target.elements.token.value);
                 this.$store.dispatch(HIDE_AUTHENTICATE_MODAL);
@@ -105,29 +116,72 @@ export default {
                 this.$data.tokenError = `Login failed! (${error})`;
             }
         },
-        initGoogle() {
-            window.gapi.auth2.init({
-                client_id: process.env.GOOGLE_CLIENT_ID,
-            }).then((auth) => {
-                googleAuth = auth;
-                this.$data.googleLoaded = true;
+        // todo where put this?
+        async loadGoogle() {
+            const gapiScript = document.createElement('script');
+            await new Promise((resolve) => {
+                gapiScript.onload = () => {
+                    window.gapi.load('auth2', resolve);
+                };
+                gapiScript.src = 'https://apis.google.com/js/api.js'; // todo is this functionality available as a module?
+                document.head.appendChild(gapiScript);
             });
+        },
+        async initializeGoogle() {
+            googleAuth = await window.gapi.auth2.init({
+                client_id: process.env.GOOGLE_CLIENT_ID,
+            });
+            this.$data.googleInitialized = true;
         },
         async loginWithGoogle() {
             let googleUser;
             try {
                 googleUser = await googleAuth.signIn();
             } catch (error) {
-                throw error; // todo
+                console.error(error); // todo
+                return;
             }
-            const googleBasicProfile = googleUser.getBasicProfile();
-            const email = googleBasicProfile.getEmail();
-            const name = googleBasicProfile.getName();
-            const image = googleBasicProfile.getImageUrl();
             const googleToken = googleUser.getAuthResponse().id_token;
-            alert(`hi ${name}!`);
-            // ... todo
+            await this.$store.dispatch(`session/${SESSION_GOOGLE_TOKEN_LOGIN}`, googleToken);
+            this.$store.dispatch(HIDE_AUTHENTICATE_MODAL);
         },
+        async loadFacebook() {
+            const fbsdkScript = document.createElement('script');
+            await new Promise((resolve) => {
+                fbsdkScript.onload = resolve;
+                fbsdkScript.src = 'https://connect.facebook.net/en_US/sdk.js';
+                document.head.appendChild(fbsdkScript);
+            });
+        },
+        initializeFacebook() {
+            window.fbAsyncInit = () => window.FB.init({
+                appId: process.env.FACEBOOK_APP_ID,
+                cookie: true,
+                xfbml: true,
+                version: 'v3.0', // todo 3.0
+            });
+            this.$data.facebookInitialized = true;
+        },
+        async loginWithFacebook() {
+            let facebookToken;
+            try {
+                facebookToken = await new Promise((resolve, reject) => {
+                    window.FB.login((response) => {
+                        if (response.status === 'connected') {
+                            resolve(response.authResponse.accessToken);
+                        } else {
+                            reject(response);
+                        }
+                    });
+                });
+            } catch (response) {
+                console.error(response); // todo
+                return;
+            }
+            await this.$store.dispatch(`session/${SESSION_FACEBOOK_TOKEN_LOGIN}`, facebookToken);
+            this.$store.dispatch(HIDE_AUTHENTICATE_MODAL);
+        },
+
     },
 };
 </script>
@@ -171,6 +225,8 @@ fieldset {
 #with-external button {
     display: flex;
     align-items: center;
+    width:200px;
+    margin-bottom:10px;
 }
 #with-external button img.logo {
     margin-right: 5px;

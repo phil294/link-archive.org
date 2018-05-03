@@ -1,6 +1,6 @@
 import storageService from '@/services/storage-service';
 import httpService from '@/services/http-service';
-import { SESSION_REQUEST_TOKEN_MAIL, SESSION_LOGIN_WITH_TOKEN, SESSION_LOGOUT } from './actions';
+import { SESSION_REQUEST_TOKEN_MAIL, SESSION_LOGIN_WITH_TOKEN, SESSION_LOGOUT, SESSION_GOOGLE_TOKEN_LOGIN, SESSION_FACEBOOK_TOKEN_LOGIN } from './actions';
 
 export default {
     namespaced: true,
@@ -29,7 +29,7 @@ export default {
             } catch (error) {
                 throw new Error('Malformed token');
             }
-            const email = payload.sub;
+            const email = payload.email;
             if (!email) throw new Error('Invalid token: no email contained');
             commit('setToken', token);
             commit('setEmail', email);
@@ -38,6 +38,16 @@ export default {
         },
         async [SESSION_REQUEST_TOKEN_MAIL](_, email) {
             await httpService.get(`authentication/requesttokenmail?email=${email}`);
+        },
+        async [SESSION_GOOGLE_TOKEN_LOGIN]({ dispatch }, googleToken) {
+            const response = await httpService.post(`authentication/googletokenlogin?googletoken=${googleToken}`);
+            const jwt = response.data;
+            dispatch(SESSION_LOGIN_WITH_TOKEN, jwt);
+        },
+        async [SESSION_FACEBOOK_TOKEN_LOGIN]({ dispatch }, facebookToken) {
+            const response = await httpService.post(`authentication/facebooktokenlogin?facebooktoken=${facebookToken}`);
+            const jwt = response.data;
+            dispatch(SESSION_LOGIN_WITH_TOKEN, jwt);
         },
         [SESSION_LOGOUT]({ commit }) {
             commit('setEmail', null);
