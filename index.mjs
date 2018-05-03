@@ -2,6 +2,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import MailService from './services/mail-service.mjs';
+import TokenService from './services/token-service.mjs';
 import authenticationRouter from './routers/authentication-router.mjs';
 import secureRouter from './routers/secure-router.mjs';
 
@@ -15,10 +16,14 @@ const MAIL_SENDER_USER = process.env.MAIL_SENDER_USER || (() => { throw new Erro
 const MAIL_SENDER_PASSWORD = process.env.MAIL_SENDER_PASSWORD || (() => { throw new Error('MAIL_SENDER_PASSWORD is not set'); })();
 const TOKEN_SECRET = process.env.TOKEN_SECRET || (() => { throw new Error('TOKEN_SECRET is not set'); })();
 const WEB_ROOT = process.env.WEB_ROOT || (() => { throw new Error('WEB_ROOT is not set'); })();
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || (() => { throw new Error('GOOGLE_CLIENT_ID is not set'); })();
+// const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET || (() => { throw new Error('GOOGLE_CLIENT_SECRET is not set'); })();
+const FACEBOOK_APP_ID = process.env.FACEBOOK_APP_ID || (() => { throw new Error('FACEBOOK_APP_ID is not set'); })();
 
 mongoose.connect(MONGO_URL);
 
 const mailService = new MailService(MAIL_SENDER_USER, MAIL_SENDER_PASSWORD);
+const tokenService = new TokenService(TOKEN_SECRET);
 
 // ////////////////// ROUTES
 
@@ -27,13 +32,16 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*'); // fixme
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-    res.header('Access-Control-Allow-Headers', 'Content-Type,Token');
-
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type,Authorization');
+    if (req.method === 'OPTIONS') { // todo is this the way to go ??
+        res.sendStatus(204);
+        return;
+    }
     next();
 });
-app.use('/authentication', authenticationRouter(TOKEN_SECRET, WEB_ROOT, mailService));
-app.use('/secure', secureRouter(TOKEN_SECRET));
+app.use('/authentication', authenticationRouter(tokenService, WEB_ROOT, mailService, GOOGLE_CLIENT_ID));
+app.use('/secure', secureRouter(tokenService));
 app.listen(PORT, () => {
     log('running');
 });
