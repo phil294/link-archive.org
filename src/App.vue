@@ -17,7 +17,10 @@
             <div
                 v-if="isLoggedIn"
                 id="loginStatus">
-                Logged in as {{ email }}.
+                Logged in as
+                <span v-if="session.name">{{ session.name }}</span>
+                <span v-else-if="session.email">{{ session.email }}</span>
+                <span v-else-if="session.externalType">{{ session.externalIdentifier }} [{{ session.externalType }}]</span>
                 <one-time-button @click="SESSION_LOGOUT">Logout</one-time-button>
             </div>
             <button
@@ -49,7 +52,7 @@ export default {
             'authenticateModal',
         ]),
         ...mapState('session', [
-            'email',
+            'session',
         ]),
         ...mapGetters('session', [
             'isLoggedIn',

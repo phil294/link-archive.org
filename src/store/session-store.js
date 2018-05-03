@@ -5,36 +5,43 @@ import { SESSION_REQUEST_TOKEN_MAIL, SESSION_LOGIN_WITH_TOKEN, SESSION_LOGOUT, S
 export default {
     namespaced: true,
     state: {
-        email: storageService.getEmail(),
-        token: storageService.getToken(),
+        token: null,
+        session: null,
     },
     getters: {
         isLoggedIn(state) {
-            return state.email !== null;
+            return !!state.session;
         },
     },
     mutations: {
-        setEmail(state, email) {
-            state.email = email;
-        },
         setToken(state, token) {
             state.token = token;
         },
+        setSession(state, session) {
+            state.session = session;
+        },
     },
     actions: {
+        /** validate token and set token & session */
         [SESSION_LOGIN_WITH_TOKEN]({ commit }, token) {
+            let verifiedToken;
+            if (!token) {
+                verifiedToken = storageService.getToken();
+            } else {
+                verifiedToken = token;
+            }
             let payload;
             try {
-                payload = JSON.parse(window.atob(token.trim().split('.')[1].replace('-', '+').replace('_', '/')));
+                payload = JSON.parse(window.atob(verifiedToken.trim().split('.')[1].replace('-', '+').replace('_', '/')));
             } catch (error) {
                 throw new Error('Malformed token');
             }
-            const email = payload.email;
-            if (!email) throw new Error('Invalid token: no email contained');
-            commit('setToken', token);
-            commit('setEmail', email);
-            storageService.setEmail(email);
-            storageService.setToken(token);
+            const session = payload;
+            if (!session.email && !session.externalType) throw new Error('Invalid token: no email and no externalType');
+
+            commit('setToken', verifiedToken);
+            storageService.setToken(verifiedToken);
+            commit('setSession', session);
         },
         async [SESSION_REQUEST_TOKEN_MAIL](_, email) {
             await httpService.get(`authentication/requesttokenmail?email=${email}`);
@@ -50,9 +57,8 @@ export default {
             dispatch(SESSION_LOGIN_WITH_TOKEN, jwt);
         },
         [SESSION_LOGOUT]({ commit }) {
-            commit('setEmail', null);
             commit('setToken', null);
-            storageService.setEmail(null);
+            commit('setSession', null);
             storageService.setToken(null);
         },
     },
