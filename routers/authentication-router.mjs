@@ -6,7 +6,7 @@ import { User, externalTypes } from '../models/user.mjs';
 
 const { OAuth2Client } = googleAuthLibrary; // todo why doesnt this work as a named import ???
 
-export default ((tokenService, WEB_ROOT, mailService, GOOGLE_CLIENT_ID) => {
+export default ((tokenService, WEB_ROOT, mailService, GOOGLE_CLIENT_ID, FACEBOOK_APP_ID, FACEBOOK_APP_SECRET) => {
     const authenticationRouter = express.Router();
     /** an email for login was requested. login==register. */
     authenticationRouter.get('/requesttokenmail', (req, res) => {
@@ -51,12 +51,19 @@ export default ((tokenService, WEB_ROOT, mailService, GOOGLE_CLIENT_ID) => {
     });
     /** post facebook token, return jwt */
     authenticationRouter.post('/facebooktokenlogin', async (req, res) => {
-        const result = await request.get(`https://graph.facebook.com/me?access_token=${req.query.facebooktoken}`);
-
-
-        // const token = makeToken(email);
-        // res.send(token);
-        res.end();
+        let result = await request.get(`https://graph.facebook.com/debug_token?input_token=${req.query.facebooktoken}&access_token=${FACEBOOK_APP_ID}|${FACEBOOK_APP_SECRET}`);
+        let { data } = JSON.parse(result);
+        if (data.app_id !== FACEBOOK_APP_ID || !data.is_valid) {
+            res.status(httpStatus.UNAUTHORIZED).send('invalid app id');
+        }
+        result = await request.get(`https://graph.facebook.com/me?access_token=${req.query.facebooktoken}`);
+        data = JSON.parse(result);
+        const token = tokenService.create({
+            externalType: externalTypes.FACEBOOK,
+            externalIdentifier: data.user_id,
+            name: data.name,
+        });
+        res.send(token);
     });
     return authenticationRouter;
 });

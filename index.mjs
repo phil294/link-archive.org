@@ -19,6 +19,7 @@ const WEB_ROOT = process.env.WEB_ROOT || (() => { throw new Error('WEB_ROOT is n
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || (() => { throw new Error('GOOGLE_CLIENT_ID is not set'); })();
 // const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET || (() => { throw new Error('GOOGLE_CLIENT_SECRET is not set'); })();
 const FACEBOOK_APP_ID = process.env.FACEBOOK_APP_ID || (() => { throw new Error('FACEBOOK_APP_ID is not set'); })();
+const FACEBOOK_APP_SECRET = process.env.FACEBOOK_APP_SECRET || (() => { throw new Error('FACEBOOK_APP_SECRET is not set'); })();
 
 mongoose.connect(MONGO_URL);
 
@@ -40,7 +41,7 @@ app.use((req, res, next) => {
     }
     next();
 });
-app.use('/authentication', authenticationRouter(tokenService, WEB_ROOT, mailService, GOOGLE_CLIENT_ID));
+app.use('/authentication', authenticationRouter(tokenService, WEB_ROOT, mailService, GOOGLE_CLIENT_ID, FACEBOOK_APP_ID, FACEBOOK_APP_SECRET));
 app.use('/secure', secureRouter(tokenService));
 app.listen(PORT, () => {
     log('running');
