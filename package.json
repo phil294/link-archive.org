@@ -1,12 +1,12 @@
 {
   "name": "_api",
   "version": "1.0.0",
-  "author": "phi",
+  "author": "phil294 <eochgls@web.de>",
   "license": "MIT",
   "scripts": {
     "lint": "tslint",
     "dev": "ts-node index.ts",
-    "upgradeAll": "ncu -a && yarn install && yarn upgrade"
+    "upgrade-all": "ncu -a && yarn install && yarn upgrade"
   },
   "dependencies": {
     "@types/jwt-simple": "0.5.33",
