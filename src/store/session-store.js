@@ -1,6 +1,8 @@
 import storageService from '@/services/storage-service';
-import httpService from '@/services/http-service';
-import { SESSION_REQUEST_TOKEN_MAIL, SESSION_LOGIN_WITH_TOKEN, SESSION_LOGOUT, SESSION_GOOGLE_TOKEN_LOGIN, SESSION_FACEBOOK_TOKEN_LOGIN } from './actions';
+import httpService from '@/services/http-service'; /* eslint-disable-line */ // todo
+import {
+    SESSION_REQUEST_TOKEN_MAIL, SESSION_LOGIN_WITH_TOKEN, SESSION_LOGOUT, SESSION_GOOGLE_TOKEN_LOGIN, SESSION_FACEBOOK_TOKEN_LOGIN,
+} from './actions';
 
 export default {
     namespaced: true,
@@ -24,23 +26,17 @@ export default {
     actions: {
         /** validate token and set token & session */
         [SESSION_LOGIN_WITH_TOKEN]({ commit }, token) {
-            let verifiedToken;
-            if (!token) {
-                verifiedToken = storageService.getToken();
-            } else {
-                verifiedToken = token;
-            }
             let payload;
             try {
-                payload = JSON.parse(window.atob(verifiedToken.trim().split('.')[1].replace('-', '+').replace('_', '/')));
+                payload = JSON.parse(window.atob(token.trim().split('.')[1].replace('-', '+').replace('_', '/')));
             } catch (error) {
                 throw new Error('Malformed token');
             }
             const session = payload;
             if (!session.email && !session.externalType) throw new Error('Invalid token: no email and no externalType');
 
-            commit('setToken', verifiedToken);
-            storageService.setToken(verifiedToken);
+            commit('setToken', token);
+            storageService.setToken(token);
             commit('setSession', session);
         },
         async [SESSION_REQUEST_TOKEN_MAIL](_, email) {
