@@ -1,15 +1,15 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import Login from '@/components/Login';
+import LoginCallbackHandler from '@/components/callback-handlers/LoginCallbackHandler';
 
 Vue.use(VueRouter);
 
 export default new VueRouter({
     routes: [
         {
-            path: '/login',
-            name: 'Login',
-            component: Login,
+            path: '/logincallback',
+            name: 'LoginCallbackHandler',
+            component: LoginCallbackHandler,
         },
     ],
 });

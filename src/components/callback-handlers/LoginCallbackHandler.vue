@@ -8,9 +8,9 @@
 <script>
 import { SESSION_LOGIN_WITH_TOKEN, HIDE_AUTHENTICATE_MODAL } from '@/store/actions';
 
-/** Callback handler for email links, google and alike. todo this shouldnt be called login but callback route */
+/** Route '/logincallback': "Callback" handler for email links, google and alike. */
 export default {
-    name: 'Login',
+    name: 'LoginCallbackHandler',
     data: () => ({
         error: '',
     }),
