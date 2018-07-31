@@ -15,12 +15,12 @@ export default ((tokenService: TokenService, mailService: MailService,
         const token: string = tokenService.create({
             email: req.query.email, // validity check not necessary, nodemailer handles this
         });
-        const url = `${WEB_ROOT}/#/login?token=${token}`;
+        const url = `${WEB_ROOT}/#/logincallback?token=${token}`;
         mailService.sendMail(req.query.email, 'Your Login Mail - ??', `
                     Hello, <br>
                     here is the link to log in to ??:<br>
                     <a href="${url}">${url}</a><br>
-                    Or paste in the token manually:<br>
+                    Or paste in the token manually:<br>` + /* todo paste where? */ `
                     ${token}<br>
                     Bye`)
             .then(res.end)
