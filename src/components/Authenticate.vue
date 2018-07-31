@@ -9,12 +9,12 @@
 
                 <fieldset id="with-email" class="box">
                     <legend>With e-mail</legend>
-                    <form v-if="!showNextSteps" @submit.prevent="requestMail($event)">
+                    <form v-if="!showMailSent" @submit.prevent="requestMail($event)">
                         <label for="email">E-mail</label>
                         <input id="email" v-model="email" type="email" name="email" placeholder="email@example.com" required>
                         <button :disabled="loading" type="submit">Request mail to log in</button>
                     </form>
-                    <div v-else id="next-steps" class="padding-l">
+                    <div v-else id="mail-sent" class="padding-l">
                         <div>
                             <p>An e-mail has been sent to <em>{{ email }}</em>.</p>
                             <p>You can log in by clicking the link in the e&#8209;mail</p>
@@ -29,7 +29,7 @@
                             <div class="error">{{ tokenError }}</div>
                         </div>
                         <hr>
-                        <a @click="showNextSteps=false">
+                        <a @click="showMailSent=false">
                             <i class="material-icons">keyboard_arrow_left</i> Send another mail
                         </a>
                     </div>
@@ -60,7 +60,9 @@
 
 <script>
 import { mapActions } from 'vuex';
-import { HIDE_AUTHENTICATE_MODAL, SESSION_REQUEST_TOKEN_MAIL, SESSION_LOGIN_WITH_TOKEN, SESSION_GOOGLE_TOKEN_LOGIN, SESSION_FACEBOOK_TOKEN_LOGIN } from '@/store/actions';
+import {
+    HIDE_AUTHENTICATE_MODAL, SESSION_REQUEST_TOKEN_MAIL, SESSION_LOGIN_WITH_TOKEN, SESSION_GOOGLE_TOKEN_LOGIN, SESSION_FACEBOOK_TOKEN_LOGIN,
+} from '@/store/actions';
 import OneTimeButton from '@/components/OneTimeButton';
 
 let googleAuth; // todo
@@ -73,7 +75,7 @@ export default {
     data: () => ({
         email: '',
         loading: false,
-        showNextSteps: false,
+        showMailSent: false,
         tokenError: '',
         googleInitialized: false,
         facebookInitialized: false,
@@ -102,16 +104,16 @@ export default {
             this.$data.loading = true;
             this.$store.dispatch(`session/${SESSION_REQUEST_TOKEN_MAIL}`, event.target.elements.email.value) // using form data, not v-model
                 .then(() => {
-                    this.$data.showNextSteps = true;
+                    this.$data.showMailSent = true;
                 }).finally(() => {
                     this.$data.loading = false;
                 });
         },
         loginWithToken(event) {
             this.$data.tokenError = '';
+            this.$store.dispatch(HIDE_AUTHENTICATE_MODAL);
             try {
                 this.$store.dispatch(`session/${SESSION_LOGIN_WITH_TOKEN}`, event.target.elements.token.value);
-                this.$store.dispatch(HIDE_AUTHENTICATE_MODAL);
             } catch (error) {
                 this.$data.tokenError = `Login failed! (${error})`;
             }
@@ -147,8 +149,10 @@ export default {
         },
         async loadFacebook() {
             const fbsdkScript = document.createElement('script');
-            await new Promise((resolve) => {
+            await new Promise((resolve, reject) => {
+                console.dir(fbsdkScript);
                 fbsdkScript.onload = resolve;
+                fbsdkScript.onerror = reject; // this throws and is not catched. just like it should (?)
                 fbsdkScript.src = 'https://connect.facebook.net/en_US/sdk.js';
                 document.head.appendChild(fbsdkScript);
             });
