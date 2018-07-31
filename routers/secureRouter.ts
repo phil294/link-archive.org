@@ -1,5 +1,6 @@
 import express from 'express';
 import { UNAUTHORIZED } from 'http-status-codes';
+import { User } from '../models/User';
 import TokenService from '../services/TokenService';
 
 export default ((tokenService: TokenService) => {
@@ -15,7 +16,8 @@ export default ((tokenService: TokenService) => {
         next();
     });
     secureRouter.get('/', (_, res) => {
-        res.send(`hi from secure. your email: ${res.locals.user.email}`);
+        const user: User = res.locals.user;
+        res.send(`hi from secure. your id: ${user.id}`);
     });
     return secureRouter;
 });
