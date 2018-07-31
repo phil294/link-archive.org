@@ -22,10 +22,10 @@ rm(path.join(config.build.assetsRoot, config.build.assetsSubDirectory), (err) =>
         if (webpackErr) throw webpackErr;
         process.stdout.write(`${stats.toString({
             colors: true,
-            modules: false,
-            children: false, // If you are using ts-loader, setting this to true will make TypeScript errors show up during build.
-            chunks: false,
-            chunkModules: false,
+            modules: true,
+            children: true, // If you are using ts-loader, setting this to true will make TypeScript errors show up during build.
+            chunks: true,
+            chunkModules: true,
         })}\n\n`);
 
         if (stats.hasErrors()) {
