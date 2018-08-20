@@ -19,18 +19,6 @@ const createLintingRule = () => ({
     },
 });
 
-const checkEnv = (name) => {
-    if (!process.env[name]) {
-        throw new Error('environment variable ' + name + ' is missing');
-    }
-    if (!process.env[name].match(/^(['"]).+\1$/)) {
-        throw new Error('environment variable ' + name + ' needs to be quoted twice');
-    }
-};
-checkEnv("API_ROOT");
-checkEnv("FACEBOOK_APP_ID");
-checkEnv("GOOGLE_CLIENT_ID");
-
 module.exports = {
     context: path.resolve(__dirname, '../'),
     entry: {
