@@ -19,14 +19,7 @@
                             <p>An e-mail has been sent to <em>{{ email }}</em>.</p>
                             <p>You can log in by clicking the link in the e&#8209;mail</p>
                             <p class="center"><strong>- OR -</strong></p>
-                            <form id="insert-code" @submit.prevent="loginWithToken($event)">
-                                <div>
-                                    <label for="token">paste the code here:</label>
-                                    <input id="token" type="text" name="token" required>
-                                </div>
-                                <button type="submit">Ok</button>
-                            </form>
-                            <div class="error">{{ tokenError }}</div>
+                            <token-input @success="HIDE_AUTHENTICATE_MODAL" />
                         </div>
                         <hr>
                         <a @click="showMailSent=false">
@@ -61,22 +54,21 @@
 <script>
 import { mapActions } from 'vuex';
 import {
-    HIDE_AUTHENTICATE_MODAL, SESSION_REQUEST_TOKEN_MAIL, SESSION_LOGIN_WITH_TOKEN, SESSION_GOOGLE_TOKEN_LOGIN, SESSION_FACEBOOK_TOKEN_LOGIN,
+    HIDE_AUTHENTICATE_MODAL, SESSION_REQUEST_TOKEN_MAIL, SESSION_GOOGLE_TOKEN_LOGIN, SESSION_FACEBOOK_TOKEN_LOGIN,
 } from '@/store/actions';
-import OneTimeButton from '@/components/OneTimeButton';
+import TokenInput from '@/components/TokenInput';
 
 let googleAuth; // todo
 
 export default {
     name: 'Authenticate',
     components: {
-        OneTimeButton,
+        TokenInput,
     },
     data: () => ({
         email: '',
         loading: false,
         showMailSent: false,
-        tokenError: '',
         googleInitialized: false,
         facebookInitialized: false,
     }),
@@ -104,19 +96,11 @@ export default {
             this.$data.loading = true;
             this.$store.dispatch(`session/${SESSION_REQUEST_TOKEN_MAIL}`, event.target.elements.email.value) // using form data, not v-model
                 .then(() => {
+                    this.$data.tokenError = '';
                     this.$data.showMailSent = true;
                 }).finally(() => {
                     this.$data.loading = false;
                 });
-        },
-        loginWithToken(event) {
-            this.$data.tokenError = '';
-            this.$store.dispatch(HIDE_AUTHENTICATE_MODAL);
-            try {
-                this.$store.dispatch(`session/${SESSION_LOGIN_WITH_TOKEN}`, event.target.elements.token.value);
-            } catch (error) {
-                this.$data.tokenError = `Login failed! (${error})`;
-            }
         },
         // todo where put this?
         async loadGoogle() {
@@ -215,16 +199,6 @@ fieldset {
     position: absolute;
     top:0 ;
     right:0;
-}
-#insert-code {
-    display: flex;
-    align-items: flex-end;
-}
-#insert-code input, #insert-code button {
-    height:30px;
-}
-#insert-code input {
-    margin-bottom: 0;
 }
 #with-external button {
     display: flex;
