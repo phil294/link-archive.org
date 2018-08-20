@@ -8,22 +8,27 @@ import MailService from '../services/MailService';
 import TokenService from '../services/TokenService';
 
 export default ((tokenService: TokenService, mailService: MailService,
-                 WEB_ROOT: string, GOOGLE_CLIENT_ID: string, FACEBOOK_APP_ID: string, FACEBOOK_APP_SECRET: string) => {
+                 WEB_ROOT: string, GOOGLE_CLIENT_ID: string, FACEBOOK_APP_ID: string, FACEBOOK_APP_SECRET: string, WEBSITE_NAME: string) => {
     const authenticationRouter: Router = Router();
     /** an email for login was requested. login==register */
     authenticationRouter.get('/requesttokenmail', (req, res) => {
         const token: string = tokenService.create({
             email: req.query.email, // validity check not necessary, nodemailer handles this
         });
-        const url = `${WEB_ROOT}/#/logincallback?token=${token}`;
-        mailService.sendMail(req.query.email, 'Your Login Mail - ??', `
+        const loginUrl = `${WEB_ROOT}/#/logincallback?token=${token}`;
+        const pasteUrl = `${WEB_ROOT}/#/logincallback`;
+        mailService.sendMail(req.query.email, 'Your Login Mail - ' + WEBSITE_NAME, `
                     Hello, <br>
-                    here is the link to log in to ??:<br>
-                    <a href="${url}">${url}</a><br>
-                    Or paste in the token manually:<br>` + /* todo paste where? */ `
+                    <br>
+                    <a href="${loginUrl}">CLICK HERE to log in to ${WEBSITE_NAME}.</a><br>
+                    <br>
+                    Alternatively, you can paste the token<br>
                     ${token}<br>
+                    manually here:<br>
+                    <a href="${pasteUrl}">${pasteUrl}"</a><br>
+                    <br>
                     Bye`)
-            .then(res.end)
+            .then(() => res.end())
             .catch((error: any) => {
                 // todo analyze error and reply with fitting status code + type
                 res.status(INTERNAL_SERVER_ERROR).send(error.code);

@@ -43,7 +43,7 @@ app.use((req, res, next) => {
 });
 app.use('/authentication', authenticationRouter(
     tokenService, mailService,
-    getEnv('WEB_ROOT'), getEnv('GOOGLE_CLIENT_ID'), getEnv('FACEBOOK_APP_ID'), getEnv('FACEBOOK_APP_SECRET'),
+    getEnv('WEB_ROOT'), getEnv('GOOGLE_CLIENT_ID'), getEnv('FACEBOOK_APP_ID'), getEnv('FACEBOOK_APP_SECRET'), getEnv('WEBSITE_NAME'),
 ));
 app.use('/secure', secureRouter(tokenService));
 app.listen(getEnv('PORT'), () => {
