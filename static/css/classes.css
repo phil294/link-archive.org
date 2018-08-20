@@ -11,14 +11,34 @@
     font-size:80%;
     opacity:0.8;
 }
-.error {
-    color: darkred;
+@keyframes fadein {
+    from {opacity: 0}
+    to {opacity: 1}
 }
+/** works with v-if etc. */
+.fade-in {
+    animation: fadein 0.5s;
+}
+.fade-toggle {
+    transition: opacity 0.5s;
+}
+/** does not work with v-if, keeps size, but enables fade out animation. use like: < class="fade-toggle" :class="{hidden:_var_}" > */
+.fade-toggle.hidden {
+    opacity: 0;
+}
+.error {
+    color: darkred; /* css4 @apply fade-in */
+}
+/*.v-enter-active, .v-leave-active {
+    transition: opacity 2s;
+}
+.v-enter, .v-leave-to {
+    opacity: 0;
+}*/
 .center {
     text-align:center;
 }
 .box {
-    border: 2px solid #eeeeee;
     box-shadow: 3px 3px 4px #dddddd;
     background: rgba(255,255,255,0.8);
 }
