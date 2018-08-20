@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "lint": "tslint",
-    "dev": "ts-node index.ts",
+    "dev": "node --inspect node_modules/.bin/ts-node index.ts",
     "upgrade-all": "ncu -a && yarn install && yarn upgrade"
   },
   "dependencies": {
