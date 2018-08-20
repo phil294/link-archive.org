@@ -1,5 +1,5 @@
 import storageService from '@/services/storage-service';
-import httpService from '@/services/http-service'; /* eslint-disable-line */ // todo
+import axios from 'axios';
 import {
     SESSION_REQUEST_TOKEN_MAIL, SESSION_LOGIN_WITH_TOKEN, SESSION_LOGOUT, SESSION_GOOGLE_TOKEN_LOGIN, SESSION_FACEBOOK_TOKEN_LOGIN,
 } from './actions';
@@ -40,15 +40,15 @@ export default {
             commit('setSession', session);
         },
         async [SESSION_REQUEST_TOKEN_MAIL](_, email) {
-            await httpService.get(`authentication/requesttokenmail?email=${email}`);
+            await axios.get(`authentication/requesttokenmail?email=${email}`);
         },
         async [SESSION_GOOGLE_TOKEN_LOGIN]({ dispatch }, googleToken) {
-            const response = await httpService.post(`authentication/googletokenlogin?googletoken=${googleToken}`);
+            const response = await axios.post(`authentication/googletokenlogin?googletoken=${googleToken}`);
             const jwt = response.data;
             dispatch(SESSION_LOGIN_WITH_TOKEN, jwt);
         },
         async [SESSION_FACEBOOK_TOKEN_LOGIN]({ dispatch }, facebookToken) {
-            const response = await httpService.post(`authentication/facebooktokenlogin?facebooktoken=${facebookToken}`);
+            const response = await axios.post(`authentication/facebooktokenlogin?facebooktoken=${facebookToken}`);
             const jwt = response.data;
             dispatch(SESSION_LOGIN_WITH_TOKEN, jwt);
         },
