@@ -11,3 +11,6 @@ input[type=checkbox] + label {
 a {
     cursor: pointer;
 }
+fieldset {
+    border: 2px solid #eeeeee;
+}
