@@ -2,12 +2,13 @@
     <section id="app">
         <div
             v-if="authenticateModal"
-            id="authenticate">
+            id="authenticate-modal"
+            class="fade-in">
             <authenticate/>
         </div>
         <header class="padding">
             <nav>
-                Navigation etc.
+                Navigation etc. <!-- todo link to main page -->
             </nav>
             <div
                 v-if="loadingCounter"
@@ -25,12 +26,12 @@
             </div>
             <button
                 v-if="!isLoggedIn"
-                @click="SHOW_AUTHENTICATE_MODAL">Open authenticate dialog
+                @click="SHOW_AUTHENTICATE_MODAL">Authenticate
             </button>
         </header>
         <main>
             <router-view/>
-            sdfsdf
+            <one-time-button>hello</one-time-button>
         </main>
     </section>
 </template>
