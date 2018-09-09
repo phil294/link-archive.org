@@ -1,13 +1,13 @@
 import bodyParser from 'body-parser';
 import express from 'express';
 import 'reflect-metadata';
-import { createConnection } from 'typeorm';
+import { Connection, createConnection } from 'typeorm';
 import authenticationRouter from './routers/authenticationRouter';
 import secureRouter from './routers/secureRouter';
 import MailService from './services/MailService';
 import TokenService from './services/TokenService';
 
-const { log } = console;
+const { log, error } = console;
 
 // ///////////////// CONFIG
 
@@ -16,7 +16,7 @@ const getEnv = (name: string): string => {
     return process.env[name] || (() => { throw new Error('environment variable ' + name + ' is missing'); })();
 };
 
-createConnection({ // todo await
+const connection: Promise<Connection> = createConnection({
     database: getEnv('MONGO_DATABASE'),
     host: getEnv('MONGO_HOST'),
     port: Number(getEnv('MONGO_PORT')),
@@ -46,7 +46,11 @@ app.use('/authentication', authenticationRouter(
     getEnv('WEB_ROOT'), getEnv('GOOGLE_CLIENT_ID'), getEnv('FACEBOOK_APP_ID'), getEnv('FACEBOOK_APP_SECRET'), getEnv('WEBSITE_NAME'),
 ));
 app.use('/secure', secureRouter(tokenService));
-app.listen(getEnv('PORT'), () => {
-    log('running');
+
+(async () => {
+    await connection;
+    app.listen(getEnv('PORT'), () => log('running'));
+})().catch((e) => {
+    error(e);
+    process.exit(1);
 });
-// todo trap exit / error handling, e.g. in getEnv->throw
