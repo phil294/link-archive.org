@@ -16,4 +16,6 @@ selenium-debug.log
 *.njsproj
 *.sln
 
+api/docker/workdir
+
 run.sh

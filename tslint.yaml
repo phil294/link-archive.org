@@ -1,0 +1,12 @@
+extends: [
+    "tslint-config-airbnb",
+    "tslint:recommended"
+]
+defaultSeverity: "error"
+rules: {
+    ter-indent: [true, 4],
+    quotemark: [true, "single"],
+    max-line-length: false,
+    object-literal-sort-keys: false,
+    curly: false
+}
