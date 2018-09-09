@@ -50,13 +50,17 @@ export default ((tokenService: TokenService, mailService: MailService,
             if (!loginTicket) {
                 return undefined;
             }
-            return loginTicket.getPayload() || undefined;
+            const payload = loginTicket.getPayload(); // tslint:disable-line:no-shadowed-variable
+            if (!payload)
+                return undefined;
+            if (!payload.sub)
+                return undefined;
+            return payload;
         })();
         if (!payload) {
             res.status(UNAUTHORIZED).end();
             return;
         }
-        // todo check exists .sub and .email
         const token = tokenService.create({
             email: payload.email,
             externalIdentifier: payload.sub,

@@ -1,9 +1,9 @@
 import { createTransport, SentMessageInfo } from 'nodemailer';
-// import { Mail } from 'nodemailer/lib/mailer'; // todo kb
+import Mail from 'nodemailer/lib/mailer'; // tslint:disable-line:import-name
 
 class MailService {
     private sender: string;
-    private nodemailerTransport: any; // todo Mail
+    private nodemailerTransport: Mail;
     constructor(sender: string, senderPassword: string) {
         this.sender = sender;
         this.nodemailerTransport = createTransport({
