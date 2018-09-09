@@ -13,7 +13,7 @@ const { log, error } = console;
 
 /** process.env.[name] or throw */
 const getEnv = (name: string): string => {
-    return process.env[name] || (() => { throw new Error('environment variable ' + name + ' is missing'); })();
+    return process.env[name] || (() => { throw new Error(`environment variable ${name} is missing`); })();
 };
 
 const connection: Promise<Connection> = createConnection({
@@ -46,6 +46,10 @@ app.use('/authentication', authenticationRouter(
     getEnv('WEB_ROOT'), getEnv('GOOGLE_CLIENT_ID'), getEnv('FACEBOOK_APP_ID'), getEnv('FACEBOOK_APP_SECRET'), getEnv('WEBSITE_NAME'),
 ));
 app.use('/secure', secureRouter(tokenService));
+
+app.get('/test', (_, res) => {
+    res.send({ x: 'y' });
+});
 
 (async () => {
     await connection;
