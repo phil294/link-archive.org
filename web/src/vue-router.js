@@ -12,6 +12,12 @@ export default function createRouter() {
                 name: 'LoginCallbackHandler',
                 component: () => import('@/components/callback-handlers/LoginCallbackHandler'),
             },
+            {
+                path: '/test',
+                name: 'Test',
+                component: () => import('@/components/Test'),
+            },
+            // corresponding store modules can also be lazyloaded. see ssr vuejs docs
         ],
     });
 }
