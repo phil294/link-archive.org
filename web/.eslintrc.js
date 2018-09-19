@@ -54,5 +54,7 @@ module.exports = {
     'no-plusplus': 'off',
     'vue/max-attributes-per-line': 'off',
     'vue/no-multi-spaces': 'off',
+    'nonblock-statement-body-position': 'off',
+    'curly': 'off'
   }
 }

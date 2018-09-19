@@ -1,54 +1,57 @@
-const path = require('path');
-const utils = require('./utils');
-const config = require('../config');
-const vueLoaderConfig = require('./vue-loader.conf');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
+const webpack = require('webpack');
+const utils = require('./utils');
 
-function resolve(dir) {
-    return path.join(__dirname, '..', dir);
-}
-
-const createLintingRule = () => ({
-    test: /\.(js|vue)$/,
-    loader: 'eslint-loader',
-    enforce: 'pre',
-    include: [resolve('src'), resolve('test')],
-    options: {
-        formatter: require('eslint-friendly-formatter'),
-        emitWarning: !config.dev.showEslintErrorsInOverlay,
-    },
-});
+const environment = [
+    'API_ROOT',
+    'FACEBOOK_APP_ID',
+    'GOOGLE_CLIENT_ID',
+].reduce((all, name) => {
+    if (!process.env[name]) {
+        throw new Error(`environment variable ${name} is missing`);
+    }
+    if (!process.env[name].match(/^(['"]).+\1$/)) {
+        throw new Error(`environment variable ${name} needs to be quoted twice`);
+    }
+    return {
+        ...all,
+        [name]: process.env[name],
+    };
+}, {});
 
 module.exports = {
-    context: path.resolve(__dirname, '../'),
+    context: utils.resolve('/'),
     entry: {
         app: './src/vue-main.js',
     },
     output: {
-        path: config.build.assetsRoot,
+        path: utils.resolve('dist'),
         filename: '[name].js',
-        publicPath: process.env.NODE_ENV === 'production'
-            ? config.build.assetsPublicPath
-            : config.dev.assetsPublicPath,
+        publicPath: '/',
     },
     resolve: {
         extensions: ['.js', '.vue', '.json'],
         alias: {
-            '@': resolve('src'),
+            '@': utils.resolve('src'),
         },
     },
     module: {
         rules: [
-            ...(config.dev.useEslint ? [createLintingRule()] : []),
             {
                 test: /\.vue$/,
                 loader: 'vue-loader',
-                options: vueLoaderConfig,
+                options: {
+                    // If you have problems debugging vue-files in devtools,
+                    // set this to false - it *may* help
+                    // https://vue-loader.vuejs.org/en/options.html#cachebusting
+                    cacheBusting: true,
+                },
             },
             {
                 test: /\.js$/,
                 loader: 'babel-loader',
-                include: [resolve('src'), resolve('test'), resolve('node_modules/webpack-dev-server/client')],
+                include: [utils.resolve('src'), utils.resolve('node_modules/webpack-dev-server/client')],
             },
             {
                 test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
@@ -77,8 +80,9 @@ module.exports = {
         ],
     },
     node: {
-    // prevent webpack from injecting useless setImmediate polyfill because Vue
-    // source contains it (although only uses it if it's native).
+        // prevent webpack from injecting useless setImmediate polyfill because Vue
+        // source contains it (although only uses it if it's native).
+        // todo is this still relevant?
         setImmediate: false,
         // prevent webpack from injecting mocks to Node native modules
         // that does not make sense for the client
@@ -89,6 +93,10 @@ module.exports = {
         child_process: 'empty',
     },
     plugins: [
-        new VueLoaderPlugin()
-    ]
+        new CleanWebpackPlugin([utils.resolve('dist'), 'static']),
+        new VueLoaderPlugin(),
+        new webpack.DefinePlugin({
+            'process.env': environment,
+        }),
+    ],
 };
