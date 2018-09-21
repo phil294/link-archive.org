@@ -33,7 +33,8 @@ export default {
                 throw new Error('Malformed token');
             }
             const session = payload;
-            if (!session.email && !session.externalType) throw new Error('Invalid token: no email and no externalType');
+            if (!session.email && !session.externalType)
+                throw new Error('Invalid token: no email and no externalType');
 
             commit('setToken', token);
             storageService.setToken(token);

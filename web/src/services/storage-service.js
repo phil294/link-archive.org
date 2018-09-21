@@ -5,10 +5,9 @@ export default {
         return localStorage.getItem(STORAGE_TOKEN);
     },
     setToken(token) {
-        if (!token) {
+        if (!token)
             localStorage.removeItem(STORAGE_TOKEN);
-        } else {
+        else
             localStorage.setItem(STORAGE_TOKEN, token);
-        }
     },
 };

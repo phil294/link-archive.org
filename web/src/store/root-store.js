@@ -8,7 +8,7 @@ Vue.use(Vuex);
 
 export default function createStore() {
     return new Vuex.Store({
-        strict: process.env.NODE_ENV !== 'production',
+        strict: process.env.NODE_ENV !== 'production', // todo check this
         state: {
             loadingCounter: 0,
             authenticateModal: false,

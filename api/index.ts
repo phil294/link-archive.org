@@ -12,9 +12,7 @@ const { log, error } = console;
 // ///////////////// CONFIG
 
 /** process.env.[name] or throw */
-const getEnv = (name: string): string => {
-    return process.env[name] || (() => { throw new Error(`environment variable ${name} is missing`); })();
-};
+const getEnv = (name: string): string => process.env[name] || (() => { throw new Error(`environment variable ${name} is missing`); })();
 
 const connection: Promise<Connection> = createConnection({
     database: getEnv('MONGO_DATABASE'),

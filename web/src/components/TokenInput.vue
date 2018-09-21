@@ -31,9 +31,8 @@ export default {
         };
     },
     created() {
-        if (this.$data.tokenModel) {
+        if (this.$data.tokenModel)
             this.loginWithToken();
-        }
     },
     methods: {
         async loginWithToken() {
