@@ -10,6 +10,7 @@ export default function createStore() {
     return new Vuex.Store({
         strict: process.env.NODE_ENV !== 'production',
         state: {
+            appName: 'My App',
             loadingCounter: 0,
             authenticateModal: false,
             test: {},
@@ -21,6 +22,9 @@ export default function createStore() {
             setTest(state, test) {
                 state.test = test;
             },
+            setAppName(state, appName) {
+                state.appName = appName;
+            }
         },
         actions: {
             [SHOW_AUTHENTICATE_MODAL]({ commit }) {

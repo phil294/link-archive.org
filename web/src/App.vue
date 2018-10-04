@@ -8,7 +8,9 @@
         </div>
         <header class="padding">
             <nav>
-                Navigation etc. <!-- todo link to main page -->
+                <h2 link??>{{ appName }}</h2>
+                <div>Navigation</div>
+                <div>etc.</div>
             </nav>
             <div
                 v-if="loadingCounter"
@@ -49,6 +51,7 @@ export default {
     },
     computed: {
         ...mapState([
+            'appName',
             'loadingCounter',
             'authenticateModal',
         ]),

@@ -28,6 +28,7 @@ export default function createApp() {
             if (token) {
                 this.$store.dispatch(`session/${SESSION_LOGIN_WITH_TOKEN}`, token);
             }
+            this.$store.commit('setAppName', process.env.APP_NAME)
         },
         render: h => h(App),
     });

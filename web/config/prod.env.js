@@ -15,7 +15,8 @@ const envs = {
 };
 [ "API_ROOT",
   "FACEBOOK_APP_ID",
-  "GOOGLE_CLIENT_ID"
+  "GOOGLE_CLIENT_ID",
+  "APP_NAME",
 ].forEach(env => {
   envs[env] = getEnv(env);
 });
