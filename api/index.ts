@@ -23,7 +23,7 @@ const connection: Promise<Connection> = createConnection({
     type: 'mongodb',
 });
 
-const mailService = new MailService(getEnv('MAIL_SENDER_USER'), getEnv('MAIL_SENDER_PASSWORD'));
+const mailService = new MailService(getEnv('MAIL_SENDER_SERVICE'), getEnv('MAIL_SENDER_USER'), getEnv('MAIL_SENDER_PASSWORD'));
 const tokenService = new TokenService(getEnv('TOKEN_SECRET'));
 
 // ////////////////// ROUTES
