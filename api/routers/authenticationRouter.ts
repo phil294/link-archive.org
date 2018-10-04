@@ -20,12 +20,12 @@ export default ((tokenService: TokenService, mailService: MailService,
         mailService.sendMail(req.query.email, 'Your Login Mail - ' + WEBSITE_NAME, `
                     Hello, <br>
                     <br>
-                    <a href="${loginUrl}">CLICK HERE to log in to ${WEBSITE_NAME}.</a><br>
+                    <a href="${loginUrl}" alt="login url">CLICK HERE to log in to ${WEBSITE_NAME}.</a><br>
                     <br>
                     Alternatively, you can paste the token<br>
                     ${token}<br>
                     manually here:<br>
-                    <a href="${pasteUrl}">${pasteUrl}"</a><br>
+                    <a href="${pasteUrl}" alt="paste token url">${pasteUrl}"</a><br>
                     <br>
                     Bye`)
             .then(() => res.end())
