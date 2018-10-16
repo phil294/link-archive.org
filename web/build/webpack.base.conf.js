@@ -8,12 +8,15 @@ const environment = [
     'FACEBOOK_APP_ID',
     'GOOGLE_CLIENT_ID',
 ].reduce((all, name) => {
+    if (false) {}
+    /*
     if (!process.env[name]) {
         throw new Error(`environment variable ${name} is missing`);
     }
     if (!process.env[name].match(/^(['"]).+\1$/)) {
         throw new Error(`environment variable ${name} needs to be quoted twice`);
     }
+    */
     return {
         ...all,
         [name]: process.env[name],
