@@ -48,13 +48,15 @@ module.exports = {
     // allow debugger during development
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     // custom ------------
-    'indent': ['error', 4],
+    'indent': ['error', 'tab'],
+    'no-tabs': 'off',
     'max-len': 'off',
     'vue/html-indent': ['error', 4],
     'no-plusplus': 'off',
     'vue/max-attributes-per-line': 'off',
     'vue/no-multi-spaces': 'off',
     'nonblock-statement-body-position': 'off',
-    'curly': 'off'
+    'curly': 'off',
+    'vue/html-closing-bracket-newline': 'off'
   }
 }
