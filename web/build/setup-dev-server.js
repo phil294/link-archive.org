@@ -5,13 +5,13 @@ const webpack = require('webpack');
 const chokidar = require('chokidar');
 const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpackHotMiddleware = require('webpack-hot-middleware');
-const clientConfig = require('./webpack.client.conf');
-const serverConfig = require('./webpack.server.conf');
+const clientDevConfig = require('./webpack.dev.client.conf');
+const serverDevConfig = require('./webpack.dev.server.conf');
 
 const { log, error } = console;
 
 const readFile = (theFs, file) => theFs
-	.readFileSync(path.join(clientConfig.output.path, file), 'utf-8');
+	.readFileSync(path.join(clientDevConfig.output.path, file), 'utf-8');
 
 module.exports = function setupDevServer(app) {
 	let bundle;
@@ -32,7 +32,7 @@ module.exports = function setupDevServer(app) {
 			update();
 		});
 
-		const clientCompiler = webpack(clientConfig);
+		const clientCompiler = webpack(clientDevConfig);
 		const devMiddleware = webpackDevMiddleware(clientCompiler, {
 			publicPath: '/dist/',
 			// noInfo: true
@@ -53,7 +53,7 @@ module.exports = function setupDevServer(app) {
 
 		app.use(webpackHotMiddleware(clientCompiler, { heartbeat: 5000 }));
 
-		const serverCompiler = webpack(serverConfig);
+		const serverCompiler = webpack(serverDevConfig);
 		const mfs = new MFS();
 		serverCompiler.outputFileSystem = mfs;
 		serverCompiler.watch({}, (err, stats) => {

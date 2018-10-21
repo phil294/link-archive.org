@@ -1,9 +1,7 @@
 const webpack = require('webpack');
-const merge = require('webpack-merge');
 const VueSSRServerPlugin = require('vue-server-renderer/server-plugin');
-const baseWebpackConfig = require('./webpack.base.conf');
 
-const webpackConfig = merge(baseWebpackConfig, {
+module.exports = {
 	entry: './src/vue-entry-server.js',
 	target: 'node',
 	devtool: 'source-map',
@@ -30,6 +28,4 @@ const webpackConfig = merge(baseWebpackConfig, {
 			window: undefined, // todo
 		}),
 	],
-});
-
-module.exports = webpackConfig;
+};
