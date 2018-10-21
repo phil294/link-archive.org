@@ -51,7 +51,7 @@ module.exports = {
     'indent': ['error', 'tab'],
     'no-tabs': 'off',
     'max-len': 'off',
-    'vue/html-indent': ['error', 4],
+    'vue/html-indent': ['error', 'tab'],
     'no-plusplus': 'off',
     'vue/max-attributes-per-line': 'off',
     'vue/no-multi-spaces': 'off',

@@ -45,10 +45,6 @@ app.use('/authentication', authenticationRouter(
 ));
 app.use('/secure', secureRouter(tokenService));
 
-app.get('/test', (_, res) => {
-    res.send({ x: 'y' });
-});
-
 (async () => {
     await connection;
     app.listen(getEnv('PORT'), () => log('running'));

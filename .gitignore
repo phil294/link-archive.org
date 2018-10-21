@@ -6,7 +6,7 @@ yarn-debug.log*
 yarn-error.log*
 selenium-debug.log
 
-run.sh
+run*.sh
 
 web/test/unit/coverage/
 web/test/e2e/reports/

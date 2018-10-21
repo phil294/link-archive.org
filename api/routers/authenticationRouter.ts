@@ -17,7 +17,7 @@ export default ((tokenService: TokenService, mailService: MailService,
         });
         const loginUrl = `${WEB_ROOT}/#/logincallback?token=${token}`;
         const pasteUrl = `${WEB_ROOT}/#/logincallback`;
-        mailService.sendMail(req.query.email, 'Your Login Mail - ' + WEBSITE_NAME, `
+        mailService.sendMail(req.query.email, `Your Login Mail - ${WEBSITE_NAME}`, `
                     Hello, <br>
                     <br>
                     <a href="${loginUrl}">CLICK HERE to log in to ${WEBSITE_NAME}.</a><br>
@@ -26,6 +26,8 @@ export default ((tokenService: TokenService, mailService: MailService,
                     ${token}<br>
                     manually here:<br>
                     <a href="${pasteUrl}">${pasteUrl}"</a><br>
+                    <br>
+                    If your user account does not exist yet, it will be created once you log in.<br>
                     <br>
                     Bye`)
             .then(() => res.end())
