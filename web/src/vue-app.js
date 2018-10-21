@@ -23,7 +23,17 @@ export default function createApp() {
 	const app = new Vue({
 		router,
 		store,
-		beforeMount() {
+		async beforeMount() {
+			await this.$nextTick();
+			/** ************* CLIENT-ONLY DOM MODIFICATION ***************
+			/* Needs to happen after $nextTick so the ssr hydration
+			 * check does not consider the below changes. In other words,
+			 * the lines below may make the page look different than
+			 * what the server-side rendered html looks like.
+			 * Right now, this only includes session data (setting jwt)
+			 * which is not part of ssr (client-only, for API
+			 * interaction)
+			 */
 			const token = storageService.getToken();
 			if (token) {
 				this.$store.dispatch(`session/${SESSION_LOGIN_WITH_TOKEN}`, token);
