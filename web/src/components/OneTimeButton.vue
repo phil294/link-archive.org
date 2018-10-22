@@ -1,10 +1,10 @@
 <template>
-    <div id="onetimebutton">
-        <button :disabled="loading" :type="type" @click="clicked">
-            <slot v-if="!loading">Click me</slot>
-            <span v-else>loading...</span>
-        </button>
-    </div>
+	<div id="onetimebutton">
+		<button :disabled="loading" :type="type" @click="clicked">
+			<slot v-if="!loading">Click me</slot>
+			<span v-else>loading...</span>
+		</button>
+	</div>
 </template>
 
 <script>
@@ -62,3 +62,4 @@ export default {
         align-items: center;
     }
 </style>
+

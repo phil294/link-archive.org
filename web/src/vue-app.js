@@ -10,20 +10,20 @@ import storageService from '@/services/storage-service';
 Vue.config.productionTip = false; // todo ? // = process.env.NODE_ENV === 'production'  .. ?
 
 export default function createApp() {
-    const router = createRouter();
-    const store = createStore();
-    sync(store, router);
+	const router = createRouter();
+	const store = createStore();
+	sync(store, router);
 
-    axios.defaults.baseURL = process.env.API_ROOT;
-    axios.interceptors.request.use((config) => {
-        config.headers.common.Authorization = `Bearer ${store.state.session.token}`; // eslint-disable-line no-param-reassign
-        return config;
-    });
+	axios.defaults.baseURL = process.env.API_ROOT;
+	axios.interceptors.request.use((config) => {
+		config.headers.common.Authorization = `Bearer ${store.state.session.token}`; // eslint-disable-line no-param-reassign
+		return config;
+	});
 
     const app = new Vue({
         router,
         store,
-        created() {
+        beforeMount() {
             const token = storageService.getToken();
             if (token) {
                 this.$store.dispatch(`session/${SESSION_LOGIN_WITH_TOKEN}`, token);

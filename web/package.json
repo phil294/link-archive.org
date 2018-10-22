@@ -5,17 +5,24 @@
   "author": "phil294 <eochgls@web.de>",
   "private": true,
   "scripts": {
-    "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
+    "dev": "node --inspect=9228  vue-server.js",
+    "build-client": "NODE_ENV=production webpack --config build/webpack.client.conf.js --progress --inline",
+    "build-server": "NODE_ENV=production webpack --config build/webpack.server.conf.js --progress --inline",
+    "build": "rimraf dist && yarn run build-client && yarn run build-server",
+    "start-server": "NODE_ENV=production node vue-server.js",
+    "--------------": "",
     "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
     "e2e": "node test/e2e/runner.js",
     "test": "npm run unit && npm run e2e",
     "lint": "eslint --ext .js,.vue src test/unit test/e2e/specs",
-    "build": "node build/build.js",
+    "build-old": "node build/build.js",
+    "---------------": "",
     "upgrade-all": "ncu -a && yarn install && yarn upgrade"
   },
   "dependencies": {
     "@types/gapi.auth2": "0.0.47",
     "axios": "0.19.0-beta.1",
+    "express": "4.16.3",
     "googleapis": "33.0.0",
     "npm-check-updates": "3.0.0-alpha2",
     "vue": "2.5.17",
@@ -23,7 +30,8 @@
     "vue-router": "3.0.1",
     "vue-server-renderer": "2.5.17",
     "vuex": "3.0.1",
-    "vuex-router-sync": "^5.0.0"
+    "vuex-router-sync": "^5.0.0",
+    "webpack-manifest-plugin": "^2.0.4"
   },
   "devDependencies": {
     "@babel/core": "7.0.0",
@@ -42,7 +50,9 @@
     "babel-register": "7.0.0-beta.3",
     "chai": "4.1.2",
     "chalk": "2.4.1",
+    "chokidar": "^2.0.4",
     "chromedriver": "2.41.0",
+    "clean-webpack-plugin": "^0.1.19",
     "copy-webpack-plugin": "4.5.2",
     "cross-env": "5.2.0",
     "cross-spawn": "6.0.5",
@@ -68,6 +78,8 @@
     "karma-sourcemap-loader": "0.3.7",
     "karma-spec-reporter": "0.0.32",
     "karma-webpack": "4.0.0-rc.2",
+    "memory-fs": "^0.4.1",
+    "mini-css-extract-plugin": "^0.4.3",
     "mocha": "5.2.0",
     "nightwatch": "1.0.11",
     "node-notifier": "5.2.1",
@@ -93,7 +105,9 @@
     "webpack": "4.17.2",
     "webpack-bundle-analyzer": "3.0.0-beta.0",
     "webpack-cli": "^3.1.0",
+    "webpack-dev-middleware": "^3.4.0",
     "webpack-dev-server": "3.1.8",
+    "webpack-hot-middleware": "^2.24.3",
     "webpack-merge": "4.1.4"
   },
   "engines": {

@@ -1,94 +1,110 @@
-const path = require('path');
-const utils = require('./utils');
-const config = require('../config');
-const vueLoaderConfig = require('./vue-loader.conf');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
+const webpack = require('webpack');
+const utils = require('./utils');
 
-function resolve(dir) {
-    return path.join(__dirname, '..', dir);
-}
+// todo ? split into base, dev.base, prod.base, dev.client, prod.client, dev.server, prod.server ?
+const isProduction = process.env.NODE_ENV === 'production';
 
-const createLintingRule = () => ({
-    test: /\.(js|vue)$/,
-    loader: 'eslint-loader',
-    enforce: 'pre',
-    include: [resolve('src'), resolve('test')],
-    options: {
-        formatter: require('eslint-friendly-formatter'),
-        emitWarning: !config.dev.showEslintErrorsInOverlay,
-    },
-});
+const environment = [
+	'API_ROOT',
+	'FACEBOOK_APP_ID',
+	'GOOGLE_CLIENT_ID',
+].reduce((all, name) => {
+	let e;
+	if (!process.env[name]) {
+		e = new Error(`environment variable ${name} is missing`);
+	} else if (!process.env[name].match(/^(['"]).+\1$/)) {
+		e = new Error(`environment variable ${name} needs to be quoted twice`);
+	}
+	if (e)
+		// if (isProduction)
+		throw e;
+	return {
+		...all,
+		[name]: process.env[name],
+	};
+}, {});
+
 
 module.exports = {
-    context: path.resolve(__dirname, '../'),
-    entry: {
-        app: './src/vue-main.js',
-    },
-    output: {
-        path: config.build.assetsRoot,
-        filename: '[name].js',
-        publicPath: process.env.NODE_ENV === 'production'
-            ? config.build.assetsPublicPath
-            : config.dev.assetsPublicPath,
-    },
-    resolve: {
-        extensions: ['.js', '.vue', '.json'],
-        alias: {
-            '@': resolve('src'),
-        },
-    },
-    module: {
-        rules: [
-            ...(config.dev.useEslint ? [createLintingRule()] : []),
-            {
-                test: /\.vue$/,
-                loader: 'vue-loader',
-                options: vueLoaderConfig,
-            },
-            {
-                test: /\.js$/,
-                loader: 'babel-loader',
-                include: [resolve('src'), resolve('test'), resolve('node_modules/webpack-dev-server/client')],
-            },
-            {
-                test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
-                loader: 'url-loader',
-                options: {
-                    limit: 10000,
-                    name: utils.assetsPath('img/[name].[hash:7].[ext]'),
-                },
-            },
-            {
-                test: /\.(mp4|webm|ogg|mp3|wav|flac|aac)(\?.*)?$/,
-                loader: 'url-loader',
-                options: {
-                    limit: 10000,
-                    name: utils.assetsPath('media/[name].[hash:7].[ext]'),
-                },
-            },
-            {
-                test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
-                loader: 'url-loader',
-                options: {
-                    limit: 10000,
-                    name: utils.assetsPath('fonts/[name].[hash:7].[ext]'),
-                },
-            },
-        ],
-    },
-    node: {
-    // prevent webpack from injecting useless setImmediate polyfill because Vue
-    // source contains it (although only uses it if it's native).
-        setImmediate: false,
-        // prevent webpack from injecting mocks to Node native modules
-        // that does not make sense for the client
-        dgram: 'empty',
-        fs: 'empty',
-        net: 'empty',
-        tls: 'empty',
-        child_process: 'empty',
-    },
-    plugins: [
-        new VueLoaderPlugin()
-    ]
+	mode: isProduction ? 'production' : 'development',
+	devtool: isProduction ? 'source-map' : 'cheap-module-eval-source-map',
+	output: {
+		path: utils.resolve('dist'),
+		filename: '[name].[chunkhash:6].js',
+		publicPath: '/dist/',
+	},
+	resolve: {
+		extensions: ['.js', '.vue', '.json'],
+		alias: {
+			'@': utils.resolve('src'),
+		},
+	},
+	module: {
+		noParse: /es6-promise\.js$/, // "avoid webpack shimming process" todo
+		rules: [
+			{
+				test: /\.vue$/,
+				loader: 'vue-loader',
+				options: {
+					// If you have problems debugging vue-files in devtools,
+					// set this to false - it *may* help
+					// https://vue-loader.vuejs.org/en/options.html#cachebusting
+					// cacheBusting: true,
+					extractCSS: isProduction,
+				},
+			},
+			{
+				test: /\.js$/,
+				loader: 'babel-loader',
+				exclude: /node_modules/,
+			},
+			{
+				test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
+				loader: 'url-loader',
+				options: {
+					limit: 10000,
+					name: utils.assetsPath('img/[name].[hash:6].[ext]'),
+				},
+			},
+			{
+				test: /\.(mp4|webm|ogg|mp3|wav|flac|aac)(\?.*)?$/,
+				loader: 'url-loader',
+				options: {
+					limit: 10000,
+					name: utils.assetsPath('media/[name].[hash:6].[ext]'),
+				},
+			},
+			{
+				test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
+				loader: 'url-loader',
+				options: {
+					limit: 10000,
+					name: utils.assetsPath('fonts/[name].[hash:6].[ext]'),
+				},
+			},
+		],
+	},
+	node: {
+		// prevent webpack from injecting useless setImmediate polyfill because Vue
+		// source contains it (although only uses it if it's native).
+		// todo is this still relevant?
+		setImmediate: false,
+		// prevent webpack from injecting mocks to Node native modules
+		// that does not make sense for the client
+		dgram: 'empty',
+		fs: 'empty',
+		net: 'empty',
+		tls: 'empty',
+		child_process: 'empty',
+	},
+	plugins: [
+		new VueLoaderPlugin(),
+		new webpack.DefinePlugin({
+			'process.env': environment,
+		}),
+	],
+	performance: {
+		hints: isProduction ? 'warning' : false,
+	},
 };
