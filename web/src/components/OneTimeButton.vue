@@ -9,7 +9,7 @@
 
 <script>
 /**
- * Button that, when clicked, replaces itself with a loading animation and component fires $click-event. If necessary, .reset() can be called to revert the state
+ * Button that, when clicked, replaces itself with a loading animation and component fires $click-event. If necessary, .reset() can be called to revert the state. Prop action will be called on click. If it is a promise, loading state will be reverted after it's finished (no matter the outcome)
  */
 export default {
     name: 'OneTimeButton',
@@ -18,14 +18,27 @@ export default {
             type: String,
             default: 'button',
         },
+        action: {},
     },
     data: () => ({
         loading: false,
     }),
     methods: {
-        clicked() {
+        async clicked() {
             this.$data.loading = true;
             this.$emit('click');
+            let action = this.$props.action;
+            if(action) {
+                if(typeof action=== 'function')
+                    action = action();
+                if(action instanceof Promise) {
+                    try {
+                        await action();
+                    } finally {
+                        this.$data.loading = false;
+                    } 
+                }
+            }
         },
         /** Consider using a normal button instead */
         reset() {

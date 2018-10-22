@@ -1,0 +1,31 @@
+<template>
+    <form @submit.prevent="submit">
+        <slot></slot>
+        <one-time-button type="submit" action="submit">{{ buttonLabel }}</one-time-button>
+    </form>
+</template>
+
+<script>
+/**
+ * Standardform component: includes only submit (one-time-)button. Component fires $submit event and calls action callback like OneTimeButton.
+ */
+export default {
+    name: 'OneTimeForm',
+    props: {
+        buttonLabel: {
+            type: String,
+            default: 'Submit',
+        },
+        action: {},
+    },
+    methods: {
+        submit(event) {
+            this.$emit('submit', event);
+            return this.$props.action;
+        },
+    },
+};
+</script>
+
+<style scoped>
+</style>
