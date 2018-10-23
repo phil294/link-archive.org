@@ -1,17 +1,20 @@
 <template>
 	<form @submit.prevent="submit">
-		<slot></slot>
+		<slot />
 		<one-time-button type="submit">{{ buttonLabel }}</one-time-button>
+		<div class="error fade-in">{{ errorMessage }}</div>
 	</form>
-	<div class="error fade-in">{{ errorMessage }}</div>
 </template>
 
 <script>
+import OneTimeButton from '@/components/OneTimeButton';
+
 /**
  * Standardform component: includes only submit (one-time-)button. Component fires $submit event and calls action callback like OneTimeButton.
  */
 export default {
 	name: 'OneTimeForm',
+	components: { OneTimeButton },
 	props: {
 		buttonLabel: {
 			type: String,
@@ -20,39 +23,42 @@ export default {
 		errorCaption: {
 			type: String,
 			default: 'Submit failed',
-		}
-		action: {},
+		},
+		action: {
+			type: Function,
+			default: null,
+		},
 	},
 	data: () => ({
 		errorResponse: '',
 	}),
+	computed: {
+		errorMessage() {
+			return this.$data.errorResponse ? `${this.$data.errorCaption}: ${this.$data.errorResponse}` : '';
+		},
+	},
 	methods: {
 		async submit(event) {
 			this.$data.loading = true;
 			this.$data.errorResponse = '';
 			this.$emit('submit', event);
-			let action = this.$props.action;
-			if(action) { // todo duplicate code
-				if(typeof action === 'function')
+			let { action } = this.$props;
+			if (action) { // todo duplicate code
+				if (typeof action === 'function')
 					action = action(event);
-				if(action instanceof Promise) {
+				if (action instanceof Promise) {
 					try {
-						await action(event);
-					} catch(error) {
+						await action;
+					} catch (error) {
 						await this.$nextTick(); // force transition even if follow-up error // todo
 						this.$data.errorResponse = error;
 					} finally {
 						this.$data.loading = false;
-					} 
+					}
 				}
 			}
 		},
 	},
-	computed: {
-		errorMessage() {
-			return `${this.$data.errorCaption}: ${errorResponse}`;
-		}
-	}
 };
 </script>
 

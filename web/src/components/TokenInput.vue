@@ -3,7 +3,7 @@
 		<one-time-form id="insert-code" button-label="Ok" :action="loginWithToken">
 			<label for="token">paste the token here:</label>
 			<input id="token" v-model="tokenModel" type="text" name="token" required>
-		</form>
+		</one-time-form>
 	</div>
 </template>
 
@@ -11,9 +11,13 @@
 import {
 	SESSION_LOGIN_WITH_TOKEN,
 } from '@/store/actions';
+import OneTimeForm from '@/components/OneTimeForm';
 
 export default {
 	name: 'TokenInput',
+	components: {
+		OneTimeForm,
+	},
 	props: {
 		token: {
 			type: String,

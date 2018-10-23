@@ -41,7 +41,7 @@ router.onReady(() => {
 
         // call all asyncData()
         // todo loading indicator
-        Promise.all(activated.map(hook => hook({ store, route: to })))
+        Promise.all(activatedAsyncDataHooks.map(hook => hook({ store, route: to })))
             .then(() => {
             // stop loading indicator
             next();
