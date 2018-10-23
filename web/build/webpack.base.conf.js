@@ -1,9 +1,9 @@
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const webpack = require('webpack');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const utils = require('./utils');
 
-// todo ? split into base, dev.base, prod.base, dev.client, prod.client, dev.server, prod.server ?
-const isProduction = process.env.NODE_ENV === 'production';
+const { error } = console;
 
 const environment = [
 	'API_ROOT',
@@ -17,8 +17,7 @@ const environment = [
 		e = new Error(`environment variable ${name} needs to be quoted twice`);
 	}
 	if (e)
-		// if (isProduction)
-		throw e;
+		error(e);
 	return {
 		...all,
 		[name]: process.env[name],
@@ -26,9 +25,7 @@ const environment = [
 }, {});
 
 
-module.exports = {
-	mode: isProduction ? 'production' : 'development',
-	devtool: isProduction ? 'source-map' : 'cheap-module-eval-source-map',
+const webpackBaseConfig = {
 	output: {
 		path: utils.resolve('dist'),
 		filename: '[name].[chunkhash:6].js',
@@ -51,7 +48,8 @@ module.exports = {
 					// set this to false - it *may* help
 					// https://vue-loader.vuejs.org/en/options.html#cachebusting
 					// cacheBusting: true,
-					extractCSS: isProduction,
+					// extractCSS: isProduction, // FIXME
+					extractCSS: false,
 				},
 			},
 			{
@@ -104,7 +102,10 @@ module.exports = {
 			'process.env': environment,
 		}),
 	],
-	performance: {
-		hints: isProduction ? 'warning' : false,
-	},
 };
+
+if (false) {
+	webpackBaseConfig.plugins.push(new BundleAnalyzerPlugin()); // todo
+}
+
+module.exports = webpackBaseConfig;
