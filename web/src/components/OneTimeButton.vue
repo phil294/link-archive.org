@@ -2,7 +2,7 @@
 	<div id="onetimebutton">
 		<button :disabled="loading" :type="type" @click="clicked">
 			<slot v-if="!loading">Click me</slot>
-			<span v-else>loading...</span>
+			<span v-else>loading...</span> <!-- todo -->
 		</button>
 	</div>
 </template>

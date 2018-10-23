@@ -9,10 +9,9 @@
 
 				<fieldset id="with-email" class="box">
 					<legend>With e-mail</legend>
-					<form v-if="!showMailSent" @submit.prevent="requestMail($event)">
+					<one-time-form v-if="!showMailSent" :button-label="Request mail to log in" action="requestMail">
 						<label for="email">E-mail</label>
 						<input id="email" v-model="email" type="email" name="email" placeholder="email@example.com" required>
-						<button :disabled="loading" type="submit">Request mail to log in</button>
 					</form>
 					<div v-else id="mail-sent" class="padding-l">
 						<div>
@@ -31,14 +30,14 @@
 				<fieldset id="with-external" class="box">
 					<legend>Or</legend>
 					<div id="google-login">
-						<button v-if="googleInitialized" @click="loginWithGoogle">
+						<one-time-button v-if="googleInitialized" action="loginWithGoogle">
 							<img src="/static/google.png" class="logo">
 							Log in with Google
 						</button>
 						<div v-else class="note">Downloading Google scripts...</div>
 					</div>
 					<div id="facebook-login">
-						<button v-if="facebookInitialized" @click="loginWithFacebook">
+						<one-time-button v-if="facebookInitialized" action="loginWithFacebook">
 							<img src="/static/google.png" class="logo">
 							Log in with Facebook
 						</button>
@@ -92,9 +91,9 @@ export default {
 		...mapActions([
 			HIDE_AUTHENTICATE_MODAL,
 		]),
-		requestMail(event) {
+		async requestMail(event) {
 			this.$data.loading = true;
-			this.$store.dispatch(`session/${SESSION_REQUEST_TOKEN_MAIL}`, event.target.elements.email.value) // using form data, not v-model
+			return this.$store.dispatch(`session/${SESSION_REQUEST_TOKEN_MAIL}`, event.target.elements.email.value) // using form data, not v-model
 				.then(() => {
 					this.$data.tokenError = '';
 					this.$data.showMailSent = true;

@@ -9,8 +9,8 @@
 		<header class="padding">
 			<nav>
 				<h2 link??>{{ appName }}</h2>
-                <div>Navigation</div>
-                <div>etc.</div>
+				<div>Navigation</div>
+				<div>etc.</div>
 			</nav>
 			<div
 				v-if="loadingCounter"
@@ -45,31 +45,31 @@ import Authenticate from '@/components/Authenticate';
 import OneTimeButton from '@/components/OneTimeButton';
 
 export default {
-    name: 'App',
-    components: {
-        Authenticate, OneTimeButton,
-    },
-    computed: {
-        ...mapState([
-            'appName',
-            'loadingCounter',
-            'authenticateModal',
-        ]),
-        ...mapState('session', [
-            'session',
-        ]),
-        ...mapGetters('session', [
-            'isLoggedIn',
-        ]),
-    },
-    methods: {
-        ...mapActions([
-            SHOW_AUTHENTICATE_MODAL,
-        ]),
-        ...mapActions('session', [
-            SESSION_LOGOUT,
-        ]),
-    },
+	name: 'App',
+	components: {
+		Authenticate, OneTimeButton,
+	},
+	computed: {
+		...mapState([
+			'appName',
+			'loadingCounter',
+			'authenticateModal',
+		]),
+		...mapState('session', [
+			'session',
+		]),
+		...mapGetters('session', [
+			'isLoggedIn',
+		]),
+	},
+	methods: {
+		...mapActions([
+			SHOW_AUTHENTICATE_MODAL,
+		]),
+		...mapActions('session', [
+			SESSION_LOGOUT,
+		]),
+	},
 };
 </script>
 

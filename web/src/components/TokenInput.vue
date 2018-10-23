@@ -1,13 +1,9 @@
 <template>
 	<div>
-		<form id="insert-code" @submit.prevent="loginWithToken()">
-			<div>
-				<label for="token">paste the token here:</label>
-				<input id="token" v-model="tokenModel" type="text" name="token" required>
-			</div>
-			<button type="submit">Ok</button> <!-- todo onetime? -->
+		<one-time-form id="insert-code" button-label="Ok" :action="loginWithToken">
+			<label for="token">paste the token here:</label>
+			<input id="token" v-model="tokenModel" type="text" name="token" required>
 		</form>
-		<div v-if="tokenError" class="error fade-in">{{ tokenError }}</div>
 	</div>
 </template>
 
@@ -26,30 +22,25 @@ export default {
 	},
 	data() {
 		return {
-			tokenError: '',
 			tokenModel: this.$props.token,
 		};
 	},
-	mounted() { // created?
+	mounted() { // created? todo
 		if (this.$data.tokenModel)
 			this.loginWithToken();
 	},
 	methods: {
 		async loginWithToken() {
 			this.$data.tokenError = '';
-			try {
-				this.$store.dispatch(`session/${SESSION_LOGIN_WITH_TOKEN}`, this.$data.tokenModel);
-				this.$emit('success');
-			} catch (error) {
-				await this.$nextTick(); // force transition even if follow-up error
-				this.$data.tokenError = `Login failed! (${error})`;
-			}
+			this.$store.dispatch(`session/${SESSION_LOGIN_WITH_TOKEN}`, this.$data.tokenModel); // throws. todo?
+			this.$emit('success');
 		},
 	},
 };
 </script>
 
 <style scoped>
+/* todo move all to otf */
 #insert-code {
     display: flex;
     align-items: flex-end;
