@@ -9,10 +9,10 @@
 
 				<fieldset id="with-email" class="box">
 					<legend>With e-mail</legend>
-					<one-time-form v-if="!showMailSent" :button-label="Request mail to log in" action="requestMail">
+					<promise-form v-if="!showMailSent" :button-label="Request mail to log in" action="requestMail">
 						<label for="email">E-mail</label>
 						<input id="email" v-model="email" type="email" name="email" placeholder="email@example.com" required>
-					</form>
+					</promise-form>
 					<div v-else id="mail-sent" class="padding-l">
 						<div>
 							<p>An e-mail has been sent to <em>{{ email }}</em>.</p>
@@ -30,17 +30,17 @@
 				<fieldset id="with-external" class="box">
 					<legend>Or</legend>
 					<div id="google-login">
-						<one-time-button v-if="googleInitialized" action="loginWithGoogle">
+						<promise-button v-if="googleInitialized" action="loginWithGoogle">
 							<img src="/static/google.png" class="logo">
 							Log in with Google
-						</button>
+						</promise-button>
 						<div v-else class="note">Downloading Google scripts...</div>
 					</div>
 					<div id="facebook-login">
-						<one-time-button v-if="facebookInitialized" action="loginWithFacebook">
+						<promise-button v-if="facebookInitialized" action="loginWithFacebook">
 							<img src="/static/google.png" class="logo">
 							Log in with Facebook
-						</button>
+						</promise-button>
 						<div v-else class="note">Downloading Facebook scripts...</div>
 					</div>
 				</fieldset>
@@ -56,13 +56,14 @@ import {
 	HIDE_AUTHENTICATE_MODAL, SESSION_REQUEST_TOKEN_MAIL, SESSION_GOOGLE_TOKEN_LOGIN, SESSION_FACEBOOK_TOKEN_LOGIN,
 } from '@/store/actions';
 import TokenInput from '@/components/TokenInput';
+import PromiseButton from '@/components/PromiseButton';
 
 let googleAuth; // todo
 
 export default {
 	name: 'Authenticate',
 	components: {
-		TokenInput,
+		TokenInput, PromiseButton
 	},
 	data: () => ({
 		email: '',

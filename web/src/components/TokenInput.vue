@@ -1,9 +1,9 @@
 <template>
 	<div>
-		<one-time-form id="insert-code" button-label="Ok" :action="loginWithToken">
+		<promise-form id="insert-code" button-label="Ok" :action="loginWithToken">
 			<label for="token">paste the token here:</label>
 			<input id="token" v-model="tokenModel" type="text" name="token" required>
-		</form>
+		</promise-form>
 	</div>
 </template>
 

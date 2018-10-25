@@ -33,7 +33,6 @@
 		</header>
 		<main>
 			<router-view />
-			<one-time-button>hello</one-time-button>
 		</main>
 	</section>
 </template>
