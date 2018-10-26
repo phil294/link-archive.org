@@ -9,8 +9,10 @@
 <script>
 import ProgressButton from '@/components/ProgressButton';
 
-/** todo
- * Standardform component: includes only submit (one-time-)button. Component fires $submit event and calls action callback like OneTimeButton. todo
+/** 
+ * Standardform component: includes only submit (progress-)button.
+ * Component fires $submit event and calls `action` prop just
+ * like `promise-button`.
  */
 export default {
 	name: 'PromiseForm',

@@ -7,8 +7,10 @@
 
 <script>
 /**
- * todo
- * Button that, when clicked, replaces itself with a loading animation and component fires $click-event. If necessary, .reset() can be called to revert the state. Prop action will be called on click. If it is a promise, loading state will be reverted after it's finished (no matter the outcome)
+ * Button that, when clicked, replaces itself with a loading animation 
+ * and fires $click-event.
+ * Alternatively, call .setLoading() and .reset() manually and disable
+ * automatic loading state with setLoadingAutomatically=false.
  */
 export default {
     name: 'ProgressButton',
