@@ -4,12 +4,12 @@
 			<button id="close" type="button" @click="HIDE_AUTHENTICATE_MODAL">
 				<i class="material-icons">close</i>
 			</button>
-			<h1>Log in or create account</h1>
+			<!--<h1>Log in or create account</h1>-->
 			<div id="register-or-login">
 
 				<fieldset id="with-email" class="box">
 					<legend>With e-mail</legend>
-					<promise-form v-if="!showMailSent" button-label="Request mail to log in" action="requestMail">
+					<promise-form v-if="!showMailSent" button-label="Request mail to log in" :action="requestMail">
 						<label for="email">E-mail</label>
 						<input id="email" v-model="email" type="email" name="email" placeholder="email@example.com" required>
 					</promise-form>
@@ -57,13 +57,14 @@ import {
 } from '@/store/actions';
 import TokenInput from '@/components/TokenInput';
 import PromiseButton from '@/components/PromiseButton';
+import PromiseForm from '@/components/PromiseForm';
 
 let googleAuth; // todo
 
 export default {
 	name: 'Authenticate',
 	components: {
-		TokenInput, PromiseButton
+		TokenInput, PromiseButton, PromiseForm
 	},
 	data: () => ({
 		email: '',
