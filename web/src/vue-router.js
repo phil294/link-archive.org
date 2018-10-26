@@ -8,14 +8,16 @@ export default function createRouter() {
 		mode: 'history',
 		routes: [
 			{
-				path: '/logincallback',
-				name: 'LoginCallbackHandler',
-				component: () => import('@/components/callback-handlers/LoginCallbackHandler'),
-			},
-			{
 				path: '/',
 				name: 'Index',
 				component: () => import('@/components/Index'),
+				// todo replace with logo
+			},
+			{
+				path: '/logincallback',
+				name: 'LoginCallbackHandler',
+				hidden: true,
+				component: () => import('@/components/callback-handlers/LoginCallbackHandler'),
 			},
 			// corresponding store modules can also be lazyloaded. see ssr vuejs docs
 		],

@@ -38,14 +38,13 @@ export default {
 </script>
 
 <style scoped>
-    /* todo style buttons globally instead */
-    #loading {
-        background:blue;
-        color:aqua;
-    }
-    button {
-        display: flex;
-        align-items: center;
-    }
+	/* todo style buttons globally instead */
+	#loading {
+		background:blue;
+		color:aqua;
+	}
+	button {
+		display: flex;
+		align-items: center;
+	}
 </style>
-

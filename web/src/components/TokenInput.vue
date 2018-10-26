@@ -11,9 +11,13 @@
 import {
 	SESSION_LOGIN_WITH_TOKEN,
 } from '@/store/actions';
+import OneTimeForm from '@/components/OneTimeForm';
 
 export default {
 	name: 'TokenInput',
+	components: {
+		OneTimeForm,
+	},
 	props: {
 		token: {
 			type: String,

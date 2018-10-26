@@ -8,9 +8,9 @@
 		</div>
 		<header class="padding">
 			<nav>
-				<h2 link??>{{ appName }}</h2>
-				<div>Navigation</div>
-				<div>etc.</div>
+				<router-link v-for="route in $router.options.routes" v-if="!route.hidden" :key="route.path" exact :to="route.path">
+					{{ route.name }}
+				</router-link>
 			</nav>
 			<div
 				v-if="loadingCounter"
@@ -79,7 +79,7 @@ export default {
 	height: 100%;
 	grid-template-areas:	"header"
 							"main";
-	grid-template-rows: 50px 1fr;
+	/* grid-template-rows: 50px 1fr; */
 }
 #app > header {
 	grid-area: header;
@@ -88,6 +88,21 @@ export default {
 	flex-direction: row;
 	justify-content: space-between;
 	align-items: center;
+}
+#app > header > nav {
+	display: flex;
+	flex-direction: row;
+}
+#app > header > nav {
+	display: flex;
+	flex-direction: row;
+}
+nav > a {
+	white-space: nowrap;
+	margin-right:10%;
+}
+nav > a.router-link-active {
+	font-weight: bold;
 }
 #loading {
 	flex: 1;

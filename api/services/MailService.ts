@@ -7,11 +7,11 @@ class MailService {
     constructor(service: string, sender: string, senderPassword: string) {
         this.sender = sender;
         this.nodemailerTransport = createTransport({
+            service,
             auth: {
                 pass: senderPassword,
                 user: this.sender,
             },
-            service: service,
         });
     }
     public sendMail(recepient: string, subject: string, bodyHtml: string): Promise<SentMessageInfo> {

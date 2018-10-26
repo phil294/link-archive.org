@@ -9,7 +9,7 @@
 
 				<fieldset id="with-email" class="box">
 					<legend>With e-mail</legend>
-					<promise-form v-if="!showMailSent" :button-label="Request mail to log in" action="requestMail">
+					<promise-form v-if="!showMailSent" button-label="Request mail to log in" action="requestMail">
 						<label for="email">E-mail</label>
 						<input id="email" v-model="email" type="email" name="email" placeholder="email@example.com" required>
 					</promise-form>
@@ -30,14 +30,14 @@
 				<fieldset id="with-external" class="box">
 					<legend>Or</legend>
 					<div id="google-login">
-						<promise-button v-if="googleInitialized" action="loginWithGoogle">
+						<promise-button v-if="googleInitialized" :action="loginWithGoogle">
 							<img src="/static/google.png" class="logo">
 							Log in with Google
 						</promise-button>
 						<div v-else class="note">Downloading Google scripts...</div>
 					</div>
 					<div id="facebook-login">
-						<promise-button v-if="facebookInitialized" action="loginWithFacebook">
+						<promise-button v-if="facebookInitialized" :action="loginWithFacebook">
 							<img src="/static/google.png" class="logo">
 							Log in with Facebook
 						</promise-button>
@@ -134,7 +134,6 @@ export default {
 		async loadFacebook() {
 			const fbsdkScript = document.createElement('script');
 			await new Promise((resolve, reject) => {
-				console.dir(fbsdkScript);
 				fbsdkScript.onload = resolve;
 				fbsdkScript.onerror = reject; // this throws and is not catched. just like it should (?)
 				fbsdkScript.src = 'https://connect.facebook.net/en_US/sdk.js';
