@@ -2,7 +2,7 @@
 	<div id="modal">
 		<main class="box padding-xl">
 			<button id="close" type="button" @click="HIDE_AUTHENTICATE_MODAL">
-				<i class="material-icons">close</i>
+				🗙
 			</button>
 			<!--<h1>Log in or create account</h1>-->
 			<div id="register-or-login">
@@ -22,7 +22,7 @@
 						</div>
 						<hr>
 						<a @click="showMailSent=false">
-							<i class="material-icons">keyboard_arrow_left</i> Send another mail
+							⮜ Send another mail
 						</a>
 					</div>
 				</fieldset>
