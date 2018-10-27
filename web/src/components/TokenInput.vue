@@ -29,14 +29,15 @@ export default {
 			tokenModel: this.$props.token,
 		};
 	},
-	mounted() { // created? todo
+	mounted() {
 		if (this.$data.tokenModel)
 			this.loginWithToken();
 	},
 	methods: {
+		/** throws */
 		async loginWithToken() {
 			this.$data.tokenError = '';
-			this.$store.dispatch(`session/${SESSION_LOGIN_WITH_TOKEN}`, this.$data.tokenModel); // throws. todo?
+			this.$store.dispatch(`session/${SESSION_LOGIN_WITH_TOKEN}`, this.$data.tokenModel);
 			this.$emit('success');
 		},
 	},
@@ -44,15 +45,4 @@ export default {
 </script>
 
 <style scoped>
-/* todo move all to otf */
-#insert-code {
-    display: flex;
-    align-items: flex-end;
-}
-#insert-code input, #insert-code button {
-    height:30px;
-}
-#insert-code input {
-    margin-bottom: 0;
-}
 </style>

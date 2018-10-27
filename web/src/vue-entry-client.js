@@ -30,7 +30,8 @@ router.onReady(() => {
 
         // non-previously-rendered components:
         let diffed = false;
-        // const activatedAsyncDataHooks = matched.filter((c, i) => diffed || (diffed = (prevMatched[i] !== c))) // todo
+        // const activatedAsyncDataHooks = matched
+        //    .filter((c, i) => diffed || (diffed = (prevMatched[i] !== c)))
         const activatedAsyncDataHooks = matched.filter((c, i) => {
             return diffed || (diffed = (prevMatched[i] !== c));
         })

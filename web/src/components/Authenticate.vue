@@ -1,6 +1,6 @@
 <template>
 	<div id="modal">
-		<main class="box padding-xl"> <!-- todo ? -->
+		<main class="box padding-xl">
 			<button id="close" type="button" @click="HIDE_AUTHENTICATE_MODAL">
 				<i class="material-icons">close</i>
 			</button>
@@ -146,7 +146,7 @@ export default {
 				appId: process.env.FACEBOOK_APP_ID,
 				cookie: true,
 				xfbml: true,
-				version: 'v3.0', // todo 3.0
+				version: 'v3.0',
 			});
 			this.$data.facebookInitialized = true;
 		},

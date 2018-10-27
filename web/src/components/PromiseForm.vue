@@ -1,8 +1,8 @@
 <template>
 	<form @submit.prevent="submit">
 		<slot />
-		<progress-button ref="submit" type="submit" :set-loading-automatically="false">{{ buttonLabel }}</progress-button> <!-- TODO :disabled="!formModel.isValid" how to? -->
-		<div class="error fade-in">{{ errorMessage }}</div>
+		<progress-button ref="submit" type="submit" :set-loading-automatically="false">{{ buttonLabel }}</progress-button>
+		<div v-if="errorMessage" class="error fade-in">{{ errorMessage }}</div>
 	</form>
 </template>
 
@@ -28,7 +28,7 @@ export default {
 		},
 		action: {
 			type: Function,
-			required: true, // todo
+			required: true,
 		},
 	},
 	data: () => ({
@@ -47,10 +47,10 @@ export default {
 			try {
 				await this.$props.action(event);
 			} catch (error) {
-				await this.$nextTick(); // force transition even if follow-up error // todo
+				await this.$nextTick(); // enforce transition event even if follow-up error
 				this.$data.errorResponse = error;
 			} finally {
-				if (this.$refs.submit) // component still alive
+				if (this.$refs.submit) // component still alive?
 					this.$refs.submit.reset();
 			}
 		},

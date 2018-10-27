@@ -32,7 +32,6 @@ export default ((tokenService: TokenService, mailService: MailService,
                     Bye`)
             .then(() => res.end())
             .catch((error: any) => {
-                // todo analyze error and reply with fitting status code + type
                 res.status(INTERNAL_SERVER_ERROR).send(error.code);
             });
     });

@@ -12,7 +12,7 @@ export default {
 	props: {
 		action: {
 			type: Function,
-			required: true, // todo
+			required: true,
 		},
 	},
 	methods: {

@@ -10,8 +10,8 @@ export default function createRouter() {
 			{
 				path: '/',
 				name: 'Index',
+				hidden: true,
 				component: () => import('@/components/Index'),
-				// todo replace with logo
 			},
 			{
 				path: '/logincallback',

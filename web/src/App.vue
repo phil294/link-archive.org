@@ -8,6 +8,7 @@
 		</div>
 		<header class="padding">
 			<nav>
+				<router-link exact to="/">[LOGO]</router-link>
 				<router-link v-for="route in $router.options.routes"
 					v-if="!route.hidden" :key="route.path" exact :to="route.path">
 					{{ route.name }}
@@ -84,7 +85,7 @@ export default {
 }
 #app > header {
 	grid-area: header;
-	border-bottom: 1px solid lightgrey; /* todo should this be done with an hr element? grid disapproves */
+	border-bottom: 1px solid lightgrey;
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
