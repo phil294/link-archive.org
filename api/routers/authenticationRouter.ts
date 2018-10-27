@@ -25,7 +25,7 @@ export default ((tokenService: TokenService, mailService: MailService,
                     Alternatively, you can paste the token<br>
                     ${token}<br>
                     manually here:<br>
-                    <a href="${pasteUrl}" alt="paste token url">${pasteUrl}"</a><br>
+                    <a href="${pasteUrl}" alt="paste token url">${pasteUrl}</a><br>
                     <br>
                     If your user account does not exist yet, it will be created once you log in.<br>
                     <br>
