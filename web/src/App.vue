@@ -8,7 +8,8 @@
 		</div>
 		<header class="padding">
 			<nav>
-				<router-link v-for="route in $router.options.routes" v-if="!route.hidden" :key="route.path" exact :to="route.path">
+				<router-link v-for="route in $router.options.routes"
+					v-if="!route.hidden" :key="route.path" exact :to="route.path">
 					{{ route.name }}
 				</router-link>
 			</nav>

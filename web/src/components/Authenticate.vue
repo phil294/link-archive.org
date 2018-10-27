@@ -64,7 +64,7 @@ let googleAuth; // todo
 export default {
 	name: 'Authenticate',
 	components: {
-		TokenInput, PromiseButton, PromiseForm
+		TokenInput, PromiseButton, PromiseForm,
 	},
 	data: () => ({
 		email: '',
