@@ -12,6 +12,10 @@
 					<promise-form v-if="!showMailSent" button-label="Request mail to log in" :action="requestMail">
 						<label for="email">E-mail</label>
 						<input id="email" v-model="email" type="email" name="email" placeholder="email@example.com" required>
+						<read-more class="note" summary="(Why no password?)">
+							<p>You can simply login by requesting a login link via E-mail. If you are afraid someone else might have gained access to the login link, you can invalidate all current ones <a href="TODO">here</a>.</p>
+							<p>The main reasons for implementing a password-less login can be found in <a href="https://goo.gl/czxFnf">this article</a>. In short: Passwords are more of a security threat than measurement.</p>
+						</read-more>
 					</promise-form>
 					<div v-else id="mail-sent" class="padding-l">
 						<div>
@@ -58,6 +62,7 @@ import {
 import TokenInput from '@/components/TokenInput';
 import PromiseButton from '@/components/PromiseButton';
 import PromiseForm from '@/components/PromiseForm';
+import ReadMore from '@/components/ReadMore';
 
 async function loadGoogle() {
 	const gapiScript = document.createElement('script');
@@ -69,7 +74,7 @@ async function loadGoogle() {
 		document.head.appendChild(gapiScript);
 	});
 }
-let googleAuth; // todo
+let googleAuth;
 async function initializeGoogle() {
 	googleAuth = await window.gapi.auth2.init({
 		client_id: process.env.GOOGLE_CLIENT_ID,
@@ -99,7 +104,7 @@ async function initializeFacebook() {
 		appId: process.env.FACEBOOK_APP_ID,
 		cookie: true,
 		xfbml: true,
-		version: 'v3.0', // todo 3.0
+		version: 'v3.0',
 	});
 }
 async function loginFacebook() {
@@ -117,12 +122,13 @@ async function loginFacebook() {
 	} catch (response) {
 		throw response; // todo s. google
 	}
+	return facebookToken;
 }
 
 export default {
 	name: 'Authenticate',
 	components: {
-		TokenInput, PromiseButton, PromiseForm,
+		TokenInput, PromiseButton, PromiseForm, ReadMore,
 	},
 	data: () => ({
 		email: '',
@@ -160,13 +166,13 @@ export default {
 				});
 		},
 		async loginWithGoogle() {
-			const googleToken = loginGoogle();
+			const googleToken = await loginGoogle();
 			await this.$store.dispatch(`session/${SESSION_GOOGLE_TOKEN_LOGIN}`, googleToken);
 			this.$store.dispatch(HIDE_AUTHENTICATE_MODAL);
 		},
 		async loginWithFacebook() {
 			// todo factory interface blub
-			const facebookToken = loginFacebook();
+			const facebookToken = await loginFacebook();
 			await this.$store.dispatch(`session/${SESSION_FACEBOOK_TOKEN_LOGIN}`, facebookToken);
 			this.$store.dispatch(HIDE_AUTHENTICATE_MODAL);
 		},
