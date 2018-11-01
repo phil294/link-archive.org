@@ -1,0 +1,7 @@
+/build/
+/config/
+# todo doesnt work??
+/dist/
+/*.js
+/test/unit/coverage/
+/node_modules/

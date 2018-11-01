@@ -1,0 +1,16 @@
+body, html {
+    padding: 0;
+    margin: 0;
+}
+input:not([type=checkbox]), label {
+    width: 100%;
+}
+input[type=checkbox] + label {
+    display: inline;
+}
+a {
+    cursor: pointer;
+}
+fieldset {
+    border: 2px solid #eeeeee;
+}

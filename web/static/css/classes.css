@@ -1,0 +1,48 @@
+.padding {
+    padding: 0.5vw;
+}
+.padding-l {
+    padding: 1vw;
+}
+.padding-xl {
+    padding: 3vw;
+}
+.note {
+    font-size:80%;
+    opacity:0.8;
+}
+@keyframes fadein {
+    from {opacity: 0}
+    to {opacity: 1}
+}
+/** works with v-if etc. */
+.fade-in {
+    animation: fadein 0.5s;
+}
+.fade-toggle {
+    transition: opacity 0.5s;
+}
+/** does not work with v-if, keeps size, but enables fade out animation. use like: < class="fade-toggle" :class="{hidden:_var_}" > */
+.fade-toggle.hidden {
+    opacity: 0;
+}
+.error {
+    color: darkred; /* css4 @apply fade-in */
+}
+/*.v-enter-active, .v-leave-active {
+    transition: opacity 2s;
+}
+.v-enter, .v-leave-to {
+    opacity: 0;
+}*/
+.center {
+    text-align:center;
+}
+.box {
+    box-shadow: 3px 3px 4px #dddddd;
+    background: rgba(255,255,255,0.8);
+}
+.material-icons {
+    display: inline-flex;
+    vertical-align:middle;
+}
