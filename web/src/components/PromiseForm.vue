@@ -36,7 +36,7 @@ export default {
 	}),
 	computed: {
 		errorMessage() {
-			return this.$data.errorResponse ? `${this.$data.errorCaption}: ${this.$data.errorResponse}` : '';
+			return this.$data.errorResponse ? `${this.$props.errorCaption}: ${this.$data.errorResponse}` : '';
 		},
 	},
 	methods: {
