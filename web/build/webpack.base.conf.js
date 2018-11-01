@@ -38,7 +38,7 @@ const webpackBaseConfig = {
 		},
 	},
 	module: {
-		noParse: /es6-promise\.js$/, // "avoid webpack shimming process" todo
+		noParse: /es6-promise\.js$/, // "avoid webpack shimming process" todo ..?
 		rules: [
 			{
 				test: /\.vue$/,
@@ -105,7 +105,7 @@ const webpackBaseConfig = {
 };
 
 if (false) {
-	webpackBaseConfig.plugins.push(new BundleAnalyzerPlugin()); // todo
+	webpackBaseConfig.plugins.push(new BundleAnalyzerPlugin());
 }
 
 module.exports = webpackBaseConfig;

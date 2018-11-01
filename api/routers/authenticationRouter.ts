@@ -12,6 +12,9 @@ export default ((tokenService: TokenService, mailService: MailService,
     const authenticationRouter: Router = Router();
     /** an email for login was requested. login==register */
     authenticationRouter.get('/requesttokenmail', (req, res) => {
+        // todo determine if account with mail exists and give out the information to the user in the mail below. motivation: freecodecamp 180963
+        // todo let user choose if he wants one-time or never-expiring token
+        // todo add functionality "invalidate all tokens" (aka "log out everywhere")
         const token: string = tokenService.create({
             email: req.query.email, // validity check not necessary, nodemailer handles this
         });
@@ -25,14 +28,13 @@ export default ((tokenService: TokenService, mailService: MailService,
                     Alternatively, you can paste the token<br>
                     ${token}<br>
                     manually here:<br>
-                    <a href="${pasteUrl}" alt="paste token url">${pasteUrl}"</a><br>
+                    <a href="${pasteUrl}" alt="paste token url">${pasteUrl}</a><br>
                     <br>
                     If your user account does not exist yet, it will be created once you log in.<br>
                     <br>
                     Bye`)
             .then(() => res.end())
             .catch((error: any) => {
-                // todo analyze error and reply with fitting status code + type
                 res.status(INTERNAL_SERVER_ERROR).send(error.code);
             });
     });

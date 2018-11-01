@@ -13,6 +13,8 @@ web/test/e2e/reports/
 
 api/docker/workdir
 
+todo*
+
 .idea
 .vscode
 *.suo

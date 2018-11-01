@@ -24,7 +24,7 @@ export default {
 		},
 	},
 	actions: {
-		/** validate token and set token & session */
+		/** validate token and set token & session. throws */
 		[SESSION_LOGIN_WITH_TOKEN]({ commit }, token) {
 			let payload;
 			try {

@@ -1,6 +1,5 @@
 import Vuex from 'vuex';
 import Vue from 'vue';
-import axios from 'axios';
 import { SHOW_AUTHENTICATE_MODAL, HIDE_AUTHENTICATE_MODAL } from './actions';
 import session from './session-store';
 
@@ -8,9 +7,9 @@ Vue.use(Vuex);
 
 export default function createStore() {
 	return new Vuex.Store({
-		strict: process.env.NODE_ENV !== 'production', // todo check this
+		strict: process.env.NODE_ENV !== 'production',
 		state: {
-            appName: 'My App',
+			appName: 'My App',
 			loadingCounter: 0,
 			authenticateModal: false,
 			test: {},
@@ -20,8 +19,8 @@ export default function createStore() {
 				state.authenticateModal = show;
 			},
 			setAppName(state, appName) {
-                state.appName = appName;
-            }
+				state.appName = appName;
+			},
 		},
 		actions: {
 			[SHOW_AUTHENTICATE_MODAL]({ commit }) {

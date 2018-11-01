@@ -7,7 +7,7 @@ import createRouter from './vue-router';
 import createStore from './store/root-store';
 import storageService from '@/services/storage-service';
 
-Vue.config.productionTip = false; // todo ? // = process.env.NODE_ENV === 'production'  .. ?
+Vue.config.productionTip = false;
 
 export default function createApp() {
 	const router = createRouter();

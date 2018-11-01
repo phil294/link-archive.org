@@ -14,3 +14,9 @@ a {
 fieldset {
     border: 2px solid #eeeeee;
 }
+details > summary {
+    cursor: pointer;
+}
+form > * {
+    margin-bottom: 10px;
+}
