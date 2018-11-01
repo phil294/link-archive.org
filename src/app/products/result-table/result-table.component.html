@@ -1,0 +1,105 @@
+<table id="result" *ngIf="val(products); else noResultsTempl; let products">
+	<tr class="padding">
+		<th class="padding">Name</th>
+		<!-- Attributnamen -->
+		<th *ngFor="let attribute of relevantAttributes" class="padding">
+			<div fxLayout="row" fxLayoutAlign="center center">
+				<i class="material-icons" (click)="deleteAttribute(attribute)" *ngIf="isAdmin">delete</i>
+				<abbr title="{{attribute.description}}">
+					<editable-value-dialog
+							[value]="attribute.name"
+							[editable]="isAdmin"
+							(valueChanged)="changeAttributeName(attribute, $event)">
+					</editable-value-dialog>
+				</abbr>
+				<div title="Sorting order"> <!-- toto language -->
+					<div class="sortingIsset" fxLayout="row" fxLayoutAlign="center center"
+						 *ngIf="sortersFindIndex(attribute.id)!=-1 ; else notSortedTempl">
+						<!-- sorting number is set -->
+						<i class="material-icons"
+						   *ngIf="sortersFind(attribute.id)[1]==SortingOrder.DESC ; else isAscTempl"
+						   (click)="sortersFind(attribute.id)[1]=SortingOrder.ASC; sortersChanged.emit(sorters);">
+							<!-- sorting is DESC, onclick=ASC -->
+							expand_less</i>
+						<ng-template #isAscTempl>
+							<i class="material-icons"
+							   (click)="sorters.splice(sortersFindIndex(attribute.id),1); sortersChanged.emit(sorters);">
+								<!-- sorting is ASC, onclick=NONE -->
+								expand_more</i>
+						</ng-template>
+						<!-- sorting index visible to user -->
+						<span class="veryimportant">{{ sortersFindIndex(attribute.id) + 1 }}</span>
+					</div>
+					<ng-template #notSortedTempl>
+						<i class="material-icons inactive"
+						   (click)="sorters.push([attribute.id, SortingOrder.DESC]); sortersChanged.emit(sorters);">
+							<!-- sorting is NONE, onclick=DESC -->
+							expand_more</i>
+					</ng-template>
+				</div>
+			</div>
+		</th>
+		<!-- Admin: Attribut hinzufügen -->
+		<th *ngIf="isAdmin">
+			<div fxLayout="column" fxLayoutAlign="center start">
+				<div fxLayout="row" fxLayoutAlign="start center">
+					<i class="material-icons padding" (click)="showAddAttributeDialog=true" *ngIf="!showAddAttributeDialog">add_box</i>
+					<i class="material-icons padding" (click)="showAddAttributeDialog=false" *ngIf="showAddAttributeDialog">remove_circle</i>
+					<h4 *ngIf="showAddAttributeDialog">Add new attribute</h4>
+				</div>
+				<div *ngIf="showAddAttributeDialog" class="box padding">
+					<form (ngSubmit)="showAddAttributeDialog=false ; addAttribute(newAttribute)" fxLayout="column" fxLayoutAlign="center center"
+						  #addAttributeForm="ngForm">
+						<label>Name<br/>
+							<input type="text" [(ngModel)]="newAttribute.name" name="name" class="margin" required/></label>
+						<label>Description<br/>
+							<input type="text" [(ngModel)]="newAttribute.description" name="description" class="margin" required/></label>
+						<label>Unit<br/>
+							<input type="text" [(ngModel)]="newAttribute.unit" name="unit" class="margin" required/></label>
+						<input type="submit" value="Ok" [disabled]="!addAttributeForm.form.valid"/>
+					</form>
+				</div>
+			</div>
+		</th>
+	</tr>
+	<!-- einzelne Produkte des Ergebnisses -->
+	<tr *ngFor="let product of products">
+		<!-- Produktname -->
+		<td class="padding" fxLayout="row" fxLayoutAlign="start center">
+			<i class="material-icons" (click)="deleteProduct(product)" *ngIf="isAdmin">delete</i>
+			<editable-value-dialog class="important"
+								   [value]="product.name"
+								   [editable]="isAdmin"
+								   (valueChanged)="changeProductName(product, $event)">
+			</editable-value-dialog>
+		</td>
+		<!-- Produktwerte -->
+		<td *ngFor="let attribute of relevantAttributes" class="padding">
+			<editable-value-dialog
+					[value]="val(product.productData[attribute.id])? product.productData[attribute.id].value : ''"
+					[unit]="attribute.unit"
+					[editable]="isAdmin"
+					(valueChanged)="changeProductValue(product, attribute, $event)">
+			</editable-value-dialog>
+		</td>
+	</tr>
+</table>
+<div>
+	<ng-template #noResultsTempl>
+		<div class="padding" fxFlex fxLayout="row" fxLayoutAlign="center center">
+			<div>No results</div>
+		</div>
+	</ng-template>
+	<!-- Produkt hinzufügen -->
+	<div fxLayout="row" fxLayoutAlign="start center" *ngIf="isAdmin">
+		<i class="material-icons padding" (click)="showAddProductDialog=true" *ngIf="!showAddProductDialog">add_box</i>
+		<i class="material-icons padding" (click)="showAddProductDialog=false" *ngIf="showAddProductDialog">remove_circle</i>
+		<div *ngIf="showAddProductDialog">
+			<form (ngSubmit)="showAddProductDialog=false ; addProduct(newProduct)">
+				<label>Add new entry:
+					<input type="text" [(ngModel)]="newProduct.name" name="name"/></label>
+				<input type="submit" value="Ok"/>
+			</form>
+		</div>
+	</div>
+</div>

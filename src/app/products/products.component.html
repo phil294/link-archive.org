@@ -1,0 +1,130 @@
+<div fxLayout="column" fxLayoutAlign="center center">
+	<div class="box" fxLayout="column" fxLayoutAlign="center center">
+		<div class="padding">
+			<h3 class="padding">Cars</h3>
+
+			<div id="configuration" fxLayout="row">
+				<div id="filters" class="box padding">
+					<h4>Filters</h4>
+					<div fxLayout="row">
+						<div id="addFilter" fxLayout="row">
+							<div class="attributeChooser">
+								<label fxLayout="column">Available attributes
+									<input type="text" [(ngModel)]="filterbox"/>
+									<select
+											[(ngModel)]="filterattribute"
+											size="{{attributes.length<10?attributes.length:10}}">
+										<ng-container *ngFor="let attribute of attributes">
+											<option [ngValue]="attribute" *ngIf="attribute.name.includes(filterbox) && !filters.has(attribute.id)"> <!-- filterbox string matching && no duplicate filters -->
+												{{ attribute.name }}
+											</option>
+										</ng-container>
+									</select>
+								</label>
+							</div>
+							<form *ngIf="val(filterattribute)" id="filterConfigurator" fxLayout="column" fxLayoutAlign="center center" class="padding"
+								  #filterConfiguratorForm="ngForm" (ngSubmit)="addFilter($event, filterattribute, newFilter)">
+								<h5>{{filterattribute.name}}</h5>
+
+								<!-- value-->
+								<label>
+									Exact value:
+									<input type="radio" name="type" [value]="FilterType.VALUE" [(ngModel)]="filtertype" (click)="newFilter.range_from='';newFilter.range_to=''"/>
+								</label>
+								<div *ngIf="filtertype==FilterType.VALUE" fxLayout="row">
+									<input [type]="text" name="filtervalue" [(ngModel)]="newFilter.value" minlength="1"/>
+									<span>{{ filterattribute.unit }}</span>
+								</div>
+								<br/>
+
+								<!-- range -->
+								<label>
+									Range:
+									<input type="radio" name="type" [value]="FilterType.RANGE" [(ngModel)]="filtertype" (click)="newFilter.value=''"/>
+								</label>
+								<div *ngIf="filtertype==FilterType.RANGE" fxLayout="column" fxLayoutAlign="center center">
+									<div fxLayout="row">
+										<input type="number" name="filterrange_from" [(ngModel)]="newFilter.range_from" [max]="newFilter.range_to" required/>
+										<span>{{ filterattribute.unit }}</span>
+									</div>
+									<span>-</span>
+									<div fxLayout="row">
+										<input type="number" name="filterrange_to" [(ngModel)]="newFilter.range_to" [min]="newFilter.range_from" required/>
+										<span>{{ filterattribute.unit }}</span>
+									</div>
+								</div>
+								<br/>
+
+								<input type="submit" [disabled]="!val(filterattribute) || !filterattribute.name.includes(filterbox) || !filterConfiguratorForm.form.valid || !newFilter.valid()"
+									   value="Add filter"/>
+							</form>
+						</div>
+						<ul id="filterList" fxLayout="column" class="padding">
+							<li *ngFor="let filterEntry of filtersToIterable()" fxLayout="row" fxLayoutAlign="start center">
+								<i class="material-icons" (click)="removeFilter(filterEntry.attribute)">remove_circle</i>
+								{{ attributeById(filterEntry.attribute).name + ":"}}
+								<span *ngIf="val(filterEntry.filter.value); else filterRangeTempl" class="displayedFilerValue">
+									{{ filterEntry.filter.value +" "+attributeById(filterEntry.attribute).unit }}
+								</span>
+								<ng-template #filterRangeTempl>
+									<span>
+										{{ filterEntry.filter.range_from +"-"+filterEntry.filter.range_to+" "+attributeById(filterEntry.attribute).unit }}
+									</span>
+								</ng-template>
+							</li>
+						</ul>
+					</div>
+				</div>
+
+				<div fxFlex></div>
+
+				<div id="showers" class="box padding">
+					<h4>Display attributes</h4>
+					<div fxLayout="row">
+						<div fxLayout="column" class="padding">
+							<ul id="showerList" fxLayout="column">
+								<li *ngFor="let shower of showers" fxLayout="row" fxLayoutAlign="start center">
+									<i class="material-icons" (click)="removeShower(shower)">remove_circle</i>
+									{{ attributeById(shower).name }}
+								</li>
+							</ul>
+							<div *ngIf="val(showerattribute)">
+								<button (click)="addShower(showerattribute)">Add <span class="important">{{ showerattribute.name }}</span></button>
+							</div>
+						</div>
+
+						<div id="addShower" fxLayout="row">
+							<div class="attributeChooser">
+								<label fxLayout="column">Available attributes
+									<input type="text" [(ngModel)]="showerbox"/>
+									<select
+											[(ngModel)]="showerattribute"
+											size="{{attributes.length<10?attributes.length:10}}">
+										<ng-container *ngFor="let attribute of attributes">
+											<option [ngValue]="attribute" *ngIf="attribute.name.includes(showerbox) && !showers.has(attribute.id)"> <!-- filterbox string matching && no duplicate filters -->
+												{{ attribute.name }}
+											</option>
+										</ng-container>
+									</select>
+								</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div id="rowsChooser">
+				<span>Show </span>
+				<input type="number" min="1" max="100" [(ngModel)]="rows" (change)="doSearch()"/>
+				<span> results</span>
+			</div>
+
+			<result-table
+					[products]="products"
+					[relevantAttributes]="relevantAttributes"
+					(sortersChanged)="sortersChanged($event)"
+					(attributesChanged)="attributesChanged()">
+			</result-table>
+		</div>
+	</div>
+</div>

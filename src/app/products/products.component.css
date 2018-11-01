@@ -1,0 +1,18 @@
+/** VARS */
+#result {
+  border-collapse: collapse;
+  border: 1px black; }
+
+#rowsChooser {
+	font-size: 0.7em;
+}
+
+#rowsChooser input {
+	height: 10px;
+}
+
+.displayedFilerValue {
+	white-space: nowrap;
+}
+
+/*# sourceMappingURL=products.component.css.map */

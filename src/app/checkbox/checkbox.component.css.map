@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAAA,WAAW;ACEX,SAAU;EACR,YAAY,EAAE,EAAE;EAChB,aAAa,EAAE,EAAE",
+"sources": ["../../styles_variables.scss","checkbox.component.scss"],
+"names": [],
+"file": "checkbox.component.css"
+}

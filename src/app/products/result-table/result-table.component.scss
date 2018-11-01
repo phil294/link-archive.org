@@ -1,0 +1,10 @@
+@import "../../../styles_variables.scss";
+
+#result {
+  border-collapse: collapse;
+  border: 1px black;
+
+  tr:nth-child(even) {
+	background-color: $darksmoke;
+  }
+}
