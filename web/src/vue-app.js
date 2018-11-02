@@ -1,4 +1,3 @@
-import { SESSION_LOGIN_WITH_TOKEN } from '@/store/actions';
 import Vue from 'vue';
 import { sync } from 'vuex-router-sync';
 import axios from 'axios';
@@ -36,7 +35,7 @@ export default function createApp() {
 			 */
 			const token = storageService.getToken();
 			if (token) {
-				this.$store.dispatch(`session/${SESSION_LOGIN_WITH_TOKEN}`, token);
+				this.$store.dispatch(`session/loginWithToken`, token);
 			}
 		},
 		render: h => h(App),

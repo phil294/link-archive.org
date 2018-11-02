@@ -1,7 +1,7 @@
 <template>
 	<div id="modal">
 		<main class="box padding-xl">
-			<button id="close" type="button" @click="HIDE_AUTHENTICATE_MODAL">
+			<button id="close" type="button" @click="hideAuthenticateModal">
 				🗙
 			</button>
 			<!--<h1>Log in or create account</h1>-->
@@ -34,19 +34,12 @@
 
 				<fieldset id="with-external" class="box">
 					<legend>Or</legend>
-					<div id="google-login">
-						<promise-button v-if="googleInitialized" :action="loginWithGoogle">
-							<img src="/static/google.png" class="logo">
-							Log in with Google
+					<div v-for="provider in externalLoginProviders" :key="provider.name">
+						<promise-button v-if="provider.initialized" :action="externalLogin(provider)">
+							<img :src="'static/'+provider.name+'.png'" class="logo">
+							Log in with {{ provider.name }}
 						</promise-button>
-						<div v-else class="note">Downloading Google scripts...</div>
-					</div>
-					<div id="facebook-login">
-						<promise-button v-if="facebookInitialized" :action="loginWithFacebook">
-							<img src="/static/facebook.png" class="logo">
-							Log in with Facebook
-						</promise-button>
-						<div v-else class="note">Downloading Facebook scripts...</div>
+						<div v-else class="note">Loading {{ provider.name }} login scripts...</div>
 					</div>
 				</fieldset>
 
@@ -57,74 +50,74 @@
 
 <script>
 import { mapActions } from 'vuex';
-import {
-	HIDE_AUTHENTICATE_MODAL, SESSION_REQUEST_TOKEN_MAIL, SESSION_GOOGLE_TOKEN_LOGIN, SESSION_FACEBOOK_TOKEN_LOGIN,
-} from '@/store/actions';
 import TokenInput from '@/components/TokenInput';
 import PromiseButton from '@/components/PromiseButton';
 import PromiseForm from '@/components/PromiseForm';
 import ReadMore from '@/components/ReadMore';
 
-async function loadGoogle() {
-	const gapiScript = document.createElement('script');
-	await new Promise((resolve) => {
-		gapiScript.onload = () => {
-			window.gapi.load('auth2', resolve);
-		};
-		gapiScript.src = 'https://apis.google.com/js/api.js'; // todo is this functionality available as a module?
-		document.head.appendChild(gapiScript);
-	});
+/** should be abstract */
+class ExternalLoginProvider {
+	constructor(name) {
+		this.name = name;
+		this.initialized = false;
+	}
+	appendScript(url) {
+		const scriptEl = document.createElement('script');
+		return new Promise((resolve, reject) => {
+			scriptEl.onload = resolve;
+			scriptEl.onerror = reject;
+			scriptEl.src = url;
+			document.head.appendChild(scriptEl);
+		})
+	}
+	async setup() {
+		await this.initialize();
+		this.initialized = true;
+	}
+	/** to be called once at start */
+	async load() {};
+	/** to be called on component creation (may be multiple times) by .setup() */
+	async initialize() {};
+	/** @returns token */
+	async login() {}
 }
-let googleAuth;
-async function initializeGoogle() {
-	googleAuth = await window.gapi.auth2.init({
+const googleLoginProvider = new ExternalLoginProvider('google');
+googleLoginProvider.load = async function() {
+	await this.appendScript('https://apis.google.com/js/api.js'); // todo is this functionality available as a module?
+	await new Promise(resolve => () => {
+		window.gapi.load('auth2', resolve);
+	});
+};
+googleLoginProvider.initialize = async function() {
+	this.googleAuth = await window.gapi.auth2.init({
 		client_id: process.env.GOOGLE_CLIENT_ID,
 	});
+};
+googleLoginProvider.login = async function() {
+	const googleUser = await googleAuth.signIn();
+	return googleUser.getAuthResponse().id_token;
 }
-async function loginGoogle() {
-	let googleUser;
-	try {
-		googleUser = await googleAuth.signIn();
-	} catch (error) {
-		throw error; // new error? todo
-	}
-	const googleToken = googleUser.getAuthResponse().id_token;
-	return googleToken;
-}
-async function loadFacebook() {
-	const fbsdkScript = document.createElement('script');
-	await new Promise((resolve, reject) => {
-		fbsdkScript.onload = resolve;
-		fbsdkScript.onerror = reject; // this throws and is not catched. just like it should (?)
-		fbsdkScript.src = 'https://connect.facebook.net/en_US/sdk.js';
-		document.head.appendChild(fbsdkScript);
-	});
-}
-async function initializeFacebook() {
+const facebookLoginProvider = new ExternalLoginProvider('facebook');
+facebookLoginProvider.load = async function() {
+	await this.appendScript('https://connect.facebook.net/en_US/sdk.js');
 	window.fbAsyncInit = () => window.FB.init({
 		appId: process.env.FACEBOOK_APP_ID,
 		cookie: true,
 		xfbml: true,
 		version: 'v3.0',
 	});
-}
-async function loginFacebook() {
-	let facebookToken;
-	try {
-		facebookToken = await new Promise((resolve, reject) => {
-			window.FB.login((response) => {
-				if (response.status === 'connected') {
-					resolve(response.authResponse.accessToken);
-				} else {
-					reject(response);
-				}
-			});
+};
+facebookLoginProvider.login = function() {
+	return new Promise((resolve, reject) => {
+		window.FB.login((response) => {
+			if (response.status === 'connected') {
+				resolve(response.authResponse.accessToken);
+			} else {
+				reject(response);
+			}
 		});
-	} catch (response) {
-		throw response; // todo s. google
-	}
-	return facebookToken;
-}
+	});
+};
 
 export default {
 	name: 'Authenticate',
@@ -135,30 +128,29 @@ export default {
 		email: '',
 		loading: false,
 		showMailSent: false,
-		googleInitialized: false,
-		facebookInitialized: false,
+		externalLoginProviders: [
+			googleLoginProvider, facebookLoginProvider,
+		],
 	}),
 	async created() {
-		// google: load once, initialize upon component creation
-		if (!(window.gapi || {}).auth2) {
-			await loadGoogle();
-		}
-		await initializeGoogle();
-		this.$data.googleInitialized = true;
-		// facebook: load once, initialize once (needs to happen globally)
-		if (!(window.FB || {}).login) {
-			await loadFacebook();
-			await initializeFacebook();
-		}
-		this.$data.facebookInitialized = true;
+		if(!window.loadedExternalLoginProviders)
+			window.loadedExternalLoginProviders = {};
+		this.$data.externalLoginProviders.forEach(async (provider) => {
+			debugger
+			if(!window.loadedExternalLoginProviders[provider.name]) {
+				await provider.load();
+				window.loadedExternalLoginProviders[provider.name] = true;
+			}
+			await provider.setup();
+		});
 	},
 	methods: {
 		...mapActions([
-			HIDE_AUTHENTICATE_MODAL,
+			'hideAuthenticateModal',
 		]),
 		async requestMail(event) {
 			this.$data.loading = true;
-			return this.$store.dispatch(`session/${SESSION_REQUEST_TOKEN_MAIL}`, event.target.elements.email.value) // using form data, not v-model
+			return this.$store.dispatch(`session/requestTokenMail`, event.target.elements.email.value) // using form data, not v-model
 				.then(() => {
 					this.$data.tokenError = '';
 					this.$data.showMailSent = true;
@@ -166,16 +158,15 @@ export default {
 					this.$data.loading = false;
 				});
 		},
-		async loginWithGoogle() {
-			const googleToken = await loginGoogle();
-			await this.$store.dispatch(`session/${SESSION_GOOGLE_TOKEN_LOGIN}`, googleToken);
-			this.$store.dispatch(HIDE_AUTHENTICATE_MODAL);
-		},
-		async loginWithFacebook() {
-			// todo factory interface blub
-			const facebookToken = await loginFacebook();
-			await this.$store.dispatch(`session/${SESSION_FACEBOOK_TOKEN_LOGIN}`, facebookToken);
-			this.$store.dispatch(HIDE_AUTHENTICATE_MODAL);
+		externalLogin(provider) {
+			return async () => {
+				const token = await provider.login();
+				await this.$store.dispatch(`session/externalLoginProviderLoginWithToken`, {
+					token, // todo can this throw?
+					providerName: provider.name
+				});
+				this.$store.dispatch(hideAuthenticateModal);
+			};
 		},
 
 	},

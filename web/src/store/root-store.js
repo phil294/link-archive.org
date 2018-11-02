@@ -1,6 +1,5 @@
 import Vuex from 'vuex';
 import Vue from 'vue';
-import { SHOW_AUTHENTICATE_MODAL, HIDE_AUTHENTICATE_MODAL } from './actions';
 import session from './session-store';
 
 Vue.use(Vuex);
@@ -23,10 +22,10 @@ export default function createStore() {
 			},
 		},
 		actions: {
-			[SHOW_AUTHENTICATE_MODAL]({ commit }) {
+			showAuthenticateModal({ commit }) {
 				commit('toggleAuthenticateModal', true);
 			},
-			[HIDE_AUTHENTICATE_MODAL]({ commit }) {
+			hideAuthenticateModal({ commit }) {
 				commit('toggleAuthenticateModal', false);
 			},
 		},

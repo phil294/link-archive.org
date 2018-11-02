@@ -46,7 +46,7 @@ export default ((tokenService: TokenService, mailService: MailService,
             try {
                 loginTicket = await googleOAuth2Client.verifyIdToken(({ // todo can this even throw?? docs pleeeease
                     audience: GOOGLE_CLIENT_ID,
-                    idToken: req.query.googletoken,
+                    idToken: req.query.token,
                 }));
             } catch (error) {
                 return undefined;
@@ -81,7 +81,7 @@ export default ((tokenService: TokenService, mailService: MailService,
         if (data.app_id !== FACEBOOK_APP_ID || !data.is_valid) {
             res.status(UNAUTHORIZED).send('Facebook says the data is not valid.');
         }
-        result = await request.get(`https://graph.facebook.com/me?access_token=${req.query.facebooktoken}`);
+        result = await request.get(`https://graph.facebook.com/me?access_token=${req.query.token}`);
         data = JSON.parse(result);
         const token = tokenService.create({
             externalIdentifier: data.user_id,

@@ -26,11 +26,11 @@
 				<span v-if="session.name">{{ session.name }}</span>
 				<span v-else-if="session.email">{{ session.email }}</span>
 				<span v-else-if="session.externalType">{{ session.externalIdentifier }} [{{ session.externalType }}]</span>
-				<progress-button @click="SESSION_LOGOUT">Logout</progress-button>
+				<progress-button @click="logout">Logout</progress-button>
 			</div>
 			<button
 				v-if="!isLoggedIn"
-				@click="SHOW_AUTHENTICATE_MODAL">Authenticate
+				@click="showAuthenticateModal">Authenticate
 			</button>
 		</header>
 		<main>
@@ -41,7 +41,6 @@
 
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex';
-import { SHOW_AUTHENTICATE_MODAL, SESSION_LOGOUT } from '@/store/actions';
 import Authenticate from '@/components/Authenticate';
 import ProgressButton from '@/components/ProgressButton';
 
@@ -65,10 +64,10 @@ export default {
 	},
 	methods: {
 		...mapActions([
-			SHOW_AUTHENTICATE_MODAL,
+			'showAuthenticateModal',
 		]),
 		...mapActions('session', [
-			SESSION_LOGOUT,
+			'logout',
 		]),
 	},
 };
