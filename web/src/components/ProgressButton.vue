@@ -6,14 +6,13 @@
 </template>
 
 <script>
-import Vue from 'vue';
 /**
  * Button that, when clicked, replaces itself with a loading animation
  * and fires $click-event.
  * Alternatively, call .setLoading() and .reset() manually and disable
  * automatic loading state with setLoadingAutomatically=false.
  */
-export default Vue.extend({
+export default {
 	name: 'ProgressButton',
 	props: {
 		type: {
@@ -46,7 +45,7 @@ export default Vue.extend({
 			this.$data.loading = true;
 		},
 	},
-});
+};
 </script>
 
 <style scoped>

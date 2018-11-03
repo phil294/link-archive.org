@@ -19,7 +19,7 @@ export default Vue.extend({
 	methods: {
 		async clicked() {
 			// this.constructor.super.options.methods.clicked.call(this); // #2977
-			ProgressButton.methods.clicked.call(this);
+			ProgressButton.methods.clicked.call(this); // does not work with vue.extend in progressbutton
 			try {
 				await this.$props.action();
 			} finally {
