@@ -1,18 +1,18 @@
-function appendScript(url) {
-	const scriptEl = document.createElement('script');
-	return new Promise((resolve, reject) => {
-		scriptEl.onload = resolve;
-		scriptEl.onerror = reject;
-		scriptEl.src = url;
-		document.head.appendChild(scriptEl);
-	});
-}
-
 /** should be abstract */
 class ExternalLoginProvider {
 	constructor(name) {
 		this.name = name;
 		this.initialized = false;
+	}
+
+	static appendScript(url) {
+		const scriptEl = document.createElement('script');
+		return new Promise((resolve, reject) => {
+			scriptEl.onload = resolve;
+			scriptEl.onerror = reject;
+			scriptEl.src = url;
+			document.head.appendChild(scriptEl);
+		});
 	}
 
 	async setup() {
@@ -32,7 +32,7 @@ class ExternalLoginProvider {
 
 const googleLoginProvider = new ExternalLoginProvider('google');
 googleLoginProvider.load = async function () {
-	await appendScript('https://apis.google.com/js/api.js'); // todo is this functionality available as a module?
+	await ExternalLoginProvider.appendScript('https://apis.google.com/js/api.js'); // todo is this functionality available as a module?
 	await new Promise((resolve) => {
 		window.gapi.load('auth2', resolve);
 	});
@@ -49,7 +49,7 @@ googleLoginProvider.login = async function () {
 
 const facebookLoginProvider = new ExternalLoginProvider('facebook');
 facebookLoginProvider.load = async function () {
-	await appendScript('https://connect.facebook.net/en_US/sdk.js');
+	await ExternalLoginProvider.appendScript('https://connect.facebook.net/en_US/sdk.js');
 	window.fbAsyncInit = () => window.FB.init({
 		appId: process.env.FACEBOOK_APP_ID,
 		cookie: true,
