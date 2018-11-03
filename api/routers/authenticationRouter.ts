@@ -18,12 +18,12 @@ export default ((tokenService: TokenService, mailService: MailService,
         const token: string = tokenService.create({
             email: req.query.email, // validity check not necessary, nodemailer handles this
         });
-        const loginUrl = `${WEB_ROOT}/#/logincallback?token=${token}`;
-        const pasteUrl = `${WEB_ROOT}/#/logincallback`;
+        const loginUrl = `${WEB_ROOT}/logincallback?token=${token}`;
+        const pasteUrl = `${WEB_ROOT}/logincallback`;
         mailService.sendMail(req.query.email, `Your Login Mail - ${WEBSITE_NAME}`, `
                     Hello, <br>
                     <br>
-                    <a href="${loginUrl}" alt="login url">CLICK HERE to log in to ${WEBSITE_NAME}.</a><br>
+                    <a href="${loginUrl}" alt="login url">click here to log in to ${WEBSITE_NAME}.</a><br>
                     <br>
                     Alternatively, you can paste the token<br>
                     ${token}<br>
@@ -46,7 +46,7 @@ export default ((tokenService: TokenService, mailService: MailService,
             try {
                 loginTicket = await googleOAuth2Client.verifyIdToken(({ // todo can this even throw?? docs pleeeease
                     audience: GOOGLE_CLIENT_ID,
-                    idToken: req.query.googletoken,
+                    idToken: req.query.token,
                 }));
             } catch (error) {
                 return undefined;
@@ -76,19 +76,19 @@ export default ((tokenService: TokenService, mailService: MailService,
     });
     /** post facebook token, return jwt */
     authenticationRouter.post('/facebooktokenlogin', async (req, res) => {
-        let result = await request.get(`https://graph.facebook.com/debug_token?input_token=${req.query.facebooktoken}&access_token=${FACEBOOK_APP_ID}|${FACEBOOK_APP_SECRET}`);
+        let result = await request.get(`https://graph.facebook.com/debug_token?input_token=${req.query.token}&access_token=${FACEBOOK_APP_ID}|${FACEBOOK_APP_SECRET}`);
         let { data } = JSON.parse(result);
         if (data.app_id !== FACEBOOK_APP_ID || !data.is_valid) {
-            res.status(UNAUTHORIZED).send('Facebook says the data is not valid.');
+            return res.status(UNAUTHORIZED).send('Facebook says the data is not valid.');
         }
-        result = await request.get(`https://graph.facebook.com/me?access_token=${req.query.facebooktoken}`);
+        result = await request.get(`https://graph.facebook.com/me?access_token=${req.query.token}`);
         data = JSON.parse(result);
         const token = tokenService.create({
             externalIdentifier: data.user_id,
             externalType: ExternalType.FACEBOOK,
             name: data.name,
         });
-        res.send(token);
+        return res.send(token);
     });
     return authenticationRouter;
 });

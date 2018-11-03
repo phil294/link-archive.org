@@ -1,4 +1,5 @@
 <script>
+import Vue from 'vue';
 import ProgressButton from './ProgressButton';
 
 /**
@@ -6,7 +7,7 @@ import ProgressButton from './ProgressButton';
  * to a promise. The button will wait for this promise
  * before it resets its loading state.
  */
-export default {
+export default Vue.extend({
 	name: 'PromiseButton',
 	extends: ProgressButton,
 	props: {
@@ -18,7 +19,7 @@ export default {
 	methods: {
 		async clicked() {
 			// this.constructor.super.options.methods.clicked.call(this); // #2977
-			ProgressButton.methods.clicked.call(this);
+			ProgressButton.methods.clicked.call(this); // does not work with vue.extend in progressbutton
 			try {
 				await this.$props.action();
 			} finally {
@@ -26,5 +27,5 @@ export default {
 			}
 		},
 	},
-};
+});
 </script>

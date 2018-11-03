@@ -8,12 +8,10 @@
 </template>
 
 <script>
-import {
-	SESSION_LOGIN_WITH_TOKEN,
-} from '@/store/actions';
+import Vue from 'vue';
 import PromiseForm from '@/components/PromiseForm';
 
-export default {
+export default Vue.extend({
 	name: 'TokenInput',
 	components: {
 		PromiseForm,
@@ -37,11 +35,11 @@ export default {
 		/** throws */
 		async loginWithToken() {
 			this.$data.tokenError = '';
-			this.$store.dispatch(`session/${SESSION_LOGIN_WITH_TOKEN}`, this.$data.tokenModel);
+			this.$store.dispatch('session/loginWithToken', this.$data.tokenModel);
 			this.$emit('success');
 		},
 	},
-};
+});
 </script>
 
 <style scoped>

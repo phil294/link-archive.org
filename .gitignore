@@ -21,3 +21,4 @@ todo*
 *.ntvs*
 *.njsproj
 *.sln
+*.code-workspace

@@ -3,7 +3,9 @@
 </template>
 
 <script>
-export default {
+import Vue from 'vue';
+
+export default Vue.extend({
 	name: 'Index',
 	asyncData({ store }) {
 		// return store.dispatch('test');
@@ -11,5 +13,5 @@ export default {
 	computed: {
 
 	},
-};
+});
 </script>
