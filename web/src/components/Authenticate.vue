@@ -9,15 +9,17 @@
 
 				<fieldset id="with-email" class="box">
 					<legend>With email</legend>
-					<promise-form v-if="!showMailSent" button-label="Request mail to log in" :action="requestMail">
-						<label for="email">Email</label>
-						<input id="email" v-model="email" type="email" name="email" placeholder="email@example.com" required>
+					<div v-if="!showMailSent">
+						<promise-form button-label="Request mail to log in" :action="requestMail">
+							<label for="email">Email</label>
+							<input id="email" v-model="email" type="email" name="email" placeholder="email@example.com" required>
+						</promise-form>
 						<read-more class="note" summary="(Why no password?)">
 							<p>You can simply login by requesting a login link via mail. If you are afraid someone else might have gained access to the login link, you can invalidate all current ones <a href="TODO">here</a>.</p>
 							<p>The main reasons for implementing a password-less login can be found in <a href="https://goo.gl/czxFnf">this article</a>. In short: Passwords are more of a security threat than measurement.</p>
 							<p>If you feel you <em>really</em> need to use a password, you can configure one in the account settings once you are logged in.</p>
 						</read-more>
-					</promise-form>
+					</div>
 					<div v-else id="mail-sent" class="padding-l">
 						<div>
 							<p>An email has been sent to <em>{{ email }}</em>.</p>
