@@ -8,9 +8,10 @@
 </template>
 
 <script>
+import Vue from 'vue';
 import PromiseForm from '@/components/PromiseForm';
 
-export default {
+export default Vue.extend({
 	name: 'TokenInput',
 	components: {
 		PromiseForm,
@@ -38,7 +39,7 @@ export default {
 			this.$emit('success');
 		},
 	},
-};
+});
 </script>
 
 <style scoped>

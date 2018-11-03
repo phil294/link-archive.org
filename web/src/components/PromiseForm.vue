@@ -7,6 +7,7 @@
 </template>
 
 <script>
+import Vue from 'vue';
 import ProgressButton from '@/components/ProgressButton';
 
 /**
@@ -14,7 +15,7 @@ import ProgressButton from '@/components/ProgressButton';
  * Component fires $submit event and calls `action` prop just
  * like `promise-button`.
  */
-export default {
+export default Vue.extend({
 	name: 'PromiseForm',
 	components: { ProgressButton },
 	props: {
@@ -55,7 +56,7 @@ export default {
 			}
 		},
 	},
-};
+});
 </script>
 
 <style scoped>

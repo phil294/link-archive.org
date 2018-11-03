@@ -10,10 +10,12 @@
 </template>
 
 <script>
+import Vue from 'vue';
+
 /**
  * <details>-wrapper
  */
-export default {
+export default Vue.extend({
 	name: 'ReadMore',
 	props: {
 		summary: {
@@ -27,7 +29,7 @@ export default {
 	methods: {
 
 	},
-};
+});
 </script>
 
 <style scoped>

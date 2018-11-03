@@ -3,10 +3,11 @@
 </template>
 
 <script>
+import Vue from 'vue';
 import TokenInput from '@/components/TokenInput';
 
 /** Route '/logincallback': "Callback" handler for email links, google and alike. */
-export default {
+export default Vue.extend({
 	name: 'LoginCallbackHandler',
 	components: {
 		TokenInput,
@@ -19,7 +20,7 @@ export default {
 			this.$router.push('/');
 		},
 	},
-};
+});
 </script>
 
 <style scoped>

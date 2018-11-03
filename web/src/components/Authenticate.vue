@@ -51,6 +51,7 @@
 </template>
 
 <script>
+import Vue from 'vue';
 import { mapActions } from 'vuex';
 import TokenInput from '@/components/TokenInput';
 import PromiseButton from '@/components/PromiseButton';
@@ -127,7 +128,7 @@ facebookLoginProvider.login = function () {
 	});
 };
 
-export default {
+export default Vue.extend({
 	name: 'Authenticate',
 	components: {
 		TokenInput, PromiseButton, PromiseForm, ReadMore,
@@ -177,7 +178,7 @@ export default {
 		},
 
 	},
-};
+});
 </script>
 
 <style scoped>
