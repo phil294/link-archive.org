@@ -57,6 +57,7 @@ module.exports = {
     'vue/no-multi-spaces': 'off',
     'nonblock-statement-body-position': 'off',
     'curly': 'off',
-    'vue/html-closing-bracket-newline': 'off'
+    'vue/html-closing-bracket-newline': 'off',
+    'func-names': 'off'
   }
 }

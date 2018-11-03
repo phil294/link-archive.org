@@ -43,7 +43,7 @@ export default {
 		async externalLoginProviderLoginWithToken({ dispatch }, { token, providerName }) {
 			const response = await axios.post(`authentication/${providerName}tokenlogin?token=${token}`);
 			const jwt = response.data;
-			dispatch(SESSION_LOGIN_WITH_TOKEN, jwt);
+			dispatch('loginWithToken', jwt);
 		},
 		logout({ commit }) {
 			commit('setToken', null);
