@@ -59,6 +59,8 @@ import PromiseForm from '@/components/PromiseForm';
 import ReadMore from '@/components/ReadMore';
 import externalLoginProviders from '@/external-login-providers';
 
+const loadedExternalLoginProviders = {};
+
 export default Vue.extend({
 	name: 'Authenticate',
 	components: {
@@ -71,12 +73,10 @@ export default Vue.extend({
 		externalLoginProviders,
 	}),
 	async created() {
-		if (!window.loadedExternalLoginProviders)
-			window.loadedExternalLoginProviders = {};
 		this.$data.externalLoginProviders.forEach(async (provider) => {
-			if (!window.loadedExternalLoginProviders[provider.name]) {
+			if (!loadedExternalLoginProviders[provider.name]) {
 				await provider.load();
-				window.loadedExternalLoginProviders[provider.name] = true;
+				loadedExternalLoginProviders[provider.name] = true;
 			}
 			await provider.setup();
 		});
