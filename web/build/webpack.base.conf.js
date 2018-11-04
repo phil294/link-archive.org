@@ -32,7 +32,7 @@ const webpackBaseConfig = {
 		publicPath: '/dist/',
 	},
 	resolve: {
-		extensions: ['.js', '.vue', '.json'],
+		extensions: ['.js', '.vue', '.json', '.coffee'],
 		alias: {
 			'@': utils.resolve('src'),
 		},
@@ -51,6 +51,10 @@ const webpackBaseConfig = {
 					// extractCSS: isProduction, // FIXME
 					extractCSS: false,
 				},
+			},
+			{
+				test: /\.coffee$/,
+				loader: 'coffee-loader',
 			},
 			{
 				test: /\.js$/,

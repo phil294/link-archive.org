@@ -2,7 +2,7 @@ const webpack = require('webpack');
 const VueSSRServerPlugin = require('vue-server-renderer/server-plugin');
 
 module.exports = {
-	entry: './src/vue-entry-server.js',
+	entry: './src/vue-entry-server.coffee',
 	target: 'node',
 	devtool: 'source-map',
 	output: {

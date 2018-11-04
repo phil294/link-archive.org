@@ -39,38 +39,35 @@
 	</section>
 </template>
 
-<script>
-import { mapState, mapGetters, mapActions } from 'vuex';
-import Authenticate from '@/components/Authenticate';
-import ProgressButton from '@/components/ProgressButton';
+<script lang="coffee">
+import { mapState, mapGetters, mapActions } from 'vuex'
+import Authenticate from '@/components/Authenticate'
+import ProgressButton from '@/components/ProgressButton'
 
-export default {
-	name: 'App',
-	components: {
-		Authenticate, ProgressButton,
-	},
+export default
+	name: 'App'
+	components: { Authenticate, ProgressButton }
 	computed: {
 		...mapState([
-			'appName',
-			'loadingCounter',
-			'authenticateModal',
-		]),
+			'appName'
+			'loadingCounter'
+			'authenticateModal'
+		])
 		...mapState('session', [
-			'session',
-		]),
+			'session'
+		])
 		...mapGetters('session', [
-			'isLoggedIn',
-		]),
-	},
+			'isLoggedIn'
+		])
+	}
 	methods: {
 		...mapActions([
-			'showAuthenticateModal',
-		]),
+			'showAuthenticateModal'
+		])
 		...mapActions('session', [
-			'logout',
-		]),
-	},
-};
+			'logout'
+		])
+	}
 </script>
 
 <style scoped>

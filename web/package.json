@@ -54,6 +54,8 @@
     "chokidar": "^2.0.4",
     "chromedriver": "2.41.0",
     "clean-webpack-plugin": "^0.1.19",
+    "coffee-loader": "^0.9.0",
+    "coffeescript": "^2.3.2",
     "copy-webpack-plugin": "4.5.2",
     "cross-env": "5.2.0",
     "cross-spawn": "6.0.5",

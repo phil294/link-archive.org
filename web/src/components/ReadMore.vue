@@ -9,27 +9,20 @@
 	</details>
 </template>
 
-<script>
-import Vue from 'vue';
+<script lang="coffee">
+import Vue from 'vue'
 
-/**
+###
  * <details>-wrapper
- */
-export default Vue.extend({
-	name: 'ReadMore',
-	props: {
-		summary: {
-			type: String,
-			default: 'Read more',
-			required: true,
-		},
-	},
-	data: () => ({
-	}),
-	methods: {
-
-	},
-});
+###
+export default Vue.extend(
+	name: 'ReadMore'
+	props:
+		summary:
+			type: String
+			default: 'Read more'
+			required: true
+)
 </script>
 
 <style scoped>

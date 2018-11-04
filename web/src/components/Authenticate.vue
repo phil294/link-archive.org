@@ -50,64 +50,51 @@
 	</div>
 </template>
 
-<script>
-import Vue from 'vue';
-import { mapActions } from 'vuex';
-import TokenInput from '@/components/TokenInput';
-import PromiseButton from '@/components/PromiseButton';
-import PromiseForm from '@/components/PromiseForm';
-import ReadMore from '@/components/ReadMore';
-import externalLoginProviders from '@/external-login-providers';
+<script lang="coffee">
+import Vue from 'vue'
+import { mapActions } from 'vuex'
+import TokenInput from '@/components/TokenInput'
+import PromiseButton from '@/components/PromiseButton'
+import PromiseForm from '@/components/PromiseForm'
+import ReadMore from '@/components/ReadMore'
+import externalLoginProviders from '@/external-login-providers'
 
-const loadedExternalLoginProviders = {};
+loadedExternalLoginProviders = {}
 
-export default Vue.extend({
-	name: 'Authenticate',
-	components: {
-		TokenInput, PromiseButton, PromiseForm, ReadMore,
-	},
-	data: () => ({
-		email: '',
-		loading: false,
-		showMailSent: false,
-		externalLoginProviders,
-	}),
-	async created() {
-		this.$data.externalLoginProviders.forEach(async (provider) => {
-			if (!loadedExternalLoginProviders[provider.name]) {
-				await provider.load();
-				loadedExternalLoginProviders[provider.name] = true;
-			}
-			await provider.setup();
-		});
-	},
+export default Vue.extend(
+	name: 'Authenticate'
+	components: { TokenInput, PromiseButton, PromiseForm, ReadMore }
+	data: =>
+		email: ''
+		loading: false
+		showMailSent: false
+		externalLoginProviders: externalLoginProviders # todo shorthand?
+	created: ->
+		for provider from @$data.externalLoginProviders
+			if !loadedExternalLoginProviders[provider.name]
+				await provider.load() # todo without () ?
+				loadedExternalLoginProviders[provider.name] = true
+			await provider.setup()
 	methods: {
 		...mapActions([
-			'hideAuthenticateModal',
-		]),
-		async requestMail(event) {
-			this.$data.loading = true;
-			return this.$store.dispatch('session/requestTokenMail', event.target.elements.email.value) // using form data, not v-model
-				.then(() => {
-					this.$data.tokenError = '';
-					this.$data.showMailSent = true;
-				}).finally(() => {
-					this.$data.loading = false;
-				});
-		},
-		externalLogin(provider) {
-			return async () => {
-				const token = await provider.login();
-				await this.$store.dispatch('session/externalLoginProviderLoginWithToken', {
-					token, // todo can this throw?
-					providerName: provider.name,
-				});
-				this.$store.dispatch('hideAuthenticateModal');
-			};
-		},
-
-	},
-});
+			'hideAuthenticateModal'
+		])
+		requestMail: (event) ->
+			@$data.loading = true
+			try
+				await @$store.dispatch('session/requestTokenMail', event.target.elements.email.value) # using form data, not v-model
+				@$data.tokenError = ''
+				@$data.showMailSent = true
+			finally
+				@$data.loading = false
+		externalLogin: (provider) -> =>
+			token = await provider.login()
+			await @$store.dispatch('session/externalLoginProviderLoginWithToken',
+				token: token # todo can this throw?
+				providerName: provider.name)
+			@$store.dispatch('hideAuthenticateModal')
+	}
+)
 </script>
 
 <style scoped>

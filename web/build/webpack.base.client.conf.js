@@ -5,7 +5,7 @@ const ManifestPlugin = require('webpack-manifest-plugin');
 module.exports = {
 	entry: {
 		app: [
-			'./src/vue-entry-client.js',
+			'./src/vue-entry-client.coffee',
 		],
 	},
 	optimization: {
