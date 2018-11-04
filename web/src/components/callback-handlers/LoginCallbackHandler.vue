@@ -1,5 +1,5 @@
-<template>
-	<token-input :token="$route.query.token" @success="redirect()" />
+<template lang="slm">
+	token-input -token=$route.query.token %success=redirect
 </template>
 
 <script lang="coffee">

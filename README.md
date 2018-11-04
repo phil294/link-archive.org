@@ -5,7 +5,7 @@ API:
 - TypeORM
 
 WEB:
-- Vue.js, Coffeescript2, Vuex, axios
+- Vue.js, Coffeescript2, Slm, Vuex, axios
 
 - Passwordless E-mail login
 - 3rd party login

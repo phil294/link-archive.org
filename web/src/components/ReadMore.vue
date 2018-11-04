@@ -1,12 +1,8 @@
-<template>
-	<details>
-		<summary>
-			{{ summary }}
-		</summary>
-		<div id="details">
-			<slot />
-		</div>
-	</details>
+<template lang="slm">
+	details
+		summary {{ summary }}
+		div#details
+			slot
 </template>
 
 <script lang="coffee">

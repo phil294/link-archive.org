@@ -20,6 +20,7 @@ export default Vue.extend(
 			ProgressButton.methods.clicked.call(@) # does not work with vue.extend in progressbutton
 			try
 				await this.$props.action()
+			# todo error message like promiseform? aka google like mail login error
 			finally
 				this.$data.loading = false
 )

@@ -1,53 +1,47 @@
-<template>
-	<div id="modal">
-		<main class="box padding-xl">
-			<button id="close" type="button" @click="hideAuthenticateModal">
-				🗙
-			</button>
-			<!--<h1>Log in or create account</h1>-->
-			<div id="register-or-login">
-
-				<fieldset id="with-email" class="box">
-					<legend>With email</legend>
-					<div v-if="!showMailSent">
-						<promise-form button-label="Request mail to log in" :action="requestMail">
-							<label for="email">Email</label>
-							<input id="email" v-model="email" type="email" name="email" placeholder="email@example.com" required>
-						</promise-form>
-						<read-more class="note" summary="(Why no password?)">
-							<p>You can simply login by requesting a login link via mail. If you are afraid someone else might have gained access to the login link, you can invalidate all current ones <a href="TODO">here</a>.</p>
-							<p>The main reasons for implementing a password-less login can be found in <a href="https://goo.gl/czxFnf">this article</a>. In short: Passwords are more of a security threat than measurement.</p>
-							<p>If you feel you <em>really</em> need to use a password, you can configure one in the account settings once you are logged in.</p>
-						</read-more>
-					</div>
-					<div v-else id="mail-sent" class="padding-l">
-						<div>
-							<p>An email has been sent to <em>{{ email }}</em>.</p>
-							<p>You can log in by clicking the link in the email</p>
-							<p class="center"><strong>- OR -</strong></p>
-							<token-input @success="hideAuthenticateModal" />
-						</div>
-						<hr>
-						<a @click="showMailSent=false">
-							⮜ Send another mail
-						</a>
-					</div>
-				</fieldset>
-
-				<fieldset id="with-external" class="box">
-					<legend>Or</legend>
-					<div v-for="provider in externalLoginProviders" :key="provider.name">
-						<promise-button v-if="provider.initialized" :action="externalLogin(provider)">
-							<img :src="'static/'+provider.name+'.png'" class="logo">
-							Log in with {{ provider.name }}
-						</promise-button>
-						<div v-else class="note">Loading {{ provider.name }} login scripts...</div>
-					</div>
-				</fieldset>
-
-			</div>
-		</main>
-	</div>
+<template lang="slm">
+	div#modal
+		main.box.padding-xl
+			button#close type=button %click=hideAuthenticateModal 🗙
+			h1 Log in or create account	
+			div#register-or-login
+				fieldset#with-email.box
+					legend With email
+					div v-if="!showMailSent"
+						promise-form button-label="Request mail to log in" -action=requestMail
+							label for=email Email
+							input#email model=email type=email name=email placeholder=email@example.com required
+						read-more.note summary="(Why no password?)"
+							p
+								| You can simply login by requesting a login link via mail. If you are afraid someone else might have gained access to the login link, you can invalidate all current ones 
+								a href="TODO" here
+								| .
+							p
+								| The main reasons for implementing a password-less login can be found in 
+								a href="https://goo.gl/czxFnf" this article
+								|. In short: Passwords are more of a security threat than measurement.
+							p
+								| If you feel you 
+								em really
+								| need to use a password, you can configure one in the account settings once you are logged in.
+					div#mail-sent.padding-l v-else
+						div
+							p
+								| An email has been sent to
+								em {{ email }}
+							p
+								| You can log in by clicking the link in the email
+							p.center
+								strong - OR -
+							token-input %success=hideAuthenticateModal
+						hr
+						a %click=showMailSent=false ⮜ Send another mail
+				fieldset#with-external.box
+					legend Or
+					div v-for="provider in externalLoginProviders" -key=provider.name
+						promise-button if=provider.initialized -action=externalLogin(provider)
+							img.logo -src='static/'+provider.name+'.png'
+							| Log in with {{ provider.name }}
+						div.note v-else Loading {{ provider.name }} login scripts...
 </template>
 
 <script lang="coffee">

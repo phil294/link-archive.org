@@ -1,8 +1,7 @@
-<template>
-	<button :disabled="loading || disabled" :type="type" @click="clicked">
-		<slot v-if="!loading">Click me</slot>
-		<span v-else>loading...</span>
-	</button>
+<template lang="slm">
+	button -disabled="loading || disabled" -type=type %click=clicked
+		slot if=!loading Click me
+		span v-else loading...
 </template>
 
 <script lang="coffee">

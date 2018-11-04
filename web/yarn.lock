@@ -6743,6 +6743,11 @@ map-visit@^1.0.0:
   dependencies:
     object-visit "^1.0.0"
 
+marked@^0.3.2:
+  version "0.3.19"
+  resolved "https://registry.yarnpkg.com/marked/-/marked-0.3.19.tgz#5d47f709c4c9fc3c216b6d46127280f40b39d790"
+  integrity sha512-ea2eGWOqNxPcXv8dyERdSr/6FmzvWwzjMxpfGB/sbMccXoct+xY+YukPD+QTUZwyvK7BZwcr4m21WBOW41pAkg==
+
 math-random@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/math-random/-/math-random-1.0.1.tgz#8b3aac588b8a66e4975e3cdea67f7bb329601fac"
@@ -9926,6 +9931,27 @@ slide@^1.1.3, slide@^1.1.6, slide@~1.1.3, slide@~1.1.6:
   resolved "https://registry.yarnpkg.com/slide/-/slide-1.1.6.tgz#56eb027d65b4d2dce6cb2e2d32c4d4afc9e1d707"
   integrity sha1-VusCfWW00tzmyy4tMsTUr8nh1wc=
 
+slm-loader@^1.0.0-beta:
+  version "1.0.0-beta"
+  resolved "https://registry.yarnpkg.com/slm-loader/-/slm-loader-1.0.0-beta.tgz#b4b6bf2175016dc56ee9d790a8ae43c07bb40a64"
+  integrity sha512-KFAjVsfmlJbCP15gmjAWnyukzBRchMg4I2HiZSG2OqE2LZmLmS+JkyLJEMcFzXk/w6r8Nid0Mgbkaxjtx14Vug==
+  dependencies:
+    loader-utils "^1.1.0"
+    slm "^2.0.0"
+    slm-markdown "^1.0.0"
+
+slm-markdown@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/slm-markdown/-/slm-markdown-1.0.0.tgz#d82a409702938164bcab5b5d200232173803c2f3"
+  integrity sha1-2CpAlwKTgWS8q1tdIAIyFzgDwvM=
+  dependencies:
+    marked "^0.3.2"
+
+slm@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/slm/-/slm-2.0.0.tgz#da1a0634fbe2bf2c492464f07f101fb3b75db855"
+  integrity sha512-8XgPx7nHm5POoOMEO701zqhQRxJvCboRl1NWTxzHLmMe4U0BgRlbDWUC4zREScbNWBA7a8XdLTZJRTQRIDu3bw==
+
 smart-buffer@^1.0.13:
   version "1.1.15"
   resolved "https://registry.yarnpkg.com/smart-buffer/-/smart-buffer-1.1.15.tgz#7f114b5b65fab3e2a35aa775bb12f0d1c649bf16"
@@ -11327,6 +11353,14 @@ vue-server-renderer@2.5.17:
     resolve "^1.2.0"
     serialize-javascript "^1.3.0"
     source-map "0.5.6"
+
+vue-slm-lang-loader@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/vue-slm-lang-loader/-/vue-slm-lang-loader-1.0.0.tgz#2364e5c8aac83ff854b154952ebfde3912132b0b"
+  integrity sha512-EsTWAyGFX7lv2IRAG64Fn6TJSXEbRY+A37zkbo4KufghdqJf6PU2N83EtU0kxv419s9+jFP56zuB0F62NBRzHw==
+  dependencies:
+    loader-utils "^1.1.0"
+    slm "^2.0.0"
 
 vue-style-loader@4.1.2, vue-style-loader@^4.1.0:
   version "4.1.2"

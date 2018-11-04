@@ -1,9 +1,8 @@
-<template>
-	<form @submit.prevent="submit">
-		<slot />
-		<progress-button ref="submit" type="submit" :set-loading-automatically="false">{{ buttonLabel }}</progress-button>
-		<div v-if="errorMessage" class="error fade-in">{{ errorMessage }}</div>
-	</form>
+<template lang="slm">
+	form %submit.prevent=submit
+		slot
+		progress-button ref=submit type=submit -set-loading-automatically=false {{ buttonLabel }}
+		div.error.fade-in if=errorMessage {{ errorMessage }}
 </template>
 
 <script lang="coffee">
