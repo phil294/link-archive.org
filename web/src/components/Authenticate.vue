@@ -91,39 +91,32 @@ export default Vue.extend(
 )
 </script>
 
-<style scoped>
-#modal {
-	position:fixed;
-	z-index:9998;
-	top:0;
-	left:0;
-	padding: 2%;
-	width:100%;
-	height:100%;
-	box-sizing: border-box;
-	background: rgba(0,0,0,0.08);
-}
-main {
-	height:100%;
-	max-width:400px;
-	margin: 0 auto;
-	position: relative;
-}
-fieldset {
-	margin-bottom:20px;
-}
-#close {
-	position: absolute;
-	top:0 ;
-	right:0;
-}
-#with-external button {
-	display: flex;
-	align-items: center;
-	width:200px;
-	margin-bottom:10px;
-}
-#with-external button img.logo {
-	margin-right: 5px;
-}
+<style lang="stylus" scoped>
+#modal
+	position:fixed
+	top:0
+	left:0
+	padding: 2%
+	width:100%
+	height:100%
+	box-sizing: border-box
+	background: rgba(0,0,0,0.08)
+main
+	height:100%
+	max-width:400px
+	margin: 0 auto
+	position: relative
+fieldset
+	margin-bottom:20px
+#close
+	position: absolute
+	top:0
+	right:0
+#with-external button
+	display: flex
+	align-items: center
+	width:200px
+	margin-bottom:10px
+#with-external button img.logo 
+	margin-right: 5px
 </style>

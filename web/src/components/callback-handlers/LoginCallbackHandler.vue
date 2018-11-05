@@ -17,5 +17,5 @@ export default Vue.extend
 			this.$router.push '/'
 </script>
 
-<style scoped>
+<style lang="stylus" scoped>
 </style>

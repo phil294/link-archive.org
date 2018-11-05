@@ -70,44 +70,36 @@ export default
 	}
 </script>
 
-<style scoped>
-#app {
-	display:grid;
-	width: 100%;
-	height: 100%;
-	grid-template-areas:	"header"
+<style lang="stylus" scoped>
+#app
+	display:grid
+	width: 100%
+	height: 100%
+	grid-template-areas:	"header" \
 							"main";
-	/* grid-template-rows: 50px 1fr; */
-}
-#app > header {
-	grid-area: header;
-	border-bottom: 1px solid lightgrey;
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
-	align-items: center;
-}
-#app > header > nav {
-	display: flex;
-	flex-direction: row;
-}
-#app > header > nav {
-	display: flex;
-	flex-direction: row;
-}
-nav > a {
-	white-space: nowrap;
-	margin-right:10%;
-}
-nav > a.router-link-active {
-	font-weight: bold;
-}
-#loading {
-	flex: 1;
-	background: lightblue;
-	text-align:center;
-}
-#app > main {
-	grid-area: main;
-}
+	// grid-template-rows: 50px 1fr
+#app > header
+	grid-area: header
+	border-bottom: 1px solid lightgrey
+	display: flex
+	flex-direction: row
+	justify-content: space-between
+	align-items: center
+#app > header > nav
+	display: flex
+	flex-direction: row
+#app > header > nav
+	display: flex
+	flex-direction: row
+nav > a
+	white-space: nowrap
+	margin-right:10%
+nav > a.router-link-active
+	font-weight: bold
+#loading
+	flex: 1
+	background: lightblue
+	text-align:center
+#app > main
+	grid-area: main
 </style>

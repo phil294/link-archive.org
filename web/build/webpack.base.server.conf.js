@@ -16,8 +16,8 @@ module.exports = {
 	module: {
 		rules: [
 			{
-				test: /\.css$/,
-				loader: 'css-loader/locals',
+				test: /\.(css|styl(us)?)$/,
+				loader: 'null-loader',
 			},
 		],
 	},

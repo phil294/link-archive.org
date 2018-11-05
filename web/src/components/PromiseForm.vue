@@ -48,5 +48,5 @@ export default Vue.extend(
 )
 </script>
 
-<style scoped>
+<style lang="stylus" scoped>
 </style>

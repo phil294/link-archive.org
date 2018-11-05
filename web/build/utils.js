@@ -6,8 +6,7 @@ exports.resolve = dir => path.join(__dirname, '..', dir);
 
 exports.resolveCustomLoader = (loaderName) => {
 	const loaderFile = path.join(__dirname, 'custom-loaders', loaderName);
-	const loaderFileCoffee = `${loaderFile}.coffee`;
-	fs.writeFileSync(`${loaderFile}.js`, coffeescript.compile(fs.readFileSync(loaderFileCoffee, 'utf-8'))); // todo I dont know how to tell webpack to accept a coffeefile directly please fix me
+	fs.writeFileSync(`${loaderFile}.js`, coffeescript.compile(fs.readFileSync(`${loaderFile}.coffee`, 'utf-8'))); // todo I dont know how to tell webpack to accept a coffee loaderscript file directly please fix me
 	return loaderFile;
 };
 

@@ -37,5 +37,5 @@ export default
 			@$data.loading = true
 </script>
 
-<style scoped>
+<style lang="stylus" scoped>
 </style>

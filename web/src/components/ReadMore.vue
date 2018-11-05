@@ -21,8 +21,7 @@ export default Vue.extend(
 )
 </script>
 
-<style scoped>
-#details > * {
-	padding-left: 2vw;
-}
+<style lang="stylus" scoped>
+#details > *
+	padding-left: 2vw
 </style>
