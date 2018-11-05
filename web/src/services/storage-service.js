@@ -1,5 +1,7 @@
 const STORAGE_TOKEN = 'token';
 
+// todo rewrite
+
 export default {
 	getToken() {
 		return localStorage.getItem(STORAGE_TOKEN);

@@ -28,12 +28,11 @@ module.exports = merge.smartStrategy({
 		],
 	},
 	module: {
-		rules: [
-			{
-				test: /\.css$/,
+		rules: [/\.css$/, /\.styl(us)?$/]
+			.map(test => ({
+				test,
 				use: MiniCssExtractPlugin.loader,
-			},
-		],
+			})),
 	},
 	plugins: [
 		// extract css into its own file

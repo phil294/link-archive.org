@@ -32,7 +32,7 @@ const webpackBaseConfig = {
 		publicPath: '/dist/',
 	},
 	resolve: {
-		extensions: ['.js', '.vue', '.json'],
+		extensions: ['.js', '.vue', '.json', '.coffee'],
 		alias: {
 			'@': utils.resolve('src'),
 		},
@@ -53,9 +53,17 @@ const webpackBaseConfig = {
 				},
 			},
 			{
+				test: /\.coffee$/,
+				loader: 'coffee-loader',
+			},
+			{
 				test: /\.js$/,
 				loader: 'babel-loader',
 				exclude: /node_modules/,
+			},
+			{
+				test: /\.slm$/,
+				loader: utils.resolveCustomLoader('slm-loader'),
 			},
 			{
 				test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,

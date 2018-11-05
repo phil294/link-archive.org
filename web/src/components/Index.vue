@@ -1,17 +1,13 @@
-<template>
-	<div>INDEX</div>
+<template lang="slm">
+	div INDEX
 </template>
 
-<script>
-import Vue from 'vue';
+<script lang="coffee">
+import Vue from 'vue'
 
-export default Vue.extend({
-	name: 'Index',
-	asyncData({ store }) {
-		// return store.dispatch('test');
-	},
-	computed: {
-
-	},
-});
+export default Vue.extend(
+	name: 'Index'
+	asyncData: ({ store }) ->
+		# store.dispatch('test')
+)
 </script>

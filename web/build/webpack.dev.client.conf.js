@@ -15,12 +15,11 @@ module.exports = merge.smartStrategy({
 		filename: '[name].js',
 	},
 	module: {
-		rules: [
-			{
-				test: /\.css$/,
+		rules: [/\.css$/, /\.styl(us)?$/]
+			.map(test => ({
+				test,
 				use: 'vue-style-loader',
-			},
-		],
+			})),
 	},
 	plugins: [
 		new webpack.HotModuleReplacementPlugin(),

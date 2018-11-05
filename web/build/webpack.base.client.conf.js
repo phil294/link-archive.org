@@ -2,10 +2,17 @@ const webpack = require('webpack');
 const VueSSRClientPlugin = require('vue-server-renderer/client-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
 
+const cssLoader = {
+	loader: 'css-loader',
+	options: {
+		sourceMap: true,
+	},
+};
+
 module.exports = {
 	entry: {
 		app: [
-			'./src/vue-entry-client.js',
+			'./src/vue-entry-client.coffee',
 		],
 	},
 	optimization: {
@@ -16,14 +23,16 @@ module.exports = {
 	module: {
 		rules: [
 			{
-				test: /\.css$/,
+				test: /\.styl(us)?$/,
 				use: [
-					{
-						loader: 'css-loader',
-						options: {
-							sourceMap: true,
-						},
-					},
+					cssLoader,
+					'stylus-loader',
+				],
+			},
+			{
+				test: /\.css$/,
+				use: [ // todo loader
+					cssLoader,
 				],
 			},
 		],
