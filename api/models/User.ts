@@ -1,4 +1,5 @@
 import { BaseEntity, Column, Entity, ObjectID, ObjectIdColumn } from 'typeorm';
+import { INTERNAL_SERVER_ERROR, UNAUTHORIZED } from 'http-status-codes';
 
 enum ExternalType {
     GOOGLE,
@@ -7,7 +8,7 @@ enum ExternalType {
 
 @Entity()
 class User extends BaseEntity {
-    public static async findOneOrCreate(payload: User) {
+    public static async findOneOrCreate(payload: User, iat: number) {
         let userOptional: User | undefined;
         // external
         if (payload.externalType && payload.externalIdentifier) {
@@ -21,16 +22,18 @@ class User extends BaseEntity {
                 email: payload.email,
             });
         } else {
-            throw new Error('payload not identifiable'); // todo can this ever happen? would mean an invalid token generation somewhere
+            throw new Error(`${INTERNAL_SERVER_ERROR}`); // 'payload not identifiable' todo can this ever happen? would mean an invalid token generation somewhere
         }
-        // todo if payload.iat < userOptional.minIat: throw new Error('login expired') or status code etc. -> add method for invalidating all usertokens by setting minIat=date.now()/1000, effectively "logging out" a jwt. (should probably be using cookies instead)
-        // minIat: '<' + payload.iat,
         let user: User;
         if (!userOptional) {
             // this is a first valid token login. create account
             user = await payload.save();
         } else {
             user = userOptional;
+            if(iat < user.minIat) {
+                // minIat had been set to disallow the given token -> All tokens had been invalidated -> Expired -> Unauthorized
+                throw new Error(`${UNAUTHORIZED}`);
+            }
         }
         return user;
     }
@@ -47,6 +50,8 @@ class User extends BaseEntity {
     public name: string | undefined;
     @Column()
     public picture: string | undefined;
+    @Column()
+    public minIat: number = 0;
 
 }
 

@@ -18,10 +18,10 @@ module.exports = function setupDevServer(app) {
 	let template;
 	let clientManifest;
 
-	return new Promise((resolve) => {
+	return new Promise((ok) => {
 		const update = () => {
 			if (bundle && clientManifest) {
-				resolve({ bundle, template, clientManifest });
+				ok({ bundle, template, clientManifest });
 			}
 		};
 

@@ -1,47 +1,43 @@
 <template lang="slm">
-	div#modal
-		main.box.padding-xl
-			button#close type=button %click=hideAuthenticateModal 🗙
-			h1 Log in or create account	
-			div#register-or-login
-				fieldset#with-email.box
-					legend With email
-					div v-if="!showMailSent"
-						promise-form button-label="Request mail to log in" -action=requestMail
-							label for=email Email
-							input#email model=email type=email name=email placeholder=email@example.com required
-						read-more.note summary="(Why no password?)"
-							p
-								| You can simply login by requesting a login link via mail. If you are afraid someone else might have gained access to the login link, you can invalidate all current ones 
-								a href="TODO" here
-								| .
-							p
-								| The main reasons for implementing a password-less login can be found in 
-								a href="https://goo.gl/czxFnf" this article
-								|. In short: Passwords are more of a security threat than measurement.
-							p
-								| If you feel you 
-								em really
-								| need to use a password, you can configure one in the account settings once you are logged in.
-					div#mail-sent.padding-l v-else
-						div
-							p
-								| An email has been sent to
-								em {{ email }}
-							p
-								| You can log in by clicking the link in the email
-							p.center
-								strong - OR -
-							token-input %success=hideAuthenticateModal
-						hr
-						a %click=showMailSent=false ⮜ Send another mail
-				fieldset#with-external.box
-					legend Or
-					div v-for="provider in externalLoginProviders" -key=provider.name
-						promise-button if=provider.initialized -action=externalLogin(provider)
-							img.logo -src='static/'+provider.name+'.png'
-							| Log in with {{ provider.name }}
-						div.note v-else Loading {{ provider.name }} login scripts...
+	modal %close=hideAuthenticateModal
+		h1 Log in or create account	
+		div#register-or-login
+			fieldset#with-email.box
+				legend With email
+				div if=!showMailSent
+					promise-form button-label="Request mail to log in" -action=requestMail
+						label for=email Email
+						input#email model=email type=email name=email placeholder=email@example.com required
+					read-more.note summary="(Why no password?)"
+						p
+							| You can simply login by requesting a login link via mail. If you are afraid someone else might have gained access to the login link, you can invalidate all current ones in the user settings.
+						p
+							| The main reasons for implementing a password-less login can be found in 
+							a href="https://goo.gl/czxFnf" this article
+							|. In short: Passwords are more of a security threat than measurement.
+						p
+							| If you feel you 
+							em really
+							| need to use a password, you can configure one in the account settings once you are logged in.
+				div#mail-sent.padding-l v-else
+					div
+						p
+							| An email has been sent to
+							em {{ email }}
+						p
+							| You can log in by clicking the link in the email
+						p.center
+							strong - OR -
+						token-input %success=hideAuthenticateModal
+					hr
+					a %click=showMailSent=false ⮜ Send another mail
+			fieldset#with-external.box
+				legend Or
+				div v-for="provider in externalLoginProviders" -key=provider.name
+					promise-button.center if=provider.initialized -action=externalLogin(provider)
+						img.logo -src='static/'+provider.name+'.png'
+						| Log in with {{ provider.name }}
+					div.note v-else Loading {{ provider.name }} login scripts...
 </template>
 
 <script lang="coffee">
@@ -92,29 +88,11 @@ export default Vue.extend(
 </script>
 
 <style lang="stylus" scoped>
-#modal
-	position:fixed
-	top:0
-	left:0
-	padding: 2%
-	width:100%
+modal
 	height:100%
-	box-sizing: border-box
-	background: rgba(0,0,0,0.08)
-main
-	height:100%
-	max-width:400px
-	margin: 0 auto
-	position: relative
-fieldset
+	fieldset
 	margin-bottom:20px
-#close
-	position: absolute
-	top:0
-	right:0
 #with-external button
-	display: flex
-	align-items: center
 	width:200px
 	margin-bottom:10px
 #with-external button img.logo 

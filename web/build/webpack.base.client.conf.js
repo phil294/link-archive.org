@@ -31,9 +31,7 @@ module.exports = {
 			},
 			{
 				test: /\.css$/,
-				use: [ // todo loader
-					cssLoader,
-				],
+				loader: cssLoader,
 			},
 		],
 	},

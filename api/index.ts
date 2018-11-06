@@ -3,10 +3,10 @@ import express from 'express';
 import { NO_CONTENT } from 'http-status-codes';
 import 'reflect-metadata';
 import { Connection, createConnection } from 'typeorm';
-import authenticationRouter from './routers/authenticationRouter';
-import secureRouter from './routers/secureRouter';
-import MailService from './services/MailService';
-import TokenService from './services/TokenService';
+import authenticationRouter from './routers/authentication-router';
+import secureRouter from './routers/secure-router';
+import MailService from './services/mail-service';
+import TokenService from './services/token-service';
 
 const { log, error } = console;
 

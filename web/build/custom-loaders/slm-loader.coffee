@@ -45,7 +45,9 @@ module.exports = (slmdoc) ->
 			(?<=\s)(			# [WS]
 			v-else		|		# The keywords...	<- captured
 			required	|		# ...
-			disabled
+			disabled	|
+			draggable	|
+			selected	|
 			)(?=\s|$)			# [WS]
 		///g, '$1=""')			# Add =""
 	)()

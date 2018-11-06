@@ -1,12 +1,12 @@
 import createApp from './vue-app'
 
-export default (context) => new Promise((resolve, reject) =>
+export default (context) => new Promise((ok, notok) =>
 	{ app, router, store } = createApp()
 	router.push(context.url)
 	router.onReady( =>
 		matchedComponents = router.getMatchedComponents()
 		if !matchedComponents.length
-			return reject({ code: 404 })
+			return notok({ code: 404 })
 		Promise.all(matchedComponents.map((Component) =>
 			if Component.asyncData
 				return Component.asyncData(
@@ -14,7 +14,7 @@ export default (context) => new Promise((resolve, reject) =>
 					route: router.currentRoute)
 		)).then( =>
 			context.state = store.state # eslint-disable-line no-param-reassign
-			resolve(app)
-		).catch(reject)
+			ok(app)
+		).catch(notok)
 	, reject)
 )
