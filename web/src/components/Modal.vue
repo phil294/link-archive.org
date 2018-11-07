@@ -1,8 +1,10 @@
 <template lang="slm">
-div#modal.fill.center
+div#modal.fill.center %keyup.enter=close
 	main.box.padding-xl
 		button#close type=button %click=close 🗙
 		slot
+	div#background.fill %click=close
+		
 </template>
 
 <script lang="coffee">
@@ -29,4 +31,8 @@ main
 	position: absolute
 	top:0
 	right:0
+#background
+	position: absolute 
+	top: 0
+	left: 0
 </style>
