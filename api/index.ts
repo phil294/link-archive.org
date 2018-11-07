@@ -5,6 +5,7 @@ import 'reflect-metadata';
 import { Connection, createConnection } from 'typeorm';
 import authenticationRouter from './routers/authenticationRouter';
 import secureRouter from './routers/secureRouter';
+import productRouter from './routers/product-router';
 import MailService from './services/MailService';
 import TokenService from './services/TokenService';
 
@@ -45,6 +46,7 @@ app.use('/authentication', authenticationRouter(
     getEnv('WEB_ROOT'), getEnv('GOOGLE_CLIENT_ID'), getEnv('FACEBOOK_APP_ID'), getEnv('FACEBOOK_APP_SECRET'), getEnv('WEBSITE_NAME'),
 ));
 app.use('/secure', secureRouter(tokenService));
+app.use('/p', productRouter);
 
 (async () => {
     await connection;
