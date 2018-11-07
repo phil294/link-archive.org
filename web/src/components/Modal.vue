@@ -1,10 +1,9 @@
 <template lang="slm">
-div#modal.fill.center %keyup.enter=close
+div#modal.fill.center %keyup.esc=close tabindex=-1
+	div#background.fill %click=close
 	main.box.padding-xl
 		button#close type=button %click=close 🗙
 		slot
-	div#background.fill %click=close
-		
 </template>
 
 <script lang="coffee">
