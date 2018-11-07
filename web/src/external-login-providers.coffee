@@ -5,9 +5,9 @@ class ExternalLoginProvider
 
 	@appendScript: (url) ->
 		scriptEl = document.createElement('script')
-		new Promise((resolve, reject) => # todo
-			scriptEl.onload = resolve
-			scriptEl.onerror = reject
+		new Promise((ok, notok) =>
+			scriptEl.onload = ok
+			scriptEl.onerror = notok
 			scriptEl.src = url
 			document.head.appendChild(scriptEl))
 
@@ -27,8 +27,8 @@ class ExternalLoginProvider
 googleLoginProvider = new ExternalLoginProvider('google')
 googleLoginProvider.load = ->
 	await ExternalLoginProvider.appendScript('https://apis.google.com/js/api.js') # todo is this functionality available as a module?
-	await new Promise((resolve) =>
-		window.gapi.load('auth2', resolve))
+	await new Promise((ok) =>
+		window.gapi.load('auth2', ok))
 googleLoginProvider.initialize = ->
 	@googleAuth = await window.gapi.auth2.init(
 		client_id: process.env.GOOGLE_CLIENT_ID)
@@ -45,11 +45,11 @@ facebookLoginProvider.load = ->
 		xfbml: true
 		version: 'v3.0')
 facebookLoginProvider.login = ->
-	new Promise((resolve, reject) =>
+	new Promise((ok, notok) =>
 		window.FB.login((response) =>
 			if response.status == 'connected'
-				resolve(response.authResponse.accessToken)
+				ok(response.authResponse.accessToken)
 			else
-				reject(response)))
+				notok(response)))
 
 export default [ googleLoginProvider, facebookLoginProvider ]

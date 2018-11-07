@@ -1,29 +1,49 @@
 (function() {
-  var slm;
+  var replaces, slm, standaloneKeywords;
 
   slm = require('slm');
 
-  module.exports = function(slmdoc) {
-    // Allow inline comments: # followed by whitespace
-    // Allow attributes without quotes syntax. E.g: input @click=myMethod
+  // Things to replace
+  replaces = [
+    [/(?<=\s)if="/g,
+    ' v-if="'],
+    [/(?<=\s)else(?=\s)/g,
+    'v-else'],
+    [/else-if="/g,
+    'v-else-if="'],
+    [/model="/g,
+    'v-model="'],
     // Allow alternative syntax for event handlers: %click="myMethod" translates to @click="myMethod"
-    // Allow alternative syntax for property binding: -src="mySrc" translates to :src="mySrc"
-    // Allow alternative syntax for v-model: model="myVar" translates to v-model="myVar"
-    // Allow alternative syntax for v-if: if="myVar" translates to v-if="myVar"
-    // Allow standalone keywords to work without value assignment. To be extended. E.g.: div v-else hello
-    return slm.compile(slmdoc.replace(/# .*/g, '').replace(/(?<=\s[a-z.@%:-]+=)([^\s"]+)(?=\s|$)/g, '"$1"').replace(/(?<=\s)%(?=[a-z.-]+="[^"]+"\s|$)/g, '@').replace(/(?<=\s)-(?=[a-z.-]+="[^"]+"\s|$)/g, ':').replace(/(?<=\s)model(?=="[^"]+"\s|$)/g, 'v-model').replace(/(?<=\s)if(?=="[^"]+"\s|$)/g, 'v-if').replace(/(?<=\s)(v-else|required|disabled)(?=\s|$)/g, '$1=""'))(); // [WS]%src= // Add quotes // [WS] // Replace with @ // [WS] // Replace with v-model // [WS] // Add =""
-// The keywords...	<- captured
-// ...
-// [WS]
-// model			<- captured
-// ="myVar"
-// [WS]
-// %					<- captured
-// src=
-// "mySrc"
-// [WS]
-// mySrc				<- captured
-// [WS]
+    [/(?<=\s)%(?=[a-z.-]+=")/g,
+    '@'],
+    // Allow alternative syntax for property binding: -src="mySrc" translates to :src="mySrc". Tactical syntax highlighting error fixing quote: "
+    [/(?<=\s)-(?=[a-z.-]+=")/g,
+    ':']
+  ];
+
+  // Keywords that should allowed to be followed and preceded by whitespace without anything else. This has the potential to break plain text horribly
+  standaloneKeywords = ['v-else', 'required', 'disabled', 'draggable', 'selected', 'exact'];
+
+  module.exports = function(slmdoc) {
+    var keyword, rule;
+    // Allow inline comments: # followed by whitespace
+    
+    // Allow attributes without quotes syntax. E.g: input @click=myMethod
+    slmdoc = slmdoc.replace(/# .*/g, '').replace(/(?<=\s[a-z.@%:-]+=)([^\s"]+)(?=\s|$)/g, '"$1"'); // [WS]%src= // Add quotes
+    // mySrc				<- captured
+    // [WS]
+    
+    // All replace rules
+    for (rule of replaces) {
+      slmdoc = slmdoc.replace(rule[0], rule[1]);
+    }
+// All standalone keywords
+    for (keyword of standaloneKeywords) {
+      slmdoc = slmdoc.replace(new RegExp('(?<=\\s)(' + keyword + ')(?=\\s|$)', 'g'), '$1=""'); // [WS] // The keyword		<- captured // [WS]
+    }
+    
+    // Should now be pure coffee
+    return slm.compile(slmdoc)();
   };
 
 }).call(this);

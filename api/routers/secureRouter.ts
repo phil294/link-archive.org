@@ -1,7 +1,7 @@
 import express from 'express';
 import { UNAUTHORIZED } from 'http-status-codes';
-import { User } from '../models/User';
-import TokenService from '../services/TokenService';
+import { default as TokenService } from '../services/TokenService';
+import userRouter from './secure/userRouter';
 
 export default ((tokenService: TokenService) => {
     const secureRouter = express.Router();
@@ -15,9 +15,10 @@ export default ((tokenService: TokenService) => {
         }
         next();
     });
-    secureRouter.get('/', (_, res) => {
-        const user: User = res.locals.user;
-        res.send(`hi from secure. your id: ${user.id}`);
+    secureRouter.get('/refreshtoken', (_, res) => {
+        const token: string = tokenService.create({ ...res.locals.user });
+        res.send(token);
     });
+    secureRouter.use('/user', userRouter);
     return secureRouter;
 });

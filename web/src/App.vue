@@ -1,52 +1,32 @@
-<template>
-	<section id="app">
-		<div
-			v-if="authenticateModal"
-			id="authenticate-modal"
-			class="fade-in">
-			<authenticate />
-		</div>
-		<header class="padding">
-			<nav>
-				<router-link exact to="/">[LOGO]</router-link>
-				<router-link v-for="route in $router.options.routes"
-					v-if="!route.hidden" :key="route.path" exact :to="route.path">
-					{{ route.name }}
-				</router-link>
-			</nav>
-			<div
-				v-if="loadingCounter"
-				id="loading">
-				global-loading-counter-{{ loadingCounter }}
-			</div>
-			<div
-				v-if="isLoggedIn"
-				id="loginStatus">
-				Logged in as
-				<span v-if="session.name">{{ session.name }}</span>
-				<span v-else-if="session.email">{{ session.email }}</span>
-				<span v-else-if="session.externalType">{{ session.externalIdentifier }} [{{ session.externalType }}]</span>
-				<progress-button @click="logout">Logout</progress-button>
-			</div>
-			<button
-				v-if="!isLoggedIn"
-				@click="showAuthenticateModal">Authenticate
-			</button>
-		</header>
-		<main>
-			<router-view />
-		</main>
-	</section>
+<template lang="slm">
+	section#app.fill
+		authenticate.fade-in if=authenticateModal
+		header.center.padding
+			nav
+				router-link exact to=/ [LOGO]
+				router-link exact to=/settings
+					| Settings
+			div#loading if=loadingCounter
+				global-loading-counter-{{ loadingCounter }} # todo ??
+			div#loginStatus if=isLoggedIn
+				| Logged in as
+				span if=session.name {{ session.name }}
+				span else-if=session.email {{ session.email }}
+				span else-if=session.externalType {{ session.externalIdentifier }} [{{ session.externalType }}]
+				button %click=logout Logout
+			button if=!isLoggedIn %click=showAuthenticateModal
+				| Sign in
+		main
+			router-view
 </template>
 
 <script lang="coffee">
 import { mapState, mapGetters, mapActions } from 'vuex'
 import Authenticate from '@/components/Authenticate'
-import ProgressButton from '@/components/ProgressButton'
 
 export default
 	name: 'App'
-	components: { Authenticate, ProgressButton }
+	components: { Authenticate }
 	computed: {
 		...mapState([
 			'appName'
@@ -73,24 +53,13 @@ export default
 <style lang="stylus" scoped>
 #app
 	display:grid
-	width: 100%
-	height: 100%
 	grid-template-areas:	"header" \
 							"main";
 	// grid-template-rows: 50px 1fr
 #app > header
 	grid-area: header
 	border-bottom: 1px solid lightgrey
-	display: flex
-	flex-direction: row
 	justify-content: space-between
-	align-items: center
-#app > header > nav
-	display: flex
-	flex-direction: row
-#app > header > nav
-	display: flex
-	flex-direction: row
 nav > a
 	white-space: nowrap
 	margin-right:10%
@@ -102,4 +71,267 @@ nav > a.router-link-active
 	text-align:center
 #app > main
 	grid-area: main
+</style>
+
+<style lang="stylus">
+
+// SAKURA /////////////////////////
+
+/* Sakura.css v1.0.0
+ * ================
+ * Minimal css theme.
+ * Project: https://github.com/oxalorg/sakura
+    MIT License
+
+    Copyright (c) 2016 Mitesh Shah
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
+ */
+
+// @import 'https://fonts.googleapis.com/css?family=Fira+Mono|Noto+Serif|Noto+Sans:300,400,500';
+
+:root {
+  --color-main: #222;
+  --color-hover: #555;
+  --color-border: #000;
+}
+
+/* Body */
+html {
+  font-family: "Noto Serif", "Arial", "Helvetica", sans-serif;
+}
+
+body {
+  color: #4a4a4a;
+  background-color: #fff;
+}
+
+/* todo
+@media (max-width: 684px) {
+  body {
+    font-size: 1.53rem; } }
+
+@media (max-width: 382px) {
+  body {
+    font-size: 1.35rem; } }
+*/
+
+h1, h2, h3, h4, h5, h6 {
+  line-height: 1.1;
+  font-family: Verdana, Geneva, sans-serif;
+  font-weight: 700;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  -ms-word-break: break-all;
+  word-break: break-word;
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto; }
+
+h1 {
+  font-size: 2.35em; }
+
+h2 {
+  font-size: 2.00em; }
+
+h3 {
+  font-size: 1.75em; }
+
+h4 {
+  font-size: 1.5em; }
+
+h5 {
+  font-size: 1.25em; }
+
+h6 {
+  font-size: 1em; }
+
+small, sub, sup {
+  font-size: 75%; }
+
+a {
+  text-decoration: none;
+  color: var(--color-main); }
+  a:hover {
+    color: var(--color-hover);
+    border-bottom: 2px solid var(--color-border); }
+
+ul {
+  padding-left: 1.4em; }
+
+li {
+  margin-bottom: 0.4em; }
+
+blockquote {
+  font-style: italic;
+  margin-left: 1.5em;
+  padding-left: 1em;
+  border-left: 3px solid var(--color-main); }
+
+img {
+  max-width: 100%; }
+
+/* Pre and Code */
+pre {
+  background-color: #f1f1f1;
+  display: block;
+  padding: 1em;
+  overflow-x: auto; }
+
+code {
+  font-size: 0.9em;
+  padding: 0 0.5em;
+  background-color: #f1f1f1;
+  white-space: pre-wrap; }
+
+pre > code {
+  padding: 0;
+  background-color: transparent;
+  white-space: pre; }
+
+/* Tables */
+table {
+  text-align: justify;
+  width: 100%;
+  border-collapse: collapse; }
+
+td, th {
+  padding: 0.5em;
+  border-bottom: 1px solid #f1f1f1; }
+
+textarea {
+  width: 100%; }
+
+.button, button, input[type="submit"], input[type="reset"], input[type="button"] {
+  display: inline-block;
+  padding: 5px 10px;
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  background-color: var(--color-main);
+  color: #f9f9f9;
+  border-radius: 1px;
+  border: 1px solid var(--color-border);
+  cursor: pointer;
+  box-sizing: border-box; }
+  .button[disabled], button[disabled], input[type="submit"][disabled], input[type="reset"][disabled], input[type="button"][disabled] {
+    cursor: default;
+    opacity: .5; }
+  .button:focus, .button:hover, button:focus, button:hover, input[type="submit"]:focus, input[type="submit"]:hover, input[type="reset"]:focus, input[type="reset"]:hover, input[type="button"]:focus, input[type="button"]:hover {
+    background-color: var(--color-hover);
+    border-color: var(--color-hover);
+    color: #f9f9f9;
+    outline: 0; }
+
+textarea, select, input {
+  color: #4a4a4a;
+  padding: 6px 10px;
+  /* The 6px vertically centers text on FF, ignored by Webkit */
+  margin-bottom: 10px;
+  background-color: #f1f1f1;
+  border: 1px solid #f1f1f1;
+  border-radius: 4px;
+  box-shadow: none;
+  box-sizing: border-box; }
+  textarea:focus, select:focus, input[type]:focus {
+    border: 1px solid var(--color-border);
+    outline: 0; }
+
+input[type="checkbox"]:focus {
+  outline: 1px dotted var(--color-border); }
+
+legend, label {
+  display: inline-block;
+  margin-bottom: .5rem;
+}
+legend {
+  font-weight: 600; }
+
+
+// GLOBAL ///////////////////////// 
+
+body, html {
+    padding: 0;
+    margin: 0;
+}
+input:not([type=checkbox]), label {
+    width: 100%;
+}
+input[type=checkbox] + label {
+    display: inline;
+}
+a {
+    cursor: pointer;
+}
+fieldset {
+    border: 2px solid #eeeeee;
+}
+details > summary {
+    cursor: pointer;
+}
+form > *:not(:last-child) {
+    margin-bottom: 10px;
+}
+
+// CLASSES /////////////////////////
+
+.padding
+    padding: 0.5vw
+.padding-l
+    padding: 1vw
+.padding-xl
+    padding: 3vw
+.note
+    font-size:80%
+    opacity:0.8
+@keyframes fadein
+    from {opacity: 0}
+    to {opacity: 1}
+// works with v-if etc.
+.fade-in
+    animation: fadein 0.5s
+.fade-toggle
+    transition: opacity 0.5s
+// does not work with v-if, keeps size, but enables fade out animation. use like: ... class="fade-toggle" :class="{hidden:_var_}"
+.fade-toggle.hidden
+    opacity: 0
+.error
+    color: darkred // css4 @apply fade-in
+.flex
+    display: flex
+.center-w, .center-h
+    @extend .flex
+.center-w
+    justify-content: center
+.center-h
+    align-items: center
+.center
+    @extend .center-w, .center-h
+.fill-w
+    width: 100%
+.fill-h
+    height: 100%
+.fill
+    @extend .fill-w, .fill-h
+.box
+    box-shadow: 3px 3px 4px #ddd
+    background: rgba(255,255,255,0.8)
+
 </style>

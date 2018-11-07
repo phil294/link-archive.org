@@ -36,4 +36,10 @@ export default
 		logout: ({ commit }) ->
 			commit('setToken', null)
 			commit('setSession', null)
-			storageService.set('token', null)
+			storageService.setToken(null)
+		invalidateAllTokens: ({ dispatch }) ->
+			now = Date.now() / 1000
+			response = await axios.get('secure/refreshtoken') # date + 1
+			jwt = response.data
+			await dispatch('loginWithToken', jwt) # shouldnt be called login..? is just setting token
+			await axios.patch('secure/user', { minIat: now - 1 }) # this might also log out the current user if his date is inaccurate. but can live with that

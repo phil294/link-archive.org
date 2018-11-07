@@ -8,7 +8,7 @@ class TokenService {
     }
     /** validates or throws, and returns queried/created user from db */
     public async toUser(token: string): Promise<User> {
-        const payload: User = decode(token, this.tokenSecret);
+        const payload: any = decode(token, this.tokenSecret);
         return User.findOneOrCreate(payload);
     }
     /** create a never-expering token. no validity checks here for customData. todo? */
