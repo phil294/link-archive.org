@@ -5,8 +5,8 @@ import 'reflect-metadata';
 import { Connection, createConnection } from 'typeorm';
 import authenticationRouter from './routers/authentication-router';
 import secureRouter from './routers/secure-router';
-import MailService from './services/mail-service';
-import TokenService from './services/token-service';
+import { default as MailService } from './services/mail-service';
+import { default as TokenService } from './services/token-service';
 
 const { log, error } = console;
 

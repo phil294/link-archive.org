@@ -45,6 +45,7 @@ import Vue from 'vue'
 import { mapActions } from 'vuex'
 import TokenInput from '@/components/TokenInput'
 import PromiseButton from '@/components/PromiseButton'
+import Modal from '@/components/Modal'
 import PromiseForm from '@/components/PromiseForm'
 import ReadMore from '@/components/ReadMore'
 import externalLoginProviders from '@/external-login-providers'
@@ -53,10 +54,9 @@ loadedExternalLoginProviders = {}
 
 export default Vue.extend(
 	name: 'Authenticate'
-	components: { TokenInput, PromiseButton, PromiseForm, ReadMore }
+	components: { TokenInput, PromiseButton, PromiseForm, ReadMore, Modal }
 	data: =>
 		email: ''
-		loading: false
 		showMailSent: false
 		externalLoginProviders: externalLoginProviders # todo shorthand?
 	created: ->
@@ -70,17 +70,12 @@ export default Vue.extend(
 			'hideAuthenticateModal'
 		])
 		requestMail: (event) ->
-			@$data.loading = true
-			try
-				await @$store.dispatch('session/requestTokenMail', event.target.elements.email.value) # using form data, not v-model
-				@$data.tokenError = ''
-				@$data.showMailSent = true
-			finally
-				@$data.loading = false
+			await @$store.dispatch('session/requestTokenMail', event.target.elements.email.value) # using form data, not v-model
+			@$data.showMailSent = true
 		externalLogin: (provider) -> =>
 			token = await provider.login()
 			await @$store.dispatch('session/externalLoginProviderLoginWithToken',
-				token: token # todo can this throw?
+				token: token # todo can this throw? #todo shorthand
 				providerName: provider.name)
 			@$store.dispatch('hideAuthenticateModal')
 	}
@@ -88,9 +83,7 @@ export default Vue.extend(
 </script>
 
 <style lang="stylus" scoped>
-modal
-	height:100%
-	fieldset
+fieldset
 	margin-bottom:20px
 #with-external button
 	width:200px

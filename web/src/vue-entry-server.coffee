@@ -16,5 +16,5 @@ export default (context) => new Promise((ok, notok) =>
 			context.state = store.state # eslint-disable-line no-param-reassign
 			ok(app)
 		).catch(notok)
-	, reject)
+	, notok)
 )

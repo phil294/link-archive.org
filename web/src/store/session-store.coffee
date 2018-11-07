@@ -42,4 +42,4 @@ export default
 			# response = await axios.get('secure/refreshtoken') # date + 1
 			# jwt = response.data
 			# await dispatch('loginWithToken', jwt) # shouldnt be called login..? is just setting token
-			await axios.patch('secure/user/', { minIat: now })
+			await axios.patch('secure/user', { minIat: now })

@@ -2,7 +2,7 @@
 div#modal.fill.center
 	main.box.padding-xl
 		button#close type=button %click=close 🗙
-			slot
+		slot
 </template>
 
 <script lang="coffee">
@@ -11,8 +11,7 @@ import Vue from 'vue'
 export default Vue.extend(
 	name: 'Modal'
 	methods:
-		close: ->
-			@emit('close')
+		close: -> @$emit('close')
 )
 </script>
 
@@ -25,6 +24,7 @@ export default Vue.extend(
 	background: rgba(0,0,0,0.08)
 main
 	max-width:400px
+	position: relative
 #close
 	position: absolute
 	top:0

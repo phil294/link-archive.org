@@ -4,8 +4,8 @@ import { LoginTicket, TokenPayload } from 'google-auth-library/build/src/auth/lo
 import { INTERNAL_SERVER_ERROR, UNAUTHORIZED } from 'http-status-codes';
 import * as request from 'request-promise-native';
 import { ExternalType } from '../models/user';
-import MailService from '../services/mail-service';
-import TokenService from '../services/token-service';
+import { default as MailService } from '../services/mail-service';
+import { default as TokenService } from '../services/token-service';
 
 export default ((tokenService: TokenService, mailService: MailService,
                  WEB_ROOT: string, GOOGLE_CLIENT_ID: string, FACEBOOK_APP_ID: string, FACEBOOK_APP_SECRET: string, WEBSITE_NAME: string) => {

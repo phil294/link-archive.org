@@ -1,53 +1,49 @@
 slm = require('slm')
 
+# Things to replace
+replaces = [
+	[/(?<=\s)if="/g, ' v-if="']
+	[/else="/g, 'v-else="']
+	[/else-if="/g, 'v-else-if="']
+	[/model="/g, 'v-model="']
+	# Allow alternative syntax for event handlers: %click="myMethod" translates to @click="myMethod"
+	[/(?<=\s)%(?=[a-z.-]+=")/g, '@']
+	# Allow alternative syntax for property binding: -src="mySrc" translates to :src="mySrc". Tactical syntax highlighting error fixing quote: "
+	[/(?<=\s)-(?=[a-z.-]+=")/g, ':']
+]
+
+# Keywords that should allowed to be followed and preceded by whitespace without anything else. This has the potential to break plain text horribly
+standaloneKeywords = [
+	'v-else'
+	'required'
+	'disabled'
+	'draggable'
+	'selected'
+	'exact'
+]
+
 module.exports = (slmdoc) ->
-	slm.compile(slmdoc
-		# Allow inline comments: # followed by whitespace
-		.replace(/# .*/g, '')
-		# Allow attributes without quotes syntax. E.g: input @click=myMethod
-		.replace(///
-			(?<=\s[a-z.@%:-]+=)	# [WS]%src=
-			([^\s"]+)			# mySrc				<- captured
-			(?=\s|$)			# [WS]
-		///g, '"$1"')			# Add quotes
-		# Allow alternative syntax for event handlers: %click="myMethod" translates to @click="myMethod"
-		.replace(///
-			(?<=\s)				# [WS]
-			%					# %					<- captured
-			(?=[a-z.-]+=		# src=
-			"[^"]+"				# "mySrc"
-			\s|$)				# [WS]
-		///g, '@')				# Replace with @
-		# Allow alternative syntax for property binding: -src="mySrc" translates to :src="mySrc"
-		.replace(///
-			(?<=\s)
-			-
-			(?=[a-z.-]+=
-			"[^"]+"
-			\s|$)
-		///g, ':')
-		# Allow alternative syntax for v-model: model="myVar" translates to v-model="myVar"
-		.replace(///
-			(?<=\s)				# [WS]
-			model				# model			<- captured
-			(?=="[^"]+"			# ="myVar"
-			\s|$)				# [WS]
-		///g, 'v-model')		# Replace with v-model
-		# Allow alternative syntax for v-if: if="myVar" translates to v-if="myVar"
-		.replace(///
-			(?<=\s)
-			if
-			(?=="[^"]+"
-			\s|$)
-		///g, 'v-if')
-		# Allow standalone keywords to work without value assignment. To be extended. E.g.: div v-else hello
-		.replace(///
-			(?<=\s)(			# [WS]
-			v-else		|		# The keywords...	<- captured
-			required	|		# ...
-			disabled	|
-			draggable	|
-			selected	|
-			)(?=\s|$)			# [WS]
-		///g, '$1=""')			# Add =""
-	)()
+	# Allow inline comments: # followed by whitespace
+	slmdoc = slmdoc.replace(/# .*/g, '')
+	
+	# Allow attributes without quotes syntax. E.g: input @click=myMethod
+	.replace(///
+		(?<=\s[a-z.@%:-]+=)	# [WS]%src=
+		([^\s"]+)			# mySrc				<- captured
+		(?=\s|$)			# [WS]
+	///g, '"$1"')			# Add quotes
+	
+	# All replace rules
+	for rule from replaces
+		slmdoc = slmdoc.replace(rule[0], rule[1])
+
+	# All standalone keywords
+	for keyword from standaloneKeywords
+		slmdoc = slmdoc.replace(new RegExp(
+			'(?<=\\s)(' \	# [WS]
+			+ keyword \		# The keyword		<- captured
+			+ ')(?=\\s|$)'	# [WS]
+		, 'g'), '$1=""')
+	
+	# Should now be pure coffee
+	return slm.compile(slmdoc)()
