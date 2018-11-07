@@ -1,13 +1,13 @@
 <template lang="slm">
 	form %submit.prevent=submit
 		slot
-		progress-button ref=submit type=submit -set-loading-automatically=false {{ buttonLabel }}
+		one-time-button ref=submit type=submit -set-loading-automatically=false {{ buttonLabel }}
 		div.error.fade-in if=errorMessage {{ errorMessage }}
 </template>
 
 <script lang="coffee">
 import Vue from 'vue'
-import ProgressButton from '@/components/ProgressButton'
+import OneTimeButton from '@/components/OneTimeButton'
 
 ###
  * Standardform component: includes only submit (progress-)button.
@@ -16,7 +16,7 @@ import ProgressButton from '@/components/ProgressButton'
 ###
 export default Vue.extend(
 	name: 'PromiseForm'
-	components: { ProgressButton }
+	components: { OneTimeButton }
 	props:
 		buttonLabel:
 			type: String

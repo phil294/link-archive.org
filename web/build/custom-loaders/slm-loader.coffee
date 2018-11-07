@@ -3,7 +3,7 @@ slm = require('slm')
 # Things to replace
 replaces = [
 	[/(?<=\s)if="/g, ' v-if="']
-	[/else="/g, 'v-else="']
+	[/(?<=\s)else(?=\s)/g, 'v-else']
 	[/else-if="/g, 'v-else-if="']
 	[/model="/g, 'v-model="']
 	# Allow alternative syntax for event handlers: %click="myMethod" translates to @click="myMethod"

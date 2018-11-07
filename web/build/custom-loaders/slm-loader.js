@@ -7,8 +7,8 @@
   replaces = [
     [/(?<=\s)if="/g,
     ' v-if="'],
-    [/else="/g,
-    'v-else="'],
+    [/(?<=\s)else(?=\s)/g,
+    'v-else'],
     [/else-if="/g,
     'v-else-if="'],
     [/model="/g,

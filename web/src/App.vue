@@ -13,7 +13,7 @@
 				span if=session.name {{ session.name }}
 				span else-if=session.email {{ session.email }}
 				span else-if=session.externalType {{ session.externalIdentifier }} [{{ session.externalType }}]
-				progress-button %click=logout Logout
+				button %click=logout Logout
 			button if=!isLoggedIn %click=showAuthenticateModal
 				| Sign in
 		main
@@ -23,11 +23,10 @@
 <script lang="coffee">
 import { mapState, mapGetters, mapActions } from 'vuex'
 import Authenticate from '@/components/Authenticate'
-import ProgressButton from '@/components/ProgressButton'
 
 export default
 	name: 'App'
-	components: { Authenticate, ProgressButton }
+	components: { Authenticate }
 	computed: {
 		...mapState([
 			'appName'

@@ -15,6 +15,10 @@ export default ((tokenService: TokenService) => {
         }
         next();
     });
+    secureRouter.get('/refreshtoken', (_, res) => {
+        const token: string = tokenService.create({ ...res.locals.user });
+        res.send(token);
+    });
     secureRouter.use('/user', userRouter);
     return secureRouter;
 });

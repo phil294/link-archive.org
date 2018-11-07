@@ -1,7 +1,7 @@
 <template lang="slm">
-	button -disabled="loading || disabled" -type=type %click=clicked
-		slot if=!loading Click me
-		span v-else loading...
+	button -disabled="used" -type=type %click=clicked
+		slot if=!used Click me
+		span else {{ usedPrompt }}
 </template>
 
 <script lang="coffee">
@@ -17,24 +17,23 @@ export default
 		type:
 			type: String
 			default: 'button'
-		disabled:
-			type: Boolean
-			default: false
 		setLoadingAutomatically:
 			type: Boolean
-			default: true,
+			default: true
+		usedPrompt:
+			type: String
+			default: 'loading...'
 	data: =>
-		loading: false
+		used: false
 	methods:
 		clicked: ->
 			if @$props.setLoadingAutomatically
-				@$data.loading = true
+				@$data.used = true
 			@$emit('click')
-		# Consider using a normal button instead
 		reset: ->
-			@$data.loading = false
-		setLoading: ->
-			@$data.loading = true
+			@$data.used = false
+		setUsed: ->
+			@$data.used = true
 </script>
 
 <style lang="stylus" scoped>

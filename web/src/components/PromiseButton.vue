@@ -1,27 +1,41 @@
+<template lang="slm">
+	one-time-button -used-prompt=buttonPrompt %click=clicked ref=otb
+		slot
+</template>
+
 <script lang="coffee">
 import Vue from 'vue'
-import ProgressButton from './ProgressButton'
+import OneTimeButton from './OneTimeButton'
 
 ###
- * Pass an `action` to this component that will resolve
- * to a promise. The button will wait for this promise
- * before it resets its loading state.
+ * Pass an `action` to this component that will resolve to a promise. The button will wait for this promise before it resets its loading state.
 ###
 export default Vue.extend(
 	name: 'PromiseButton'
-	extends: ProgressButton
+	components: { OneTimeButton }
 	props:
 		action:
 			type: Function
 			required: true
+		resetAfterSuccess:
+			type: Boolean
+			default: true
+		successPrompt:
+			type: String
+			default: 'Done!'
+	data: =>
+		buttonPrompt: undefined
 	methods:
 		clicked: ->
-			# this.constructor.super.options.methods.clicked.call(this); # #2977
-			ProgressButton.methods.clicked.call(@) # does not work with vue.extend in progressbutton
 			try
 				await this.$props.action()
-			# todo error message like promiseform? aka google like mail login error
-			finally
-				this.$data.loading = false
+				if @$props.resetAfterSuccess
+					@$refs.otb.reset()
+				else
+					@$data.buttonPrompt = @$props.successPrompt
+			catch
+				# todo error message like promiseform? aka google like mail login error
+				@$refs.otb.reset()
+
 )
 </script>
