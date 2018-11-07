@@ -1,5 +1,5 @@
 import { decode, encode } from 'jwt-simple';
-import { User } from '../models/user';
+import { User } from '../models/User';
 
 class TokenService {
     private tokenSecret: string;
@@ -9,8 +9,7 @@ class TokenService {
     /** validates or throws, and returns queried/created user from db */
     public async toUser(token: string): Promise<User> {
         const payload: any = decode(token, this.tokenSecret);
-        const user: User = payload;
-        return User.findOneOrCreate(user, payload.iat);
+        return User.findOneOrCreate(payload);
     }
     /** create a never-expering token. no validity checks here for customData. todo? */
     public create(customData: any): string {

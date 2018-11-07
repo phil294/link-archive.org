@@ -28,8 +28,11 @@ router.onReady(=>
         diffed = false
         # const activatedAsyncDataHooks = matched
         #    .filter((c, i) => diffed || (diffed = (prevMatched[i] !== c)))
+        # debugger
         activatedAsyncDataHooks = matched.filter((c, i) =>
-            return diffed || (diffed = (prevMatched[i] != c))
+            if diffed
+                return diffed
+            diffed = prevMatched[i] != c
         )
             .map((c) => c.asyncData)
             .filter((_) => _)

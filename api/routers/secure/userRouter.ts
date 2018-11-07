@@ -1,7 +1,7 @@
 import express from 'express';
 
 const secureRouter = express.Router();
-secureRouter.patch('/', (req, res) => {
+secureRouter.patch('/', async (req, res) => {
     const user = res.locals.user;
     [
         'minIat', // If set, this will lead to the invalidation of all tokens prior to the date
@@ -9,7 +9,8 @@ secureRouter.patch('/', (req, res) => {
         if (req.body[prop])
             user[prop] = req.body[prop];
     });
-    user.save();
+    await user.save();
+    res.send(user);
 });
 
 export default secureRouter;

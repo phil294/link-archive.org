@@ -1,9 +1,6 @@
 {
    "synchronize": true,
    "logging": false,
-   "entities": [
-      "models/**/*.ts"
-   ],
    "migrations": [
       "migration/**/*.ts"
    ],

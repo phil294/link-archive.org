@@ -3,9 +3,9 @@ import { OAuth2Client } from 'google-auth-library';
 import { LoginTicket, TokenPayload } from 'google-auth-library/build/src/auth/loginticket';
 import { INTERNAL_SERVER_ERROR, UNAUTHORIZED } from 'http-status-codes';
 import * as request from 'request-promise-native';
-import { ExternalType } from '../models/user';
-import { default as MailService } from '../services/mail-service';
-import { default as TokenService } from '../services/token-service';
+import { ExternalType } from '../models/User';
+import MailService from '../services/MailService';
+import TokenService from '../services/TokenService';
 
 export default ((tokenService: TokenService, mailService: MailService,
                  WEB_ROOT: string, GOOGLE_CLIENT_ID: string, FACEBOOK_APP_ID: string, FACEBOOK_APP_SECRET: string, WEBSITE_NAME: string) => {

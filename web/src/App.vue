@@ -4,7 +4,7 @@
 		header.center.padding
 			nav
 				router-link exact to=/ [LOGO]
-				router-link exact to=secure/settings
+				router-link exact to=/settings
 					| Settings
 			div#loading if=loadingCounter
 				global-loading-counter-{{ loadingCounter }} # todo ??
@@ -287,7 +287,7 @@ fieldset {
 details > summary {
     cursor: pointer;
 }
-form > * {
+form > *:not(:last-child) {
     margin-bottom: 10px;
 }
 

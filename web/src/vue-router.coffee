@@ -15,14 +15,9 @@ export default ->
 			name: 'LoginCallbackHandler'
 			component: => `import('@/components/callback-handlers/LoginCallbackHandler')`
 		,
-			path: '/secure',
-			children: [
-				path: 'settings',
-				name: 'Settings',
-				component: => `import('@/components/secure/Settings')`
-			,
-			]
-			
+			path: '/settings',
+			name: 'Settings',
+			component: => `import('@/components/secure/Settings')`
 		
 		# corresponding store modules can also be lazyloaded. see ssr vuejs docs
 

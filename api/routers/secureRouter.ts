@@ -1,7 +1,7 @@
 import express from 'express';
 import { UNAUTHORIZED } from 'http-status-codes';
-import { default as TokenService } from '../services/token-service';
-import userRouter from './secure/user-router';
+import { default as TokenService } from '../services/TokenService';
+import userRouter from './secure/userRouter';
 
 export default ((tokenService: TokenService) => {
     const secureRouter = express.Router();
@@ -14,9 +14,6 @@ export default ((tokenService: TokenService) => {
             return;
         }
         next();
-    });
-    secureRouter.get('/refreshtoken', (_, res) => {
-        res.end();
     });
     secureRouter.use('/user', userRouter);
     return secureRouter;

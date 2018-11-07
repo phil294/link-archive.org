@@ -38,7 +38,7 @@ export default
 			commit('setSession', null)
 			storageService.setToken(null)
 		invalidateAllTokens: ->
-			now = Date.now()
+			now = Date.now() / 1000
 			# response = await axios.get('secure/refreshtoken') # date + 1
 			# jwt = response.data
 			# await dispatch('loginWithToken', jwt) # shouldnt be called login..? is just setting token
