@@ -11,7 +11,7 @@ import searchStoreModule from '@/store/search-store'
 # import PromiseButton from '@/components/PromiseButton'
 # import PromiseForm from '@/components/PromiseForm'
 # import ReadMore from '@/components/ReadMore'
-import ResultViewTable from './result-view/ResultViewTable';
+import ResultViewTable from './result-view/ResultViewTable'
 
 export default Vue.extend(
 	name: 'ResultView'

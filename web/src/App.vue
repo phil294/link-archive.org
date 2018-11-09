@@ -1,20 +1,22 @@
 <template lang="slm">
 	section#app.fill
-		authenticate.fade-in if=authenticateModal
+		popup if=authenticatePopup %close=hideAuthenticatePopup
+			authenticate %authenticated=hideAuthenticatePopup
+		modal if=loadingCounter
+			.box.padding-l
+				| Loading... ({{ loadingCounter }})
 		header.center.padding
 			nav
 				router-link exact to=/ [LOGO]
 				router-link exact to=/settings Settings
 				router-link exact to=/p search result
-			div#loading if=loadingCounter
-				global-loading-counter-{{ loadingCounter }} # todo ??
 			div#loginStatus if=isLoggedIn
 				| Logged in as 
 				span if=session.name {{ session.name }}
 				span else-if=session.email {{ session.email }}
 				span else-if=session.externalType {{ session.externalIdentifier }} [{{ session.externalType }}]
 				button %click=logout Logout
-			button if=!isLoggedIn %click=showAuthenticateModal
+			button if=!isLoggedIn %click=showAuthenticatePopup
 				| Sign in
 		main
 			router-view
@@ -23,15 +25,17 @@
 <script lang="coffee">
 import { mapState, mapGetters, mapActions } from 'vuex'
 import Authenticate from '@/components/Authenticate'
+import Popup from '@/components/Popup'
+import Modal from '@/components/Modal'
 
 export default
 	name: 'App'
-	components: { Authenticate }
+	components: { Popup, Authenticate, Modal }
 	computed: {
 		...mapState([
 			'appName'
 			'loadingCounter'
-			'authenticateModal'
+			'authenticatePopup'
 		])
 		...mapState('session', [
 			'session'
@@ -42,7 +46,8 @@ export default
 	}
 	methods: {
 		...mapActions([
-			'showAuthenticateModal'
+			'hideAuthenticatePopup'
+			'showAuthenticatePopup'
 		])
 		...mapActions('session', [
 			'logout'
@@ -65,10 +70,6 @@ nav > a
 	margin-right:10%
 nav > a.router-link-active
 	font-weight: bold
-#loading
-	flex: 1
-	background: lightblue
-	text-align:center
 #app > main
 	grid-area: main
 </style>

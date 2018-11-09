@@ -32,10 +32,13 @@ if (isProd) {
 	require('./build/setup-dev-server.js')(server).then(
 		({ bundle, template, clientManifest }) => {
 			log('dev renderer initialized');
+			const prefetchload = true; // for debugging purposes, deactivable
 			renderer = Renderer.createBundleRenderer(bundle, {
 				template,
 				clientManifest,
 				runInNewContext: false,
+				shouldPrefetch: prefetchload ? false : () => false,
+				shouldPreload: prefetchload ? false : () => false,
 			});
 		},
 	);

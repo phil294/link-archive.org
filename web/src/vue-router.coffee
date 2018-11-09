@@ -22,8 +22,5 @@ export default ->
 			path: '/p',
 			name: 'ResultView',
 			component: => `import('@/components/ResultView')`
-		
-		# corresponding store modules can also be lazyloaded. see ssr vuejs docs
-
 		]
 	)

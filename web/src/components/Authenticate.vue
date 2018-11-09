@@ -1,43 +1,43 @@
 <template lang="slm">
-	modal %close=hideAuthenticateModal
-		h1 Log in or create account	
-		div#register-or-login
-			fieldset#with-email.box
-				legend With email
-				div if=!showMailSent
-					promise-form button-label="Request mail to log in" -action=requestMail
-						label for=email Email
-						input#email model=email type=email name=email placeholder=email@example.com required
-					read-more.note summary="(Why no password?)"
-						p
-							| You can simply login by requesting a login link via mail. If you are afraid someone else might have gained access to the login link, you can invalidate all current ones in the user settings.
-						p
-							| The main reasons for implementing a password-less login can be found in 
-							a href="https://goo.gl/czxFnf" this article
-							|. In short: Passwords are more of a security threat than measurement.
-						p
-							| If you feel you 
-							em really
-							| need to use a password, you can configure one in the account settings once you are logged in.
-				div#mail-sent.padding-l v-else
-					div
-						p
-							| An email has been sent to
-							em {{ email }}
-						p
-							| You can log in by clicking the link in the email
-						p.center
-							strong - OR -
-						token-input %success=hideAuthenticateModal
-					hr
-					a %click=showMailSent=false ⮜ Send another mail
-			fieldset#with-external.box
-				legend Or
-				div v-for="provider in externalLoginProviders" -key=provider.name
-					promise-button.center if=provider.initialized -action=externalLogin(provider)
-						img.logo -src='static/'+provider.name+'.png'
-						| Log in with {{ provider.name }}
-					div.note v-else Loading {{ provider.name }} login scripts...
+div
+	h1 Log in or create account	
+	div#register-or-login
+		fieldset#with-email.box
+			legend With email
+			div if=!showMailSent
+				promise-form button-label="Request mail to log in" -action=requestMail
+					label for=email Email
+					input#email model=email type=email name=email placeholder=email@example.com required
+				read-more.note summary="(Why no password?)"
+					p
+						| You can simply login by requesting a login link via mail. If you are afraid someone else might have gained access to the login link, you can invalidate all current ones in the user settings.
+					p
+						| The main reasons for implementing a password-less login can be found in 
+						a href="https://goo.gl/czxFnf" this article
+						|. In short: Passwords are more of a security threat than measurement.
+					p
+						| If you feel you 
+						em really
+						| need to use a password, you can configure one in the account settings once you are logged in.
+			div#mail-sent.padding-l v-else
+				div
+					p
+						| An email has been sent to
+						em {{ email }}
+					p
+						| You can log in by clicking the link in the email
+					p.center
+						strong - OR -
+					token-input %success=authenticated
+				hr
+				a %click=showMailSent=false ⮜ Send another mail
+		fieldset#with-external.box
+			legend Or
+			div v-for="provider in externalLoginProviders" -key=provider.name
+				promise-button.center if=provider.initialized -action=externalLogin(provider)
+					img.logo -src='static/'+provider.name+'.png'
+					| Log in with {{ provider.name }}
+				div.note v-else Loading {{ provider.name }} login scripts...
 </template>
 
 <script lang="coffee">
@@ -45,7 +45,6 @@ import Vue from 'vue'
 import { mapActions } from 'vuex'
 import TokenInput from '@/components/TokenInput'
 import PromiseButton from '@/components/PromiseButton'
-import Modal from '@/components/Modal'
 import PromiseForm from '@/components/PromiseForm'
 import ReadMore from '@/components/ReadMore'
 import externalLoginProviders from '@/external-login-providers'
@@ -54,7 +53,7 @@ loadedExternalLoginProviders = {}
 
 export default Vue.extend(
 	name: 'Authenticate'
-	components: { TokenInput, PromiseButton, PromiseForm, ReadMore, Modal }
+	components: { TokenInput, PromiseButton, PromiseForm, ReadMore }
 	data: =>
 		email: ''
 		showMailSent: false
@@ -66,9 +65,6 @@ export default Vue.extend(
 				loadedExternalLoginProviders[provider.name] = true
 			await provider.setup()
 	methods: {
-		...mapActions([
-			'hideAuthenticateModal'
-		])
 		requestMail: (event) ->
 			await @$store.dispatch('session/requestTokenMail', event.target.elements.email.value) # using form data, not v-model
 			@$data.showMailSent = true
@@ -77,7 +73,7 @@ export default Vue.extend(
 			await @$store.dispatch('session/externalLoginProviderLoginWithToken',
 				token: token # todo can this throw? #todo shorthand
 				providerName: provider.name)
-			@$store.dispatch('hideAuthenticateModal')
+			@$emit('authenticated')
 	}
 )
 </script>
