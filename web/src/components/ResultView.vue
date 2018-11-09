@@ -1,5 +1,5 @@
 <template lang="slm">
-	div.fill
+	div.center.fill
 		# result-view-filters
 		result-view-table
 </template>
@@ -15,10 +15,8 @@ import ResultViewTable from './result-view/ResultViewTable';
 export default Vue.extend(
 	name: 'ResultView'
 	components: { ResultViewTable }
-	asyncData: ({ store }) ->
+	asyncDataHook: ({ store }) ->
 		store.dispatch('search/search')
-	created: ->
-		@$store.dispatch('search/search')
 )
 </script>
 

@@ -1,5 +1,5 @@
 <template lang="slm">
-	table.center
+	table
 		thead
 			th
 			th v-for="attribute in attributes" -key=attribute.name
