@@ -9,7 +9,7 @@
 			div#loading if=loadingCounter
 				global-loading-counter-{{ loadingCounter }} # todo ??
 			div#loginStatus if=isLoggedIn
-				| Logged in as
+				| Logged in as 
 				span if=session.name {{ session.name }}
 				span else-if=session.email {{ session.email }}
 				span else-if=session.externalType {{ session.externalIdentifier }} [{{ session.externalType }}]
