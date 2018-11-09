@@ -1,6 +1,6 @@
 import Vuex from 'vuex'
 import Vue from 'vue'
-import session from './session-store'
+import sessionModule from './session-store'
 
 Vue.use(Vuex)
 
@@ -22,5 +22,7 @@ export default =>
 				commit('toggleAuthenticateModal', true)
 			hideAuthenticateModal: ({ commit }) ->
 				commit('toggleAuthenticateModal', false)
-		modules: { session }
+		modules:
+			session: sessionModule
+			# When adding here, see ssr docs. Global submodules *seem* to need a factory wrapper too
 	)
