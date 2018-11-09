@@ -36,7 +36,7 @@ export default
 		logout: ({ commit }) ->
 			commit('setToken', null)
 			commit('setSession', null)
-			storageService.setToken(null)
+			storageService.set('token', null)
 		invalidateAllTokens: ({ dispatch }) ->
 			now = Date.now() / 1000
 			response = await axios.get('secure/refreshtoken') # date + 1

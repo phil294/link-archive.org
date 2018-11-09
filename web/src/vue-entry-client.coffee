@@ -25,9 +25,12 @@ Vue.mixin(
     beforeMount: ->
         { asyncDataHook } = @$options
         if asyncDataHook
+            store.commit('increaseLoadingCounter')
             @$asyncDataLoaded = asyncDataHook(
                 store: @$store
                 route: @$route
+            ).finally( =>
+                store.commit('decreaseLoadingCounter')
             )
 )
 
