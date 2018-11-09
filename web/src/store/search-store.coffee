@@ -23,5 +23,7 @@ export default
 		setResult: (state, result) -> state.result = result
 	actions:
 		search: ({ commit, state }) ->
+			#if state.result
+			#	return
 			response = await axios.get("p/#{state.product}")
 			commit('setResult', response.data)

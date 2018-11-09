@@ -1,9 +1,10 @@
 <template lang="slm">
 	table
 		thead
-			th
-			th v-for="attribute in attributes" -key=attribute.name
-				| {{ attribute.name }}
+			tr
+				th
+				th v-for="attribute in attributes" -key=attribute.name
+					| {{ attribute.name }}
 		tbody
 			tr v-for="entry in result" # key? todo
 				td
