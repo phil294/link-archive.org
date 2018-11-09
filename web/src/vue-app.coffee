@@ -32,7 +32,7 @@ export default ->
 			 * which is not part of ssr (client-only, for API
 			 * interaction)
 			###
-			token = storageService.getToken()
+			token = storageService.get('token')
 			if token
 				@$store.dispatch('session/loginWithToken', token)
 		render: (h) => h(App)

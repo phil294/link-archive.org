@@ -55,7 +55,7 @@ export default
 	display:grid
 	grid-template-areas:	"header" \
 							"main";
-	// grid-template-rows: 50px 1fr
+	grid-template-rows: auto 1fr
 #app > header
 	grid-area: header
 	border-bottom: 1px solid lightgrey
@@ -270,6 +270,8 @@ legend {
 body, html {
     padding: 0;
     margin: 0;
+    width: 100%;
+    height: 100%;
 }
 input:not([type=checkbox]), label {
     width: 100%;
