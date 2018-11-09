@@ -1,12 +1,15 @@
 <template lang="slm">
-	table
-        thead
-            th v-for="attribute in attributes" -key=attribute.id
-                | {{ attribute.name }}
-        tbody
-            tr v-for="entry in result" key?
-                td v-for="attribute in attributes" -key=attribute.id
-                    | {{ entry[attribute] }}
+	table.center
+		thead
+			th
+			th v-for="attribute in attributes" -key=attribute.name
+				| {{ attribute.name }}
+		tbody
+			tr v-for="entry in result" # key? todo
+				td
+					| {{ entry.name }}
+				td.value v-for="attribute in attributes" -key=attribute.name
+					| {{ entry[attribute.name] }}
 
 </template>
 
@@ -17,20 +20,23 @@ import { mapActions, mapState } from 'vuex'
 export default Vue.extend(
 	name: 'ResultView'
 	# components: { TokenInput, PromiseButton, PromiseForm, ReadMore }
-	methods: {
-		...mapActions([
-			#
-		])
-    },
-    computed: {
-        ...mapState('search', [
-            'attributes'
-            'result'
-        ])
-    }
+	computed: mapState('search', [
+		'attributes'
+		'result'
+	])
 )
 </script>
 
 <style lang="stylus" scoped>
+table
+	text-align: justify
+	border-collapse: collapse
+tr
+	height: 1em
+td, th
+	padding: 1.7vw
+	border-bottom: 1px solid #f1f1f1
+td.value
+	font-size: 80%
 
 </style>

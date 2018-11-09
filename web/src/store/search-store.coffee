@@ -4,9 +4,19 @@ import axios from 'axios'
 export default
 	namespaced: true
 	state:
-		product: null
+		product: 'test'
 		result: null
-		attributes: null
+		attributes: [
+			{
+				name: 'a1'
+			},
+			{
+				name: 'a2'
+			},
+			{
+				name: 'a3'
+			}
+		]
 		filters: null
 		sorters: null
 	mutations:

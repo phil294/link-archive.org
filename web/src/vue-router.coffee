@@ -18,6 +18,10 @@ export default ->
 			path: '/settings',
 			name: 'Settings',
 			component: => `import('@/components/secure/Settings')`
+		,
+			path: '/p',
+			name: 'ResultView',
+			component: => `import('@/components/ResultView')`
 		
 		# corresponding store modules can also be lazyloaded. see ssr vuejs docs
 

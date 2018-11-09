@@ -1,6 +1,7 @@
 import Vuex from 'vuex'
 import Vue from 'vue'
 import session from './session-store'
+import search from './search-store'
 
 Vue.use(Vuex)
 
@@ -22,5 +23,5 @@ export default =>
 				commit('toggleAuthenticateModal', true)
 			hideAuthenticateModal: ({ commit }) ->
 				commit('toggleAuthenticateModal', false)
-		modules: { session }
+		modules: { session, search }
 	)

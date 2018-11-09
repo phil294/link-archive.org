@@ -1,5 +1,5 @@
 <template lang="slm">
-	div
+	div.fill
 		# result-view-filters
 		result-view-table
 </template>
@@ -10,16 +10,15 @@ import { mapActions } from 'vuex'
 # import PromiseButton from '@/components/PromiseButton'
 # import PromiseForm from '@/components/PromiseForm'
 # import ReadMore from '@/components/ReadMore'
-import ResultViewTable from './ResultViewTable';
+import ResultViewTable from './result-view/ResultViewTable';
 
 export default Vue.extend(
 	name: 'ResultView'
 	components: { ResultViewTable }
-	methods: {
-		...mapActions([
-			#
-		])
-	}
+	asyncData: ({ store }) ->
+		store.dispatch('search/search')
+	created: ->
+		@$store.dispatch('search/search')
 )
 </script>
 

@@ -206,16 +206,6 @@ pre > code {
   background-color: transparent;
   white-space: pre; }
 
-/* Tables */
-table {
-  text-align: justify;
-  width: 100%;
-  border-collapse: collapse; }
-
-td, th {
-  padding: 0.5em;
-  border-bottom: 1px solid #f1f1f1; }
-
 textarea {
   width: 100%; }
 
@@ -270,6 +260,8 @@ legend {
 body, html {
     padding: 0;
     margin: 0;
+    width: 100%;
+    height: 100%;
 }
 input:not([type=checkbox]), label {
     width: 100%;
