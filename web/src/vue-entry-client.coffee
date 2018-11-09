@@ -5,9 +5,9 @@ import createApp from './vue-app'
 
 Vue.mixin(
     beforeRouteUpdate: (to, from, next) ->
-        { asyncData } = @$options
-        if asyncData
-            asyncData(
+        { asyncDataHook } = @$options # not tested
+        if asyncDataHook
+            asyncDataHook(
                 store: @$store
                 route: to
             ).then(next)
@@ -28,20 +28,20 @@ router.onReady(=>
         diffed = false
         # const activatedAsyncDataHooks = matched
         #    .filter((c, i) => diffed || (diffed = (prevMatched[i] !== c)))
-        # debugger
         activatedAsyncDataHooks = matched.filter((c, i) =>
             if diffed
                 return diffed
             diffed = prevMatched[i] != c
         )
-            .map((c) => c.asyncData)
+            .map((c) => c.asyncDataHook || (c.options || {}).asyncDataHook)
             .filter((_) => _)
         if !activatedAsyncDataHooks.length
             return next()
 
-        # call all asyncData()
+        # call all asyncDataHook()
         # todo loading indicator
-        Promise.all(activatedAsyncDataHooks.map((hook) => hook({ store, route: to })))
+        Promise.all(activatedAsyncDataHooks.map((asyncDataHook) =>
+            asyncDataHook({ store, route: to })))
             .then(next)
             .catch(next)
             .finally( =>
