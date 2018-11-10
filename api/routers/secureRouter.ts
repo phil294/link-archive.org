@@ -10,7 +10,7 @@ export default ((tokenService: TokenService) => {
         try {
             res.locals.user = await tokenService.toUser((req.headers.authorization || '').substring(7));
         } catch (error) {
-            res.status(UNAUTHORIZED).send(error.message);
+            res.status(UNAUTHORIZED).send(error.message); // todo error is status code.. ? see user class
             return;
         }
         next();
