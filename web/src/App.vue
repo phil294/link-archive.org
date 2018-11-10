@@ -109,6 +109,8 @@ nav > a.router-link-active
 :root {
 	--color-main: #222;
 	--color-hover: #555;
+	--color-disabled: #a6a6a6;
+	--color-highlighted: darkorange
 	--color-border: #000;
 }
 
@@ -314,18 +316,24 @@ form > *:not(:last-child) {
 // does not work with v-if, keeps size, but enables fade out animation. use like: ... class="fade-toggle" :class="{hidden:_var_}"
 .fade-toggle.hidden
 	opacity: 0
+.disabled
+	color: var(--color-disabled)
+.highlighted
+	color: var(--color-highlighted)
 .error
 	color: darkred // css4 @apply fade-in
 .flex
 	display: flex
-.center-w, .center-h
+.justify-center, .align-center, .column
 	@extend .flex
-.center-w
+.column
+	flex-direction: column
+.justify-center
 	justify-content: center
-.center-h
+.align-center
 	align-items: center
 .center
-	@extend .center-w, .center-h
+	@extend .justify-center, .align-center
 .fill-w
 	width: 100%
 .fill-h
