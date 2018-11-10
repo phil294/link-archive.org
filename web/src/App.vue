@@ -15,8 +15,8 @@
 				span if=session.name {{ session.name }}
 				span else-if=session.email {{ session.email }}
 				span else-if=session.externalType {{ session.externalIdentifier }} [{{ session.externalType }}]
-				button %click=logout Logout
-			button if=!isLoggedIn %click=showAuthenticatePopup
+				button.btn %click=logout Logout
+			button.btn if=!isLoggedIn %click=showAuthenticatePopup
 				| Sign in
 		main
 			router-view
@@ -212,7 +212,20 @@ pre > code {
 textarea {
 	width: 100%; }
 
-.button, button, input[type="submit"], input[type="reset"], input[type="button"] {
+button // buttons, by default, should not have any specific styling so they can be used better semantically. for typical button-buttons, use .btn-
+	-webkit-appearance: none
+	background: initial
+	border: initial
+
+button, .btn, input[type="submit"], input[type="reset"], input[type="button"]
+	cursor: pointer
+
+.button[disabled], button[disabled], input[type="submit"][disabled], input[type="reset"][disabled], input[type="button"][disabled] {
+	cursor: default;
+	opacity: .5;
+}
+
+.btn, input[type="submit"], input[type="reset"], input[type="button"] {
 	display: inline-block;
 	padding: 5px 10px;
 	text-align: center;
@@ -222,12 +235,8 @@ textarea {
 	color: #f9f9f9;
 	border-radius: 1px;
 	border: 1px solid var(--color-border);
-	cursor: pointer;
 	box-sizing: border-box; }
-	.button[disabled], button[disabled], input[type="submit"][disabled], input[type="reset"][disabled], input[type="button"][disabled] {
-		cursor: default;
-		opacity: .5; }
-	.button:focus, .button:hover, button:focus, button:hover, input[type="submit"]:focus, input[type="submit"]:hover, input[type="reset"]:focus, input[type="reset"]:hover, input[type="button"]:focus, input[type="button"]:hover {
+	.btn:focus, .btn:hover, input[type="submit"]:focus, input[type="submit"]:hover, input[type="reset"]:focus, input[type="reset"]:hover, input[type="button"]:focus, input[type="button"]:hover {
 		background-color: var(--color-hover);
 		border-color: var(--color-hover);
 		color: #f9f9f9;
