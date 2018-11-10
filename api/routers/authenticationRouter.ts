@@ -65,6 +65,10 @@ export default ((tokenService: TokenService, mailService: MailService,
             res.status(UNAUTHORIZED).end();
             return;
         }
+        if (!payload.sub) {
+            res.status(INTERNAL_SERVER_ERROR).send('Could not get google user ID');
+            return;
+        }
         const token = tokenService.create({
             email: payload.email,
             externalIdentifier: payload.sub,
@@ -83,6 +87,10 @@ export default ((tokenService: TokenService, mailService: MailService,
         }
         result = await request.get(`https://graph.facebook.com/me?access_token=${req.query.token}`);
         data = JSON.parse(result);
+        if (!data.id) {
+            res.status(INTERNAL_SERVER_ERROR).send('Could not get user ID');
+            return;
+        }
         const token = tokenService.create({
             externalIdentifier: data.id,
             externalType: ExternalType.FACEBOOK,
