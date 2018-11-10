@@ -84,7 +84,7 @@ export default ((tokenService: TokenService, mailService: MailService,
         result = await request.get(`https://graph.facebook.com/me?access_token=${req.query.token}`);
         data = JSON.parse(result);
         const token = tokenService.create({
-            externalIdentifier: data.user_id,
+            externalIdentifier: data.id,
             externalType: ExternalType.FACEBOOK,
             name: data.name,
         });
