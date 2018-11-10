@@ -26,6 +26,11 @@ export default
 				direction: -1
 		]
 	getters:
+		/// attributesById: (state) ->
+			state.attributes.reduce((all, attribute) =>
+				all[attribute.id] = attribute
+			, {})
+		///
 		sortersByAttribute: (state) -> # todo vocabulary unclear
 			state.attributes.reduce((all, attribute) =>
 				sorterIndex = state.sorters.findIndex((sorter) => sorter.attribute == attribute.id)

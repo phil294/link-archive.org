@@ -6,11 +6,11 @@
 				th v-for="attribute in attributes" -key=attribute.id
 					.attribute.center
 						span.name {{ attribute.name }}
-						div.sort.column.fill-h.disabled
+						div.sort.column.fill-h
 							# clickable html element todo
-							span.sort-up %click="toggleSortDirection(attribute.id, 1)" -class="{highlighted: sortersByAttribute[attribute.id].direction===1}"
+							button.sort-up.disabled %click="toggleSortDirection(attribute.id, 1)" -class="{highlighted: sortersByAttribute[attribute.id].direction===1}"
 								| ⮝
-							span.sort-down %click="toggleSortDirection(attribute.id, -1)" -class="{highlighted: sortersByAttribute[attribute.id].direction===-1}"
+							button.sort-down.disabled %click="toggleSortDirection(attribute.id, -1)" -class="{highlighted: sortersByAttribute[attribute.id].direction===-1}"
 								| ⮟
 						div.index.highlighted if="sortersByAttribute[attribute.id].index >= 0"
 							| {{ sortersByAttribute[attribute.id].index + 1 }}
@@ -19,7 +19,7 @@
 				td
 					| {{ entry.name }}
 				td.value v-for="attribute in attributes" -key=attribute.name
-					| {{ entry[attribute.name] }}
+					| {{ entry[attribute.id] }}
 
 </template>
 
@@ -62,8 +62,6 @@ td, th
 	height: 1.3em
 	.sort
 		padding-left: 0.7vw
-		font-size: 80%
-		cursor: pointer
 		position: relative
 		.sort-up, .sort-down
 			&:hover
@@ -75,7 +73,6 @@ td, th
 			position: absolute
 			bottom: -0.7em
 	.index
-		padding-left: 0.3vw
 		font-size: 80%
 .value
 	font-size: 80%
