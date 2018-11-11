@@ -3,7 +3,7 @@
 		thead
 			tr
 				th
-				th v-for="attribute in attributes" -key=attribute.id
+				th v-for="attribute in relevantAttributes" -key=attribute.id
 					.attribute.center
 						span.name {{ attribute.name }}
 						div.sort.column.fill-h
@@ -12,14 +12,14 @@
 								| ⮝
 							button.sort-down.disabled %click="toggleSortDirection(attribute.id, -1)" -class="{highlighted: sortersByAttribute[attribute.id].direction===-1}"
 								| ⮟
-						div.index.highlighted if="sortersByAttribute[attribute.id].index >= 0"
+						div.index.highlighted if="sortersAmount > 1 && sortersByAttribute[attribute.id].index >= 0"
 							| {{ sortersByAttribute[attribute.id].index + 1 }}
 		tbody
-			tr v-for="entry in result" # key? todo
-				td
-					| {{ entry.name }}
-				td.value v-for="attribute in attributes" -key=attribute.name
-					| {{ entry[attribute.id] }}
+			tr.product v-for="product in products" -key=product.id
+				td.name
+					| {{ product.name }}
+				td.value v-for="attribute in relevantAttributes" -key=attribute.name
+					| {{ product[attribute.id] }}
 
 </template>
 
@@ -40,10 +40,12 @@ export default Vue.extend(
 	computed: {
 		...mapState('search', [
 			'attributes'
-			'result'
+			'products'
 		])
 		...mapGetters('search', [
 			'sortersByAttribute'
+			'sortersAmount'
+			'relevantAttributes'
 		])
 	}
 )
@@ -51,15 +53,18 @@ export default Vue.extend(
 
 <style lang="stylus" scoped>
 table
+	--separator: 1px solid #f1f1f1
 	text-align: justify
 	border-collapse: collapse
 tr
 	height: 1em
 td, th
 	padding: 1.5vw
-	border-bottom: 1px solid #f1f1f1
+	border-bottom: var(--separator)
 .attribute
 	height: 1.3em
+	.name
+		white-space: nowrap
 	.sort
 		padding-left: 0.7vw
 		position: relative
@@ -74,6 +79,9 @@ td, th
 			bottom: -0.7em
 	.index
 		font-size: 80%
+.product
+	.name
+		border-right: var(--separator)
 .value
 	font-size: 80%
 
