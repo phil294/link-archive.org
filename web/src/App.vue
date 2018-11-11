@@ -72,6 +72,7 @@ nav > a.router-link-active
 	font-weight: bold
 #app > main
 	grid-area: main
+	width: 100vw
 </style>
 
 <style lang="stylus">
