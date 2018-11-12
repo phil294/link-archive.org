@@ -20,6 +20,9 @@ export default Vue.extend(
 <style lang="stylus" scoped>
 main
 	max-width:400px
+	max-height: 100%
+	overflow: auto
+	box-sizing: border-box
 	position: relative
 #close
 	position: absolute

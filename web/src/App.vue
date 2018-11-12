@@ -1,5 +1,5 @@
 <template lang="slm">
-	section#app.fill
+	section#app.column.fill-h
 		popup if=authenticatePopup %close=hideAuthenticatePopup
 			authenticate %authenticated=hideAuthenticatePopup
 		modal if=loadingCounter
@@ -18,7 +18,7 @@
 				button.btn %click=logout Logout
 			button.btn if=!isLoggedIn %click=showAuthenticatePopup
 				| Sign in
-		main
+		main.flex-fill.column
 			router-view
 </template>
 
@@ -56,13 +56,7 @@ export default
 </script>
 
 <style lang="stylus" scoped>
-#app
-	display:grid
-	grid-template-areas:	"header" \
-							"main";
-	grid-template-rows: auto 1fr
 #app > header
-	grid-area: header
 	border-bottom: 1px solid lightgrey
 	justify-content: space-between
 nav > a
@@ -70,9 +64,6 @@ nav > a
 	margin-right:10%
 nav > a.router-link-active
 	font-weight: bold
-#app > main
-	grid-area: main
-	width: 100vw
 </style>
 
 <style lang="stylus">
@@ -325,6 +316,8 @@ form > *:not(:last-child) {
 	color: darkred // css4 @apply fade-in
 .flex
 	display: flex
+.flex-fill
+	flex: 1
 .justify-center, .align-center, .column
 	@extend .flex
 .column
