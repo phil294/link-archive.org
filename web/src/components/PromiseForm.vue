@@ -35,7 +35,7 @@ export default Vue.extend(
 	methods:
 		submit: (event) ->
 			@$data.errorResponse = ''
-			@$refs.submit.setLoading()
+			@$refs.submit.setUsed()
 			@$emit('submit', event)
 			try
 				await @$props.action(event)

@@ -22,7 +22,7 @@ div
 			div#mail-sent.padding-l v-else
 				div
 					p
-						| An email has been sent to
+						| An email has been sent to 
 						em {{ email }}
 					p
 						| You can log in by clicking the link in the email
