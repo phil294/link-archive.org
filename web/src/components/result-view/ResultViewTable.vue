@@ -6,7 +6,7 @@
 				th v-for="attribute in relevantAttributes" -key=attribute.id
 					.attribute.center
 						span.name {{ attribute.name }}
-						div.sort.column.fill-h
+						div.sort.column
 							# clickable html element todo
 							button.sort-up.disabled %click="toggleSortDirection(attribute.id, 1)" -class="{highlighted: sortersByAttribute[attribute.id].direction===1}"
 								| ⮝
@@ -20,7 +20,6 @@
 					| {{ product.name }}
 				td.value v-for="attribute in relevantAttributes" -key=attribute.name
 					| {{ product[attribute.id] }}
-
 </template>
 
 <script lang="coffee">
@@ -53,18 +52,28 @@ export default Vue.extend(
 
 <style lang="stylus" scoped>
 table
-	--separator: 1px solid #f1f1f1
-	text-align: justify
+	--separator: 1px solid #e3e3e3
 	border-collapse: collapse
 tr
 	height: 1em
+	background: #fff
+tr:nth-child(odd)
+	background: #f2f2f2
 td, th
-	padding: 1.5vw
+	padding: 6px
 	border-bottom: var(--separator)
+	min-width: 100px
+td:first-child, th // would be better on thead but this does not seem possible
+	position: sticky
+	background: inherit
+td:first-child
+	z-index: 1
+	left: 0
+	border-right: var(--separator)
+th
+	z-index: 2
+	top: 0
 .attribute
-	height: 1.3em
-	.name
-		white-space: nowrap
 	.sort
 		padding-left: 0.7vw
 		position: relative
@@ -79,9 +88,6 @@ td, th
 			bottom: -0.7em
 	.index
 		font-size: 80%
-.product
-	.name
-		border-right: var(--separator)
 .value
 	font-size: 80%
 

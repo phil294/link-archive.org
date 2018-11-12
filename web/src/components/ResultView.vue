@@ -1,11 +1,13 @@
 <template lang="slm">
-	div#scrollcontainer.fill
-		# result-view-filters
-		result-view-table
-		p sorters: {{ sorters }}
-		p filters: {{ filters }}
-		p showers: {{ showers }}
-		p extraAttributes: {{ extraAttributes }}
+	div#kaa.column
+		div
+			# result-view-filters
+			p sorters: {{ sorters }}
+			p filters: {{ filters }}
+			p showers: {{ showers }}
+			p extraAttributes: {{ extraAttributes }}
+		div#bla
+			result-view-table.flex-fill
 </template>
 
 <script lang="coffee">
@@ -38,6 +40,6 @@ export default Vue.extend(
 </script>
 
 <style lang="stylus" scoped>
-#scrollcontainer
+#bla, #kaa // both needed for proper overflow in FF (idk) - todo
 	overflow: auto
 </style>
