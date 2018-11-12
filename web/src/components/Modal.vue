@@ -1,5 +1,5 @@
 <template lang="slm">
-div#modal.fill.center.fade-in %keyup.esc=close tabindex=-1
+div#modal.center.fade-in %keyup.esc=close tabindex=-1
 	div#background.fill %click=close
 	slot
 </template>
@@ -19,11 +19,11 @@ export default Vue.extend(
 	position:fixed
 	top:0
 	left:0
-	z-index: 1
+	bottom: 0
+	right: 0
+	z-index: 999
 	box-sizing: border-box
 	background: rgba(0,0,0,0.08)
 #background
-	position: absolute 
-	top: 0
-	left: 0
+	position: absolute
 </style>
