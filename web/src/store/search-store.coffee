@@ -72,6 +72,7 @@ export default
 	namespaced: true
 	state:
 		product: 'test'
+		# while dev: stub attrs
 		attributes: [0..10].map((i) =>
 			id: i
 			name: "attribute #{i}"
@@ -106,6 +107,7 @@ export default
 				return all
 			, {})
 		sortersAmount: (state) -> state.sorters.length
+		### This is a concatenation of showers and extraAttributes (and sorters in between, if not contained in the latter) ###
 		relevantAttributes: (state, getters) ->
 			sorterAttributesNotContainedInExtraAttributes = state.sorters
 				.map((sorter) => sorter.attribute)

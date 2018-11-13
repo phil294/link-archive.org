@@ -7,7 +7,5 @@ import Vue from 'vue'
 
 export default Vue.extend(
 	name: 'Index'
-	asyncData: ({ store }) ->
-		# store.dispatch('test')
 )
 </script>

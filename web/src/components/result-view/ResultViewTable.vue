@@ -15,7 +15,7 @@
 						div.index.highlighted if="sortersAmount > 1 && sortersByAttribute[attribute.id].index >= 0"
 							| {{ sortersByAttribute[attribute.id].index + 1 }}
 		tbody
-			tr.product v-for="product in products" -key=product.id
+			tr.product each=product -key=product.id
 				td.name
 					| {{ product.name }}
 				td.value v-for="attribute in relevantAttributes" -key=attribute.name
