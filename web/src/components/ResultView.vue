@@ -7,7 +7,8 @@
 			p showers: {{ showers }}
 			p extraAttributes: {{ extraAttributes }}
 		div#bla
-			result-view-table.flex-fill
+			result-view/showers-selector
+			result-view/result-table.flex-fill
 </template>
 
 <script lang="coffee">
@@ -17,11 +18,9 @@ import searchStoreModule from '@/store/search-store'
 # import PromiseButton from '@/components/PromiseButton'
 # import PromiseForm from '@/components/PromiseForm'
 # import ReadMore from '@/components/ReadMore'
-import ResultViewTable from './result-view/ResultViewTable'
 
 export default Vue.extend(
 	name: 'ResultView'
-	components: { ResultViewTable }
 	asyncDataHook: ({ store }) ->
 		store.registerModule('search', searchStoreModule)
 		store.dispatch('search/search')

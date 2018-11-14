@@ -28,7 +28,6 @@ import { mapActions, mapState, mapGetters } from 'vuex'
 
 export default Vue.extend(
 	name: 'ResultView'
-	# components: { TokenInput, PromiseButton, PromiseForm, ReadMore }
 	methods: {
 		...mapActions('search', [
 			
