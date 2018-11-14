@@ -22,3 +22,5 @@ todo*
 *.njsproj
 *.sln
 *.code-workspace
+
+web/build/custom-loaders/*.js

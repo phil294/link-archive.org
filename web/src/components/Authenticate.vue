@@ -43,17 +43,12 @@ div
 <script lang="coffee">
 import Vue from 'vue'
 import { mapActions } from 'vuex'
-import TokenInput from '@/components/TokenInput'
-import PromiseButton from '@/components/PromiseButton'
-import PromiseForm from '@/components/PromiseForm'
-import ReadMore from '@/components/ReadMore'
 import externalLoginProviders from '@/external-login-providers'
 
 loadedExternalLoginProviders = {}
 
 export default Vue.extend(
 	name: 'Authenticate'
-	components: { TokenInput, PromiseButton, PromiseForm, ReadMore }
 	data: =>
 		email: ''
 		showMailSent: false

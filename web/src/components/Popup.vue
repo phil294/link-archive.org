@@ -7,11 +7,9 @@ modal %close=close
 
 <script lang="coffee">
 import Vue from 'vue'
-import Modal from './Modal'
 
 export default Vue.extend(
 	name: 'Popup'
-	components: { Modal }
 	methods:
 		close: -> @$emit('close')
 )
