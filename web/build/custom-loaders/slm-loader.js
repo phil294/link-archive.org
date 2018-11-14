@@ -19,21 +19,18 @@
     // Allow alternative syntax for event handlers: %click="myMethod" translates to @click="myMethod"
     [/(?<=\s)%(?=[a-z.-]+=")/g,
     '@'],
-    [
-      // Allow alternative syntax for property binding: -src="mySrc" translates to :src="mySrc". / Ignore this quote: "
-      /(?<=\s)-(?=[a-z.-]+=")/g,
-      ':' // before: no { or }
-    // brace
-    // after: no { or }
-    ],
-    [
-      // { to {{ and } to }}
-      /(?<![{}])[{}](?![{}])/g,
-      '$1$1' // double
-    ]
+    // Allow alternative syntax for property binding: -src="mySrc" translates to :src="mySrc". / Ignore this quote: "
+    [/(?<=\s)-(?=[a-z.-]+=")/g,
+    ':']
   ];
 
   // Keywords that should allowed to be followed and preceded by whitespace without anything else. This has the potential to break plain text horribly
+  // { to {{ and } to }}
+  /* [///
+  	(?<![{}])	# before: no { or }
+  	[{}]		# brace
+  	(?![{}])	# after: no { or }
+  ///g, '$1$1']	# double */
   standaloneKeywords = ['v-else', 'required', 'disabled', 'draggable', 'selected', 'exact'];
 
   module.exports = function(slmdoc) {

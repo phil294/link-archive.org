@@ -5,14 +5,12 @@
 
 <script lang="coffee">
 import Vue from 'vue'
-import OneTimeButton from './OneTimeButton'
 
 ###
  * Pass an `action` to this component that will resolve to a promise. The button will wait for this promise before it resets its loading state.
 ###
 export default Vue.extend(
 	name: 'PromiseButton'
-	components: { OneTimeButton }
 	props:
 		action:
 			type: Function

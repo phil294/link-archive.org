@@ -42,15 +42,22 @@ const webpackBaseConfig = {
 		rules: [
 			{
 				test: /\.vue$/,
-				loader: 'vue-loader',
-				options: {
-					// If you have problems debugging vue-files in devtools,
-					// set this to false - it *may* help
-					// https://vue-loader.vuejs.org/en/options.html#cachebusting
-					// cacheBusting: true,
-					// extractCSS: isProduction, // FIXME
-					extractCSS: false,
-				},
+				use: [
+					{
+						loader: 'vue-loader',
+						options: {
+							// If you have problems debugging vue-files in devtools,
+							// set this to false - it *may* help
+							// https://vue-loader.vuejs.org/en/options.html#cachebusting
+							// cacheBusting: true,
+							// extractCSS: isProduction, // FIXME
+							extractCSS: false,
+						},
+					},
+					{
+						loader: utils.resolveCustomLoader('vue-loader'),
+					},
+				],
 			},
 			{
 				test: /\.coffee$/,

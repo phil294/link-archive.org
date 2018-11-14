@@ -7,7 +7,6 @@
 
 <script lang="coffee">
 import Vue from 'vue'
-import OneTimeButton from '@/components/OneTimeButton'
 
 ###
  * Standardform component: includes only submit (progress-)button.
@@ -16,7 +15,6 @@ import OneTimeButton from '@/components/OneTimeButton'
 ###
 export default Vue.extend(
 	name: 'PromiseForm'
-	components: { OneTimeButton }
 	props:
 		buttonLabel:
 			type: String

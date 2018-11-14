@@ -9,12 +9,9 @@
 <script lang="coffee">
 import Vue from 'vue'
 import { mapActions } from 'vuex'
-import PromiseButton from '@/components/PromiseButton'
-import ReadMore from '@/components/ReadMore'
 
 export default Vue.extend(
 	name: 'Settings'
-	components: { PromiseButton, ReadMore }
 	methods: {
 		...mapActions('session', [
 			'invalidateAllTokens'

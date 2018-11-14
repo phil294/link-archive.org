@@ -23,13 +23,9 @@
 
 <script lang="coffee">
 import { mapState, mapGetters, mapActions } from 'vuex'
-import Authenticate from '@/components/Authenticate'
-import Popup from '@/components/Popup'
-import Modal from '@/components/Modal'
 
 export default
 	name: 'App'
-	components: { Popup, Authenticate, Modal }
 	computed: {
 		...mapState([
 			'appName'
