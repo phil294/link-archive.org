@@ -17,6 +17,7 @@ export default
 	actions:
 		# validate token and set token & session. throws
 		loginWithToken: ({ commit }, token) ->
+			debugger
 			try
 				payload = JSON.parse(window.atob(token.trim().split('.')[1].replace('-', '+').replace('_', '/')))
 			catch error
@@ -25,7 +26,7 @@ export default
 			if !session.email && !session.externalType
 				throw new Error('Invalid token: no email and no externalType')
 			commit('setToken', token)
-			storageService.setToken(token)
+			storageService.set('token', token)
 			commit('setSession', session)
 		requestTokenMail: (_, email) ->
 			await axios.get("authentication/requesttokenmail?email=#{email}")
