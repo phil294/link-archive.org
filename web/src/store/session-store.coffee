@@ -7,7 +7,7 @@ export default
 		token: null
 		session: null
 	getters:
-		isLoggedIn: (state) ->
+		isLoggedIn: state ->
 			!!state.session
 	mutations:
 		setToken: (state, token) ->

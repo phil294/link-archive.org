@@ -7,7 +7,7 @@ export default (context) => new Promise((ok, notok) =>
 		matchedComponents = router.getMatchedComponents()
 		if !matchedComponents.length
 			return notok({ code: 404 })
-		Promise.all(matchedComponents.map((Component) =>
+		Promise.all(matchedComponents.map(Component =>
 			# todo crash here does not send res answer but hangs
 			asyncDataHook = Component.asyncDataHook || (Component.options || {}).asyncDataHook
 			if asyncDataHook

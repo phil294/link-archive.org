@@ -31,15 +31,16 @@ export default Vue.extend(
 		errorMessage: ->
 			if @$data.errorResponse then "#{@$props.errorCaption}: #{@$data.errorResponse}" else ''
 	methods:
-		submit: (event) ->
+		submit: event ->
 			@$data.errorResponse = ''
 			@$refs.submit.setUsed()
 			@$emit('submit', event)
 			try
 				await @$props.action(event)
-			catch error
+			catch e
 				await @$nextTick() # enforce transition event even if follow-up error
-				@$data.errorResponse = error
+				@$data.errorResponse = e
+				throw e
 			finally
 				if @$refs.submit # component still alive?
 					@$refs.submit.reset()

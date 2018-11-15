@@ -17,9 +17,9 @@ export default =>
 				state.authenticatePopup = show
 			setAppName: (state, appName) ->
 				state.appName = appName
-			increaseLoadingCounter: (state) ->
+			increaseLoadingCounter: state ->
 				state.loadingCounter++
-			decreaseLoadingCounter: (state) ->
+			decreaseLoadingCounter: state ->
 				state.loadingCounter--
 		actions:
 			showAuthenticatePopup: ({ commit }) ->
