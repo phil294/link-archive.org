@@ -8,7 +8,7 @@
 			p extraAttributes: {{ extraAttributes }}
 		div#bla
 			result-view/showers-selector
-			result-view/result-table.flex-fill
+			result-view/result-table
 </template>
 
 <script lang="coffee">
