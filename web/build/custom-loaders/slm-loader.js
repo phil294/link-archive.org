@@ -31,7 +31,7 @@
   	[{}]		# brace
   	(?![{}])	# after: no { or }
   ///g, '$1$1']	# double */
-  standaloneKeywords = ['v-else', 'required', 'disabled', 'draggable', 'selected', 'exact'];
+  standaloneKeywords = ['v-else', 'required', 'disabled', 'draggable', 'selected', 'exact', 'drag', 'drop'];
 
   module.exports = function(slmdoc) {
     var keyword, rule;

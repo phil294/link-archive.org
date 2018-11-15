@@ -28,6 +28,8 @@ standaloneKeywords = [
 	'draggable'
 	'selected'
 	'exact'
+	'drag'
+	'drop'
 ]
 
 module.exports = (slmdoc) ->
