@@ -61,7 +61,14 @@ const webpackBaseConfig = {
 			},
 			{
 				test: /\.coffee$/,
-				loader: 'coffee-loader',
+				use: [
+					{
+						loader: 'coffee-loader',
+					},
+					{
+						loader: utils.resolveCustomLoader('coffee-loader'),
+					},
+				],
 			},
 			{
 				test: /\.js$/,

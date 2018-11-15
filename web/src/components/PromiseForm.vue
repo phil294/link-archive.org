@@ -31,7 +31,7 @@ export default Vue.extend(
 		errorMessage: ->
 			if @$data.errorResponse then "#{@$props.errorCaption}: #{@$data.errorResponse}" else ''
 	methods:
-		submit: (event) ->
+		submit: event ->
 			@$data.errorResponse = ''
 			@$refs.submit.setUsed()
 			@$emit('submit', event)

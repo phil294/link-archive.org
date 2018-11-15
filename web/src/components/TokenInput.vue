@@ -14,9 +14,9 @@ export default Vue.extend(
 		token:
 			type: String
 			default: ''
-	data: () ->
+	data: ->
 		tokenModel: @$props.token
-	mounted: () ->
+	mounted: ->
 		if @$data.tokenModel
 			@loginWithToken()
 	methods:

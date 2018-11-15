@@ -60,10 +60,10 @@ export default Vue.extend(
 				loadedExternalLoginProviders[provider.name] = true
 			await provider.setup()
 	methods: {
-		requestMail: (event) ->
+		requestMail: event ->
 			await @$store.dispatch('session/requestTokenMail', event.target.elements.email.value) # using form data, not v-model
 			@$data.showMailSent = true
-		externalLogin: (provider) -> =>
+		externalLogin: provider -> =>
 			token = await provider.login()
 			await @$store.dispatch('session/externalLoginProviderLoginWithToken',
 				token: token # todo can this throw? #todo shorthand
