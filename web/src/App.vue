@@ -163,12 +163,6 @@ a {
 		color: var(--color-hover);
 		border-bottom: 2px solid var(--color-border); }
 
-ul {
-	padding-left: 1.4em; }
-
-li {
-	margin-bottom: 0.4em; }
-
 blockquote {
 	font-style: italic;
 	margin-left: 1.5em;
