@@ -17,7 +17,7 @@ div
 						|. In short: Passwords are more of a security threat than measurement.
 					p
 						| If you feel you 
-						em really
+						em really 
 						| need to use a password, you can configure one in the account settings once you are logged in.
 			div#mail-sent.padding-l v-else
 				div

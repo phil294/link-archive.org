@@ -17,7 +17,6 @@ export default
 	actions:
 		# validate token and set token & session. throws
 		loginWithToken: ({ commit }, token) ->
-			debugger
 			try
 				payload = JSON.parse(window.atob(token.trim().split('.')[1].replace('-', '+').replace('_', '/')))
 			catch error

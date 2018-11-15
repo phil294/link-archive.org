@@ -37,9 +37,10 @@ export default Vue.extend(
 			@$emit('submit', event)
 			try
 				await @$props.action(event)
-			catch error
+			catch e
 				await @$nextTick() # enforce transition event even if follow-up error
-				@$data.errorResponse = error
+				@$data.errorResponse = e
+				throw e
 			finally
 				if @$refs.submit # component still alive?
 					@$refs.submit.reset()
