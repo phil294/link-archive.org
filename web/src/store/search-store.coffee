@@ -90,14 +90,14 @@ export default
 		products: []
 		extraAttributes: []
 	getters:
-		attributesById: (state) ->
+		attributesById: state ->
 			state.attributes.reduce((all, attribute) =>
 				all[attribute.id] = attribute
 				return all
 			, {})
-		sortersByAttribute: (state) -> # todo vocabulary unclear
+		sortersByAttribute: state -> # todo vocabulary unclear
 			state.attributes.reduce((all, attribute) =>
-				sorterIndex = state.sorters.findIndex((sorter) => sorter.attribute == attribute.id)
+				sorterIndex = state.sorters.findIndex(sorter => sorter.attribute == attribute.id)
 				if sorterIndex > -1
 					all[attribute.id] =
 						index: sorterIndex
@@ -106,14 +106,14 @@ export default
 					all[attribute.id] = {}
 				return all
 			, {})
-		sortersAmount: (state) -> state.sorters.length
+		sortersAmount: state -> state.sorters.length
 		### This is a concatenation of showers and extraAttributes (and sorters in between, if not contained in the latter) ###
 		relevantAttributes: (state, getters) ->
 			sorterAttributesNotContainedInExtraAttributes = state.sorters
-				.map((sorter) => sorter.attribute)
-				.filter((attribute) => !state.extraAttributes.includes(attribute))
+				.map(sorter => sorter.attribute)
+				.filter(attribute => !state.extraAttributes.includes(attribute))
 			[ ...state.showers, ...sorterAttributesNotContainedInExtraAttributes, ...state.extraAttributes ]
-				.map((attributeId) =>
+				.map(attributeId =>
 					getters.attributesById[attributeId])
 	mutations:
 		removeSorterAt: (state, index) -> Vue.delete(state.sorters, index)
