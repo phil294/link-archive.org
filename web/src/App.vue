@@ -59,6 +59,8 @@ nav > a
 	margin-right:10%
 nav > a.router-link-active
 	font-weight: bold
+main
+	overflow: auto	
 </style>
 
 <style lang="stylus">
@@ -283,6 +285,9 @@ details > summary {
 }
 form > *:not(:last-child) {
 	margin-bottom: 10px;
+}
+[draggable] {
+	cursor: pointer;
 }
 
 // CLASSES /////////////////////////
