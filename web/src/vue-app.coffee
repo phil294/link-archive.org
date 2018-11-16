@@ -5,6 +5,8 @@ import App from './App'
 import createRouter from './vue-router'
 import createStore from './store/root-store'
 import storageService from '@/services/storage-service'
+import './directives/drag'
+import './directives/drop'
 
 Vue.config.productionTip = false
 

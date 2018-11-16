@@ -277,6 +277,9 @@ details > summary {
 form > *:not(:last-child) {
 	margin-bottom: 10px;
 }
+[draggable] {
+	cursor: pointer;
+}
 
 // CLASSES /////////////////////////
 
