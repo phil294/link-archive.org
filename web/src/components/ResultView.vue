@@ -1,13 +1,7 @@
 <template lang="slm">
-	div#kaa.column
-		div
-			# result-view-filters
-			p sorters: {{ sorters }}
-			p filters: {{ filters }}
-			p showers: {{ showers }}
-			p extraAttributes: {{ extraAttributes }}
+	div#kaa
+		result-view/showers-selector
 		div#bla
-			result-view/showers-selector
 			result-view/result-table
 </template>
 

@@ -2,15 +2,15 @@
 	div#hallo.flex
 		div.relevants.flex-fill
 			h4 Shown columns
-			ul drop
-				li.shower.padding each=shower drag
+			ul drop=addShower
+				li.shower.padding each=shower drag=shower
 					| {{ attributesById[shower].name }}
 				li.extra-attribute.disabled.padding each=extraAttribute
 					| {{ attributesById[extraAttribute].name }}
 		div.attributes.flex-fill
 			h4 More columns
 			ul
-				li.attribute.padding each=attribute -key=attribute.id drag
+				li.attribute.padding each=attribute -key=attribute.id drag=attribute.id
 					| {{ attribute.name }}
 
 </template>
@@ -25,6 +25,8 @@ export default Vue.extend(
 		...mapActions('search', [
 			
 		])
+		addShower: shower ->
+			console.log(shower)
 	}
 	computed: {
 		...mapState('search', [

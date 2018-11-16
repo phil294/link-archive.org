@@ -13,6 +13,10 @@
     'v-else-if="'],
     [/model="/g,
     'v-model="'],
+    [/drag="/g,
+    'v-drag="'],
+    [/drop="/g,
+    'v-drop="'],
     // each=products translates to v-for="product in products"
     [/(?<=\s)each="(\S+)"/g,
     'v-for="$1 in $1s"'],
