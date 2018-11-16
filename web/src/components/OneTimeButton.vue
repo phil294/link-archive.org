@@ -1,5 +1,5 @@
 <template lang="slm">
-	button -disabled="used" -type=type %click=clicked
+	button.btn -disabled=used -type=type %click=clicked
 		slot if=!used Click me
 		span else {{ usedPrompt }}
 </template>

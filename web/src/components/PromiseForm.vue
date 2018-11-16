@@ -7,7 +7,6 @@
 
 <script lang="coffee">
 import Vue from 'vue'
-import OneTimeButton from '@/components/OneTimeButton'
 
 ###
  * Standardform component: includes only submit (progress-)button.
@@ -16,7 +15,6 @@ import OneTimeButton from '@/components/OneTimeButton'
 ###
 export default Vue.extend(
 	name: 'PromiseForm'
-	components: { OneTimeButton }
 	props:
 		buttonLabel:
 			type: String
@@ -33,15 +31,16 @@ export default Vue.extend(
 		errorMessage: ->
 			if @$data.errorResponse then "#{@$props.errorCaption}: #{@$data.errorResponse}" else ''
 	methods:
-		submit: (event) ->
+		submit: event ->
 			@$data.errorResponse = ''
-			@$refs.submit.setLoading()
+			@$refs.submit.setUsed()
 			@$emit('submit', event)
 			try
 				await @$props.action(event)
-			catch error
+			catch e
 				await @$nextTick() # enforce transition event even if follow-up error
-				@$data.errorResponse = error
+				@$data.errorResponse = e
+				throw e
 			finally
 				if @$refs.submit # component still alive?
 					@$refs.submit.reset()

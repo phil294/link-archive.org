@@ -5,14 +5,12 @@
 
 <script lang="coffee">
 import Vue from 'vue'
-import OneTimeButton from './OneTimeButton'
 
 ###
  * Pass an `action` to this component that will resolve to a promise. The button will wait for this promise before it resets its loading state.
 ###
 export default Vue.extend(
 	name: 'PromiseButton'
-	components: { OneTimeButton }
 	props:
 		action:
 			type: Function
@@ -33,9 +31,10 @@ export default Vue.extend(
 					@$refs.otb.reset()
 				else
 					@$data.buttonPrompt = @$props.successPrompt
-			catch
+			catch e
 				# todo error message like promiseform? aka google like mail login error
 				@$refs.otb.reset()
+				throw e
 
 )
 </script>

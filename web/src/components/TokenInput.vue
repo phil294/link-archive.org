@@ -7,18 +7,16 @@
 
 <script lang="coffee">
 import Vue from 'vue'
-import PromiseForm from '@/components/PromiseForm'
 
 export default Vue.extend(
 	name: 'TokenInput'
-	components: { PromiseForm }
 	props:
 		token:
 			type: String
 			default: ''
-	data: () ->
+	data: ->
 		tokenModel: @$props.token
-	mounted: () ->
+	mounted: ->
 		if @$data.tokenModel
 			@loginWithToken()
 	methods:

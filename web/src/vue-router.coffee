@@ -18,8 +18,6 @@ export default ->
 			path: '/settings',
 			name: 'Settings',
 			component: => `import('@/components/secure/Settings')`
-		
 		# corresponding store modules can also be lazyloaded. see ssr vuejs docs
-
 		]
 	)

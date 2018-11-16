@@ -13,16 +13,25 @@
     'v-else-if="'],
     [/model="/g,
     'v-model="'],
+    // each=products translates to v-for="product in products"
+    [/(?<=\s)each="(\S+)"/g,
+    'v-for="$1 in $1s"'],
     // Allow alternative syntax for event handlers: %click="myMethod" translates to @click="myMethod"
     [/(?<=\s)%(?=[a-z.-]+=")/g,
     '@'],
-    // Allow alternative syntax for property binding: -src="mySrc" translates to :src="mySrc". Tactical syntax highlighting error fixing quote: "
+    // Allow alternative syntax for property binding: -src="mySrc" translates to :src="mySrc". / Ignore this quote: "
     [/(?<=\s)-(?=[a-z.-]+=")/g,
     ':']
   ];
 
   // Keywords that should allowed to be followed and preceded by whitespace without anything else. This has the potential to break plain text horribly
-  standaloneKeywords = ['v-else', 'required', 'disabled', 'draggable', 'selected', 'exact'];
+  // { to {{ and } to }}
+  /* [///
+  	(?<![{}])	# before: no { or }
+  	[{}]		# brace
+  	(?![{}])	# after: no { or }
+  ///g, '$1$1']	# double */
+  standaloneKeywords = ['v-else', 'required', 'disabled', 'draggable', 'selected', 'exact', 'drag', 'drop'];
 
   module.exports = function(slmdoc) {
     var keyword, rule;

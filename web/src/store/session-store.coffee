@@ -7,7 +7,7 @@ export default
 		token: null
 		session: null
 	getters:
-		isLoggedIn: (state) ->
+		isLoggedIn: state ->
 			!!state.session
 	mutations:
 		setToken: (state, token) ->
@@ -25,7 +25,7 @@ export default
 			if !session.email && !session.externalType
 				throw new Error('Invalid token: no email and no externalType')
 			commit('setToken', token)
-			storageService.setToken(token)
+			storageService.set('token', token)
 			commit('setSession', session)
 		requestTokenMail: (_, email) ->
 			await axios.get("authentication/requesttokenmail?email=#{email}")
@@ -36,7 +36,7 @@ export default
 		logout: ({ commit }) ->
 			commit('setToken', null)
 			commit('setSession', null)
-			storageService.setToken(null)
+			storageService.set('token', null)
 		invalidateAllTokens: ({ dispatch }) ->
 			now = Date.now() / 1000
 			response = await axios.get('secure/refreshtoken') # date + 1

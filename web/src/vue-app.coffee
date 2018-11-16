@@ -5,6 +5,8 @@ import App from './App'
 import createRouter from './vue-router'
 import createStore from './store/root-store'
 import storageService from '@/services/storage-service'
+import './directives/drag'
+import './directives/drop'
 
 Vue.config.productionTip = false
 
@@ -14,9 +16,10 @@ export default ->
 	sync(store, router)
 
 	axios.defaults.baseURL = process.env.API_ROOT
-	axios.interceptors.request.use((config) =>
+	axios.interceptors.request.use(config =>
 		config.headers.common.Authorization = "Bearer #{store.state.session.token}"
-		config)
+		return config
+	)
 
 	app = new Vue(
 		router: router
@@ -35,6 +38,6 @@ export default ->
 			token = storageService.get('token')
 			if token
 				@$store.dispatch('session/loginWithToken', token)
-		render: (h) => h(App)
+		render: h => h(App)
 	)
 	{ app, router, store }

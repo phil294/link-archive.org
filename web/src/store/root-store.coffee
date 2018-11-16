@@ -1,6 +1,6 @@
 import Vuex from 'vuex'
 import Vue from 'vue'
-import session from './session-store'
+import sessionModule from './session-store'
 
 Vue.use(Vuex)
 
@@ -10,17 +10,23 @@ export default =>
 		state:
 			appName: 'My App'
 			loadingCounter: 0
-			authenticateModal: false
+			authenticatePopup: false
 			test: {}
 		mutations:
-			toggleAuthenticateModal: (state, show) ->
-				state.authenticateModal = show
+			toggleAuthenticatePopup: (state, show) ->
+				state.authenticatePopup = show
 			setAppName: (state, appName) ->
 				state.appName = appName
+			increaseLoadingCounter: state ->
+				state.loadingCounter++
+			decreaseLoadingCounter: state ->
+				state.loadingCounter--
 		actions:
-			showAuthenticateModal: ({ commit }) ->
-				commit('toggleAuthenticateModal', true)
-			hideAuthenticateModal: ({ commit }) ->
-				commit('toggleAuthenticateModal', false)
-		modules: { session }
+			showAuthenticatePopup: ({ commit }) ->
+				commit('toggleAuthenticatePopup', true)
+			hideAuthenticatePopup: ({ commit }) ->
+				commit('toggleAuthenticatePopup', false)
+		modules:
+			session: sessionModule
+			# When adding here, see ssr docs. Global submodules *seem* to need a factory wrapper too
 	)

@@ -3,9 +3,10 @@ import createApp from './vue-app'
 
 { app, router, store } = createApp()
 
+# Get on route copmonent reuse: update (/1 to /2 or query param change). not tested
 Vue.mixin(
     beforeRouteUpdate: (to, from, next) ->
-        { asyncDataHook } = @$options # not tested
+        { asyncDataHook } = @$options
         if asyncDataHook
             asyncDataHook(
                 store: @$store
@@ -19,34 +20,20 @@ Vue.mixin(
 if window.__INITIAL_STATE__
     store.replaceState(window.__INITIAL_STATE__)
 
-router.onReady(=>
-    router.beforeResolve((to, from, next) =>
-        matched = router.getMatchedComponents(to)
-        prevMatched = router.getMatchedComponents(from)
-
-        # non-previously-rendered components:
-        diffed = false
-        # const activatedAsyncDataHooks = matched
-        #    .filter((c, i) => diffed || (diffed = (prevMatched[i] !== c)))
-        activatedAsyncDataHooks = matched.filter((c, i) =>
-            if diffed
-                return diffed
-            diffed = prevMatched[i] != c
-        )
-            .map((c) => c.asyncDataHook || (c.options || {}).asyncDataHook)
-            .filter((_) => _)
-        if !activatedAsyncDataHooks.length
-            return next()
-
-        # call all asyncDataHook()
-        # todo loading indicator
-        Promise.all(activatedAsyncDataHooks.map((asyncDataHook) =>
-            asyncDataHook({ store, route: to })))
-            .then(next)
-            .catch(next)
-            .finally( =>
-                # stop loading indicator..??
+# Get on route component creation
+Vue.mixin(
+    beforeMount: ->
+        { asyncDataHook } = @$options
+        if asyncDataHook
+            store.commit('increaseLoadingCounter')
+            @$asyncDataLoaded = asyncDataHook(
+                store: @$store
+                route: @$route
+            ).finally( =>
+                store.commit('decreaseLoadingCounter')
             )
-    )
+)
+
+router.onReady(=>
     app.$mount('#app')
 )
