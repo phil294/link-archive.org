@@ -20,6 +20,7 @@ Vue.directive('drop',
         )
         el.addEventListener('drop', e =>
             e.preventDefault()
+            counter = 0
             el.classList.remove('drop')
             data = JSON.parse(
                 e.dataTransfer.getData('application/json'))
