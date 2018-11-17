@@ -1,17 +1,17 @@
 <template lang="slm">
 	div#hallo.flex
 		div.relevants.flex-fill
-			h4 Shown columns
-			ul drop=addShower
-				li.shower.padding each=shower drag=shower
-					| {{ attributesById[shower].name }}
-				li.extra-attribute.disabled.padding each=extraAttribute
-					| {{ attributesById[extraAttribute].name }}
-		div.attributes.flex-fill
-			h4 More columns
+			h6 Shown columns
 			ul
-				li.attribute.padding each=attribute -key=attribute.id drag=attribute.id
-					| {{ attribute.name }}
+				li.shower.padding each=showerId drop=addShowerBelow(showerId) drag=showerId
+					| {{ attributesById[showerId].name }}
+				li.extra-attribute.disabled.padding each=extraAttributeId drag=extraAttributeId
+					| {{ attributesById[extraAttributeId].name }}
+		div.attributes.flex-fill
+			h6 More columns
+			ul
+				li.attribute.padding each=availableAttributeId drag=availableAttributeId
+					| {{ attributesById[availableAttributeId].name }}
 
 </template>
 
@@ -25,17 +25,21 @@ export default Vue.extend(
 		...mapActions('search', [
 			
 		])
-		addShower: shower ->
-			console.log(shower)
+		addShowerBelow: whereId -> whatId ->
+			# what ∈ [showers, extraAttributes, allAttributes]
+			if whereId == whatId
+				return
+			# add, then remove
+			console.log(whereId, whatId)
 	}
 	computed: {
 		...mapState('search', [
-			'attributes'
-			'showers'
-			'extraAttributes'
+			'showerIds'
+			'extraAttributeIds'
 		])
 		...mapGetters('search', [
 			'attributesById'
+			'availableAttributeIds'
 		])
 	}
 )
@@ -57,5 +61,7 @@ li
 	list-style-type: none
 	border: 1px solid #eee
 	// border-collapse: collapse
+	&.drop
+		border-bottom: 2px solid green
 
 </style>

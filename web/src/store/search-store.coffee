@@ -67,6 +67,19 @@ This way, the server is only queried with showers that the user actively set and
 Seperate query:
 - attributes: []
 	All attributes there are (maybe make this dynamic one day for when there are a lot of them)
+
+overview to avoid duplicate lists:
+
+- filters, sorters, showers
+- sortersByAttribute
+- sortersAmount
+
+- attributes
+- attributesById
+- extraAttributes
+- relevantAttributes
+- availableAttributes
+
 ###
 export default
 	namespaced: true
@@ -77,25 +90,25 @@ export default
 			id: i
 			name: "attribute #{i}"
 		)
-		filters: null
+		filterIds: null
 		sorters: [
-				attribute: 2
+				attribute: 2 # todo call this attributeId
 				direction: 1
 			,
 				attribute: 3
 				direction: -1
 		]
-		showers: [5, 6]
+		showerIds: [5, 6]
 		columns: null
 		products: []
-		extraAttributes: []
+		extraAttributeIds: []
 	getters:
 		attributesById: state ->
 			state.attributes.reduce((all, attribute) =>
 				all[attribute.id] = attribute
 				return all
 			, {})
-		sortersByAttribute: state -> # todo vocabulary unclear
+		sortersByAttributeId: state ->
 			state.attributes.reduce((all, attribute) =>
 				sorterIndex = state.sorters.findIndex(sorter => sorter.attribute == attribute.id)
 				if sorterIndex > -1
@@ -108,29 +121,39 @@ export default
 			, {})
 		sortersAmount: state -> state.sorters.length
 		### This is a concatenation of showers and extraAttributes (and sorters in between, if not contained in the latter) ###
-		relevantAttributes: (state, getters) ->
-			sorterAttributesNotContainedInExtraAttributes = state.sorters
+		relevantAttributeIds: (state, getters) ->
+			# sorters that are not part of extraAttributes or showers
+			sorters = state.sorters
 				.map(sorter => sorter.attribute)
-				.filter(attribute => !state.extraAttributes.includes(attribute))
-			[ ...state.showers, ...sorterAttributesNotContainedInExtraAttributes, ...state.extraAttributes ]
-				.map(attributeId =>
-					getters.attributesById[attributeId])
+				.filter(attributeId =>
+					!state.extraAttributeIds.includes(attributeId) &&
+					!state.showerIds.includes(attributeId))
+			return [
+				...state.showerIds,
+				...sorters,
+				...state.extraAttributeIds ]
+		availableAttributeIds: (state, getters) ->
+			relevants = getters.relevantAttributeIds
+			return state.attributes
+				.map(attribute => attribute.id)
+				.filter(attributeId =>
+					!relevants.includes(attributeId))
 	mutations:
 		removeSorterAt: (state, index) -> Vue.delete(state.sorters, index)
 		addSorter: (state, sorter) -> state.sorters.push(sorter)
 		setProducts: (state, products) -> state.products = products
-		setExtraAttributes: (state, extraAttributes) -> state.extraAttributes = extraAttributes
+		setExtraAttributeIds: (state, extraAttributeIds) -> state.extraAttributeIds = extraAttributeIds
 	actions:
-		toggleSortDirection: ({ commit, state, getters }, { attribute, direction }) ->
-			sorter = getters.sortersByAttribute[attribute]
+		toggleSortDirection: ({ commit, state, getters }, { attributeId, direction }) ->
+			sorter = getters.sortersByAttributeId[attributeId]
 			if sorter
 				commit('removeSorterAt', sorter.index)
 				if sorter.direction == direction
 					return
-			commit('addSorter', { attribute, direction })
+			commit('addSorter', { attribute: attributeId, direction })
 		search: ({ commit, state }) ->
 			if state.result
 				return
 			response = await axios.get("p/#{state.product}")
-			commit('setExtraAttributes', response.data.extraAttributes)
+			commit('setExtraAttributeIds', response.data.extraAttributeIds)
 			commit('setProducts', response.data.products)
