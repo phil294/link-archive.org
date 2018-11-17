@@ -26,7 +26,4 @@ Vue.directive('drop',
                 e.dataTransfer.getData('application/json'))
             value(data)
         )
-    unbind: el =>
-        el.removeEventListener('dragover')
-        el.removeEventListener('drop')
 )

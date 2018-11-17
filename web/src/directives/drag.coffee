@@ -8,6 +8,4 @@ Vue.directive('drag',
                 JSON.stringify(value))
             e.dataTransfer.dropEffect = 'move'
         )
-    unbind: el =>
-        el.removeEventListener('dragstart')
 )
