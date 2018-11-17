@@ -339,7 +339,8 @@ form > *:not(:last-child) {
 .fill
 	@extend .fill-w, .fill-h
 .box
-	box-shadow: 3px 3px 4px #ddd
-	background: rgba(255,255,255,0.8)
-
+    box-shadow: 3px 3px 4px #ddd
+    background: rgba(255,255,255,0.8)
+.drop
+	border: 1px solid green
 </style>
