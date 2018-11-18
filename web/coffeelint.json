@@ -34,7 +34,7 @@
     "level": "warn"
   },
   "eol_last": {
-    "level": "error"
+    "level": "ignore"
   },
   "line_endings": {
     "level": "error",
