@@ -7,7 +7,8 @@ module.exports = (coffeedoc) ->
 				(?:=\s)			|	# "= " or
 				\(				|	# "(" or
 				(?:,\s)			|	# ", " or
-				(?:(?:-|=)>\s)		# "-> " or "=> "
+				(?:(?:-|=)>\s)	|	# "-> " or "=> " or
+				(?:return\s)		# "return "
 			)
 			([\w$@]+)		# $my_paramName@123
 			(?=
