@@ -143,6 +143,8 @@ export default
 		addSorter: (state, sorter) -> state.sorters.push(sorter)
 		setProducts: (state, products) -> state.products = products
 		setExtraAttributeIds: (state, extraAttributeIds) -> state.extraAttributeIds = extraAttributeIds
+		removeShowerIdAt: (state, index) -> Vue.delete(state.showerIds, index)
+		addShowerIdAt: (state, { index, showerId }) -> state.showerIds.splice(index, 0, showerId)
 	actions:
 		toggleSortDirection: ({ commit, state, getters }, { attributeId, direction }) ->
 			sorter = getters.sortersByAttributeId[attributeId]
@@ -157,3 +159,12 @@ export default
 			response = await axios.get("p/#{state.product}")
 			commit('setExtraAttributeIds', response.data.extraAttributeIds)
 			commit('setProducts', response.data.products)
+		addShowerAt: ({ dispatch, commit, state }, { index, showerId }) ->
+			currentPos = state.showerIds.findIndex(e => e == showerId)
+			if currentPos == index
+				return # nothing changed
+			if currentPos > -1
+				commit('removeShowerIdAt', currentPos) # user moved shower from pos A to B
+			commit('addShowerIdAt', { index, showerId })
+			commit('setExtraAttributeIds', [])
+			dispatch('search')
