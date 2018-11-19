@@ -1,22 +1,22 @@
 <template lang="slm">
-	# :_='
-	div#hallo.flex
-		div.relevants.flex-fill
-			h6 Shown columns
-			ul
-				div.showers
-					li.shower.padding v-for="showerId, showerIndex in showerIds" :key=showerIndex drop=addShowerAt(showerIndex) drag=showerId
-						| {{ attributesById[showerId].name }}
-				div.extra-attributes drop=addShowerAt(-1)
-					li.extra-attribute.disabled.padding each=extraAttributeId drag=extraAttributeId -key=extraAttributeId
-						| {{ attributesById[extraAttributeId].name }}
-		div.attributes.flex-fill
-			h6 More columns
-			ul
-				li.attribute.padding each=availableAttributeId drag=availableAttributeId -key=availableAttributeId
-					| {{ attributesById[availableAttributeId].name }}
-		| {{ showerIds }}
-	# '
+# :_='
+div#hallo.flex
+	div.relevants.flex-fill
+		h6 Shown columns
+		ul
+			div.showers
+				li.shower.padding v-for="showerId, showerIndex in showerIds" :key=showerIndex drop=addShowerAt(showerIndex) drag=showerId
+					| {{ attributesById[showerId].name }}
+			div.extra-attributes drop=addShowerAt(-1)
+				li.extra-attribute.disabled.padding each=extraAttributeId drag=extraAttributeId -key=extraAttributeId
+					| {{ attributesById[extraAttributeId].name }}
+	div.attributes.flex-fill
+		h6 More columns
+		ul
+			li.attribute.padding each=availableAttributeId drag=availableAttributeId -key=availableAttributeId
+				| {{ attributesById[availableAttributeId].name }}
+	| {{ showerIds }}
+# '
 </template>
 
 <script lang="coffee">
