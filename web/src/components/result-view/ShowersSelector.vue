@@ -5,7 +5,7 @@ div#hallo.flex
 		h6 Shown columns
 		ul
 			div.showers
-				li.shower.padding v-for="showerId, showerIndex in showerIds" :key=showerIndex drop=addShowerAt(showerIndex) drag=showerId
+				li.shower.padding v-for="showerId, showerIndex in showerIds" :key="showerId+'_'+showerIndex" drop=addShowerAt(showerIndex) drag=showerId
 					| {{ attributesById[showerId].name }}
 			div.extra-attributes drop=addShowerAt(-1)
 				li.extra-attribute.disabled.padding each=extraAttributeId drag=extraAttributeId -key=extraAttributeId
