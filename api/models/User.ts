@@ -8,6 +8,7 @@ enum ExternalType {
 
 @Entity()
 class User extends BaseEntity {
+    public static ADMIN_ID = 1;
     public static async findOneOrCreate(payload: any) {
         let userOptional: User | undefined;
         // external

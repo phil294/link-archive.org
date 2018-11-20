@@ -6,6 +6,7 @@ import * as request from 'request-promise-native';
 import { ExternalType } from '../models/User';
 import MailService from '../services/MailService';
 import TokenService from '../services/TokenService';
+import userSecured from '../userSecured';
 
 export default ((tokenService: TokenService, mailService: MailService,
                  WEB_ROOT: string, GOOGLE_CLIENT_ID: string, FACEBOOK_APP_ID: string, FACEBOOK_APP_SECRET: string, WEBSITE_NAME: string) => {
@@ -14,7 +15,6 @@ export default ((tokenService: TokenService, mailService: MailService,
     authenticationRouter.get('/requesttokenmail', (req, res) => {
         // todo determine if account with mail exists and give out the information to the user in the mail below. motivation: freecodecamp 180963
         // todo let user choose if he wants one-time or never-expiring token
-        // todo add functionality "invalidate all tokens" (aka "log out everywhere")
         const token: string = tokenService.create({
             email: req.query.email, // validity check not necessary, nodemailer handles this
         });
@@ -97,6 +97,10 @@ export default ((tokenService: TokenService, mailService: MailService,
             name: data.name,
         });
         return res.send(token);
+    });
+    authenticationRouter.get('/refreshtoken', userSecured, (_, res) => {
+        const token: string = tokenService.create({ ...res.locals.user });
+        res.send(token);
     });
     return authenticationRouter;
 });
