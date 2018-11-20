@@ -3,9 +3,10 @@ import express from 'express';
 import { NO_CONTENT } from 'http-status-codes';
 import 'reflect-metadata';
 import { Connection, createConnection } from 'typeorm';
+import authenticationMiddleware from './authenticationMiddleware';
 import authenticationRouter from './routers/authenticationRouter';
-import secureRouter from './routers/secureRouter';
 import productRouter from './routers/product-router';
+import userRouter from './routers/userRouter';
 import MailService from './services/MailService';
 import TokenService from './services/TokenService';
 
@@ -44,11 +45,13 @@ app.use((req, res, next) => {
     }
     next();
 });
+
+app.use(authenticationMiddleware(tokenService));
 app.use('/authentication', authenticationRouter(
     tokenService, mailService,
     getEnv('WEB_ROOT'), getEnv('GOOGLE_CLIENT_ID'), getEnv('FACEBOOK_APP_ID'), getEnv('FACEBOOK_APP_SECRET'), getEnv('WEBSITE_NAME'),
 ));
-app.use('/secure', secureRouter(tokenService));
+app.use('/user', userRouter);
 app.use('/p', productRouter);
 
 (async () => {

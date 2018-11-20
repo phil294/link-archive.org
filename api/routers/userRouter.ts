@@ -1,7 +1,8 @@
 import express from 'express';
+import userSecured from '../userSecured';
 
-const secureRouter = express.Router();
-secureRouter.patch('/', async (req, res) => {
+const userRouter = express.Router();
+userRouter.patch('/', userSecured, async (req, res) => {
     const user = res.locals.user;
     [
         'minIat', // If set, this will lead to the invalidation of all tokens prior to the date
@@ -13,4 +14,4 @@ secureRouter.patch('/', async (req, res) => {
     res.send(user);
 });
 
-export default secureRouter;
+export default userRouter;
