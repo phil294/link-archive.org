@@ -1,4 +1,5 @@
 <template lang="slm">
+# :_='
 div
 	h1 Log in or create account	
 	div#register-or-login
@@ -38,6 +39,7 @@ div
 					img.logo -src='static/'+provider.name+'.png'
 					| Log in with {{ provider.name }}
 				div.note v-else Loading {{ provider.name }} login scripts...
+# '
 </template>
 
 <script lang="coffee">

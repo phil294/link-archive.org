@@ -1,18 +1,22 @@
 <template lang="slm">
-	div#hallo.flex
-		div.relevants.flex-fill
-			h4 Shown columns
-			ul drop=addShower
-				li.shower.padding each=shower drag=shower
-					| {{ attributesById[shower].name }}
-				li.extra-attribute.disabled.padding each=extraAttribute
-					| {{ attributesById[extraAttribute].name }}
-		div.attributes.flex-fill
-			h4 More columns
-			ul
-				li.attribute.padding each=attribute -key=attribute.id drag=attribute.id
-					| {{ attribute.name }}
-
+# :_='
+div#hallo.flex
+	div.relevants.flex-fill
+		h6 Shown columns
+		ul
+			div.showers
+				li.shower.padding v-for="showerId, showerIndex in showerIds" :key="showerId+'_'+showerIndex" drop=addShowerAt(showerIndex) drag=showerId
+					| {{ attributesById[showerId].name }}
+			div.extra-attributes drop=addShowerAt(-1)
+				li.extra-attribute.disabled.padding each=extraAttributeId drag=extraAttributeId -key=extraAttributeId
+					| {{ attributesById[extraAttributeId].name }}
+	div.attributes.flex-fill
+		h6 More columns
+		ul
+			li.attribute.padding each=availableAttributeId drag=availableAttributeId -key=availableAttributeId
+				| {{ attributesById[availableAttributeId].name }}
+	| {{ showerIds }}
+# '
 </template>
 
 <script lang="coffee">
@@ -25,17 +29,19 @@ export default Vue.extend(
 		...mapActions('search', [
 			
 		])
-		addShower: shower ->
-			console.log(shower)
+		addShowerAt: index -> showerId =>
+			if index == -1
+				index = @showerIds.length
+			@$store.dispatch('search/addShowerAt', { showerId, index })
 	}
 	computed: {
 		...mapState('search', [
-			'attributes'
-			'showers'
-			'extraAttributes'
+			'showerIds'
+			'extraAttributeIds'
 		])
 		...mapGetters('search', [
 			'attributesById'
+			'availableAttributeIds'
 		])
 	}
 )
@@ -57,5 +63,7 @@ li
 	list-style-type: none
 	border: 1px solid #eee
 	// border-collapse: collapse
+&.drop
+	border-top: 2px solid green
 
 </style>

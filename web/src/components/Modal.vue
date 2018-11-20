@@ -1,7 +1,9 @@
 <template lang="slm">
+# :_='
 div#modal.center.fade-in %keyup.esc=close tabindex=-1
 	div#background.fill %click=close
 	slot
+# '
 </template>
 
 <script lang="coffee">

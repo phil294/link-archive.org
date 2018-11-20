@@ -8,18 +8,18 @@
 						span.name {{ attribute.name }}
 						div.sort.column
 							# clickable html element todo
-							button.sort-up.disabled %click="toggleSortDirection(attribute.id, 1)" -class="{highlighted: sortersByAttribute[attribute.id].direction===1}"
+							button.sort-up.disabled %click="toggleSortDirection(attribute.id, 1)" -class="{highlighted: sortersByAttributeId[attribute.id].direction===1}"
 								| ⮝
-							button.sort-down.disabled %click="toggleSortDirection(attribute.id, -1)" -class="{highlighted: sortersByAttribute[attribute.id].direction===-1}"
+							button.sort-down.disabled %click="toggleSortDirection(attribute.id, -1)" -class="{highlighted: sortersByAttributeId[attribute.id].direction===-1}"
 								| ⮟
-						div.index.highlighted if="sortersAmount > 1 && sortersByAttribute[attribute.id].index >= 0"
-							| {{ sortersByAttribute[attribute.id].index + 1 }}
+						div.index.highlighted if="sortersAmount > 1 && sortersByAttributeId[attribute.id].index >= 0"
+							| {{ sortersByAttributeId[attribute.id].index + 1 }}
 		tbody
 			tr.product each=product -key=product.id
 				td.name
 					| {{ product.name }}
-				td.value v-for="attribute in relevantAttributes" -key=attribute.name
-					| {{ product[attribute.id] }}
+				td.value each=relevantAttributeId
+					| {{ product[relevantAttributeId] }}
 </template>
 
 <script lang="coffee">
@@ -32,8 +32,8 @@ export default Vue.extend(
 		...mapActions('search', [
 			
 		])
-		toggleSortDirection: (attribute, direction) ->
-			@$store.dispatch('search/toggleSortDirection', { attribute, direction })
+		toggleSortDirection: (attributeId, direction) ->
+			@$store.dispatch('search/toggleSortDirection', { attributeId, direction })
 	}
 	computed: {
 		...mapState('search', [
@@ -41,10 +41,14 @@ export default Vue.extend(
 			'products'
 		])
 		...mapGetters('search', [
-			'sortersByAttribute'
+			'sortersByAttributeId'
 			'sortersAmount'
-			'relevantAttributes'
+			'relevantAttributeIds'
+			'attributesById'
 		])
+		relevantAttributes: ->
+			@relevantAttributeIds.map(attributeId =>
+				@attributesById[attributeId])
 	}
 )
 </script>

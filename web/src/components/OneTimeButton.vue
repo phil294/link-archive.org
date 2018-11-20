@@ -1,7 +1,9 @@
 <template lang="slm">
-	button.btn -disabled=used -type=type %click=clicked
-		slot if=!used Click me
-		span else {{ usedPrompt }}
+# :_='
+button.btn -disabled=used -type=type %click=clicked
+	slot if=!used Click me
+	span else {{ usedPrompt }}
+# '
 </template>
 
 <script lang="coffee">

@@ -1,25 +1,26 @@
 <template lang="slm">
-	section#app.column.fill-h
-		popup if=authenticatePopup %close=hideAuthenticatePopup
-			authenticate %authenticated=hideAuthenticatePopup
-		modal if=loadingCounter
-			.box.padding-l
-				| Loading... ({{ loadingCounter }})
-		header.center.padding
-			nav
-				router-link exact to=/ [LOGO]
-				router-link exact to=/settings Settings
-				router-link exact to=/p search result
-			div#loginStatus if=isLoggedIn
-				| Logged in as 
-				span if=session.name {{ session.name }}
-				span else-if=session.email {{ session.email }}
-				span else-if=session.externalType {{ session.externalIdentifier }} [{{ session.externalType }}]
-				button.btn %click=logout Logout
-			button.btn if=!isLoggedIn %click=showAuthenticatePopup
-				| Sign in
-		main.flex-fill.column
+# :_='
+section#app.column.fill-h
+	popup if=authenticatePopup %close=hideAuthenticatePopup
+		authenticate %authenticated=hideAuthenticatePopup
+	modal if=loadingCounter
+		.box.padding-l
+			| Loading... ({{ loadingCounter }})
+	header.center.padding
+		nav
+			router-link exact to=/ [LOGO]
+			router-link exact to=/settings Settings
+		div#loginStatus if=isLoggedIn
+			| Logged in as 
+			span if=session.name {{ session.name }}
+			span else-if=session.email {{ session.email }}
+			span else-if=session.externalType {{ session.externalIdentifier }} [{{ session.externalType }}]
+			button.btn %click=logout Logout
+		button.btn if=!isLoggedIn %click=showAuthenticatePopup
+			| Sign in
+	main.flex-fill.column
 			router-view
+# '
 </template>
 
 <script lang="coffee">
@@ -332,6 +333,4 @@ form > *:not(:last-child) {
 .box
 	box-shadow: 3px 3px 4px #ddd
 	background: rgba(255,255,255,0.8)
-.drop
-	border: 1px solid green
 </style>
