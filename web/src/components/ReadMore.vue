@@ -1,8 +1,10 @@
 <template lang="slm">
-	details
-		summary {{ summary }}
-		div#details
-			slot
+# :_='
+details
+	summary {{ summary }}
+	div#details
+		slot
+# '
 </template>
 
 <script lang="coffee">

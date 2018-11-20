@@ -23,7 +23,7 @@ const connection: Promise<Connection> = createConnection({
     port: Number(getEnv('MONGO_PORT')),
     type: 'mongodb',
     entities: [
-        `${__dirname}/models/*.ts`,
+        `${__dirname}/models/*.ts`, // ` * 
     ],
 });
 
@@ -37,6 +37,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*'); // fixme
+
     res.header('Access-Control-Allow-Headers', 'Content-Type,Authorization');
     if (req.method === 'OPTIONS') {
         res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS,PATCH');

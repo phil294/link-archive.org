@@ -1,8 +1,10 @@
 <template lang="slm">
-	form %submit.prevent=submit
-		slot
-		one-time-button ref=submit type=submit -set-loading-automatically=false {{ buttonLabel }}
-		div.error.fade-in if=errorMessage {{ errorMessage }}
+# :_='
+form %submit.prevent=submit
+	slot
+	one-time-button ref=submit type=submit -set-loading-automatically=false {{ buttonLabel }}
+	div.error.fade-in if=errorMessage {{ errorMessage }}
+# '
 </template>
 
 <script lang="coffee">

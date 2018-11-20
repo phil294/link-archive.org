@@ -1,5 +1,5 @@
 <template lang="slm">
-	div INDEX
+div INDEX
 </template>
 
 <script lang="coffee">
