@@ -90,7 +90,7 @@ export default
 			id: i
 			name: "attribute #{i}"
 		)
-		filterIds: null
+		filters: null
 		sorters: [
 				attribute: 2 # todo call this attributeId
 				direction: 1
@@ -156,7 +156,7 @@ export default
 		search: ({ commit, state }) ->
 			if state.result
 				return
-			response = await axios.get("p/#{state.product}")
+			response = await axios.get("p/#{state.product}") # columns=...
 			commit('setExtraAttributeIds', response.data.extraAttributeIds)
 			commit('setProducts', response.data.products)
 		addShowerAt: ({ dispatch, commit, state }, { index, showerId }) ->

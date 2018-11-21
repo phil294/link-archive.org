@@ -1,16 +1,15 @@
 import { BaseEntity, Column, Entity, ObjectID, ObjectIdColumn } from 'typeorm';
-import ProductData from './ProductData';
 
 @Entity()
-class Product extends BaseEntity {
+class Attribute extends BaseEntity {
     @ObjectIdColumn()
     public id!: ObjectID;
     @Column()
     public name!: string; // required todo
     @Column()
-    public verified: boolean = false; // public .. ? todo
+    public verified: boolean = false;
     @Column()
-    public data: ProductData[] = [];
+    public interest: number = 0;
 }
 
-export default Product;
+export default Attribute;
