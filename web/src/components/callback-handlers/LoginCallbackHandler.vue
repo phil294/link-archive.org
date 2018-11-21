@@ -1,6 +1,6 @@
 <template lang="slm">
 # :_='
-token-input -token=$route.query.token %success=redirect
+token-input :token=$route.query.token @success=redirect
 # '
 </template>
 

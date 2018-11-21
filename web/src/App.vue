@@ -1,8 +1,8 @@
 <template lang="slm">
 # :_='
 section#app.column.fill-h
-	popup if=authenticatePopup %close=hideAuthenticatePopup
-		authenticate %authenticated=hideAuthenticatePopup
+	popup if=authenticatePopup @close=hideAuthenticatePopup
+		authenticate @authenticated=hideAuthenticatePopup
 	modal if=loadingCounter
 		.box.padding-l
 			| Loading... ({{ loadingCounter }})
@@ -15,8 +15,8 @@ section#app.column.fill-h
 			span if=session.name {{ session.name }}
 			span else-if=session.email {{ session.email }}
 			span else-if=session.externalType {{ session.externalIdentifier }} [{{ session.externalType }}]
-			button.btn %click=logout Logout
-		button.btn if=!isLoggedIn %click=showAuthenticatePopup
+			button.btn @click=logout Logout
+		button.btn if=!isLoggedIn @click=showAuthenticatePopup
 			| Sign in
 	main.flex-fill.column
 			router-view

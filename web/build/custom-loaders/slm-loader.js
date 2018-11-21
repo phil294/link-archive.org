@@ -13,18 +13,23 @@
     'v-else-if="'],
     [/model="/g,
     'v-model="'],
+    [/drag="/g,
+    'v-drag="'],
+    [/drop="/g,
+    'v-drop="'],
     // each=products translates to v-for="product in products"
     [/(?<=\s)each="(\S+)"/g,
-    'v-for="$1 in $1s"'],
-    // Allow alternative syntax for event handlers: %click="myMethod" translates to @click="myMethod"
-    [/(?<=\s)%(?=[a-z.-]+=")/g,
-    '@'],
-    // Allow alternative syntax for property binding: -src="mySrc" translates to :src="mySrc". / Ignore this quote: "
-    [/(?<=\s)-(?=[a-z.-]+=")/g,
-    ':']
+    'v-for="$1 in $1s"']
   ];
 
   // Keywords that should allowed to be followed and preceded by whitespace without anything else. This has the potential to break plain text horribly
+
+  // Allow alternative syntax for event handlers: %click="myMethod" translates to @click="myMethod"
+  //[/(?<=\s)%(?=[a-z.-]+=")/g, '@']
+
+  // Allow alternative syntax for property binding: -src="mySrc" translates to :src="mySrc". / Ignore this quote: "
+  //[/(?<=\s)-(?=[a-z.-]+=")/g, ':']
+
   // { to {{ and } to }}
   /* [///
   	(?<![{}])	# before: no { or }

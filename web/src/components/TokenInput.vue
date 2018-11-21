@@ -1,7 +1,7 @@
 <template lang="slm">
 # :_='
 div
-	promise-form#insert-code button-label=Ok -action=loginWithToken
+	promise-form#insert-code button-label=Ok :action=loginWithToken
 		label for=token paste the token here:
 		input#token model=tokenModel type=text name=token required
 # '

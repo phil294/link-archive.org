@@ -1,8 +1,8 @@
 <template lang="slm">
 # :_='
-form %submit.prevent=submit
+form @submit.prevent=submit
 	slot
-	one-time-button ref=submit type=submit -set-loading-automatically=false {{ buttonLabel }}
+	one-time-button ref=submit type=submit :set-loading-automatically=false {{ buttonLabel }}
 	div.error.fade-in if=errorMessage {{ errorMessage }}
 # '
 </template>

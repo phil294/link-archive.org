@@ -1,6 +1,6 @@
 <template lang="slm">
 # :_='
-one-time-button -used-prompt=buttonPrompt %click=clicked ref=otb
+one-time-button :used-prompt=buttonPrompt @click=clicked ref=otb
 	slot
 # '
 </template>
