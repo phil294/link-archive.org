@@ -5,7 +5,6 @@ import 'reflect-metadata';
 import { Connection, createConnection } from 'typeorm';
 import authenticationMiddleware from './authenticationMiddleware';
 import authenticationRouter from './routers/authenticationRouter';
-import productRouter from './routers/product-router';
 import userRouter from './routers/userRouter';
 import MailService from './services/MailService';
 import TokenService from './services/TokenService';
@@ -23,7 +22,7 @@ const connection: Promise<Connection> = createConnection({
     port: Number(getEnv('MONGO_PORT')),
     type: 'mongodb',
     entities: [
-        `${__dirname}/models/*.ts`, // ` * 
+        `${__dirname}/models/*.ts`, // ` *
     ],
 });
 
@@ -53,7 +52,6 @@ app.use('/authentication', authenticationRouter(
     getEnv('WEB_ROOT'), getEnv('GOOGLE_CLIENT_ID'), getEnv('FACEBOOK_APP_ID'), getEnv('FACEBOOK_APP_SECRET'), getEnv('WEBSITE_NAME'),
 ));
 app.use('/user', userRouter);
-app.use('/p', productRouter);
 
 (async () => {
     await connection;
