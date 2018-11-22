@@ -84,22 +84,24 @@ overview to avoid duplicate lists:
 export default
 	namespaced: true
 	state:
-		product: 'test'
-		# while dev: stub attrs
-		attributes: [0..10].map((i) =>
-			id: i
-			name: "attribute #{i}"
-		)
+		### static ###
+		### (optionally) user-defined ###
+		type: 'test'
 		filters: null
 		sorters: [
-				attribute: 2 # todo call this attributeId
+				attributeId: 2
 				direction: 1
 			,
-				attribute: 3
+				attributeId: 3
 				direction: -1
 		]
 		showerIds: [5, 6]
 		columns: null
+		### server response; readonly ###
+		attributes: [0..10].map((i) =>
+			id: i # while dev: stub attrs
+			name: "attribute #{i}"
+		)
 		products: []
 		extraAttributeIds: []
 	getters:
@@ -110,7 +112,7 @@ export default
 			, {})
 		sortersByAttributeId: state ->
 			state.attributes.reduce((all, attribute) =>
-				sorterIndex = state.sorters.findIndex(sorter => sorter.attribute == attribute.id)
+				sorterIndex = state.sorters.findIndex(sorter => sorter.attributeId == attribute.id)
 				if sorterIndex > -1
 					all[attribute.id] =
 						index: sorterIndex
@@ -124,7 +126,7 @@ export default
 		relevantAttributeIds: (state, getters) ->
 			# sorters that are not part of extraAttributes or showers
 			sorters = state.sorters
-				.map(sorter => sorter.attribute)
+				.map(sorter => sorter.attributeId)
 				.filter(attributeId =>
 					!state.extraAttributeIds.includes(attributeId) &&
 					!state.showerIds.includes(attributeId))
@@ -152,11 +154,26 @@ export default
 				commit('removeSorterAt', sorter.index)
 				if sorter.direction == direction
 					return
-			commit('addSorter', { attribute: attributeId, direction })
+			commit('addSorter', { attributeId, direction })
 		search: ({ commit, state }) ->
 			if state.result
 				return
-			response = await axios.get("p/#{state.product}") # columns=...
+			# { type, showerIds, filters, sorters, columns } = state
+			showerIdsParam = state.showerIds
+				.join(',')
+			sortersParam = state.sorters
+				.map(sorter => "#{sorter.attributeId}:#{sorter.direction}")
+				.join(',')
+			filtersParam = state.filters
+				.map(filter => "#{filter.attributeId}:#{filter.condition}:#{filter.conditionValue}")
+				.join(',')
+			response = await axios.get('p', { params: {
+				type,
+				showerIds: showerIdsParam,
+				filters: filtersParam,
+				sorters: sortersParam,
+				columns
+			} })
 			commit('setExtraAttributeIds', response.data.extraAttributeIds)
 			commit('setProducts', response.data.products)
 		addShowerAt: ({ dispatch, commit, state }, { index, showerId }) ->

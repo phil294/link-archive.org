@@ -10,6 +10,7 @@ section#app.column.fill-h
 		nav
 			router-link exact to=/ [LOGO]
 			router-link exact to=/settings Settings
+			router-link exact to=/p search result
 		div#loginStatus if=isLoggedIn
 			| Logged in as 
 			span if=session.name {{ session.name }}

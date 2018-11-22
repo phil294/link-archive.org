@@ -2,6 +2,7 @@ import express from 'express';
 import adminSecured from '../adminSecured';
 import Attribute from '../models/Attribute';
 import Product from '../models/Product';
+import { Not, In } from 'typeorm';
 
 const productRouter = express.Router();
 
@@ -20,12 +21,13 @@ productRouter.delete('/:id', adminSecured, (req, res) => {
 });
 
 productRouter.get('/', async (req, res) => {
-    const { showerIds, filters, sorters, columns } = req.query;
+    const { type, showerIds, filters, sorters, columns } = req.query;
     const extraAttributesAmount = columns - showerIds.length;
     const extraAttributeIds = (await Attribute.find({
         select: ['id'],
         where: {
-            id: showerIds, // not in
+            type,
+            id: Not(In(showerIds)),
         },
         take: extraAttributesAmount,
         order: {
@@ -48,12 +50,23 @@ productRouter.get('/', async (req, res) => {
         }))
         .reduce((all: object, filter: any) => ({
             ...all,
-            [filter.attributeId]: filter.condition, // todo does not allow multiple filters for the same attribute. see typeorm#2396. fix when ready.
+            // todo does not allow multiple filters for the same attribute. see typeorm#2396. fix when ready.
+            [filter.attributeId]: filter.conditionValue,
+        }), {});
+    const sortersFormatted: any = sorters
+        .map((sorter: any) => ({
+            attributeId: `${sorter.attributeId}.value`,
+            direction: sorter.direction,
+        }))
+        .reduce((all: object, sorter: any) => ({
+            ...all,
+            [sorter.attributeId]: sorter.direction,
         }), {});
 
     /********** Search ***********/
     const products = await Product.find({
         where: {
+            type,
             data: {
                 ...filtersFormatted,
             },
@@ -61,11 +74,13 @@ productRouter.get('/', async (req, res) => {
         select: [
             'id', 'name', 'verified', // todo
             // ...relevantAttributeIds.map(id => `data/${id}`),
+            'data'
         ],
         order: {
-            ...req.query.sorters, // obj
+            ...sortersFormatted
         },
     });
+    res.send(products);
 });
 
 export default productRouter;

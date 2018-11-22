@@ -1,7 +1,7 @@
 import { BaseEntity, Column, Entity, ObjectID, ObjectIdColumn } from 'typeorm';
 
 @Entity()
-class ProductData extends BaseEntity {
+class ProductDatum extends BaseEntity {
     @ObjectIdColumn()
     public id!: ObjectID;
     @Column()
@@ -10,4 +10,4 @@ class ProductData extends BaseEntity {
     public value!: string | number | boolean;
 }
 
-export default ProductData;
+export default ProductDatum;
