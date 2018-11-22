@@ -1,7 +1,7 @@
 import express from 'express';
-import Product from '../models/Product';
 import adminSecured from '../adminSecured';
 import Attribute from '../models/Attribute';
+import Product from '../models/Product';
 
 const productRouter = express.Router();
 
@@ -10,13 +10,13 @@ productRouter.post('/', (req, res) => {
     const product = Object.assign(new Product(), {
         name,
         type: req.params.product,
-        verified: false
+        verified: false,
     }).save();
     res.send(product);
 });
 
 productRouter.delete('/:id', adminSecured, (req, res) => {
-    req.params.id
+    // req.params.id;
 });
 
 productRouter.get('/', async (req, res) => {
@@ -29,38 +29,43 @@ productRouter.get('/', async (req, res) => {
         },
         take: extraAttributesAmount,
         order: {
-            interest: 'DESC'
-        }
+            interest: 'DESC',
+        },
     })).map(attribute => attribute.id.toString());
     const sortersMissing = sorters
         .map((sorter: any) => sorter.attribute)
         .filter((attributeId: string) =>
             extraAttributeIds.includes(attributeId) &&
             showerIds.includes(attributeId));
-    extraAttributeIds.splice(extraAttributeIds.length - 1 - sortersMissing.length, sortersMissing.length)
-    const relevantAttributeIds = [...showerIds, ...extraAttributeIds, ...sortersMissing]
-    const filtersFormatted = filters.map(filter => ({
-        attributeId: `data/${filter.attributeId}`,
-        condition
-    }).reduce((all, filter) => {
-        if(!all[filter.attributeId])
-            all[filter.attributeId] = [];
-        all[filter.attributeId].push(filter.condition)
-        return all;
-    }, {}).map(E => or(E)); // todo
+    extraAttributeIds.splice(extraAttributeIds.length - 1 - sortersMissing.length, sortersMissing.length);
+    const relevantAttributeIds = [...showerIds, ...extraAttributeIds, ...sortersMissing];
+    const filtersFormatted: any = filters
+        .map((filter: any) => ({ // todo define types
+            attributeId: `${filter.attributeId}.value`,
+            // logic... transform condition to fit typeorm
+            condition: filter.condition,
+            conditionValue: filter.conditionValue,
+        }))
+        .reduce((all: object, filter: any) => ({
+            ...all,
+            [filter.attributeId]: filter.condition, // todo does not allow multiple filters for the same attribute. see typeorm#2396. fix when ready.
+        }), {});
 
     /********** Search ***********/
     const products = await Product.find({
         where: {
-            ...filtersFormatted,
+            data: {
+                ...filtersFormatted,
+            },
         },
         select: [
             'id', 'name', 'verified', // todo
-            ...relevantAttributeIds.map(id => `data/${id}`)
+            // ...relevantAttributeIds.map(id => `data/${id}`),
         ],
         order: {
-            ...req.query.sorters,
-        }
-    })
+            ...req.query.sorters, // obj
+        },
+    });
 });
+
 export default productRouter;

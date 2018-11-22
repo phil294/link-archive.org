@@ -9,8 +9,8 @@ class Product extends BaseEntity {
     public name!: string; // required todo
     @Column()
     public verified: boolean = false; // public .. ? todo
-    @Column()
-    public data: ProductData[] = [];
+    @Column(() => ProductData)
+    public data: Map.. bla; public ProductData; [] = [];
 }
 
 export default Product;

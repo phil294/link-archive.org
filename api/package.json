@@ -24,7 +24,7 @@
     "request": "2.88.0",
     "request-promise-native": "1.0.5",
     "ts-node": "7.0.1",
-    "typeorm": "0.2.7"
+    "typeorm": "^0.3.0-alpha.22"
   },
   "devDependencies": {
     "@types/body-parser": "1.17.0",

@@ -1,7 +1,9 @@
-import { BaseEntity, Column, Entity } from 'typeorm';
+import { BaseEntity, Column, Entity, ObjectID, ObjectIdColumn } from 'typeorm';
 
 @Entity()
 class ProductData extends BaseEntity {
+    @ObjectIdColumn()
+    public id!: ObjectID;
     @Column()
     public verified: boolean = false;
     @Column()

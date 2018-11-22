@@ -23,7 +23,7 @@ const connection: Promise<Connection> = createConnection({
     port: Number(getEnv('MONGO_PORT')),
     type: 'mongodb',
     entities: [
-        `${__dirname}/models/*.ts`, // ` * 
+        `${__dirname}/models/*.ts`, // ` *
     ],
 });
 
