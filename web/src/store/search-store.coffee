@@ -17,26 +17,26 @@ A search request consists out of user-defined request modifiers:
 	Result will include N or more entries.
 - `columns`: number
 	Amount of attributes to respond with. If <= showers, ignored.
-	Else, showers-columns extraAttributes are included in the returned view.
-	If < 1, no extraAttributes will be added.
+	Else, showers-columns extras are included in the returned view.
+	If < 1, no extras will be added.
 
 # Search result (answer)
 
-Result contains product values at uniq([...showers, ...sorters, ...extraAttributes])
+Result contains product values at uniq([...showers, ...sorters, ...extras])
 with showers = (`shower1`, `shower2`, ... `showerN`)
-and extraAttributes = (`attribute1`, `attribute2`, ... `attributeM`)
-where N >= 0 (client-defined) and M >= 0 (server-defined based on `columns`) but N+M >= 1 (columns >= 1). extraAttributes ⊈ showers.
-extraAttributes are also shown attributes and in some sense showers, but not configured by the user. Their order matters.
+and extras = (`attribute1`, `attribute2`, ... `attributeM`)
+where N >= 0 (client-defined) and M >= 0 (server-defined based on `columns`) but N+M >= 1 (columns >= 1). extras ⊈ showers.
+extras are also shown attributes and in some sense showers, but not configured by the user. Their order matters.
 
 Query response:
 - `result`:
-	`extraAttributes`: []
+	`extras`: []
 	`products`: []
 
 In the frontend, the columns (attibutes) to be displayed are determined by
-`relevantAttributes` = [...showers, ...sorterAttributesNotContainedInExtraAttributes, ...extraAttributes].
-showers and sorters are known before the server responds, so only need to add extraAttributes to the end.
-extraAttributes could instead be the first M elements of the global attributes array instead. But this is not ideal since that order may change. With the current system, changes are coherent. (Maybe add a check to compare both? Should in most cases stay the same. And if changed, debug info + rerquest new attributes?)
+`relevantAttributes` = [...showers, ...sorterAttributesNotContainedInExtras, ...extras].
+showers and sorters are known before the server responds, so only need to add extras to the end.
+extras could instead be the first M elements of the global attributes array instead. But this is not ideal since that order may change. With the current system, changes are coherent. (Maybe add a check to compare both? Should in most cases stay the same. And if changed, debug info + rerquest new attributes?)
 
 # Showers
 
@@ -50,18 +50,18 @@ This way, the server is only queried with showers that the user actively set and
 	filters={}, sorters={}, showers=[] (, attributes=[a1, a2, ..., a50])
 
 	Response:
-	products=[...], extraAttributes: [a1, a2, a3, a4, a5]
+	products=[...], extras: [a1, a2, a3, a4, a5]
 
 	User sets 1 filter at a2, 1 sorter at a5 and configures showers=[a3, a1]
 	filters={a2: 'bla'}, sorters={a5: 1}, showers=[a3, a1]
 
-	Server query: SELECT showers, extraAttributes..., sorters FROM p WHERE filters ORDER BY sorters
+	Server query: SELECT showers, extras..., sorters FROM p WHERE filters ORDER BY sorters
 	Response:
-	products=[...], extraAttributes: [a2, a4, a5]
+	products=[...], extras: [a2, a4, a5]
 
 	Resulting table: relevantAttributes:
 	[a3, a1, a2, a4, a5]
-	[...showers, ...extraAttributes] with filters and sorters active.
+	[...showers, ...extras] with filters and sorters active.
 	
 ---
 Seperate query:
@@ -76,7 +76,7 @@ overview to avoid duplicate lists:
 
 - attributes
 - attributesById
-- extraAttributes
+- extras
 - relevantAttributes
 - availableAttributes
 
@@ -87,7 +87,7 @@ export default
 		### static ###
 		### (optionally) user-defined ###
 		type: 'test'
-		filters: null
+		filters: []
 		sorters: [
 				attributeId: 2
 				direction: 1
@@ -103,7 +103,7 @@ export default
 			name: "attribute #{i}"
 		)
 		products: []
-		extraAttributeIds: []
+		extraIds: []
 	getters:
 		attributesById: state ->
 			state.attributes.reduce((all, attribute) =>
@@ -122,18 +122,18 @@ export default
 				return all
 			, {})
 		sortersAmount: state -> state.sorters.length
-		### This is a concatenation of showers and extraAttributes (and sorters in between, if not contained in the latter) ###
+		### This is a concatenation of showers and extras (and sorters in between, if not contained in the latter) ###
 		relevantAttributeIds: (state, getters) ->
-			# sorters that are not part of extraAttributes or showers
+			# sorters that are not part of extras or showers
 			sorters = state.sorters
 				.map(sorter => sorter.attributeId)
 				.filter(attributeId =>
-					!state.extraAttributeIds.includes(attributeId) &&
+					!state.extraIds.includes(attributeId) &&
 					!state.showerIds.includes(attributeId))
 			return [
 				...state.showerIds,
 				...sorters,
-				...state.extraAttributeIds ]
+				...state.extraIds ]
 		availableAttributeIds: (state, getters) ->
 			relevants = getters.relevantAttributeIds
 			return state.attributes
@@ -144,7 +144,8 @@ export default
 		removeSorterAt: (state, index) -> Vue.delete(state.sorters, index)
 		addSorter: (state, sorter) -> state.sorters.push(sorter)
 		setProducts: (state, products) -> state.products = products
-		setExtraAttributeIds: (state, extraAttributeIds) -> state.extraAttributeIds = extraAttributeIds
+		addProduct: (state, product) -> state.products.push(product)
+		setExtraIds: (state, extraIds) -> state.extraIds = extraIds
 		removeShowerIdAt: (state, index) -> Vue.delete(state.showerIds, index)
 		addShowerIdAt: (state, { index, showerId }) -> state.showerIds.splice(index, 0, showerId)
 	actions:
@@ -157,8 +158,9 @@ export default
 			commit('addSorter', { attributeId, direction })
 		search: ({ commit, state }) ->
 			if state.result
+				alert('result already set, not searching')
 				return
-			# { type, showerIds, filters, sorters, columns } = state
+			{ type, columns } = state
 			showerIdsParam = state.showerIds
 				.join(',')
 			sortersParam = state.sorters
@@ -174,7 +176,7 @@ export default
 				sorters: sortersParam,
 				columns
 			} })
-			commit('setExtraAttributeIds', response.data.extraAttributeIds)
+			commit('setExtraIds', response.data.extraIds)
 			commit('setProducts', response.data.products)
 		addShowerAt: ({ dispatch, commit, state }, { index, showerId }) ->
 			currentPos = state.showerIds.findIndex(e => e == showerId)
@@ -183,5 +185,11 @@ export default
 			if currentPos > -1
 				commit('removeShowerIdAt', currentPos) # user moved shower from pos A to B
 			commit('addShowerIdAt', { index, showerId })
-			commit('setExtraAttributeIds', [])
+			commit('setExtraIds', [])
 			dispatch('search')
+		addProduct: ({ commit, state }, info) ->
+			response = await axios.post('p', {
+				type: state.type,
+				...info # name etc.
+			})
+			commit('addProduct', response.data)

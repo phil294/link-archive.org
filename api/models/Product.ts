@@ -1,5 +1,5 @@
 import { BaseEntity, Column, Entity, ObjectID, ObjectIdColumn } from 'typeorm';
-import ProductDatum from './ProductData';
+import ProductDatum from './ProductDatum';
 
 @Entity()
 class Product extends BaseEntity {

@@ -1,8 +1,15 @@
 <template lang="slm">
+# :_='
 	div#kaa
 		result-view/showers-selector
 		div#bla
 			result-view/result-table
+		button if=!showAddProductDialog @click=showAddProductDialog=true
+			| +
+		button else @click=showAddProductDialog=false
+			| -
+		result-view/add-product-dialog if=showAddProductDialog
+# '
 </template>
 
 <script lang="coffee">
@@ -18,13 +25,14 @@ export default Vue.extend(
 	asyncDataHook: ({ store }) ->
 		store.registerModule('search', searchStoreModule)
 		store.dispatch('search/search')
+	data: ->
+		showAddProductDialog: false
 	computed: {
 		...mapState('search', [
 			'attributes'
 			'sorters'
 			'filters'
 			'showers'
-			'extraAttributes'
 		])
 	}
 	destroyed: ->

@@ -8,8 +8,8 @@ div#hallo.flex
 				li.shower.padding v-for="showerId, showerIndex in showerIds" :key="showerId+'_'+showerIndex" drop=addShowerAt(showerIndex) drag=showerId
 					| {{ attributesById[showerId].name }}
 			div.extra-attributes drop=addShowerAt(-1)
-				li.extra-attribute.disabled.padding each=extraAttributeId drag=extraAttributeId -key=extraAttributeId
-					| {{ attributesById[extraAttributeId].name }}
+				li.extra-attribute.disabled.padding each=extraId drag=extraId -key=extraId
+					| {{ attributesById[extraId].name }}
 	div.attributes.flex-fill
 		h6 More columns
 		ul
@@ -37,7 +37,7 @@ export default Vue.extend(
 	computed: {
 		...mapState('search', [
 			'showerIds'
-			'extraAttributeIds'
+			'extraIds'
 		])
 		...mapGetters('search', [
 			'attributesById'

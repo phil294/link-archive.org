@@ -1,17 +1,18 @@
 import express from 'express';
+import { In, Not } from 'typeorm';
 import adminSecured from '../adminSecured';
 import Attribute from '../models/Attribute';
 import Product from '../models/Product';
-import { Not, In } from 'typeorm';
 
 const productRouter = express.Router();
 
 productRouter.post('/', (req, res) => {
-    const { name } = req.body;
+    const { name, type } = req.body;
     const product = Object.assign(new Product(), {
         name,
-        type: req.params.product,
+        type,
         verified: false,
+        data: {},
     }).save();
     res.send(product);
 });
@@ -22,14 +23,15 @@ productRouter.delete('/:id', adminSecured, (req, res) => {
 
 productRouter.get('/', async (req, res) => {
     const { type, showerIds, filters, sorters, columns } = req.query;
-    const extraAttributesAmount = columns - showerIds.length;
-    const extraAttributeIds = (await Attribute.find({
+    // TODO: parse above into arrays
+    const extraIdsAmount = columns - showerIds.length;
+    const extraIds = (await Attribute.find({
         select: ['id'],
         where: {
             type,
             id: Not(In(showerIds)),
         },
-        take: extraAttributesAmount,
+        take: extraIdsAmount,
         order: {
             interest: 'DESC',
         },
@@ -37,10 +39,10 @@ productRouter.get('/', async (req, res) => {
     const sortersMissing = sorters
         .map((sorter: any) => sorter.attribute)
         .filter((attributeId: string) =>
-            extraAttributeIds.includes(attributeId) &&
+            extraIds.includes(attributeId) &&
             showerIds.includes(attributeId));
-    extraAttributeIds.splice(extraAttributeIds.length - 1 - sortersMissing.length, sortersMissing.length);
-    const relevantAttributeIds = [...showerIds, ...extraAttributeIds, ...sortersMissing];
+    extraIds.splice(extraIds.length - 1 - sortersMissing.length, sortersMissing.length);
+    const relevantAttributeIds = [...showerIds, ...extraIds, ...sortersMissing];
     const filtersFormatted: any = filters
         .map((filter: any) => ({ // todo define types
             attributeId: `${filter.attributeId}.value`,
@@ -74,10 +76,10 @@ productRouter.get('/', async (req, res) => {
         select: [
             'id', 'name', 'verified', // todo
             // ...relevantAttributeIds.map(id => `data/${id}`),
-            'data'
+            'data',
         ],
         order: {
-            ...sortersFormatted
+            ...sortersFormatted,
         },
     });
     res.send(products);
