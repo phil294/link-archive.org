@@ -53,6 +53,13 @@ app.use('/authentication', authenticationRouter(
 ));
 app.use('/user', userRouter);
 
+// @ts-ignore
+// Global error fallback handler, including promises
+app.use((err, req, res, next) => {
+    error(err);
+    res.status(500).send(err && err.status);
+});
+
 (async () => {
     await connection;
     const PORT = getEnv('PORT');
