@@ -38,13 +38,14 @@ export default Vue.extend(
 			@$data.errorResponse = ''
 			@$refs.submit.setUsed()
 			@$emit('submit', event)
-			values = Array.from(new FormData(event.target).entries())
+			formData = new FormData(event.target)
+			values = [...formData.entries()]
 				.reduce((all, entry) =>
 					all[entry[0]] = entry[1]
 					return all
 				, {})
 			try
-				await @$props.action(values, event)
+				await @$props.action(formData, values, event)
 			catch e
 				await @$nextTick() # enforce transition event even if follow-up error+
 				@$data.errorResponse = e
