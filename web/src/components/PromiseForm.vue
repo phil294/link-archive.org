@@ -13,7 +13,7 @@ import Vue from 'vue'
 ###
  * Standardform component: includes only submit (progress-)button.
  * Component fires $submit event and calls `action` prop just
- * like `promise-button`.
+ * like `promise-button` (?)+
 ###
 export default Vue.extend(
 	name: 'PromiseForm'
@@ -24,6 +24,7 @@ export default Vue.extend(
 		errorCaption:
 			type: String
 			default: 'Submit failed'
+		### docs ###
 		action:
 			type: Function
 			required: true
@@ -37,10 +38,15 @@ export default Vue.extend(
 			@$data.errorResponse = ''
 			@$refs.submit.setUsed()
 			@$emit('submit', event)
+			values = Array.from(new FormData(event.target).entries())
+				.reduce((all, entry) =>
+					all[entry[0]] = entry[1]
+					return all
+				, {})
 			try
-				await @$props.action(event)
+				await @$props.action(values, event)
 			catch e
-				await @$nextTick() # enforce transition event even if follow-up error
+				await @$nextTick() # enforce transition event even if follow-up error+
 				@$data.errorResponse = e
 				throw e
 			finally
