@@ -62,8 +62,8 @@ export default Vue.extend(
 				loadedExternalLoginProviders[provider.name] = true
 			await provider.setup()
 	methods: {
-		requestMail: event ->
-			await @$store.dispatch('session/requestTokenMail', event.target.elements.email.value) # using form data, not v-model
+		requestMail: values ->
+			await @$store.dispatch('session/requestTokenMail', values.email)
 			@$data.showMailSent = true
 		externalLogin: provider -> =>
 			token = await provider.login()
