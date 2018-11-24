@@ -1,5 +1,6 @@
 import bodyParser from 'body-parser';
 import express from 'express';
+import expressFormData from 'express-form-data';
 import { NO_CONTENT } from 'http-status-codes';
 import 'reflect-metadata';
 import { Connection, createConnection } from 'typeorm';
@@ -34,6 +35,8 @@ const tokenService = new TokenService(getEnv('TOKEN_SECRET'));
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(expressFormData.parse());
+
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*'); // fixme
 
