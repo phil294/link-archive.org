@@ -8,7 +8,6 @@ table
 				.attribute.center
 					span.name {{ attribute.name }}
 					div.sort.column
-						# clickable html element todo
 						button.sort-up.disabled %click="toggleSortDirection(attribute.id, 1)" -class="{highlighted: sortersByAttributeId[attribute.id].direction===1}"
 							| ⮝
 						button.sort-down.disabled %click="toggleSortDirection(attribute.id, -1)" -class="{highlighted: sortersByAttributeId[attribute.id].direction===-1}"
@@ -19,9 +18,12 @@ table
 		tr.product each=product -key=product.id
 			td.name
 				| {{ product.name }}
-			td.datum v-for="datum in productData(product)" :class="{disabled: !datum.verified}"
-			# slm .class / slm - %
-				| {{ product.data[relevantAttributeId].value }}
+			td.datum v-for="att of relevantAttributeIds"
+				div if=product.data[att]
+					span :class="{disabled: !product.data[att].verified}"        # todo add shorthand to slm-loader / rm - %
+						| {{ product.data[att].value }}
+				div else
+					span.disabled -
 # '
 </template>
 
@@ -37,6 +39,9 @@ export default Vue.extend(
 		])
 		toggleSortDirection: (attributeId, direction) ->
 			@$store.dispatch('search/toggleSortDirection', { attributeId, direction })
+	###	productData: product ->
+			@relevantAttributeIds.map(attributeId =>
+				product.data[attributeId]) ###
 	}
 	computed: {
 		...mapState('search', [
@@ -52,9 +57,6 @@ export default Vue.extend(
 		relevantAttributes: ->
 			@relevantAttributeIds.map(attributeId =>
 				@attributesById[attributeId])
-		productData: product ->
-			@relevantAttributeIds.map(attributeId =>
-				product.data[attributeId])
 	}
 )
 </script>

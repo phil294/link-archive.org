@@ -16,9 +16,6 @@
 import Vue from 'vue'
 import { mapState } from 'vuex'
 import searchStoreModule from '@/store/search-store'
-# import PromiseButton from '@/components/PromiseButton'
-# import PromiseForm from '@/components/PromiseForm'
-# import ReadMore from '@/components/ReadMore'
 
 export default Vue.extend(
 	name: 'ResultView'

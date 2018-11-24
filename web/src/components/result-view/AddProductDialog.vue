@@ -13,15 +13,9 @@ import { mapActions, mapState, mapGetters } from 'vuex'
 export default Vue.extend(
 	name: 'AddProductDialog'
 	methods: {
-		addProduct: ->
-			infos = Object.keys(event.target.elements)
-				.reduce((all, el, obj) => 
-					all[el] = obj[el.value]
-				, {})
-			await @$store.dispatch('search/addProduct', infos)
-	}
-	computed: {
-	
+		...mapActions('search', [
+			'addProduct'
+		])
 	}
 )
 </script>

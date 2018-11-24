@@ -96,7 +96,7 @@ export default
 				direction: -1
 		]
 		showerIds: [5, 6]
-		columns: null
+		columns: 5
 		### server response; readonly ###
 		attributes: [0..10].map((i) =>
 			id: i # while dev: stub attrs
@@ -171,9 +171,9 @@ export default
 				.join(',')
 			response = await axios.get('p', { params: {
 				type,
-				showerIds: showerIdsParam,
-				filters: filtersParam,
-				sorters: sortersParam,
+				showerIdsParam,
+				filtersParam,
+				sortersParam,
 				columns
 			} })
 			commit('setExtraIds', response.data.extraIds)
@@ -187,9 +187,7 @@ export default
 			commit('addShowerIdAt', { index, showerId })
 			commit('setExtraIds', [])
 			dispatch('search')
-		addProduct: ({ commit, state }, info) ->
-			response = await axios.post('p', {
-				type: state.type,
-				...info # name etc.
-			})
+		addProduct: ({ commit, state }, formData) ->
+			formData.append('type', state.type)
+			response = await axios.post('p', formData)
 			commit('addProduct', response.data)
