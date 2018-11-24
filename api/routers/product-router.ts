@@ -22,8 +22,40 @@ productRouter.delete('/:id', adminSecured, (req, res) => {
 });
 
 productRouter.get('/', async (req, res) => {
-    const { type, showerIds, filters, sorters, columns } = req.query;
-    // TODO: parse above into arrays
+    let { type, showerIdsParam, filtersParam, sortersParam, columns } = req.query;
+    
+    /*********** parse  *********/
+    const showerIds = showerIdsParam
+        .split(',')
+    const sortersFormatted = sortersParam
+        .split(',')
+        .map((s: string) => {
+            const split = s.split(':')
+            return {
+                attributeId: `${split[0]}.value`,
+                direction: split[1],
+            }
+        })
+        .reduce((all: object, sorter: any) => ({
+            ...all,
+            [sorter.attributeId]: sorter.direction,
+        }), {});
+    const filtersFormatted = filtersParam
+        .split(',')
+        .map((s: string) => {
+            const split = s.split(':')
+            return {
+                attributeId: `${split[0]}.value`,
+                condition: split[1],
+                conditionValue: split[2],
+            }})
+        .reduce((all: object, filter: any) => ({
+            ...all,
+            // todo does not allow multiple filters for the same attribute. see typeorm#2396. fix when ready.
+            [filter.attributeId]: filter.conditionValue,
+        }), {});
+    
+    /*********** determine extraIds **********/
     const extraIdsAmount = columns - showerIds.length;
     const extraIds = (await Attribute.find({
         select: ['id'],
@@ -36,34 +68,15 @@ productRouter.get('/', async (req, res) => {
             interest: 'DESC',
         },
     })).map(attribute => attribute.id.toString());
+    
+    /************ compute *************/
     const sortersMissing = sorters
         .map((sorter: any) => sorter.attribute)
         .filter((attributeId: string) =>
-            extraIds.includes(attributeId) &&
-            showerIds.includes(attributeId));
+            !extraIds.includes(attributeId) &&
+            !showerIds.includes(attributeId));
     extraIds.splice(extraIds.length - 1 - sortersMissing.length, sortersMissing.length);
     const relevantAttributeIds = [...showerIds, ...extraIds, ...sortersMissing];
-    const filtersFormatted: any = filters
-        .map((filter: any) => ({ // todo define types
-            attributeId: `${filter.attributeId}.value`,
-            // logic... transform condition to fit typeorm
-            condition: filter.condition,
-            conditionValue: filter.conditionValue,
-        }))
-        .reduce((all: object, filter: any) => ({
-            ...all,
-            // todo does not allow multiple filters for the same attribute. see typeorm#2396. fix when ready.
-            [filter.attributeId]: filter.conditionValue,
-        }), {});
-    const sortersFormatted: any = sorters
-        .map((sorter: any) => ({
-            attributeId: `${sorter.attributeId}.value`,
-            direction: sorter.direction,
-        }))
-        .reduce((all: object, sorter: any) => ({
-            ...all,
-            [sorter.attributeId]: sorter.direction,
-        }), {});
 
     /********** Search ***********/
     const products = await Product.find({
