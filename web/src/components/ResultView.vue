@@ -1,20 +1,22 @@
 <template lang="slm">
 # :_='
-	div#kaa
-		button if=!showShowersSelector @click=showShowersSelector=true
-			| +
-		button else @click=showShowersSelector=false
-			| -
-		result-view/showers-selector if=showShowersSelector
+	div#kaa.column
+		div
+			button if=!showShowersSelector @click=showShowersSelector=true
+				| +
+			button else @click=showShowersSelector=false
+				| -
+			result-view/showers-selector if=showShowersSelector
 		
 		div#bla
 			result-view/result-table
 		
-		button if=!showAddProductDialog @click=showAddProductDialog=true
-			| +
-		button else @click=showAddProductDialog=false
-			| -
-		result-view/add-product-dialog if=showAddProductDialog
+		div
+			button if=!showAddProductDialog @click=showAddProductDialog=true
+				| +
+			button else @click=showAddProductDialog=false
+				| -
+			result-view/add-product-dialog if=showAddProductDialog
 # '
 </template>
 
@@ -45,6 +47,9 @@ export default Vue.extend(
 </script>
 
 <style lang="stylus" scoped>
-#bla, #kaa // both needed for proper overflow in FF (idk) - todo
+#kaa
+	overflow: auto // FF
+#bla
 	overflow: auto
+	min-height: 80% // FF: always effective by parent overflowing. Chrome: ignored, parent keeps size. :(
 </style>
