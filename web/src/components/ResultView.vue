@@ -1,9 +1,15 @@
 <template lang="slm">
 # :_='
 	div#kaa
-		result-view/showers-selector
+		button if=!showShowersSelector @click=showShowersSelector=true
+			| +
+		button else @click=showShowersSelector=false
+			| -
+		result-view/showers-selector if=showShowersSelector
+		
 		div#bla
 			result-view/result-table
+		
 		button if=!showAddProductDialog @click=showAddProductDialog=true
 			| +
 		button else @click=showAddProductDialog=false
@@ -23,6 +29,7 @@ export default Vue.extend(
 		store.registerModule('search', searchStoreModule)
 		store.dispatch('search/search')
 	data: ->
+		showShowersSelector: false
 		showAddProductDialog: false
 	computed: {
 		...mapState('search', [
