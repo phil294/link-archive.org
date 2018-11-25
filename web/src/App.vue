@@ -311,7 +311,7 @@ form > *:not(:last-child) {
 	animation: fadein 0.5s
 .fade-toggle
 	transition: opacity 0.5s
-// does not work with v-if, keeps size, but enables fade out animation. use like: ... class="fade-toggle" :class="{hidden:_var_}"
+// does not work with v-if, keeps size, but enables fade out animation. use like: ... class=fade-toggle :class.hidden=_var_
 .fade-toggle.hidden
 	opacity: 0
 .disabled
