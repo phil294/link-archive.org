@@ -6,16 +6,15 @@ div#hallo.flex
 		ul
 			div.showers
 				li.shower.padding v-for="showerId, showerIndex in showerIds" :key="showerId+'_'+showerIndex" drop=addShowerAt(showerIndex) drag=showerId
-					| {{ attributesById[showerId].name }}
+					| $attributesById[showerId].name
 			div.extra-attributes drop=addShowerAt(-1)
 				li.extra-attribute.disabled.padding each=extraId drag=extraId :key=extraId
-					| {{ attributesById[extraId].name }}
+					| $attributesById[extraId].name
 	div.attributes.flex-fill
 		h6 More columns
 		ul
 			li.attribute.padding each=availableAttributeId drag=availableAttributeId :key=availableAttributeId
-				| {{ attributesById[availableAttributeId].name }}
-	| {{ showerIds }}
+				| $attributesById[availableAttributeId].name
 # '
 </template>
 
