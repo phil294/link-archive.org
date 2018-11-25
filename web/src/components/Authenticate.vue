@@ -24,7 +24,7 @@ div
 				div
 					p
 						| An email has been sent to 
-						em {{ email }}
+						em $email
 					p
 						| You can log in by clicking the link in the email
 					p.center
@@ -37,8 +37,8 @@ div
 			div v-for="provider in externalLoginProviders" -key=provider.name
 				promise-button.center if=provider.initialized -action=externalLogin(provider)
 					img.logo -src='static/'+provider.name+'.png'
-					| Log in with {{ provider.name }}
-				div.note v-else Loading {{ provider.name }} login scripts...
+					| Log in with $provider.name
+				div.note v-else Loading $provider.name login scripts...
 # '
 </template>
 

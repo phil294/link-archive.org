@@ -5,7 +5,7 @@ section#app.column.fill-h
 		authenticate %authenticated=hideAuthenticatePopup
 	modal if=loadingCounter
 		.box.padding-l
-			| Loading... ({{ loadingCounter }})
+			| Loading... ($loadingCounter)
 	header.center.padding
 		nav
 			router-link exact to=/ [LOGO]
@@ -13,9 +13,9 @@ section#app.column.fill-h
 			router-link exact to=/p search result
 		div#loginStatus if=isLoggedIn
 			| Logged in as 
-			span if=session.name {{ session.name }}
-			span else-if=session.email {{ session.email }}
-			span else-if=session.externalType {{ session.externalIdentifier }} [{{ session.externalType }}]
+			span if=session.name $session.name
+			span else-if=session.email $session.email
+			span else-if=session.externalType $session.externalIdentifier [$session.externalType]
 			button.btn %click=logout Logout
 		button.btn if=!isLoggedIn %click=showAuthenticatePopup
 			| Sign in

@@ -2,7 +2,7 @@
 # :_='
 button.btn -disabled=used -type=type %click=clicked
 	slot if=!used Click me
-	span else {{ usedPrompt }}
+	span else $usedPrompt
 # '
 </template>
 
