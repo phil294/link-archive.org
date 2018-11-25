@@ -23,6 +23,12 @@ replaces = [
 		[{}]		# brace
 		(?![{}])	# after: no { or }
 	///g, '$1$1']	# double ###
+	# $blub to {{blub}}
+	[///
+		(?<=\s)				# before: whitespace
+		\$					# dollar
+		([\w.\[\]$/+-]+)	# myVar_iable[0].$prop+12-5/7
+	///g, '{{$1}}']
 ]
 
 # Keywords that should allowed to be followed and preceded by whitespace without anything else. This has the potential to break plain text horribly
@@ -43,7 +49,7 @@ module.exports = (slmdoc) ->
 	
 	# Allow attributes without quotes syntax. E.g: input @click=myMethod
 	.replace(///
-		(?<=\s[a-z.@%:-]+=)	# [WS]%src=
+		(?<=\s[a-zA-Z.@%:-]+=)	# [WS]%src=
 		([^\s"]+)			# mySrc				<- captured
 		(?=\s|$)			# [WS]
 	///g, '"$1"')			# Add quotes
@@ -59,6 +65,6 @@ module.exports = (slmdoc) ->
 			+ keyword \		# The keyword		<- captured
 			+ ')(?=\\s|$)'	# [WS]
 		, 'g'), '$1=""')
-	
+
 	# Should now be pure coffee
-	return slm.compile(slmdoc)()
+	slm.compile(slmdoc)()

@@ -1,7 +1,7 @@
 <template lang="slm">
 # :_='
 details
-	summary {{ summary }}
+	summary $summary
 	div#details
 		slot
 # '
