@@ -8,12 +8,12 @@ div#hallo.flex
 				li.shower.padding v-for="showerId, showerIndex in showerIds" :key="showerId+'_'+showerIndex" drop=addShowerAt(showerIndex) drag=showerId
 					| {{ attributesById[showerId].name }}
 			div.extra-attributes drop=addShowerAt(-1)
-				li.extra-attribute.disabled.padding each=extraId drag=extraId -key=extraId
+				li.extra-attribute.disabled.padding each=extraId drag=extraId :key=extraId
 					| {{ attributesById[extraId].name }}
 	div.attributes.flex-fill
 		h6 More columns
 		ul
-			li.attribute.padding each=availableAttributeId drag=availableAttributeId -key=availableAttributeId
+			li.attribute.padding each=availableAttributeId drag=availableAttributeId :key=availableAttributeId
 				| {{ attributesById[availableAttributeId].name }}
 	| {{ showerIds }}
 # '
