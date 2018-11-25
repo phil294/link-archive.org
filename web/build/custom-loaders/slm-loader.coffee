@@ -24,8 +24,20 @@ replaces = [
 	[///
 		(?<=\s)				# before: whitespace
 		\$					# dollar
-		([\w.\[\]$/+-]+)	# myVar_iable[0].$prop+12-5/7
+		([\w.\[\]$/="'+-]+)	# myVar_[0].$prop+12-5/7==="a"
 	///g, '{{$1}}']
+	# :class.myclass="condition" to :class="{myclass:condition}"
+	[///
+		(?<=		# before:
+			\s			# whitespace
+			:class		# :class
+		)
+		\.([\w-]+)	# .myclass
+		="			# ="
+		([^"]+)		# condition
+		"			# "
+		(?=\s)		# after: whitespace
+	///g, '="{$1:$2}"']
 ]
 
 # Keywords that should allowed to be followed and preceded by whitespace without anything else. This has the potential to break plain text horribly
