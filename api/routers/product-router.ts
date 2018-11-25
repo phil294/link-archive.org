@@ -24,12 +24,11 @@ productRouter.delete('/:id', adminSecured, (req, res) => {
 
 // todo types missing everywhere
 productRouter.get('/', async (req, res) => {
-    const { type, showerIdsParam, filtersParam, sortersParam, columns } = req.query;
-
     /*********** parse  *********/
-    const showerIds = showerIdsParam
+    const type = req.query.t;
+    const showerIds = req.query.sh
         .split(',').filter(Boolean);
-    const sorters = sortersParam
+    const sorters = req.query.so
         .split(',').filter(Boolean)
         .map((s: string) => {
             const split = s.split(':');
@@ -47,7 +46,7 @@ productRouter.get('/', async (req, res) => {
             ...all,
             [sorter.attributeId]: sorter.direction,
         }), {});
-    const filtersFormatted = filtersParam
+    const filtersFormatted = req.query.f
         .split(',').filter(Boolean)
         .map((s: string) => {
             const split = s.split(':');
@@ -64,7 +63,7 @@ productRouter.get('/', async (req, res) => {
         }), {});
 
     /*********** determine extraIds **********/
-    const extraIdsAmount = columns - showerIds.length;
+    const extraIdsAmount = req.query.c - showerIds.length;
     const extraIds = (await Attribute.find({
         select: ['id'],
         where: {
@@ -109,6 +108,8 @@ productRouter.get('/', async (req, res) => {
             p.data = {};
         }
     });
+
+    /********** return **********/
     res.send({
         products,
         extraIds,

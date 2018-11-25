@@ -170,11 +170,11 @@ export default
 				.map(filter => "#{filter.attributeId}:#{filter.condition}:#{filter.conditionValue}")
 				.join(',')
 			response = await axios.get('p', { params: {
-				type,
-				showerIdsParam,
-				filtersParam,
-				sortersParam,
-				columns
+				t: type,
+				sh: showerIdsParam,
+				f: filtersParam,
+				so: sortersParam,
+				c: columns
 			} })
 			commit('setExtraIds', response.data.extraIds)
 			commit('setProducts', response.data.products)
