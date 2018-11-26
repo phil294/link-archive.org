@@ -20,6 +20,9 @@ export default ->
 		config.headers.common.Authorization = "Bearer #{store.state.session.token}"
 		return config
 	)
+	axios.interceptors.response.use((response => response), error =>
+		console.error(error.response)
+		Promise.reject(error.response.data || error.response.statusText || error.response.status))
 
 	app = new Vue(
 		router: router
