@@ -6,24 +6,29 @@ table
 			th
 			th v-for="attribute in relevantAttributes" :key=attribute.id
 				.attribute.center
-					span.name {{ attribute.name }}
+					span.name $attribute.name
 					div.sort.column
-						button.sort-up.disabled @click="toggleSortDirection(attribute.id, 1)" :class="{highlighted: sortersByAttributeId[attribute.id].direction===1}"
+						button.sort-up.disabled @click="toggleSortDirection(attribute.id, 1)" :class.highlighted=sortersByAttributeId[attribute.id].direction===1
 							| ⮝
-						button.sort-down.disabled @click="toggleSortDirection(attribute.id, -1)" :class="{highlighted: sortersByAttributeId[attribute.id].direction===-1}"
+						button.sort-down.disabled @click="toggleSortDirection(attribute.id, -1)" :class.highlighted=sortersByAttributeId[attribute.id].direction===-1
 							| ⮟
 					div.index.highlighted if="sortersAmount > 1 && sortersByAttributeId[attribute.id].index >= 0"
-						| {{ sortersByAttributeId[attribute.id].index + 1 }}
+						| $sortersByAttributeId[attribute.id].index+1
 	tbody
 		tr.product each=product :key=product.id
 			td.name
-				| {{ product.name }}
-			td.datum v-for="att of relevantAttributeIds"
+				| $product.name
+			td.datum v-for="att of relevantAttributeIds" @click=datumClicked(product,att)
 				div if=product.data[att]
-					span :class="{disabled: !product.data[att].verified}"        # todo add shorthand to slm-loader / rm - %
-						| {{ product.data[att].value }}
+					span.value :class.disabled="!product.data[att].verified"
+						| $product.data[att].value
+					button.edit @click=datumClicked(product,att)
+						| 🖉
 				div else
-					span.disabled -
+					span
+						| &#63; # questionmark
+					button.edit.add @click=datumClicked(product,att)
+						| + 🖉
 # '
 </template>
 
@@ -42,6 +47,9 @@ export default Vue.extend(
 	###	productData: product ->
 			@relevantAttributeIds.map(attributeId =>
 				product.data[attributeId]) ###
+		datumClicked: (product, attributeId) ->
+			@$emit('datumClicked', { product, attributeId })
+
 	}
 	computed: {
 		...mapState('search', [
@@ -99,7 +107,13 @@ th
 			bottom: -0.7em
 	.index
 		font-size: 80%
-.value
-	font-size: 80%
+td.datum
+	text-align: center
+	.value
+		font-size: 80%
+	button.edit
+		font-size: 80%
+	button.add
+		color: green
 
 </style>

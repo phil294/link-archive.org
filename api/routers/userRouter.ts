@@ -2,6 +2,7 @@ import express from 'express';
 import userSecured from '../userSecured';
 
 const userRouter = express.Router();
+// todo patch syntax is numpties, should be application/json-patch
 userRouter.patch('/', userSecured, async (req, res) => {
     const user = res.locals.user;
     [

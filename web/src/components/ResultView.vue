@@ -9,7 +9,10 @@
 			result-view/showers-selector if=showShowersSelector
 		
 		div#bla
-			result-view/result-table
+			result-view/result-table @datumClicked=datumClicked($event)
+
+		popup if=editing @close=editing=null
+			result-view/edit-datum-dialog :product=editing.product :attributeId=editing.attributeId
 		
 		div
 			button if=!showAddProductDialog @click=showAddProductDialog=true
@@ -33,6 +36,10 @@ export default Vue.extend(
 	data: ->
 		showShowersSelector: false
 		showAddProductDialog: false
+		editing: null
+	methods:
+		datumClicked: editing ->
+			@$data.editing = editing
 	computed: {
 		...mapState('search', [
 			'attributes'
