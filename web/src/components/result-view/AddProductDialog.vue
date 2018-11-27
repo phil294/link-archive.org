@@ -2,7 +2,7 @@
 # :_='
 div
 	promise-form button-label="Add product" :action=addProduct
-		input#name name=name placeholder="Name" required
+		input#name name=name placeholder=Name required
 # '
 </template>
 

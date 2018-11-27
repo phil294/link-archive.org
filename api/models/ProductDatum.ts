@@ -7,8 +7,6 @@ class ProductDatum extends BaseEntity {
     @Column()
     public user!: string; // objid?
     @Column()
-    public verified: boolean = false;
-    @Column()
     public value!: string | number | boolean;
     @Column()
     public source!: string; // todo: collaborative array

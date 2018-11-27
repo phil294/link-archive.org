@@ -5,7 +5,7 @@ import { In, Not } from 'typeorm';
 import adminSecured from '../adminSecured';
 import Attribute from '../models/Attribute';
 import Product from '../models/Product';
-import ProductDatum from '../models/ProductDatum';
+import ProductDatumProposal from '../models/ProductDatumProposal';
 
 const productRouter = express.Router();
 
@@ -30,7 +30,10 @@ productRouter.post('/:productId/data/:attributeId', async (req, res) => {
     const { productId, attributeId } = req.params;
     const { value, source } = req.body;
     // todo very inefficient for larger objects. this should only set .data[aId][], not get&save entire product
-    const product = await Product.findOne({ id: productId });
+    const product = await Product.findOne({
+        where: { id: productId }, // does not match todo
+        select: [ 'data' ]
+    });
     if (!product) {
         res.status(NOT_FOUND).send('Product not found');
         return;
@@ -40,20 +43,20 @@ productRouter.post('/:productId/data/:attributeId', async (req, res) => {
         res.status(NOT_FOUND).send('Attribute not found');
         return;
     }
-    if (!product.data[attributeId]) {
-        product.data[attributeId] = [];
-    }
-    const datum = Object.assign(new ProductDatum(), {
-        value,
+    const datumProposal = Object.assign(new ProductDatumProposal(), {
+        attribute: attribute.id,
+        product: product.id,
+        value, // todo validation? various places. typeorm?
         source,
+        user: res.locals.userId,
     });
-    product.data[attributeId].push(datum);
     try {
-        await product.save();
-    } catch (e) {
+        await datumProposal.save();
+    } catch(e) {
         res.status(UNPROCESSABLE_ENTITY).send(e.message);
+        return;
     }
-    res.send(datum);
+    res.send(datumProposal);
 });
 
 // todo types missing everywhere
@@ -129,7 +132,7 @@ productRouter.get('/', async (req, res) => {
         },
         select: [
             'id', 'name', 'verified', // todo
-            // ...relevantAttributeIds.map(id => `data/${id}`),
+            // ...relevantAttributeIds.map(id => `data/${id}/primary`),
             'data',
         ],
         order: {
