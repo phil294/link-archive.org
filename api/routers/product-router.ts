@@ -1,10 +1,12 @@
-import { NOTFOUND } from 'dns';
 import express from 'express';
 import { NOT_FOUND, UNPROCESSABLE_ENTITY } from 'http-status-codes';
+import { ObjectID } from 'mongodb';
 import { In, Not } from 'typeorm';
 import adminSecured from '../adminSecured';
 import Attribute from '../models/Attribute';
+import PrimaryProductDatum from '../models/PrimaryProductDatum';
 import Product from '../models/Product';
+import ProductDatum from '../models/ProductDatum';
 import ProductDatumProposal from '../models/ProductDatumProposal';
 
 const productRouter = express.Router();
@@ -21,40 +23,67 @@ productRouter.post('/', async (req, res) => {
     res.send(product);
 });
 
-productRouter.delete('/:id', adminSecured, (req, res) => {
-    // req.params.id;
+productRouter.delete('/:id', adminSecured, async (req, res) => {
+    return await Product.delete({
+        id: new ObjectID(req.params.id),
+    });
 });
 
 /** Propose a ProductDatum */
 productRouter.post('/:productId/data/:attributeId', async (req, res) => {
     const { productId, attributeId } = req.params;
     const { value, source } = req.body;
-    // todo very inefficient for larger objects. this should only set .data[aId][], not get&save entire product
+    const attribute = await Attribute.findOne({ _id: new ObjectID(attributeId) });
+    if (!attribute) {
+        res.status(NOT_FOUND).send('Attribute not found');
+        return;
+    }
+    const productObjId = new ObjectID(productId);
     const product = await Product.findOne({
-        where: { id: productId }, // does not match todo
-        select: [ 'data' ]
+        where: { _id: productObjId },
+        // select: [ `data.${attributeId}` ] // todo
     });
     if (!product) {
         res.status(NOT_FOUND).send('Product not found');
         return;
     }
-    const attribute = await Attribute.findOne({ id: attributeId });
-    if (!attribute) {
-        res.status(NOT_FOUND).send('Attribute not found');
-        return;
-    }
-    const datumProposal = Object.assign(new ProductDatumProposal(), {
-        attribute: attribute.id,
-        product: product.id,
+    const datum = Object.assign(new ProductDatum(), {
         value, // todo validation? various places. typeorm?
         source,
         user: res.locals.userId,
     });
+    const datumProposal = Object.assign(new ProductDatumProposal(), {
+        ...datum,
+        attribute: attribute.id,
+        product: product.id,
+    });
+    const primaryDatum = Object.assign(new PrimaryProductDatum(), {
+        ...datum,
+    });
+
     try {
         await datumProposal.save();
-    } catch(e) {
+    } catch (e) {
         res.status(UNPROCESSABLE_ENTITY).send(e.message);
         return;
+    }
+
+    // todo same as below
+    if (!product.data) {
+        product.data = {};
+    }
+    if (!product.data[attributeId]) {
+        product.data[attributeId] = primaryDatum;
+        await product.save();
+        /*
+        await Product.update({
+            id: productObjId,
+        }, {
+            data: {
+                [attributeId]: datumProposal
+            },
+        });
+        */
     }
     res.send(datumProposal);
 });

@@ -65,6 +65,7 @@ export default Vue.extend(
 		relevantAttributes: ->
 			@relevantAttributeIds.map(attributeId =>
 				@attributesById[attributeId])
+			.filter(_ => _)
 	}
 )
 </script>

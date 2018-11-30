@@ -29,6 +29,13 @@
     "@types/connect" "*"
     "@types/node" "*"
 
+"@types/bson@*":
+  version "1.0.11"
+  resolved "https://registry.yarnpkg.com/@types/bson/-/bson-1.0.11.tgz#c95ad69bb0b3f5c33b4bb6cc86d86cafb273335c"
+  integrity sha512-j+UcCWI+FsbI5/FQP/Kj2CXyplWAz39ktHFkXk84h7dNblKRSoNJs95PZFRd96NQGqsPEPgeclqnznWZr14ZDA==
+  dependencies:
+    "@types/node" "*"
+
 "@types/caseless@*":
   version "0.12.1"
   resolved "https://registry.yarnpkg.com/@types/caseless/-/caseless-0.12.1.tgz#9794c69c8385d0192acc471a540d1f8e0d16218a"
@@ -87,6 +94,14 @@
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@types/mime/-/mime-2.0.0.tgz#5a7306e367c539b9f6543499de8dd519fac37a8b"
   integrity sha512-A2TAGbTFdBw9azHbpVd+/FkdW2T6msN1uct1O9bH3vTerEHKZhTXJUQXy+hNq1B0RagfU8U+KBdqiZpxjhOUQA==
+
+"@types/mongodb@^3.1.15":
+  version "3.1.15"
+  resolved "https://registry.yarnpkg.com/@types/mongodb/-/mongodb-3.1.15.tgz#230c224e4981867b1920f415406597255c1875a8"
+  integrity sha512-JSvtmrdrh88WH0Lo8Hq7sB1FkEChkrt6+fAZdFhEsRXcUetnrdU7wd2yar40tPg5wfRI2t31yduQgPiMUvgEEA==
+  dependencies:
+    "@types/bson" "*"
+    "@types/node" "*"
 
 "@types/node@*":
   version "10.12.2"
@@ -1944,10 +1959,10 @@ minimist@^1.2.0:
   dependencies:
     minimist "0.0.8"
 
-mongodb-core@3.1.3:
-  version "3.1.3"
-  resolved "https://registry.yarnpkg.com/mongodb-core/-/mongodb-core-3.1.3.tgz#b036bce5290b383fe507238965bef748dd8adb75"
-  integrity sha512-dISiV3zHGJTwZpg0xDhi9zCqFGMhA5kDPByHlcaEp09NSKfzHJ7XQbqVrL7qhki1U9PZHsmRfbFzco+6b1h2wA==
+mongodb-core@3.1.9:
+  version "3.1.9"
+  resolved "https://registry.yarnpkg.com/mongodb-core/-/mongodb-core-3.1.9.tgz#c31ee407bf932b0149eaed775c17ee09974e4ca3"
+  integrity sha512-MJpciDABXMchrZphh3vMcqu8hkNf/Mi+Gk6btOimVg1XMxLXh87j6FAvRm+KmwD1A9fpu3qRQYcbQe4egj23og==
   dependencies:
     bson "^1.1.0"
     require_optional "^1.0.1"
@@ -1955,12 +1970,12 @@ mongodb-core@3.1.3:
   optionalDependencies:
     saslprep "^1.0.0"
 
-mongodb@3.1.4:
-  version "3.1.4"
-  resolved "https://registry.yarnpkg.com/mongodb/-/mongodb-3.1.4.tgz#0ff07a7409a4edf05e71f9ff8df3633bd278ed53"
-  integrity sha512-BGUxo4a/p5KtZpOn6+z6iZXTHfDxKDvibHQap9uMJqQouwoszvTIO/QbVZkaSX3Spny0jtTEeHc0FwfpGbtEzA==
+mongodb@^3.1.10:
+  version "3.1.10"
+  resolved "https://registry.yarnpkg.com/mongodb/-/mongodb-3.1.10.tgz#45ad9b74ea376f4122d0881b75e5489b9e504ed7"
+  integrity sha512-Uml42GeFxhTGQVml1XQ4cD0o/rp7J2ROy0fdYUcVitoE7vFqEhKH4TYVqRDpQr/bXtCJVxJdNQC1ntRxNREkPQ==
   dependencies:
-    mongodb-core "3.1.3"
+    mongodb-core "3.1.9"
     safe-buffer "^5.1.2"
 
 ms@2.0.0:

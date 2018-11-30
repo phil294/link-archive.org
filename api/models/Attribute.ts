@@ -2,6 +2,7 @@ import { BaseEntity, Column, Entity, ObjectID, ObjectIdColumn } from 'typeorm';
 
 @Entity()
 class Attribute extends BaseEntity {
+    public _id!: ObjectID;
     @ObjectIdColumn()
     public id!: ObjectID;
     @Column()

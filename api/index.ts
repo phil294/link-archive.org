@@ -5,6 +5,7 @@ import { NO_CONTENT } from 'http-status-codes';
 import 'reflect-metadata';
 import { Connection, createConnection } from 'typeorm';
 import authenticationMiddleware from './authenticationMiddleware';
+import attributeRouter from './routers/attribute-router';
 import authenticationRouter from './routers/authenticationRouter';
 import productRouter from './routers/product-router';
 import userRouter from './routers/userRouter';
@@ -57,6 +58,7 @@ app.use('/authentication', authenticationRouter(
 ));
 app.use('/user', userRouter);
 app.use('/p', productRouter);
+app.use('/a', attributeRouter);
 
 (async () => {
     await connection;

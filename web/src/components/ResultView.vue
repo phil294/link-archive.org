@@ -32,7 +32,9 @@ export default Vue.extend(
 	name: 'ResultView'
 	asyncDataHook: ({ store }) ->
 		store.registerModule('search', searchStoreModule)
-		store.dispatch('search/search')
+		return Promise.all([
+			store.dispatch('search/search'),
+			store.dispatch('search/getAttributes')])
 	data: ->
 		showShowersSelector: false
 		showAddProductDialog: false

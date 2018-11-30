@@ -53,7 +53,7 @@ This way, the server is only queried with showers that the user actively set and
 	products=[...], extras: [a1, a2, a3, a4, a5]
 
 	User sets 1 filter at a2, 1 sorter at a5 and configures showers=[a3, a1]
-	filters={a2: 'bla'}, sorters={a5: 1}, showers=[a3, a1]
+	filters=[{attributeId:'a2', condition: 'equals', conditionValue: 'bla'}], sorters=[{attributeId: 'a5', direction: 1}], showers=[a3, a1]
 
 	Server query: SELECT showers, extras..., sorters FROM p WHERE filters ORDER BY sorters
 	Response:
@@ -61,7 +61,7 @@ This way, the server is only queried with showers that the user actively set and
 
 	Resulting table: relevantAttributes:
 	[a3, a1, a2, a4, a5]
-	[...showers, ...extras] with filters and sorters active.
+	which is [...showers, ...extras] with filters and sorters active.
 	
 ---
 Seperate query:
@@ -85,23 +85,21 @@ export default
 	namespaced: true
 	state:
 		### static ###
+		#
 		### (optionally) user-defined ###
 		type: 'test'
 		filters: []
+		showerIds: ['5c00fc095ba9ef089e135241', '5c00fc095ba9ef089e135242']
 		sorters: [
-				attributeId: 2
+				attributeId: '5c00fc095ba9ef089e135248'
 				direction: 1
 			,
-				attributeId: 3
+				attributeId: '5c00fc095ba9ef089e135249'
 				direction: -1
 		]
-		showerIds: [5, 6]
 		columns: 5
 		### server response; readonly ###
-		attributes: [0..10].map((i) =>
-			id: i # while dev: stub attrs
-			name: "attribute #{i}"
-		)
+		attributes: []
 		products: []
 		extraIds: []
 	getters:
@@ -124,7 +122,7 @@ export default
 		sortersAmount: state -> state.sorters.length
 		### This is a concatenation of showers and extras (and sorters in between, if not contained in the latter) ###
 		relevantAttributeIds: (state, getters) ->
-			# sorters that are not part of extras or showers
+			# sorters that are not part of extras or showers # todo rename
 			sorters = state.sorters
 				.map(sorter => sorter.attributeId)
 				.filter(attributeId =>
@@ -146,12 +144,14 @@ export default
 		setProducts: (state, products) -> state.products = products
 		addProduct: (state, product) -> state.products.push(product)
 		addProductDatum: (state, { productId, attributeId, datum }) ->
-			if !state.products[productId].data[attributesById]
+			if !state.products[productId].data[attributesById] # fixme WONG
 				state.products[productId].data[attributesById] = []
 			state.products[productId].data[attributesById].push(datum)
 		setExtraIds: (state, extraIds) -> state.extraIds = extraIds
 		removeShowerIdAt: (state, index) -> Vue.delete(state.showerIds, index)
 		addShowerIdAt: (state, { index, showerId }) -> state.showerIds.splice(index, 0, showerId)
+		setAttributes: (state, attributes) ->
+			state.attributes = attributes
 	actions:
 		toggleSortDirection: ({ commit, state, getters }, { attributeId, direction }) ->
 			sorter = getters.sortersByAttributeId[attributeId]
@@ -160,6 +160,7 @@ export default
 				if sorter.direction == direction
 					return
 			commit('addSorter', { attributeId, direction })
+		### aka getProducts ###
 		search: ({ commit, state }) ->
 			if state.result
 				alert('result already set, not searching')
@@ -198,3 +199,6 @@ export default
 		saveDatum: ({ commit, state }, { productId, attributeId, formData }) ->
 			response = await axios.post("p/#{productId}/data/#{attributeId}", formData)
 			commit('addProductDatum', { productId, attributeId, datum: response.data })
+		getAttributes: ({ commit, state }) ->
+			response = await axios.get('a', { params: { t: state.type } })
+			commit('setAttributes', response.data)

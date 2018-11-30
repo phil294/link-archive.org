@@ -22,7 +22,7 @@ export default Vue.extend(
 			type: Object
 			required: true
 		attributeId:
-			type: Number
+			type: String
 			required: true
 	methods: {
 		...mapActions('search', [

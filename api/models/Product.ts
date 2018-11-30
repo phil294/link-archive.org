@@ -1,13 +1,14 @@
 import { BaseEntity, Column, Entity, ObjectID, ObjectIdColumn } from 'typeorm';
-import ProductDatum from './ProductDatum';
 import PrimaryProductDatum from './PrimaryProductDatum';
+import ProductDatum from './ProductDatum';
 
-interface PrimaryProductData {
-    [attributeId: string]: PrimaryProductDatum,
+interface IPrimaryProductData {
+    [attributeId: string]: PrimaryProductDatum;
 }
 
 @Entity()
 class Product extends BaseEntity {
+    public _id!: ObjectID; // todo ..?
     @ObjectIdColumn()
     public id!: ObjectID;
     @Column()
@@ -18,7 +19,7 @@ class Product extends BaseEntity {
     public verified: boolean = false; // public .. ? todo
     /** {attributeId: datum} */
     @Column(() => ProductDatum)
-    public data!: PrimaryProductData;
+    public data!: IPrimaryProductData;
 }
 
 export default Product;
