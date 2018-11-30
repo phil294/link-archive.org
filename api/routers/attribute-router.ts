@@ -1,4 +1,3 @@
-import { ObjectID } from 'bson';
 import express from 'express';
 import Attribute from '../models/Attribute';
 
@@ -27,6 +26,7 @@ attributeRouter.get('/', async (req, res) => {
             [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(i => (Object.assign(new Attribute(), {
                 type,
                 name: `attribute ${i}`,
+                _id: i,
             }))));
     }
     res.send(attributes);

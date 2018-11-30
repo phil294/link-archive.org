@@ -8,9 +8,8 @@ interface IPrimaryProductData {
 
 @Entity()
 class Product extends BaseEntity {
-    public _id!: ObjectID; // todo ..?
     @ObjectIdColumn()
-    public id!: ObjectID;
+    public _id!: ObjectID;
     @Column()
     public type!: string; // objectid?
     @Column()

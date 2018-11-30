@@ -3,7 +3,7 @@ import { BaseEntity, Column, Entity, ObjectID, ObjectIdColumn } from 'typeorm';
 @Entity()
 class ProductDatum extends BaseEntity {
     @ObjectIdColumn()
-    public id!: ObjectID;
+    public _id!: ObjectID;
     @Column()
     public user!: string; // objid?
     @Column()

@@ -89,12 +89,12 @@ export default
 		### (optionally) user-defined ###
 		type: 'test'
 		filters: []
-		showerIds: ['5c00fc095ba9ef089e135241', '5c00fc095ba9ef089e135242']
+		showerIds: ['3', '4']
 		sorters: [
-				attributeId: '5c00fc095ba9ef089e135248'
+				attributeId: '6'
 				direction: 1
 			,
-				attributeId: '5c00fc095ba9ef089e135249'
+				attributeId: '7'
 				direction: -1
 		]
 		columns: 5
@@ -105,18 +105,18 @@ export default
 	getters:
 		attributesById: state ->
 			state.attributes.reduce((all, attribute) =>
-				all[attribute.id] = attribute
+				all[attribute._id] = attribute
 				return all
 			, {})
 		sortersByAttributeId: state ->
 			state.attributes.reduce((all, attribute) =>
-				sorterIndex = state.sorters.findIndex(sorter => sorter.attributeId == attribute.id)
+				sorterIndex = state.sorters.findIndex(sorter => sorter.attributeId == attribute._id)
 				if sorterIndex > -1
-					all[attribute.id] =
+					all[attribute._id] =
 						index: sorterIndex
 						direction: state.sorters[sorterIndex].direction
 				else
-					all[attribute.id] = {}
+					all[attribute._id] = {}
 				return all
 			, {})
 		sortersAmount: state -> state.sorters.length
@@ -135,7 +135,7 @@ export default
 		availableAttributeIds: (state, getters) ->
 			relevants = getters.relevantAttributeIds
 			return state.attributes
-				.map(attribute => attribute.id)
+				.map(attribute => attribute._id)
 				.filter(attributeId =>
 					!relevants.includes(attributeId))
 	mutations:

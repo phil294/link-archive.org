@@ -4,18 +4,18 @@ table
 	thead
 		tr
 			th
-			th v-for="attribute in relevantAttributes" :key=attribute.id
+			th v-for="attribute in relevantAttributes" :key=attribute._id
 				.attribute.center
 					span.name $attribute.name
 					div.sort.column
-						button.sort-up.disabled @click="toggleSortDirection(attribute.id, 1)" :class.highlighted=sortersByAttributeId[attribute.id].direction===1
+						button.sort-up.disabled @click="toggleSortDirection(attribute._id, 1)" :class.highlighted=sortersByAttributeId[attribute._id].direction===1
 							| ⮝
-						button.sort-down.disabled @click="toggleSortDirection(attribute.id, -1)" :class.highlighted=sortersByAttributeId[attribute.id].direction===-1
+						button.sort-down.disabled @click="toggleSortDirection(attribute._id, -1)" :class.highlighted=sortersByAttributeId[attribute._id].direction===-1
 							| ⮟
-					div.index.highlighted if="sortersAmount > 1 && sortersByAttributeId[attribute.id].index >= 0"
-						| $sortersByAttributeId[attribute.id].index+1
+					div.index.highlighted if="sortersAmount > 1 && sortersByAttributeId[attribute._id].index >= 0"
+						| $sortersByAttributeId[attribute._id].index+1
 	tbody
-		tr.product each=product :key=product.id
+		tr.product each=product :key=product._id
 			td.name
 				| $product.name
 			td.datum v-for="att of relevantAttributeIds" @click=datumClicked(product,att)

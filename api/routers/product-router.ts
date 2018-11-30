@@ -25,7 +25,7 @@ productRouter.post('/', async (req, res) => {
 
 productRouter.delete('/:id', adminSecured, async (req, res) => {
     return await Product.delete({
-        id: new ObjectID(req.params.id),
+        _id: new ObjectID(req.params._id),
     });
 });
 
@@ -54,8 +54,8 @@ productRouter.post('/:productId/data/:attributeId', async (req, res) => {
     });
     const datumProposal = Object.assign(new ProductDatumProposal(), {
         ...datum,
-        attribute: attribute.id,
-        product: product.id,
+        attribute: attribute._id,
+        product: product._id,
     });
     const primaryDatum = Object.assign(new PrimaryProductDatum(), {
         ...datum,
@@ -77,7 +77,7 @@ productRouter.post('/:productId/data/:attributeId', async (req, res) => {
         await product.save();
         /*
         await Product.update({
-            id: productObjId,
+            _id: productObjId,
         }, {
             data: {
                 [attributeId]: datumProposal
@@ -131,16 +131,16 @@ productRouter.get('/', async (req, res) => {
     /*********** determine extraIds **********/
     const extraIdsAmount = req.query.c - showerIds.length;
     const extraIds = (await Attribute.find({
-        select: ['id'],
+        select: ['_id'],
         where: {
             type,
-            id: Not(In(showerIds)),
+            _id: Not(In(showerIds)),
         },
         take: extraIdsAmount,
         order: {
             interest: 'DESC',
         },
-    })).map(attribute => attribute.id.toString());
+    })).map(attribute => attribute._id.toString());
 
     /************ compute *************/
     const sortersMissing = sorters
@@ -160,7 +160,7 @@ productRouter.get('/', async (req, res) => {
             },
         },
         select: [
-            'id', 'name', 'verified', // todo
+            '_id', 'name', 'verified', // todo
             // ...relevantAttributeIds.map(id => `data/${id}/primary`),
             'data',
         ],
