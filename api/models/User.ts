@@ -41,7 +41,7 @@ class User extends BaseEntity {
     }
 
     @ObjectIdColumn()
-    public id!: ObjectID;
+    public _id!: ObjectID;
     @Column()
     public email: string | undefined;
     @Column()
