@@ -21,7 +21,7 @@ export default ->
 		return config)
 	axios.interceptors.response.use((response => response), error =>
 		console.error(error.response)
-		Promise.reject(error.response.data || error.response.statusText || error.response.status))
+		Promise.reject(error.response && (error.response.data || error.response.statusText || error.response.status) || error.response || error))
 
 	app = new Vue(
 		router: router
