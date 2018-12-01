@@ -75,7 +75,8 @@ productRouter.post('/:productId/data/:attributeId', async (req, res) => {
     if (!product.data[attributeId]) {
         product.data[attributeId] = primaryDatum;
         await product.save();
-        /*
+        /* todo which one?  what if produc tselect todo is active?
+        / todo coffee remove all returns
         await Product.update({
             _id: productObjId,
         }, {

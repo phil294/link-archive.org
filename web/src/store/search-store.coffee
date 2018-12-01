@@ -89,12 +89,12 @@ export default
 		### (optionally) user-defined ###
 		type: 'test'
 		filters: []
-		showerIds: ['3', '4']
+		showerIds: ['facebeefbadefaceaffeb003', 'facebeefbadefaceaffeb004']
 		sorters: [
-				attributeId: '6'
+				attributeId: 'facebeefbadefaceaffeb006'
 				direction: 1
 			,
-				attributeId: '7'
+				attributeId: 'facebeefbadefaceaffeb007'
 				direction: -1
 		]
 		columns: 5

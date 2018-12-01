@@ -1,3 +1,4 @@
+import { ObjectID } from 'bson';
 import express from 'express';
 import Attribute from '../models/Attribute';
 
@@ -23,10 +24,10 @@ attributeRouter.get('/', async (req, res) => {
     });
     if (!attributes.length) {
         attributes = await Attribute.save(
-            [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(i => (Object.assign(new Attribute(), {
+            [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(i => (Object.assign(new Attribute(), {
                 type,
                 name: `attribute ${i}`,
-                _id: i,
+                _id: new ObjectID(`facebeefbadefaceaffeb00${i}`),
             }))));
     }
     res.send(attributes);
