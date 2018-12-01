@@ -18,8 +18,7 @@ export default ->
 	axios.defaults.baseURL = process.env.API_ROOT
 	axios.interceptors.request.use(config =>
 		config.headers.common.Authorization = "Bearer #{store.state.session.token}"
-		return config
-	)
+		return config)
 	axios.interceptors.response.use((response => response), error =>
 		console.error(error.response)
 		Promise.reject(error.response && (error.response.data || error.response.statusText || error.response.status) || error.response || error))

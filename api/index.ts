@@ -60,6 +60,13 @@ app.use('/user', userRouter);
 app.use('/p', productRouter);
 app.use('/a', attributeRouter);
 
+// @ts-ignore
+// Global error fallback handler, including promises
+app.use((err, req, res, next) => {
+    error(err);
+    res.status(500).send(err && err.status);
+});
+
 (async () => {
     await connection;
     const PORT = getEnv('PORT');

@@ -6,7 +6,7 @@ div
 		fieldset#with-email.box
 			legend With email
 			div if=!showMailSent
-				promise-form button-label="Request mail to log in" -action=requestMail
+				promise-form button-label="Request mail to log in" :action=requestMail
 					label for=email Email
 					input#email model=email type=email name=email placeholder=email@example.com required
 				read-more.note summary="(Why no password?)"
@@ -20,7 +20,7 @@ div
 						| If you feel you 
 						em really 
 						| need to use a password, you can configure one in the account settings once you are logged in.
-			div#mail-sent.padding-l v-else
+			div#mail-sent.padding-l else
 				div
 					p
 						| An email has been sent to 
@@ -29,14 +29,14 @@ div
 						| You can log in by clicking the link in the email
 					p.center
 						strong - OR -
-					token-input %success=authenticated
+					token-input @success=authenticated
 				hr
-				a %click=showMailSent=false ⮜ Send another mail
+				a @click=showMailSent=false ⮜ Send another mail
 		fieldset#with-external.box
 			legend Or
-			div v-for="provider in externalLoginProviders" -key=provider.name
-				promise-button.center if=provider.initialized -action=externalLogin(provider)
-					img.logo -src='static/'+provider.name+'.png'
+			div v-for="provider in externalLoginProviders" :key=provider.name
+				promise-button.center if=provider.initialized :action=externalLogin(provider)
+					img.logo :src='static/'+provider.name+'.png'
 					| Log in with $provider.name
 				div.note v-else Loading $provider.name login scripts...
 # '
@@ -62,8 +62,8 @@ export default Vue.extend(
 				loadedExternalLoginProviders[provider.name] = true
 			await provider.setup()
 	methods: {
-		requestMail: event ->
-			await @$store.dispatch('session/requestTokenMail', event.target.elements.email.value) # using form data, not v-model
+		requestMail: values ->
+			await @$store.dispatch('session/requestTokenMail', values.email)
 			@$data.showMailSent = true
 		externalLogin: provider -> =>
 			token = await provider.login()
