@@ -62,7 +62,7 @@ nav > a
 nav > a.router-link-active
 	font-weight: bold
 main
-	overflow: auto
+	overflow: auto // FF
 </style>
 
 <style lang="stylus">
