@@ -52,6 +52,4 @@ module.exports = (doc) ->
 		.map((component) => component.name)
 		.join(',')
 	# todo: component name from file ...?
-	x = "#{templateTag}#{html}#{middle}\n#{imports}\n#{exportStatement}\tcomponents:{#{componentsString}}\n#{jsAndCss}"
-	#console.log(x)
-	x
+	"#{templateTag}#{html}#{middle}\n#{imports}\n#{exportStatement}\tcomponents:{#{componentsString}}\n#{jsAndCss}"
