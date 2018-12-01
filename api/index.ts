@@ -60,7 +60,7 @@ app.use('/user', userRouter);
 // Global error fallback handler, including promises
 app.use((err, req, res, next) => {
     error(err);
-    res.status(500).send(err && err.status);
+    res.status(500).send(err && (err.status || err.errmsg));
 });
 
 (async () => {
