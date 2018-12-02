@@ -46,6 +46,7 @@ app.use((req, res, next) => {
         res.sendStatus(NO_CONTENT);
         return;
     }
+    log(req.method, req.url);
     next();
 });
 
