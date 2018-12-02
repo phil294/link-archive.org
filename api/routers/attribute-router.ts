@@ -17,19 +17,11 @@ attributeRouter.post('/', async (req, res) => {
 
 attributeRouter.get('/', async (req, res) => {
     const type = req.query.t;
-    let attributes = await Attribute.find({
+    const attributes = await Attribute.find({
         where: {
             type,
         },
     });
-    if (!attributes.length) {
-        attributes = await Attribute.save(
-            [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(i => (Object.assign(new Attribute(), {
-                type,
-                name: `attribute ${i}`,
-                _id: new ObjectID(`facebeefbadefaceaffeb00${i}`),
-            }))));
-    }
     res.send(attributes);
 });
 
