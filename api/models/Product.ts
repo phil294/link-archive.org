@@ -1,6 +1,5 @@
 import { BaseEntity, Column, Entity, ObjectID, ObjectIdColumn } from 'typeorm';
 import PrimaryProductDatum from './PrimaryProductDatum';
-import ProductDatum from './ProductDatum';
 
 interface IPrimaryProductData {
     [attributeId: string]: PrimaryProductDatum;

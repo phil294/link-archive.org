@@ -95,9 +95,6 @@ interface IFilter {
     condition: string;
     conditionValue: string;
 }
-interface IProductDataConditions {
-    [attributeIdDotValue: string]: FindOptionsWhereCondition<Product>;
-}
 
 // todo types missing everywhere
 productRouter.get('/', async (req, res) => {
@@ -125,26 +122,20 @@ productRouter.get('/', async (req, res) => {
             [sorter.attributeId]: sorter.direction,
         }), {});
     const filterParam: string = req.query.f;
-    const filtersFormattedData: IProductDataConditions = filterParam
+    const filtersFormatted: FindOptionsWhere<Product> = filterParam
         .split(',').filter(Boolean)
         .map((s: string): IFilter => {
             const split = s.split(':');
+            const [attributeId, condition, conditionValue] = split;
             return {
-                attributeId: `${split[0]}.value`,
-                condition: split[1],
-                conditionValue: split[2],
+                attributeId, condition, conditionValue,
             };
         })
         .reduce((all: object, filter: any) => ({
             ...all,
             // todo does not allow multiple filters for the same attribute. see typeorm#2396. fix when ready.
-            [filter.attributeId]: filter.conditionValue, // <- typeof FindOptionsWhereCondition<Product>. join with And() ^
+            [`data.${filter.attributeId}.value`]: filter.conditionValue, // <- typeof FindOptionsWhereCondition<Product>. join with And() ^
         }), {});
-    let filtersFormatted: FindOptionsWhere<Product>;
-    if (!Object.keys(filtersFormattedData).length)
-        filtersFormatted = {};
-    else
-        filtersFormatted = { data: filtersFormattedData };
 
     /*********** determine extraIds **********/
     const countParam: string = req.query.c;

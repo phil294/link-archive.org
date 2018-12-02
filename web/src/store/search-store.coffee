@@ -88,7 +88,11 @@ export default
 		#
 		### (optionally) user-defined ###
 		type: 'test'
-		filters: []
+		filters: [ ###
+				attributeId: 'facebeefbadefaceaffeb004'
+				condition: 'eq'
+				conditionValue: 'ba' ###
+		]
 		showerIds: ['facebeefbadefaceaffeb003', 'facebeefbadefaceaffeb004']
 		sorters: [
 				attributeId: 'facebeefbadefaceaffeb006'

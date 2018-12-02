@@ -14,6 +14,14 @@ import { error } from '../utils';
         [...Array(50).keys()].map(i => (Object.assign(new Product(), {
             type: 'test',
             name: `product ${i}`,
+            /* data: {
+                facebeefbadefaceaffeb004: {
+                    verified: false,
+                    user: '123',
+                    value: 'ba',
+                    source: 'src',
+                },
+            }, */
             _id: new ObjectID('facebeefbadefaceaffeb9' + `${i}`.padStart(2, '0')), // tslint:disable-line
         }))));
 
