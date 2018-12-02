@@ -31,7 +31,7 @@ export default Vue.extend(
 		saveDatum: formData ->
 			@$store.dispatch('search/saveDatum', {
 				formData,
-				productId: @product._id
+				product: @product
 				attributeId: @attributeId
 			})
 	}

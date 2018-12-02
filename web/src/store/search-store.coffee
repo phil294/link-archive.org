@@ -143,10 +143,8 @@ export default
 		addSorter: (state, sorter) -> state.sorters.push(sorter)
 		setProducts: (state, products) -> state.products = products
 		addProduct: (state, product) -> state.products.push(product)
-		addProductDatum: (state, { productId, attributeId, datum }) ->
-			if !state.products[productId].data[attributesById] # fixme WONG
-				state.products[productId].data[attributesById] = []
-			state.products[productId].data[attributesById].push(datum)
+		addProductDatum: (state, { product, attributeId, datum }) ->
+			Vue.set(product.data, attributeId, datum)
 		setExtraIds: (state, extraIds) -> state.extraIds = extraIds
 		removeShowerIdAt: (state, index) -> Vue.delete(state.showerIds, index)
 		addShowerIdAt: (state, { index, showerId }) -> state.showerIds.splice(index, 0, showerId)
@@ -196,9 +194,9 @@ export default
 			formData.append('type', state.type)
 			response = await axios.post('p', formData)
 			commit('addProduct', response.data)
-		saveDatum: ({ commit, state }, { productId, attributeId, formData }) ->
-			response = await axios.post("p/#{productId}/data/#{attributeId}", formData)
-			commit('addProductDatum', { productId, attributeId, datum: response.data })
+		saveDatum: ({ commit, state }, { product, attributeId, formData }) ->
+			response = await axios.post("p/#{product._id}/data/#{attributeId}", formData)
+			commit('addProductDatum', { product, attributeId, datum: response.data })
 		getAttributes: ({ commit, state }) ->
 			response = await axios.get('a', { params: { t: state.type } })
 			commit('setAttributes', response.data)

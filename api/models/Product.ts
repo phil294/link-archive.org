@@ -17,7 +17,7 @@ class Product extends BaseEntity {
     @Column()
     public verified: boolean = false; // public .. ? todo
     /** {attributeId: datum} */
-    @Column(() => ProductDatum)
+    @Column()
     public data!: IPrimaryProductData;
 }
 

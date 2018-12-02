@@ -1,7 +1,7 @@
 import express from 'express';
 import { NOT_FOUND, UNPROCESSABLE_ENTITY } from 'http-status-codes';
 import { ObjectID } from 'mongodb';
-import { In, Not } from 'typeorm';
+import { FindOptionsOrder, FindOptionsWhere, In, Not } from 'typeorm';
 import adminSecured from '../adminSecured';
 import Attribute from '../models/Attribute';
 import PrimaryProductDatum from '../models/PrimaryProductDatum';
@@ -74,48 +74,57 @@ productRouter.post('/:productId/data/:attributeId', async (req, res) => {
     }
     if (!product.data[attributeId]) {
         product.data[attributeId] = primaryDatum;
-        await product.save();
-        /* todo which one?  what if produc tselect todo is active?
-        / todo coffee remove all returns
+        // await product.save(); // s typeorm#3184 todo
+        // todo which one?  what if product select todo is active?
+        //  todo coffee remove all returns
         await Product.update({
             _id: productObjId,
         }, {
-            data: {
-                [attributeId]: datumProposal
-            },
+            [`data.${attributeId}`]: primaryDatum,
         });
-        */
     }
     res.send(datumProposal);
 });
 
+interface ISorter {
+    attributeId: string;
+    direction: number;
+}
+interface IFilter {
+    attributeId: string;
+    condition: string;
+    conditionValue: string;
+}
+
 // todo types missing everywhere
 productRouter.get('/', async (req, res) => {
     /*********** parse  *********/
-    const type = req.query.t;
-    const showerIds = req.query.sh
+    const type: string = req.query.t;
+    const showerIds: string[] = req.query.sh
         .split(',').filter(Boolean);
-    const sorters = req.query.so
+    const sortersParam: string = req.query.so;
+    const sorters: ISorter[] = sortersParam
         .split(',').filter(Boolean)
-        .map((s: string) => {
+        .map((s: string): ISorter => {
             const split = s.split(':');
             return {
                 attributeId: split[0],
-                direction: split[1],
+                direction: Number(split[1]),
             };
         });
-    const sortersFormatted = sorters
-        .map((sorter: any) => ({
+    const sortersFormatted: FindOptionsOrder<Product> = sorters
+        .map((sorter): ISorter => ({
             attributeId: `data.${sorter.attributeId}.value`,
             direction: Number(sorter.direction),
         }))
-        .reduce((all: object, sorter: any) => ({
+        .reduce((all: object, sorter) => ({
             ...all,
             [sorter.attributeId]: sorter.direction,
         }), {});
-    const filtersFormatted = req.query.f
+    const filterParam: string = req.query.f;
+    const filtersFormatted: FindOptionsWhere<Product> = filterParam
         .split(',').filter(Boolean)
-        .map((s: string) => {
+        .map((s: string): IFilter => {
             const split = s.split(':');
             return {
                 attributeId: `${split[0]}.value`,
@@ -130,8 +139,9 @@ productRouter.get('/', async (req, res) => {
         }), {});
 
     /*********** determine extraIds **********/
-    const extraIdsAmount = req.query.c - showerIds.length;
-    const extraIds = (await Attribute.find({
+    const countParam: string = req.query.c;
+    const extraIdsAmount: number = Number(countParam) - showerIds.length;
+    const extraIds: string[] = (await Attribute.find({
         select: ['_id'],
         where: {
             type,
@@ -144,16 +154,18 @@ productRouter.get('/', async (req, res) => {
     })).map(attribute => attribute._id.toString());
 
     /************ compute *************/
-    const sortersMissing = sorters
-        .map((sorter: any) => sorter.attribute)
-        .filter((attributeId: string) =>
+    const sortersMissing: string[] = sorters
+        .map(sorter => sorter.attributeId)
+        .filter(attributeId =>
             !extraIds.includes(attributeId) &&
             !showerIds.includes(attributeId));
     extraIds.splice(extraIds.length - 1 - sortersMissing.length, sortersMissing.length);
     const relevantAttributeIds = [...showerIds, ...extraIds, ...sortersMissing];
+    const relevantsFormatted = relevantAttributeIds.map(id => `data.${id}`) as Array<(keyof Product)>;
 
     /********** Search ***********/
-    const products = await Product.find({
+    let products = await Product.find({
+        // @ts-ignore
         where: {
             type,
             data: {
@@ -162,13 +174,25 @@ productRouter.get('/', async (req, res) => {
         },
         select: [
             '_id', 'name', 'verified', // todo
-            // ...relevantAttributeIds.map(id => `data/${id}/primary`),
-            'data',
+            ...relevantsFormatted,
         ],
         order: {
             ...sortersFormatted,
         },
     });
+
+    if (!products.length) {
+        products = await Product.find();
+        if (!products.length) {
+            products = await Product.save(
+                [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(i => (Object.assign(new Product(), {
+                    type,
+                    name: `product ${i}`,
+                    _id: new ObjectID(`facebeefbadefaceaffeb99${i}`),
+                }))));
+        }
+    }
+
     // todo fix this with typeorm (idk)
     products.forEach((p: Product) => {
         if (!p.data) {

@@ -5,7 +5,7 @@ section#app.column.fill-h
 		authenticate @authenticated=hideAuthenticatePopup
 	modal if=loadingCounter
 		.box.padding-l
-			| Loading... ($loadingCounter)
+			| Loading... ($loadingCounter) # todo loader bug
 	header.center.padding
 		nav
 			router-link exact to=/ [LOGO]
