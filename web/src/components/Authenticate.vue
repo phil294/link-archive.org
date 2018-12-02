@@ -24,7 +24,7 @@ div
 				div
 					p
 						| An email has been sent to 
-						em $email
+						strong $email
 					p
 						| You can log in by clicking the link in the email
 					p.center
