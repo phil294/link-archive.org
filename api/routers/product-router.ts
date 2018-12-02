@@ -1,7 +1,7 @@
 import express from 'express';
 import { NOT_FOUND, UNPROCESSABLE_ENTITY } from 'http-status-codes';
 import { ObjectID } from 'mongodb';
-import { FindOptionsOrder, FindOptionsWhere, In, Not } from 'typeorm';
+import { FindOptionsOrder, FindOptionsWhere, FindOptionsWhereCondition, In, Not } from 'typeorm';
 import adminSecured from '../adminSecured';
 import Attribute from '../models/Attribute';
 import PrimaryProductDatum from '../models/PrimaryProductDatum';
@@ -95,6 +95,9 @@ interface IFilter {
     condition: string;
     conditionValue: string;
 }
+interface IProductDataConditions {
+    [attributeIdDotValue: string]: FindOptionsWhereCondition<Product>;
+}
 
 // todo types missing everywhere
 productRouter.get('/', async (req, res) => {
@@ -122,7 +125,7 @@ productRouter.get('/', async (req, res) => {
             [sorter.attributeId]: sorter.direction,
         }), {});
     const filterParam: string = req.query.f;
-    const filtersFormatted: FindOptionsWhere<Product> = filterParam
+    const filtersFormattedData: IProductDataConditions = filterParam
         .split(',').filter(Boolean)
         .map((s: string): IFilter => {
             const split = s.split(':');
@@ -135,8 +138,13 @@ productRouter.get('/', async (req, res) => {
         .reduce((all: object, filter: any) => ({
             ...all,
             // todo does not allow multiple filters for the same attribute. see typeorm#2396. fix when ready.
-            [filter.attributeId]: filter.conditionValue,
+            [filter.attributeId]: filter.conditionValue, // <- typeof FindOptionsWhereCondition<Product>. join with And() ^
         }), {});
+    let filtersFormatted: FindOptionsWhere<Product>;
+    if (!Object.keys(filtersFormattedData).length)
+        filtersFormatted = {};
+    else
+        filtersFormatted = { data: filtersFormattedData };
 
     /*********** determine extraIds **********/
     const countParam: string = req.query.c;
@@ -164,13 +172,10 @@ productRouter.get('/', async (req, res) => {
     const relevantsFormatted = relevantAttributeIds.map(id => `data.${id}`) as Array<(keyof Product)>;
 
     /********** Search ***********/
-    let products = await Product.find({
-        // @ts-ignore
+    const products = await Product.find({
         where: {
             type,
-            data: {
-                ...filtersFormatted,
-            },
+            ...filtersFormatted,
         },
         select: [
             '_id', 'name', 'verified', // todo
@@ -180,18 +185,6 @@ productRouter.get('/', async (req, res) => {
             ...sortersFormatted,
         },
     });
-
-    if (!products.length) {
-        products = await Product.find();
-        if (!products.length) {
-            products = await Product.save(
-                [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(i => (Object.assign(new Product(), {
-                    type,
-                    name: `product ${i}`,
-                    _id: new ObjectID(`facebeefbadefaceaffeb99${i}`),
-                }))));
-        }
-    }
 
     // todo fix this with typeorm (idk)
     products.forEach((p: Product) => {
