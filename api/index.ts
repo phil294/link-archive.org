@@ -3,29 +3,15 @@ import express from 'express';
 import expressFormData from 'express-form-data';
 import { NO_CONTENT } from 'http-status-codes';
 import 'reflect-metadata';
-import { Connection, createConnection } from 'typeorm';
 import authenticationMiddleware from './authenticationMiddleware';
+import connection from './connection';
 import authenticationRouter from './routers/authenticationRouter';
 import userRouter from './routers/userRouter';
 import MailService from './services/MailService';
 import TokenService from './services/TokenService';
-
-const { log, error } = console;
+import { error, getEnv, log } from './utils';
 
 // ///////////////// CONFIG
-
-/** process.env.[name] or throw */
-const getEnv = (name: string): string => process.env[name] || (() => { throw new Error(`environment variable ${name} is missing`); })();
-
-const connection: Promise<Connection> = createConnection({
-    database: getEnv('MONGO_DATABASE'),
-    host: getEnv('MONGO_HOST'),
-    port: Number(getEnv('MONGO_PORT')),
-    type: 'mongodb',
-    entities: [
-        `${__dirname}/models/*.ts`, // ` *
-    ],
-});
 
 const mailService = new MailService(getEnv('MAIL_SENDER_SERVICE'), getEnv('MAIL_SENDER_USER'), getEnv('MAIL_SENDER_PASSWORD'));
 const tokenService = new TokenService(getEnv('TOKEN_SECRET'));
