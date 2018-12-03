@@ -3,7 +3,6 @@ import express from 'express';
 import expressFormData from 'express-form-data';
 import { NO_CONTENT } from 'http-status-codes';
 import 'reflect-metadata';
-import { Connection, createConnection } from 'typeorm';
 import authenticationMiddleware from './authenticationMiddleware';
 import connection from './connection';
 import attributeRouter from './routers/attribute-router';
