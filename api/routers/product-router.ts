@@ -1,6 +1,6 @@
 import express from 'express';
 import { NOT_FOUND, UNPROCESSABLE_ENTITY } from 'http-status-codes';
-import { ObjectID } from 'mongodb';
+import { ObjectID } from 'mongodb';
 import { FindOptionsOrder, FindOptionsWhere, FindOptionsWhereCondition, In, Not } from 'typeorm';
 import adminSecured from '../adminSecured';
 import Attribute from '../models/Attribute';
@@ -140,17 +140,20 @@ productRouter.get('/', async (req, res) => {
     /*********** determine extraIds **********/
     const countParam: string = req.query.c;
     const extraIdsAmount: number = Number(countParam) - showerIds.length;
-    const extraIds: string[] = (await Attribute.find({
-        select: ['_id'],
-        where: {
-            type,
-            _id: Not(In(showerIds)),
-        },
-        take: extraIdsAmount,
-        order: {
-            interest: 'DESC',
-        },
-    })).map(attribute => attribute._id.toString());
+    let extraIds: string[] = [];
+    if (extraIdsAmount > 0) {
+        extraIds = (await Attribute.find({
+            select: ['_id'],
+            where: {
+                type,
+                _id: Not(In(showerIds)),
+            },
+            take: extraIdsAmount,
+            order: {
+                interest: 'DESC',
+            },
+        })).map(attribute => attribute._id.toString());
+    }
 
     /************ compute *************/
     const sortersMissing: string[] = sorters
