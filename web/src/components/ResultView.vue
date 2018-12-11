@@ -1,7 +1,7 @@
 <template lang="slm">
 # :_='
 	div#kaa.column
-		div
+		div#showers-selector
 			button if=!showShowersSelector @click=showShowersSelector=true
 				| +
 			button else @click=showShowersSelector=false
@@ -61,4 +61,7 @@ export default Vue.extend(
 #bla
 	overflow: auto
 	min-height: 80% // FF: always effective by parent overflowing. Chrome: ignored, parent keeps size. :(
+#showers-selector
+	max-height: 50%
+	overflow: auto
 </style>
