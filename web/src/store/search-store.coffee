@@ -101,7 +101,7 @@ export default
 				attributeId: 'facebeefbadefaceaffeb007'
 				direction: -1
 		]
-		columns: 5
+		columns: 7
 		### server response; readonly ###
 		attributes: []
 		products: []
@@ -164,9 +164,8 @@ export default
 			commit('addSorter', { attributeId, direction })
 		### aka getProducts ###
 		search: ({ commit, state }) ->
-			if state.result
-				alert('result already set, not searching')
-				return
+			commit('setExtraIds', [])
+			commit('setProducts', [])
 			{ type, columns } = state
 			showerIdsParam = state.showerIds
 				.join(',')
@@ -187,13 +186,14 @@ export default
 			commit('setProducts', response.data.products)
 		addShowerAt: ({ dispatch, commit, state }, { index, showerId }) ->
 			currentPos = state.showerIds.findIndex(e => e == showerId)
-			if currentPos == index
-				return # nothing changed
+			newPos = index
 			if currentPos > -1
 				commit('removeShowerIdAt', currentPos) # user moved shower from pos A to B
-			commit('addShowerIdAt', { index, showerId })
-			commit('setExtraIds', [])
-			dispatch('search')
+				if index > currentPos
+					newPos -= 1
+			commit('addShowerIdAt', { index: newPos, showerId })
+			if newPos != currentPos
+				dispatch('search')
 		addProduct: ({ commit, state }, formData) ->
 			formData.append('type', state.type)
 			response = await axios.post('p', formData)
