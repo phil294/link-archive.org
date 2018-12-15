@@ -6,7 +6,7 @@
   "scripts": {
     "lint": "tslint",
     "initialize-dev": "ts-node initializers/dev.ts",
-    "initialize-random-big": "ts-node initializers/random-big.ts",
+    "initialize-random": "ts-node initializers/random.ts",
     "dev": "node --inspect node_modules/.bin/ts-node --files index.ts",
     "upgrade-all": "ncu -a && yarn install && yarn upgrade"
   },

@@ -21,7 +21,7 @@ const generateRandomPrimaryProductData = () => attributeIds
     .reduce((all, v) => ({ // make `data`
         ...all,
         [v[0]]: {
-            verified: Math.random() > 0.25,
+            verified: Math.random() > 0.25, // most are verified
             user: '123',
             value: v[1],
             source: 'src',
@@ -34,14 +34,15 @@ const generateRandomPrimaryProductData = () => attributeIds
     error('Adding dummy attributes');
     await Attribute.save(attributes);
 
-    error('Generating & adding dummy products');
-    const products = [...Array(1000).keys()].map(i => (Object.assign(new Product(), {
+    error('Generating dummy products');
+    const products = [...Array(10000).keys()].map(i => (Object.assign(new Product(), {
         type: 'test',
         name: `product ${i}`,
         data: generateRandomPrimaryProductData(),
         _id: new ObjectID(`${i}`.padStart(24, '0')),
-        verified: Math.random() > 0.1,
+        verified: Math.random() > 0.1, // most are verified
     })));
+    error('Adding dummy products');
     await Product.insert(products);
 
     error('Finished');
