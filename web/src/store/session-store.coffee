@@ -41,5 +41,5 @@ export default
 			now = Date.now() / 1000
 			response = await axios.get('authentication/refreshtoken') # date + 1
 			jwt = response.data
-			await dispatch('loginWithToken', jwt) # shouldnt be called login..? is just setting token
+			await dispatch('loginWithToken', jwt) # shouldnt be called login..? is just parsing token & setting session
 			await axios.patch('user', { minIat: now - 1 }) # this might also log out the current user if his date is inaccurate. but can live with that

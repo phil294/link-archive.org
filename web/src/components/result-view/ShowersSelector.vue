@@ -6,6 +6,7 @@ div#hallo.flex
 		ul
 			div.showers
 				li.shower.padding v-for="showerId, showerIndex in showerIds" :key="showerId+'_'+showerIndex" drop=addShowerAt(showerIndex) drag=showerId
+					# todo ^ key needed?
 					| $attributesById[showerId].name
 			div.extra-attributes drop=addShowerAt(-1)
 				li.extra-attribute.disabled.padding each=extraId drag=extraId :key=extraId
