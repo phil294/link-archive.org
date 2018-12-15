@@ -110,7 +110,7 @@ export default
 		attributesById: state ->
 			state.attributes.reduce((all, attribute) =>
 				all[attribute._id] = attribute
-				return all
+				all
 			, {})
 		sortersByAttributeId: state ->
 			state.attributes.reduce((all, attribute) =>
@@ -121,7 +121,7 @@ export default
 						direction: state.sorters[sorterIndex].direction
 				else
 					all[attribute._id] = {}
-				return all
+				all
 			, {})
 		sortersAmount: state -> state.sorters.length
 		### This is a concatenation of showers and extras (and sorters in between, if not contained in the latter) ###
@@ -132,13 +132,12 @@ export default
 				.filter(attributeId =>
 					!state.extraIds.includes(attributeId) &&
 					!state.showerIds.includes(attributeId))
-			return [
-				...state.showerIds,
+			[	...state.showerIds,
 				...sorters,
 				...state.extraIds ]
 		availableAttributeIds: (state, getters) ->
 			relevants = getters.relevantAttributeIds
-			return state.attributes
+			state.attributes
 				.map(attribute => attribute._id)
 				.filter(attributeId =>
 					!relevants.includes(attributeId))
