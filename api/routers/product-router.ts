@@ -115,7 +115,7 @@ productRouter.get('/', async (req, res) => {
     const sortersFormatted: FindOptionsOrder<Product> = sorters
         .map((sorter): ISorter => ({
             attributeId: `data.${sorter.attributeId}.value`,
-            direction: Number(sorter.direction),
+            direction: Number(sorter.direction), // todo#a1: mongo treats empty as the smallest value. NULLS LAST does not exist
         }))
         .reduce((all: object, sorter) => ({
             ...all,
@@ -163,6 +163,20 @@ productRouter.get('/', async (req, res) => {
     const relevantsFormatted = relevantAttributeIds.map(id => `data.${id}`) as Array<(keyof Product)>;
 
     /********** Search ***********/
+    /* this is only a temporary solution because too slow for very big data.
+    indices make no sense either because attributes are dynamic.
+    -> todo: implement "cache" quickselect sql tables for find() that contains
+    only verified values (maybe change verified to stage: integer or maaaaybe
+    add _verified value columns also, or boi im lost). each product
+    gets its own table. this allows for beautiful clustering. will also allow
+    for #a1 to be fixed.
+    and update it accordingly. mongodb structure stays to look up product data
+    like user, time, interest. also used for product data proposal managment.
+    nosql feels right here because dynamic amount of attributes and values
+    are of dynamic type (however same at same attribute (?))
+    but keeping this without quickselect-cache for the moment until website
+    explodes in popularity (which it of course will. goes without saying. :p)
+    */
     const products = await Product.find({
         where: {
             type,
