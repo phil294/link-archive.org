@@ -17,7 +17,7 @@ const attributeIds = attributes.map(a => a._id.toString());
 const generateRandomPrimaryProductData = () => attributeIds
     .sort(() => 0.5 - Math.random()) // random order
     .slice(0, Math.floor(Math.random() * 25)) // pick some
-    .map(a => [a, Math.floor(Math.random() * 10)]) // random value 0-9
+    .map(a => [a, `${Math.floor(Math.random() * 10)}`]) // random value v0-v-9
     .reduce((all, v) => ({ // make `data`
         ...all,
         [v[0]]: {
@@ -35,7 +35,7 @@ const generateRandomPrimaryProductData = () => attributeIds
     await Attribute.save(attributes);
 
     error('Generating dummy products');
-    const products = [...Array(10000).keys()].map(i => (Object.assign(new Product(), {
+    const products = [...Array(100).keys()].map(i => (Object.assign(new Product(), {
         type: 'test',
         name: `product ${i}`,
         data: generateRandomPrimaryProductData(),
