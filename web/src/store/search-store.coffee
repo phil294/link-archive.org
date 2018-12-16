@@ -88,10 +88,10 @@ export default
 		#
 		### (optionally) user-defined ###
 		type: 'test'
-		filters: [ ###
-				attributeId: 'facebeefbadefaceaffeb004'
-				condition: 'eq'
-				conditionValue: 'ba' ###
+		filters: [
+			attributeId: 'facebeefbadefaceaffeb003'
+			condition: 'eq'
+			conditionValue: '2'
 		]
 		showerIds: ['facebeefbadefaceaffeb003', 'facebeefbadefaceaffeb004']
 		sorters: [
@@ -153,6 +153,8 @@ export default
 		addShowerIdAt: (state, { index, showerId }) -> state.showerIds.splice(index, 0, showerId)
 		setAttributes: (state, attributes) ->
 			state.attributes = attributes
+		addFilter: (state, filter) -> state.filters.push(filter)
+		removeFilter: (state, filter) -> Vue.delete(state.filters, state.filters.indexOf(filter))
 	actions:
 		toggleSortDirection: ({ commit, state, getters }, { attributeId, direction }) ->
 			sorter = getters.sortersByAttributeId[attributeId]
@@ -166,6 +168,8 @@ export default
 			if state.result
 				alert('result already set, not searching')
 				return
+			commit('setExtraIds', [])
+			commit('setProducts', [])
 			{ type, columns } = state
 			showerIdsParam = state.showerIds
 				.join(',')
@@ -191,7 +195,6 @@ export default
 			if currentPos > -1
 				commit('removeShowerIdAt', currentPos) # user moved shower from pos A to B
 			commit('addShowerIdAt', { index, showerId })
-			commit('setExtraIds', [])
 			dispatch('search')
 		addProduct: ({ commit, state }, formData) ->
 			formData.append('type', state.type)
@@ -203,3 +206,9 @@ export default
 		getAttributes: ({ commit, state }) ->
 			response = await axios.get('a', { params: { t: state.type } })
 			commit('setAttributes', response.data)
+		addFilter: ({ commit, dispatch }, filter) ->
+			commit('addFilter', filter)
+			dispatch('search')
+		removeFilter: ({ commit, dispatch }, filter) ->
+			commit('removeFilter', filter)
+			dispatch('search')

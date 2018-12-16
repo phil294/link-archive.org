@@ -1,7 +1,7 @@
 import express from 'express';
 import { NOT_FOUND, UNPROCESSABLE_ENTITY } from 'http-status-codes';
 import { ObjectID } from 'mongodb';
-import { FindOptionsOrder, FindOptionsWhere, FindOptionsWhereCondition, In, Not } from 'typeorm';
+import { Equal, FindOptionsOrder, FindOptionsWhere, FindOptionsWhereCondition, In, IsNull, Not } from 'typeorm';
 import adminSecured from '../adminSecured';
 import Attribute from '../models/Attribute';
 import PrimaryProductDatum from '../models/PrimaryProductDatum';
@@ -131,11 +131,19 @@ productRouter.get('/', async (req, res) => {
                 attributeId, condition, conditionValue,
             };
         })
-        .reduce((all: object, filter: any) => ({
-            ...all,
-            // todo does not allow multiple filters for the same attribute. see typeorm#2396. fix when ready.
-            [`data.${filter.attributeId}.value`]: filter.conditionValue, // <- typeof FindOptionsWhereCondition<Product>. join with And() ^
-        }), {});
+        // todo simple reduce does not allow multiple filters for the same attribute. see typeorm#2396. fix when ready: join them with And()
+        .reduce((all: { [key: string]: FindOptionsWhereCondition<Product> }, filter: any) => {
+            let filterFormatted: FindOptionsWhereCondition<Product>;
+            switch (filter.condition) {
+            case 'notNull':
+                filterFormatted = Not(IsNull()); break;
+            case 'eq':
+            default:
+                filterFormatted = filter.conditionValue; break;
+            }
+            all[`data.${filter.attributeId}.value`] = filterFormatted;
+            return all;
+        }, {});
 
     /*********** determine extraIds **********/
     const countParam: string = req.query.c;

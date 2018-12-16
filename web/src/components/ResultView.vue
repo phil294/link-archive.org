@@ -7,6 +7,9 @@
 			button else @click=showShowersSelector=false
 				| -
 			result-view/showers-selector if=showShowersSelector
+
+		div
+			result-view/filters
 		
 		div#bla
 			result-view/result-table @datumClicked=datumClicked($event)
