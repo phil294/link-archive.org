@@ -12,9 +12,10 @@ div#hallo.flex
 					| $attributesById[extraId].name
 	div.attributes.flex-fill
 		h6 More columns
+		input model=filter
 		ul
-			li.attribute.padding each=availableAttributeId drag=availableAttributeId :key=availableAttributeId
-				| $attributesById[availableAttributeId].name
+			li.attribute.padding v-for="attrId of filteredAvailableAttributeIds" drag=attrId :key=attrId
+				| $attributesById[attrId].name
 # '
 </template>
 
@@ -24,6 +25,8 @@ import { mapActions, mapState, mapGetters } from 'vuex'
 
 export default Vue.extend(
 	name: 'ResultViewShowersSelector'
+	data: ->
+		filter: ''
 	methods: {
 		...mapActions('search', [
 			
@@ -42,6 +45,8 @@ export default Vue.extend(
 			'attributesById'
 			'availableAttributeIds'
 		])
+		filteredAvailableAttributeIds: ->
+			@availableAttributeIds.filter(a => a.includes(@$data.filter))
 	}
 )
 </script>
