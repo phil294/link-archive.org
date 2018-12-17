@@ -45,9 +45,9 @@ export default Vue.extend(
 					return all
 				, {})
 			try
-				await @$props.action(formData, values, event)
+				await @$props.action({ formData, values, event })
 			catch e
-				await @$nextTick() # enforce transition event even if follow-up error+
+				await @$nextTick() # enforce transition effect even if follow-up error+
 				@$data.errorResponse = e
 				throw e
 			finally

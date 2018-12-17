@@ -7,8 +7,9 @@ div
 			legend With email
 			div if=!showMailSent
 				promise-form button-label="Request mail to log in" :action=requestMail
-					label for=email Email
-					input#email model=email type=email name=email placeholder=email@example.com required
+					label
+						| Email
+						input model=email type=email name=email placeholder=email@example.com required
 				read-more.note summary="(Why no password?)"
 					p
 						| You can simply login by requesting a login link via mail. If you are afraid someone else might have gained access to the login link, you can invalidate all current ones in the user settings.
@@ -29,7 +30,7 @@ div
 						| You can log in by clicking the link in the email
 					p.center
 						strong - OR -
-					token-input @success=authenticated
+					token-input @success=authenticated # todo ??
 				hr
 				a @click=showMailSent=false ⮜ Send another mail
 		fieldset#with-external.box
@@ -62,7 +63,7 @@ export default Vue.extend(
 				loadedExternalLoginProviders[provider.name] = true
 			await provider.setup()
 	methods: {
-		requestMail: values ->
+		requestMail: ({ values }) ->
 			await @$store.dispatch('session/requestTokenMail', values.email)
 			@$data.showMailSent = true
 		externalLogin: provider -> =>
