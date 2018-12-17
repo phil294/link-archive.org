@@ -4,10 +4,12 @@ div
 	h6
 		| $product.name: $attribute.name
 	promise-form :action=saveDatum
-		label for=value Value
-		input#value name=value placeholder=Value required
-		label for=source Source
-		input#source name=source placeholder=Source required
+		label
+			| Value
+			input name=value placeholder=Value required
+		label
+			| Source
+			input name=source placeholder=Source required
 # '
 </template>
 
@@ -28,7 +30,7 @@ export default Vue.extend(
 		...mapActions('search', [
 			'addProduct'
 		])
-		saveDatum: formData ->
+		saveDatum: ({ formData }) ->
 			@$store.dispatch('search/saveDatum', {
 				formData,
 				product: @product
