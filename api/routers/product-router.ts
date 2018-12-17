@@ -1,7 +1,7 @@
 import express from 'express';
 import { NOT_FOUND, UNPROCESSABLE_ENTITY } from 'http-status-codes';
 import { ObjectID } from 'mongodb';
-import { Equal, FindOptionsOrder, FindOptionsWhere, FindOptionsWhereCondition, In, IsNull, Not } from 'typeorm';
+import { FindOperator, FindOptionsOrder } from 'typeorm';
 import adminSecured from '../adminSecured';
 import Attribute from '../models/Attribute';
 import PrimaryProductDatum from '../models/PrimaryProductDatum';
@@ -95,6 +95,7 @@ interface IFilter {
     condition: string;
     conditionValue: string;
 }
+type IMongoFilterArray = Array<{[key: string]: any}>;
 
 // todo types missing everywhere
 productRouter.get('/', async (req, res) => {
@@ -122,7 +123,7 @@ productRouter.get('/', async (req, res) => {
             [sorter.attributeId]: sorter.direction,
         }), {});
     const filterParam: string = req.query.f;
-    const filtersFormatted: FindOptionsWhere<Product> = filterParam
+    const filtersFormatted: IMongoFilterArray = filterParam
         .split(',').filter(Boolean)
         .map((s: string): IFilter => {
             const split = s.split(':');
@@ -131,19 +132,25 @@ productRouter.get('/', async (req, res) => {
                 attributeId, condition, conditionValue,
             };
         })
-        // todo simple reduce does not allow multiple filters for the same attribute. see typeorm#2396. fix when ready: join them with And()
-        .reduce((all: { [key: string]: FindOptionsWhereCondition<Product> }, filter: any) => {
-            let filterFormatted: FindOptionsWhereCondition<Product>;
+        .map((filter) => {
+            let filterConditionFormatted;
             switch (filter.condition) {
-            case 'notNull':
-                filterFormatted = Not(IsNull()); break;
+            case 'lt':
+                filterConditionFormatted = { $lt: filter.conditionValue }; break;
+            case 'gt':
+                filterConditionFormatted = { $gt: filter.conditionValue }; break;
+            case 'nu':
+                filterConditionFormatted = { $exists: false }; break;
+            case 'nn':
+                filterConditionFormatted = { $exists: true }; break;
+            case 'ne':
+                filterConditionFormatted = { $ne: filter.conditionValue }; break;
             case 'eq':
             default:
-                filterFormatted = filter.conditionValue; break;
+                filterConditionFormatted = filter.conditionValue; break;
             }
-            all[`data.${filter.attributeId}.value`] = filterFormatted;
-            return all;
-        }, {});
+            return { [`data.${filter.attributeId}.value`]: filterConditionFormatted };
+        });
 
     /*********** determine extraIds **********/
     const countParam: string = req.query.c;
@@ -152,13 +159,13 @@ productRouter.get('/', async (req, res) => {
         select: ['_id'],
         where: {
             type,
-            _id: Not(In(showerIds)),
+            _id: { $nin: showerIds } as any,
         },
         take: extraIdsAmount,
         order: {
             interest: 'DESC',
         },
-    })).map(attribute => attribute._id.toString());
+    })).map((attribute: Attribute) => attribute._id.toString());
 
     /************ compute *************/
     const sortersMissing: string[] = sorters
@@ -177,7 +184,8 @@ productRouter.get('/', async (req, res) => {
     only verified values (maybe change verified to stage: integer or maaaaybe
     add _verified value columns also, or boi im lost). each product
     gets its own table. this allows for beautiful clustering. will also allow
-    for #a1 to be fixed.
+    for #a1 to be fixed. to see findoptions way of doing it, see commit before
+    17th dec 18.
     and update it accordingly. mongodb structure stays to look up product data
     like user, time, interest. also used for product data proposal managment.
     nosql feels right here because dynamic amount of attributes and values
@@ -187,9 +195,11 @@ productRouter.get('/', async (req, res) => {
     */
     const products = await Product.find({
         where: {
-            type,
-            ...filtersFormatted,
-        },
+            $and: [
+                { type },
+                ...filtersFormatted,
+            ],
+        } as any,
         select: [
             '_id', 'name', 'verified', // todo
             ...relevantsFormatted,

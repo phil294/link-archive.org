@@ -12,13 +12,16 @@ div
 			| +
 		button else @click=showForm=false
 			| -
-		promise-form if=showForm button-label="Add" :action=addFilter
-			label for=attribute-id Attribute ID
-			input#attribute-id name=attributeId required
-			label for=condition Condition
-			input#condition name=condition required placeholder=eq
-			label for=condition-value Value
-			input#condition-value name=conditionValue required
+		promise-form if=showForm button-label="Add" :action=addFilter :fields=fields
+			label
+				| Attribute ID
+				input name=attributeId required
+			label
+				| Condition
+				input name=condition required placeholder=eq
+			label
+				| Value
+				input name=conditionValue required
 # '
 </template>
 
@@ -34,7 +37,7 @@ export default Vue.extend(
 		...mapActions('search', [
 			'removeFilter'
 		])
-		addFilter: (_, values) ->
+		addFilter: ({ values }) ->
 			@$store.dispatch('search/addFilter', values)
 	}
 	computed: {

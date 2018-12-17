@@ -90,7 +90,7 @@ export default
 		type: 'test'
 		filters: [
 			attributeId: 'facebeefbadefaceaffeb003'
-			condition: 'eq'
+			condition: 'notNull'
 			conditionValue: '2'
 		]
 		showerIds: ['facebeefbadefaceaffeb003', 'facebeefbadefaceaffeb004']
@@ -156,13 +156,14 @@ export default
 		addFilter: (state, filter) -> state.filters.push(filter)
 		removeFilter: (state, filter) -> Vue.delete(state.filters, state.filters.indexOf(filter))
 	actions:
-		toggleSortDirection: ({ commit, state, getters }, { attributeId, direction }) ->
+		toggleSortDirection: ({ commit, dispatch, state, getters }, { attributeId, direction }) ->
 			sorter = getters.sortersByAttributeId[attributeId]
 			if sorter
 				commit('removeSorterAt', sorter.index)
 				if sorter.direction == direction
-					return
+					return # todo seach nonetheless
 			commit('addSorter', { attributeId, direction })
+			dispatch('search')
 		### aka getProducts ###
 		search: ({ commit, state }) ->
 			if state.result
@@ -196,7 +197,7 @@ export default
 				commit('removeShowerIdAt', currentPos) # user moved shower from pos A to B
 			commit('addShowerIdAt', { index, showerId })
 			dispatch('search')
-		addProduct: ({ commit, state }, formData) ->
+		addProduct: ({ commit, state }, { formData }) ->
 			formData.append('type', state.type)
 			response = await axios.post('p', formData)
 			commit('addProduct', response.data)
