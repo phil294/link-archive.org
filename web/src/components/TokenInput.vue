@@ -2,8 +2,9 @@
 # :_='
 div
 	promise-form#insert-code button-label=Ok :action=loginWithToken
-		label for=token paste the token here:
-		input#token model=tokenModel type=text name=token required
+		label
+			| paste the token here:
+			input model=tokenModel name=token required
 # '
 </template>
 

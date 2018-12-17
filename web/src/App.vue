@@ -300,6 +300,12 @@ form > *:not(:last-child) {
 	padding: 1vw
 .padding-xl
 	padding: 3vw
+.margin
+	margin: 0.5vw
+.margin-l
+	margin: 1vw
+.margin-xl
+	margin: 3vw
 .note
 	font-size:80%
 	opacity:0.8
