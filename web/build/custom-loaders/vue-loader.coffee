@@ -1,5 +1,5 @@
 htmlElements = [
-	'table', 'thead', 'tr', 'th', 'span', 'div', 'button', 'tbody', 'td', 'section', 'header', 'nav', 'main', 'h1', 'fieldset', 'p', 'legend', 'img', 'input', 'a', 'em', 'strong', 'hr', 'slot', 'label', 'details', 'router-link', 'router-view', 'summary', 'form', 'ol', 'ul', 'li', 'br'
+	'table', 'thead', 'tr', 'th', 'span', 'div', 'button', 'tbody', 'td', 'section', 'header', 'nav', 'main', 'h1', 'fieldset', 'p', 'legend', 'img', 'input', 'a', 'em', 'strong', 'hr', 'slot', 'label', 'details', 'router-link', 'router-view', 'summary', 'form', 'ol', 'ul', 'li', 'br', 'select', 'option', 'datalist'
 ]
 
 module.exports = (doc) ->
