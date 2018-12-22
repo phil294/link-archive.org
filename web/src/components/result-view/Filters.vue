@@ -3,7 +3,10 @@
 div
 	div.filters.flex.margin
 		div.filter.padding.margin each=filter
-			span $attributesById[filter.attributeId].name
+			span if=attributesById[filter.attributeId]
+				| $attributesById[filter.attributeId].name
+			span else
+				| loading...
 			span $filter.condition
 			span $filter.conditionValue
 			button @click=removeFilter(filter) x
