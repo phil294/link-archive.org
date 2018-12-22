@@ -1,7 +1,7 @@
 import express from 'express';
 import { NOT_FOUND, UNPROCESSABLE_ENTITY } from 'http-status-codes';
-import { ObjectID } from 'mongodb';
-import { FindOperator, FindOptionsOrder } from 'typeorm';
+import { ObjectID } from 'mongodb';
+import { FindOptionsOrder } from 'typeorm';
 import adminSecured from '../adminSecured';
 import Attribute from '../models/Attribute';
 import PrimaryProductDatum from '../models/PrimaryProductDatum';
@@ -155,7 +155,9 @@ productRouter.get('/', async (req, res) => {
     /*********** determine extraIds **********/
     const countParam: string = req.query.c;
     const extraIdsAmount: number = Number(countParam) - showerIds.length;
-    const extraIds: string[] = (await Attribute.find({
+    let extraIds: string[] = [];
+    if (extraIdsAmount > 0) {
+        extraIds = (await Attribute.find({
         select: ['_id'],
         where: {
             type,
@@ -166,6 +168,7 @@ productRouter.get('/', async (req, res) => {
             interest: 'DESC',
         },
     })).map((attribute: Attribute) => attribute._id.toString());
+    }
 
     /************ compute *************/
     const sortersMissing: string[] = sorters
