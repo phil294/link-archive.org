@@ -40,6 +40,7 @@ standaloneKeywords = [
 	'exact'
 	'drag'
 	'drop'
+	'button-float-right'
 ]
 
 module.exports = (slmdoc) ->

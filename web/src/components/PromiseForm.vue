@@ -2,7 +2,7 @@
 # :_='
 form @submit.prevent=submit
 	slot
-	one-time-button ref=submit type=submit :set-loading-automatically=false $buttonLabel
+	one-time-button.submit :class.right=buttonFloatRight ref=submit type=submit :set-loading-automatically=false $buttonLabel
 	div.error.fade-in if=errorMessage $errorMessage
 # '
 </template>
@@ -21,6 +21,9 @@ export default Vue.extend(
 		buttonLabel:
 			type: String
 			default: 'Submit'
+		buttonFloatRight:
+			type: Boolean
+			default: false
 		errorCaption:
 			type: String
 			default: 'Submit failed'
@@ -57,4 +60,6 @@ export default Vue.extend(
 </script>
 
 <style lang="stylus" scoped>
+.right
+	float: right
 </style>

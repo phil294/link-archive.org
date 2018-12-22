@@ -42,7 +42,7 @@
   ];
 
   // Keywords that should allowed to be followed and preceded by whitespace without anything else. This has the potential to break plain text horribly
-  standaloneKeywords = ['v-else', 'required', 'disabled', 'draggable', 'selected', 'exact', 'drag', 'drop'];
+  standaloneKeywords = ['v-else', 'required', 'disabled', 'draggable', 'selected', 'exact', 'drag', 'drop', 'button-float-right'];
 
   module.exports = function(slmdoc) {
     var keyword, rule;
