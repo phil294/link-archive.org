@@ -78,7 +78,9 @@ overview to avoid duplicate lists:
 - attributesById
 - extras
 - relevantAttributes
-- availableAttributes
+- hiddenAttributes
+
+attributes = relevant + hidden
 
 ###
 export default
@@ -107,6 +109,8 @@ export default
 		products: []
 		extraIds: []
 	getters:
+		attributeIds: state ->
+			state.attributes.map(a => a._id)
 		attributesById: state ->
 			state.attributes.reduce((all, attribute) =>
 				all[attribute._id] = attribute
@@ -135,7 +139,7 @@ export default
 			[	...state.showerIds,
 				...sorters,
 				...state.extraIds ]
-		availableAttributeIds: (state, getters) ->
+		hiddenAttributeIds: (state, getters) ->
 			relevants = getters.relevantAttributeIds
 			state.attributes
 				.map(attribute => attribute._id)
@@ -206,8 +210,8 @@ export default
 		getAttributes: ({ commit, state }) ->
 			response = await axios.get('a', { params: { t: state.type } })
 			commit('setAttributes', response.data)
-		addFilter: ({ commit, dispatch }, filter) ->
-			commit('addFilter', filter)
+		addFilter: ({ commit, dispatch }, { values }) ->
+			commit('addFilter', values)
 			dispatch('search')
 		removeFilter: ({ commit, dispatch }, filter) ->
 			commit('removeFilter', filter)

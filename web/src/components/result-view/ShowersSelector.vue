@@ -15,7 +15,7 @@ div#hallo.flex
 		h6 More columns
 		input model=filter
 		ul
-			li.attribute.padding v-for="attrId of filteredAvailableAttributeIds" drag=attrId :key=attrId
+			li.attribute.padding v-for="attrId of filteredAvailableAttributeIds" drag=attrId :key=attrId # todo: use attribute-select in some way¿
 				| $attributesById[attrId].name
 # '
 </template>
@@ -44,10 +44,10 @@ export default Vue.extend(
 		])
 		...mapGetters('search', [
 			'attributesById'
-			'availableAttributeIds'
+			'hiddenAttributeIds'
 		])
 		filteredAvailableAttributeIds: ->
-			@availableAttributeIds.filter(a => a.includes(@$data.filter))
+			@hiddenAttributeIds.filter(a => a.includes(@$data.filter))
 	}
 )
 </script>
