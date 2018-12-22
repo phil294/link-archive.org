@@ -1,0 +1,15 @@
+FROM mongo
+
+RUN apt update
+RUN apt install -y build-essential libboost-filesystem-dev libboost-program-options-dev libboost-system-dev libboost-thread-dev python-pymongo python-pip libssl-dev curl libcurl4-openssl-dev
+
+RUN git clone https://github.com/mongodb/mongo /mongosrc
+
+WORKDIR /mongosrc 
+
+pip install --user -r etc/pip/dev-requirements.txt
+pip2 install -r etc/pip/compile-requirements.txt
+
+# python2 buildscripts/scons.py mongod MONGO_VERSION=4.1.6
+
+# ENTRYPOINT bash

@@ -35,7 +35,7 @@ app.use((req, res, next) => {
         return;
     }
     log(req.method, req.url);
-    next();
+    setTimeout(next, 300);
 });
 
 app.use(authenticationMiddleware(tokenService));
