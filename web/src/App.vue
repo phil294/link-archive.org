@@ -232,7 +232,6 @@ textarea, select, input {
 	color: #4a4a4a;
 	padding: 6px 10px;
 	/* The 6px vertically centers text on FF, ignored by Webkit */
-	margin-bottom: 10px;
 	background-color: #f1f1f1;
 	border: 1px solid #f1f1f1;
 	border-radius: 4px;
@@ -247,7 +246,6 @@ input[type="checkbox"]:focus {
 
 legend, label {
 	display: inline-block;
-	margin-bottom: .5rem;
 }
 legend {
 	font-weight: 600; }
@@ -261,7 +259,7 @@ body, html {
 	width: 100%;
 	height: 100%;
 }
-input:not([type=checkbox]), label {
+input:not([type=checkbox]), label, select {
 	width: 100%;
 }
 input[type=checkbox] + label {
@@ -275,9 +273,6 @@ fieldset {
 }
 details > summary {
 	cursor: pointer;
-}
-form > *:not(:last-child) {
-	margin-bottom: 10px;
 }
 [draggable] {
 	cursor: pointer;
@@ -319,15 +314,19 @@ form > *:not(:last-child) {
 	color: darkred // css4 @apply fade-in
 .flex
 	display: flex
+	@media screen and (max-width: 600px) {
+		flex-direction: column
+	}
 .flex-fill
 	flex: 1
-.justify-center, .align-center, .column
-	@extend .flex
 .column
+	display: flex
 	flex-direction: column
 .justify-center
+	display: flex
 	justify-content: center
 .align-center
+	display: flex
 	align-items: center
 .center
 	@extend .justify-center, .align-center
@@ -338,6 +337,6 @@ form > *:not(:last-child) {
 .fill
 	@extend .fill-w, .fill-h
 .box
-	box-shadow: 3px 3px 4px #ddd
+	box-shadow: 1px 2px 7px 1px #eee
 	background: rgba(255,255,255,0.8)
 </style>
