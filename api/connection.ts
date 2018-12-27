@@ -1,10 +1,10 @@
 import { Connection, createConnection } from 'typeorm';
-import { getEnv } from './utils';
+import { env } from './utils';
 
 const connection: Promise<Connection> = createConnection({
-    database: getEnv('MONGO_DATABASE'),
-    host: getEnv('MONGO_HOST'),
-    port: Number(getEnv('MONGO_PORT')),
+    database: env('MONGO_DATABASE'),
+    host: env('MONGO_HOST'),
+    port: Number(env('MONGO_PORT')),
     type: 'mongodb',
     entities: [
         `${__dirname}/models/*.ts`, // ` *
