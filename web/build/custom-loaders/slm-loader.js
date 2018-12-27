@@ -7,6 +7,8 @@
   replaces = [
     [/(?<=\s)if="/g,
     ' v-if="'],
+    [/(?<=\s)html="/g,
+    ' v-html="'],
     [/(?<=\s)else(?=\s)/g,
     'v-else'],
     [/else-if="/g,
@@ -26,7 +28,7 @@
     ],
     [
       // $blub to {{blub}}
-      /(?<=\s)\$([\w.\[\]$\/="'+-]+)/g,
+      /(?<=\s)\$([\w.\[\]()$\/="'+-]+)/g,
       '{{$1}}' // before:
     // whitespace
     // :class
