@@ -11,12 +11,12 @@ import productRouter from './routers/product-router';
 import userRouter from './routers/userRouter';
 import MailService from './services/MailService';
 import TokenService from './services/TokenService';
-import { error, getEnv, log } from './utils';
+import { env, error, log } from './utils';
 
 // ///////////////// CONFIG
 
-const mailService = new MailService(getEnv('MAIL_SENDER_SERVICE'), getEnv('MAIL_SENDER_USER'), getEnv('MAIL_SENDER_PASSWORD'));
-const tokenService = new TokenService(getEnv('TOKEN_SECRET'));
+const mailService = new MailService(env('MAIL_SENDER_SERVICE'), env('MAIL_SENDER_USER'), env('MAIL_SENDER_PASSWORD'));
+const tokenService = new TokenService(env('TOKEN_SECRET'));
 
 // ////////////////// ROUTES
 
@@ -41,7 +41,7 @@ app.use((req, res, next) => {
 app.use(authenticationMiddleware(tokenService));
 app.use('/authentication', authenticationRouter(
     tokenService, mailService,
-    getEnv('WEB_ROOT'), getEnv('GOOGLE_CLIENT_ID'), getEnv('FACEBOOK_APP_ID'), getEnv('FACEBOOK_APP_SECRET'), getEnv('WEBSITE_NAME'),
+    env('WEB_ROOT'), env('GOOGLE_CLIENT_ID'), env('FACEBOOK_APP_ID'), env('FACEBOOK_APP_SECRET'), env('WEBSITE_NAME'),
 ));
 app.use('/user', userRouter);
 app.use('/p', productRouter);
@@ -56,7 +56,7 @@ app.use((err, req, res, next) => {
 
 (async () => {
     await connection;
-    const PORT = getEnv('PORT');
+    const PORT = env('PORT');
     app.listen(PORT, () => log(`running on ${PORT}`));
 })().catch((e) => {
     error(e);
