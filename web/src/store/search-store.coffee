@@ -91,9 +91,12 @@ export default
 		### (optionally) user-defined ###
 		type: 'test'
 		filters: [
-			attributeId: 'facebeefbadefaceaffeb003'
-			condition: 'notNull'
-			conditionValue: '2'
+				attributeId: 'facebeefbadefaceaffeb003'
+				condition: 'nn'
+			,
+				attributeId: 'facebeefbadefaceaffeb001'
+				condition: 'gt'
+				conditionValue: '7'
 		]
 		showerIds: ['facebeefbadefaceaffeb003', 'facebeefbadefaceaffeb004']
 		sorters: [

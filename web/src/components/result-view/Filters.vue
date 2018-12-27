@@ -7,9 +7,10 @@ div
 				| $attributesById[filter.attributeId].name
 			span else
 				| loading...
-			span $filter.condition
-			span $filter.conditionValue
-			button @click=removeFilter(filter) x
+			| &nbsp; $conditionById[filter.condition].long
+			span if=filter.conditionValue
+				| &nbsp; $filter.conditionValue
+			button @click=removeFilter(filter) 🗙
 	div
 		button if=!showForm @click=showForm=true
 			| +
@@ -25,13 +26,8 @@ div
 					div.condition.padding
 						label
 							| Condition
-							select name=condition required model=condition
-								option value=eq &equals;
-								option value=ne !&equals; (is not)
-								option value=lt &lt; (is less than...)
-								option value=gt &gt; (is more than...)
-								option value=nu is empty
-								option value=nn is not empty
+							select name=condition required model=conditionId
+								option each=condition :value=condition.id html=conditionToOption(condition)
 					div.condition-value.padding
 						label if=conditionNeedsValue
 							| Value
@@ -46,12 +42,46 @@ export default Vue.extend(
 	name: 'ResultViewFilters'
 	data: ->
 		showForm: false
-		condition: 'eq' # Yes, a string. Not a constant. Deal with it.
+		conditionId: 'eq'
+		conditions: [
+				id: 'eq'
+				abbr: '&nbsp;&equals;'
+				needsValue: true
+				long: 'is'
+			,
+				id: 'ne'
+				abbr: '&excl;&equals;'
+				long: 'not'
+				needsValue: true
+			,
+				id: 'lt'
+				abbr: '&nbsp;&lt'
+				long: 'less than'
+				needsValue: true
+			,
+				id: 'gt'
+				abbr: '&nbsp;&gt'
+				long: 'more than'
+				needsValue: true
+			,
+				id: 'nu'
+				abbr: '&nbsp;&#8709;'
+				long: 'empty'
+			,
+				id: 'nn'
+				abbr: '&excl;&#8709;'
+				long: 'not empty'
+		]
 	methods: {
 		...mapActions('search', [
 			'removeFilter'
 			'addFilter'
 		])
+		conditionToOption: condition ->
+			option = condition.abbr
+			if condition.needsValue
+				option += " (#{condition.long})"
+			option
 	}
 	computed: {
 		...mapState('search', [
@@ -61,8 +91,12 @@ export default Vue.extend(
 			'attributeIds'
 			'attributesById'
 		])
+		conditionById: -> @conditions.reduce((all, condition) =>
+			all[condition.id] = condition
+			all
+		, {})
 		conditionNeedsValue: ->
-			!['nu', 'nn'].includes(@$data.condition)
+			@conditionById[@$data.conditionId].needsValue
 	}
 )
 </script>
@@ -77,4 +111,9 @@ export default Vue.extend(
 	.condition
 		flex: 1
 		min-width: 100px
+		label
+			text-align: center
+		select
+			width: 62px
+			font-family: monospace
 </style>
