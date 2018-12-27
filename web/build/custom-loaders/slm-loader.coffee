@@ -3,6 +3,7 @@ slm = require('slm')
 # Things to replace
 replaces = [
 	[/(?<=\s)if="/g, ' v-if="']
+	[/(?<=\s)html="/g, ' v-html="']
 	[/(?<=\s)else(?=\s)/g, 'v-else']
 	[/else-if="/g, 'v-else-if="']
 	[/model="/g, 'v-model="']
@@ -14,7 +15,7 @@ replaces = [
 	[///
 		(?<=\s)				# before: whitespace
 		\$					# dollar
-		([\w.\[\]$/="'+-]+)	# myVar_[0].$prop+12-5/7==="a"
+		([\w.\[\]()$/="'+-]+)	# myVar_[0].$prop+12-5/7==="a"
 	///g, '{{$1}}']
 	# :class.myclass="condition" to :class="{myclass:condition}"
 	[///
