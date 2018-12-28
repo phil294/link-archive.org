@@ -126,8 +126,7 @@ productRouter.get('/', async (req, res) => {
     const filtersFormatted: IMongoFilterArray = filterParam
         .split(',').filter(Boolean)
         .map((s: string): IFilter => {
-            const split = s.split(':');
-            const [attributeId, condition, conditionValue] = split;
+            const [attributeId, condition, conditionValue] = s.split(':');
             return {
                 attributeId, condition, conditionValue,
             };

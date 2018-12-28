@@ -93,10 +93,6 @@ export default
 		filters: [
 				attributeId: 'facebeefbadefaceaffeb003'
 				condition: 'nn'
-			,
-				attributeId: 'facebeefbadefaceaffeb001'
-				condition: 'gt'
-				conditionValue: '7'
 		]
 		showerIds: ['facebeefbadefaceaffeb003', 'facebeefbadefaceaffeb004']
 		sorters: [
@@ -106,7 +102,7 @@ export default
 				attributeId: 'facebeefbadefaceaffeb007'
 				direction: -1
 		]
-		columns: 7
+		columns: 5
 		### server response; readonly ###
 		attributes: []
 		products: []
