@@ -29,7 +29,7 @@ module.exports = (doc) ->
 		.filter((name) => !htmlElements.includes(name))
 	html = html.replace(/// # todo: use matches from above
 			(?<=^|\n\s*)
-			([a-z-]+)/([a-z-]+)	# bla/my-comp
+			([a-z-]+/)+([a-z-]+)	# bla/blub/my-comp
 			(?=[\s.#]|$)
 		///g, '$2')	# remove /
 	usedComponents = [...new Set(usedComponentNames)]
@@ -52,4 +52,7 @@ module.exports = (doc) ->
 		.map((component) => component.name)
 		.join(',')
 	# todo: component name from file ...?
-	"#{templateTag}#{html}#{middle}\n#{imports}\n#{exportStatement}\tcomponents:{#{componentsString}}\n#{jsAndCss}"
+	x = "#{templateTag}#{html}#{middle}\n#{imports}\n#{exportStatement}\tcomponents:{#{componentsString}}\n#{jsAndCss}"
+	# if x.includes('datumClicked')
+		# console.log x
+	x

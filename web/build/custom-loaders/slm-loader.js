@@ -17,8 +17,10 @@
     'v-model="'],
     [/drag="/g,
     'v-drag="'],
-    [/drop="/g,
-    'v-drop="'],
+    [
+      /drop="/g,
+      'v-drop="' 
+    ],
     [
       // each=products translates to v-for="product in products"
       /(?<=\s)each="(\S+)"/g,
