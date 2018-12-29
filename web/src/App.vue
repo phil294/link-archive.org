@@ -306,7 +306,7 @@ details > summary {
 // does not work with v-if, keeps size, but enables fade out animation. use like: ... class=fade-toggle :class.hidden=_var_
 .fade-toggle.hidden
 	opacity: 0
-.disabled
+.disabled // todo rename inactive or similar
 	color: var(--color-disabled)
 .highlighted
 	color: var(--color-highlighted)
