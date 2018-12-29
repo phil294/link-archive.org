@@ -1,18 +1,9 @@
 <template lang="slm">
 # :_='
-	div#kaa.flex-fill.column
-		div#showers-selector
-			button if=!showShowersSelector @click=showShowersSelector=true
-				| +
-			button else @click=showShowersSelector=false
-				| -
-			result-view/showers-selector if=showShowersSelector
-
-		div
-			result-view/filters
-		
-		div#bla
-			result-view/result-table @datumClicked=datumClicked($event)
+	div#kaa.flex-fill.column		
+		div#bla.margin
+			result-view/result-table if=attributes.length @datumClicked=datumClicked($event)
+			p.disabled.center else Loading...
 
 		popup if=editing @close=editing=null
 			result-view/edit-datum-dialog :product=editing.product :attributeId=editing.attributeId
@@ -39,7 +30,6 @@ export default Vue.extend(
 			store.dispatch('search/search'),
 			store.dispatch('search/getAttributes')])
 	data: ->
-		showShowersSelector: false
 		showAddProductDialog: false
 		editing: null
 	methods:
@@ -48,9 +38,6 @@ export default Vue.extend(
 	computed: {
 		...mapState('search', [
 			'attributes'
-			'sorters'
-			'filters'
-			'showers'
 		])
 	}
 	destroyed: ->
@@ -63,9 +50,7 @@ export default Vue.extend(
 	overflow: auto // FF
 #bla
 	overflow: auto
+	margin: 0 auto
 	min-height: 50% // FF: always effective by parent overflowing. Chrome: ignored, parent keeps size. :(
 	max-height: 90%
-#showers-selector
-	max-height: 50%
-	overflow: auto
 </style>

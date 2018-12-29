@@ -101,7 +101,7 @@ type IMongoFilterArray = Array<{[key: string]: any}>;
 productRouter.get('/', async (req, res) => {
     /*********** parse  *********/
     const type: string = req.query.t;
-    const showerIds: string[] = req.query.sh
+    let showerIds: string[] = req.query.sh
         .split(',').filter(Boolean);
     const sortersParam: string = req.query.so;
     const sorters: ISorter[] = sortersParam
@@ -151,33 +151,24 @@ productRouter.get('/', async (req, res) => {
             return { [`data.${filter.attributeId}.value`]: filterConditionFormatted };
         });
 
-    /*********** determine extraIds **********/
-    const countParam: string = req.query.c;
-    const extraIdsAmount: number = Number(countParam) - showerIds.length;
-    let extraIds: string[] = [];
-    if (extraIdsAmount > 0) {
-        extraIds = (await Attribute.find({
-        select: ['_id'],
-        where: {
-            type,
-            _id: { $nin: showerIds } as any,
-        },
-        take: extraIdsAmount,
-        order: {
-            interest: 'DESC',
-        },
-    })).map((attribute: Attribute) => attribute._id.toString());
+    /*********** determine showers if not given **********/
+    if (!showerIds.length) {
+        const count: number = Number(req.query.c);
+        showerIds = (await Attribute.find({
+            select: ['_id'],
+            where: {
+                type,
+            },
+            take: count,
+            order: {
+                interest: 'DESC',
+            },
+        }))
+        .map((attribute: Attribute) => attribute._id.toString());
     }
 
     /************ compute *************/
-    const sortersMissing: string[] = sorters
-        .map(sorter => sorter.attributeId)
-        .filter(attributeId =>
-            !extraIds.includes(attributeId) &&
-            !showerIds.includes(attributeId));
-    extraIds.splice(extraIds.length - 1 - sortersMissing.length, sortersMissing.length);
-    const relevantAttributeIds = [...showerIds, ...extraIds, ...sortersMissing];
-    const relevantsFormatted = relevantAttributeIds.map(id => `data.${id}`) as Array<(keyof Product)>;
+    const showerIdsFormatted = showerIds.map(id => `data.${id}`) as Array<(keyof Product)>;
 
     /********** Search ***********/
     /* this is only a temporary solution because too slow for very big data.
@@ -204,7 +195,7 @@ productRouter.get('/', async (req, res) => {
         } as any,
         select: [
             '_id', 'name', 'verified', // todo
-            ...relevantsFormatted,
+            ...showerIdsFormatted,
         ],
         order: {
             ...sortersFormatted,
@@ -221,7 +212,7 @@ productRouter.get('/', async (req, res) => {
     /********** return **********/
     res.send({
         products,
-        extraIds,
+        showerIds, // maybe as seperate request?
     });
 });
 

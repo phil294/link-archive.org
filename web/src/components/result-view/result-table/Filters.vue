@@ -1,35 +1,32 @@
 <template lang="slm">
 # :_='
 div
-	div.filters.flex.margin # todo no flex but line break
+	div.filters
 		div.filter.padding.margin each=filter
-			span if=attributesById[filter.attributeId]
-				| $attributesById[filter.attributeId].name
-			span else
-				| loading...
-			| &nbsp; $conditionById[filter.condition].long
+			strong  $conditionById[filter.condition].long
 			span if=filter.conditionValue
-				| &nbsp; $filter.conditionValue
+				|  $filter.conditionValue
 			button @click=removeFilter(filter) 🗙
-	div
+	div.center
 		button if=!showForm @click=showForm=true
 			| +
 		button else @click=showForm=false
 			| -
-		div.center.margin-l
-			promise-form#form.box.padding-xl if=showForm button-label="Add" :action=addFilter button-float-right
+		div.center.margin if=showForm
+			promise-form#form.box.padding-xl button-label="Add" :action=addFilter button-float-right
 				div.flex
-					div.attribute-select.padding
-						label
+					div.attribute-select.padding if=!attributeId
+						label.column
 							| Attribute
 							attribute-select name=attributeId required :attribute-ids=attributeIds
+					input else type=hidden name=attributeId :value=attributeId
 					div.condition.padding
-						label
+						label.column
 							| Condition
 							select name=condition required model=conditionId
 								option each=condition :value=condition.id html=conditionToOption(condition)
 					div.condition-value.padding
-						label if=conditionNeedsValue
+						label.column if=conditionNeedsValue
 							| Value
 							input name=conditionValue required
 # '
@@ -39,7 +36,14 @@ div
 import Vue from 'vue'
 import { mapActions, mapState, mapGetters } from 'vuex'
 export default Vue.extend(
-	name: 'ResultViewFilters'
+	name: 'ResultTableFilters'
+	props:
+		filters:
+			type: Array
+			required: true
+		attributeId:
+			type: String
+			default: ''
 	data: ->
 		showForm: false
 		conditionId: 'eq'
@@ -47,7 +51,6 @@ export default Vue.extend(
 				id: 'eq'
 				abbr: '&nbsp;&equals;'
 				needsValue: true
-				long: 'is'
 			,
 				id: 'ne'
 				abbr: '&excl;&equals;'
@@ -78,15 +81,15 @@ export default Vue.extend(
 			'addFilter'
 		])
 		conditionToOption: condition ->
-			option = condition.abbr
+			option = "#{condition.abbr} (is"
+			if condition.long
+				option += " #{condition.long}"
 			if condition.needsValue
-				option += " (#{condition.long})"
+				option += '...'
+			option += ')'
 			option
 	}
 	computed: {
-		...mapState('search', [
-			'filters'
-		])
 		...mapGetters('search', [
 			'attributeIds'
 			'attributesById'
@@ -116,4 +119,7 @@ export default Vue.extend(
 		select
 			width: 62px
 			font-family: monospace
+	.condition-value
+		input
+			width: 130px
 </style>

@@ -3,31 +3,35 @@
 table
 	thead
 		tr
+			th Filters
+			td.filters each=showerId
+				result-view/result-table/filters :filters=filtersByAttributeId[showerId] :attributeId=showerId
+		tr
 			th
-			th v-for="attribute in relevantAttributes" :key=attribute._id
+			th each=showerId
 				.attribute.center
-					span.name $attribute.name
+					span.name $attributesById[showerId].name
 					div.sort.column
-						button.sort-up.disabled @click="toggleSortDirection(attribute._id, 1)" :class.highlighted=sortersByAttributeId[attribute._id].direction===1
+						button.sort-up.disabled @click="toggleSortDirection(showerId, 1)" :class.highlighted=sortersByAttributeId[showerId].direction===1
 							| ⮝
-						button.sort-down.disabled @click="toggleSortDirection(attribute._id, -1)" :class.highlighted=sortersByAttributeId[attribute._id].direction===-1
+						button.sort-down.disabled @click="toggleSortDirection(showerId, -1)" :class.highlighted=sortersByAttributeId[showerId].direction===-1
 							| ⮟
-					div.index.highlighted if="sortersAmount > 1 && sortersByAttributeId[attribute._id].index >= 0"
-						| $sortersByAttributeId[attribute._id].index+1
+					div.index.highlighted if="sortersAmount > 1 && sortersByAttributeId[showerId].index >= 0"
+						| $sortersByAttributeId[showerId].index+1
 	tbody
-		tr.product each=product :key=product._id
+		tr.product each=product
 			td.name
 				| $product.name
-			td.datum v-for="att of relevantAttributeIds" @click=datumClicked(product,att)
-				div if=product.data[att]
-					span.value :class.disabled="!product.data[att].verified"
-						| $product.data[att].value
-					button.edit @click=datumClicked(product,att)
+			td.datum each=showerId @click=datumClicked(product,showerId)
+				div if=product.data[showerId]
+					span.value :class.disabled="!product.data[showerId].verified"
+						| $product.data[showerId].value
+					button.edit @click=datumClicked(product,showerId)
 						| 🖉
 				div else
 					span
-						| &#63; # questionmark
-					button.edit.add @click=datumClicked(product,att)
+						| &#63; # ¿
+					button.edit.add @click=datumClicked(product,showerId)
 						| + 🖉
 # '
 </template>
@@ -44,28 +48,21 @@ export default Vue.extend(
 		])
 		toggleSortDirection: (attributeId, direction) ->
 			@$store.dispatch('search/toggleSortDirection', { attributeId, direction })
-	###	productData: product ->
-			@relevantAttributeIds.map(attributeId =>
-				product.data[attributeId]) ###
 		datumClicked: (product, attributeId) ->
 			@$emit('datumClicked', { product, attributeId })
 
 	}
 	computed: {
 		...mapState('search', [
-			'attributes'
 			'products'
+			'showerIds'
 		])
 		...mapGetters('search', [
+			'filtersByAttributeId'
 			'sortersByAttributeId'
 			'sortersAmount'
-			'relevantAttributeIds'
 			'attributesById'
 		])
-		relevantAttributes: ->
-			@relevantAttributeIds.map(attributeId =>
-				@attributesById[attributeId])
-			.filter(_ => _)
 	}
 )
 </script>
@@ -77,8 +74,9 @@ table
 tr
 	height: 1em
 	background: #fff
-tr:nth-child(odd)
-	background: #f2f2f2
+tbody
+	tr:nth-child(odd)
+		background: #f2f2f2
 td, th
 	padding: 6px
 	border-bottom: var(--separator)
@@ -102,10 +100,10 @@ th
 				color: var(--color-main)
 		.sort-up
 			position: relative
-			top: -0.3em
+			top: -0.2em
 		.sort-down
 			position: absolute
-			bottom: -0.7em
+			bottom: -0.6em
 	.index
 		font-size: 80%
 td.datum

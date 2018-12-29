@@ -6,63 +6,33 @@ import Vue from 'vue'
 # Search request
 
 A search request consists out of user-defined request modifiers:
-- `product`: string
+- `type`: string
 	What to search for
 - `filters`: {} - optional
 	Attributes to filter by
 - `sorters`: {} - optional
 	Attributes to sort with
 - `showers`: [] - optional
-	Attributes to assuredly include in the query: [`shower1`, `shower2`, ... `showerN`]
-	Result will include N or more entries.
+	Attributes to be included in the result product data: [`shower1`, `shower2`, ... `showerN`]
+	Each product data result will include max(N, columns) entries.
+	Showers are what the server sent, and may be configured by the user (add / remove / move cols around, maybe in order to sort / filter by them or jff)
 - `columns`: number
 	Amount of attributes to respond with. If <= showers, ignored.
-	Else, showers-columns extras are included in the returned view.
-	If < 1, no extras will be added.
+	If < 1, no values will be returned
 
 # Search result (answer)
 
-Result contains product values at uniq([...showers, ...sorters, ...extras])
+Result contains product values at [...showers]. filters and sorters are part of showers, defined seperately.
 with showers = (`shower1`, `shower2`, ... `showerN`)
-and extras = (`attribute1`, `attribute2`, ... `attributeM`)
-where N >= 0 (client-defined) and M >= 0 (server-defined based on `columns`) but N+M >= 1 (columns >= 1). extras ⊈ showers.
-extras are also shown attributes and in some sense showers, but not configured by the user. Their order matters.
 
 Query response:
 - `result`:
-	`extras`: []
+	`showers`: []
 	`products`: []
 
 In the frontend, the columns (attibutes) to be displayed are determined by
-`relevantAttributes` = [...showers, ...sorterAttributesNotContainedInExtras, ...extras].
-showers and sorters are known before the server responds, so only need to add extras to the end.
-extras could instead be the first M elements of the global attributes array instead. But this is not ideal since that order may change. With the current system, changes are coherent. (Maybe add a check to compare both? Should in most cases stay the same. And if changed, debug info + rerquest new attributes?)
+`showers`
 
-# Showers
-
-It would be easiest to always request an editable set of `showers`¹. But result views will be shareable. Every request increments the interest on the passed filters/sorters/showers and thus, keeping showers should be avoided.
--> Make the user configure showers manually.
-This way, the server is only queried with showers that the user actively set and incrementing the interest is justified.
-
-# Example:
-
-	Initial state:
-	filters={}, sorters={}, showers=[] (, attributes=[a1, a2, ..., a50])
-
-	Response:
-	products=[...], extras: [a1, a2, a3, a4, a5]
-
-	User sets 1 filter at a2, 1 sorter at a5 and configures showers=[a3, a1]
-	filters=[{attributeId:'a2', condition: 'equals', conditionValue: 'bla'}], sorters=[{attributeId: 'a5', direction: 1}], showers=[a3, a1]
-
-	Server query: SELECT showers, extras..., sorters FROM p WHERE filters ORDER BY sorters
-	Response:
-	products=[...], extras: [a2, a4, a5]
-
-	Resulting table: relevantAttributes:
-	[a3, a1, a2, a4, a5]
-	which is [...showers, ...extras] with filters and sorters active.
-	
 ---
 Seperate query:
 - attributes: []
@@ -76,11 +46,9 @@ overview to avoid duplicate lists:
 
 - attributes
 - attributesById
-- extras
-- relevantAttributes
 - hiddenAttributes
 
-attributes = relevant + hidden
+attributes = showers + hidden
 
 ###
 export default
@@ -91,22 +59,14 @@ export default
 		### (optionally) user-defined ###
 		type: 'test'
 		filters: [
-				attributeId: 'facebeefbadefaceaffeb003'
-				condition: 'nn'
 		]
-		showerIds: ['facebeefbadefaceaffeb003', 'facebeefbadefaceaffeb004']
+		showerIds: []
 		sorters: [
-				attributeId: 'facebeefbadefaceaffeb006'
-				direction: 1
-			,
-				attributeId: 'facebeefbadefaceaffeb007'
-				direction: -1
 		]
-		columns: 5
+		columns: 3
 		### server response; readonly ###
 		attributes: []
 		products: []
-		extraIds: []
 	getters:
 		attributeIds: state ->
 			state.attributes.map(a => a._id)
@@ -115,35 +75,27 @@ export default
 				all[attribute._id] = attribute
 				all
 			, {})
-		sortersByAttributeId: state ->
-			state.attributes.reduce((all, attribute) =>
-				sorterIndex = state.sorters.findIndex(sorter => sorter.attributeId == attribute._id)
+		sortersByAttributeId: (state, getters) ->
+			getters.attributeIds.reduce((all, attributeId) =>
+				sorterIndex = state.sorters.findIndex(sorter => sorter.attributeId == attributeId)
 				if sorterIndex > -1
-					all[attribute._id] =
+					all[attributeId] =
 						index: sorterIndex
 						direction: state.sorters[sorterIndex].direction
 				else
-					all[attribute._id] = {}
+					all[attributeId] = {}
+				all
+			, {})
+		filtersByAttributeId: (state, getters) ->
+			getters.attributeIds.reduce((all, attributeId) =>
+				all[attributeId] = state.filters.filter(filter => filter.attributeId == attributeId)
 				all
 			, {})
 		sortersAmount: state -> state.sorters.length
-		### This is a concatenation of showers and extras (and sorters in between, if not contained in the latter) ###
-		relevantAttributeIds: (state, getters) ->
-			# sorters that are not part of extras or showers # todo rename
-			sorters = state.sorters
-				.map(sorter => sorter.attributeId)
-				.filter(attributeId =>
-					!state.extraIds.includes(attributeId) &&
-					!state.showerIds.includes(attributeId))
-			[	...state.showerIds,
-				...sorters,
-				...state.extraIds ]
 		hiddenAttributeIds: (state, getters) ->
-			relevants = getters.relevantAttributeIds
-			state.attributes
-				.map(attribute => attribute._id)
+			getters.attributeIds
 				.filter(attributeId =>
-					!relevants.includes(attributeId))
+					!state.showers.includes(attributeId))
 	mutations:
 		removeSorterAt: (state, index) -> Vue.delete(state.sorters, index)
 		addSorter: (state, sorter) -> state.sorters.push(sorter)
@@ -151,9 +103,9 @@ export default
 		addProduct: (state, product) -> state.products.push(product)
 		addProductDatum: (state, { product, attributeId, datum }) ->
 			Vue.set(product.data, attributeId, datum)
-		setExtraIds: (state, extraIds) -> state.extraIds = extraIds
-		removeShowerIdAt: (state, index) -> Vue.delete(state.showerIds, index)
-		addShowerIdAt: (state, { index, showerId }) -> state.showerIds.splice(index, 0, showerId)
+		setShowerIds: (state, showerIds) -> state.showerIds = showerIds
+		#removeShowerIdAt: (state, index) -> Vue.delete(state.showerIds, index)
+		#addShowerIdAt: (state, { index, showerId }) -> state.showerIds.splice(index, 0, showerId)
 		setAttributes: (state, attributes) ->
 			state.attributes = attributes
 		addFilter: (state, filter) -> state.filters.push(filter)
@@ -164,12 +116,13 @@ export default
 			if sorter
 				commit('removeSorterAt', sorter.index)
 				if sorter.direction == direction
-					return # todo seach nonetheless
+					dispatch('search')
+					return
 			commit('addSorter', { attributeId, direction })
 			dispatch('search')
 		### aka getProducts ###
 		search: ({ commit, state }) ->
-			commit('setExtraIds', [])
+			# commit('setShowerIds', [])
 			commit('setProducts', [])
 			{ type, columns } = state
 			showerIdsParam = state.showerIds
@@ -187,9 +140,9 @@ export default
 				so: sortersParam,
 				c: columns
 			} })
-			commit('setExtraIds', response.data.extraIds)
+			commit('setShowerIds', response.data.showerIds)
 			commit('setProducts', response.data.products)
-		addShowerAt: ({ dispatch, commit, state }, { index, showerId }) ->
+		###addShowerAt: ({ dispatch, commit, state }, { index, showerId }) ->
 			currentPos = state.showerIds.findIndex(e => e == showerId)
 			newPos = index
 			if currentPos > -1
@@ -198,7 +151,7 @@ export default
 					newPos -= 1
 			commit('addShowerIdAt', { index: newPos, showerId })
 			if newPos != currentPos
-				dispatch('search')
+				dispatch('search')###
 		addProduct: ({ commit, state }, { formData }) ->
 			formData.append('type', state.type)
 			response = await axios.post('p', formData)
