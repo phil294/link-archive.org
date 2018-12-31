@@ -3,7 +3,8 @@
 table
 	thead
 		tr
-			th Filters
+			td.small
+				div.center Filters ➙
 			td.filters each=showerId
 				result-view/result-table/filters :filters=filtersByAttributeId[showerId] :attributeId=showerId
 		tr
@@ -16,7 +17,7 @@ table
 							| ⮝
 						button.sort-down.disabled @click="toggleSortDirection(showerId, -1)" :class.highlighted=sortersByAttributeId[showerId].direction===-1
 							| ⮟
-					div.index.highlighted if="sortersAmount > 1 && sortersByAttributeId[showerId].index >= 0"
+					div.small.highlighted if="sortersAmount > 1 && sortersByAttributeId[showerId].index >= 0"
 						| $sortersByAttributeId[showerId].index+1
 	tbody
 		tr.product each=product
@@ -24,15 +25,21 @@ table
 				| $product.name
 			td.datum each=showerId @click=datumClicked(product,showerId)
 				div if=product.data[showerId]
-					span.value :class.disabled="!product.data[showerId].verified"
-						| $product.data[showerId].value
-					button.edit @click=datumClicked(product,showerId)
-						| 🖉
+					div if=product.data[showerId].verified
+						span
+							| $product.data[showerId].value
+						button.edit.verified @click=datumClicked(product,showerId)
+							| ✓ # ✔
+					div else
+						span.disabled
+							| $product.data[showerId].value
+						button.edit.disabled @click=datumClicked(product,showerId)
+							| ✎
 				div else
-					span
-						| &#63; # ¿
-					button.edit.add @click=datumClicked(product,showerId)
-						| + 🖉
+					span.small
+						| # &#63; # ¿
+					button.edit.disabled @click=datumClicked(product,showerId)
+						| + # 🖉
 # '
 </template>
 
@@ -68,6 +75,23 @@ export default Vue.extend(
 </script>
 
 <style lang="stylus" scoped>
+// Bug: sticky + border-collapse + border: border not shown. SO#41882616. todo: remove once fixed everywhere (lol).
+border-fix()
+	&::after
+		content: ''
+		position: absolute
+		right: 0
+		bottom: 0
+border-right-fix()
+	border-fix()
+	&::after
+		border-right: arguments
+		height: 100%
+border-bottom-fix()
+	border-fix()
+	&::after
+		border-bottom: arguments
+		width: 100%
 table
 	--separator: 1px solid #e3e3e3
 	border-collapse: collapse
@@ -78,15 +102,20 @@ tbody
 	tr:nth-child(odd)
 		background: #f2f2f2
 td, th
-	padding: 6px
-	border-bottom: var(--separator)
+	padding: 8px 6px
+	border-bottom-fix: var(--separator)
 	min-width: 100px
+	max-width: 150px
+	word-wrap: break-word
+	position: relative
 td:first-child, th // would be better on thead but this does not seem possible
 	position: sticky
 	background: inherit
-td:first-child
+td:first-child, th:first-child
 	z-index: 1
 	left: 0
+	border-right-fix: var(--separator)
+tbody td:not(:first-child)
 	border-right: var(--separator)
 th
 	z-index: 2
@@ -104,15 +133,13 @@ th
 		.sort-down
 			position: absolute
 			bottom: -0.6em
-	.index
-		font-size: 80%
 td.datum
 	text-align: center
-	.value
-		font-size: 80%
 	button.edit
-		font-size: 80%
-	button.add
-		color: green
+		position: absolute
+		right: 0
+		bottom: 0
+		&.verified
+			color: #be9
 
 </style>
