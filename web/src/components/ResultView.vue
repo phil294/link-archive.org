@@ -1,9 +1,10 @@
 <template lang="slm">
 # :_='
 	div#kaa.flex-fill.column		
-		div#bla.margin
-			result-view/result-table if=attributes.length @datumClicked=datumClicked($event)
-			p.disabled.center else Loading...
+		div#blub
+			div#bla.margin
+				result-view/result-table if=attributes.length @datumClicked=datumClicked($event)
+				p.disabled.center else Loading...
 
 		popup if=editing @close=editing=null
 			result-view/edit-datum-dialog :product=editing.product :attributeId=editing.attributeId
@@ -48,9 +49,10 @@ export default Vue.extend(
 <style lang="stylus" scoped>
 #kaa
 	overflow: auto // FF
-#bla
-	overflow: auto
+#blub
 	margin: 0 auto
+#bla
+	// overflow: auto
 	min-height: 50% // FF: always effective by parent overflowing. Chrome: ignored, parent keeps size. :(
 	max-height: 90%
 </style>
