@@ -100,11 +100,12 @@ main
 // @import 'https://fonts.googleapis.com/css?family=Fira+Mono|Noto+Serif|Noto+Sans:300,400,500';
 
 :root {
-	--color-main: #222;
-	--color-hover: #555;
+	--color-main: #d8d8d8;
+	--color-foreground: #444;
+	--color-hover: #c4c4c4;
 	--color-disabled: #a6a6a6;
-	--color-highlighted: darkorange
-	--color-border: #000;
+	--color-highlighted: darkorange;
+	--color-border: var(--color-hover);
 }
 
 /* Body */
@@ -113,7 +114,7 @@ html {
 }
 
 body {
-	color: #4a4a4a;
+	color: var(--color-foreground);
 	background-color: #fff;
 }
 
@@ -163,7 +164,7 @@ small, sub, sup {
 
 a {
 	text-decoration: none;
-	color: var(--color-main); }
+	color: var(--color-foreground); }
 	a:hover {
 		color: var(--color-hover);
 		border-bottom: 2px solid var(--color-border); }
@@ -202,6 +203,7 @@ button // buttons, by default, should not have any specific styling so they can 
 	-webkit-appearance: none
 	background: initial
 	border: initial
+	color: inherit // FF bug
 
 button, .btn, input[type="submit"], input[type="reset"], input[type="button"]
 	cursor: pointer
@@ -213,19 +215,19 @@ button, .btn, input[type="submit"], input[type="reset"], input[type="button"]
 
 .btn, input[type="submit"], input[type="reset"], input[type="button"] {
 	display: inline-block;
-	padding: 5px 10px;
+	padding: 1px 6px;
 	text-align: center;
 	text-decoration: none;
 	white-space: nowrap;
 	background-color: var(--color-main);
-	color: #f9f9f9;
+	color: var(--color-foreground);
 	border-radius: 1px;
 	border: 1px solid var(--color-border);
 	box-sizing: border-box; }
-	.btn:focus, .btn:hover, input[type="submit"]:focus, input[type="submit"]:hover, input[type="reset"]:focus, input[type="reset"]:hover, input[type="button"]:focus, input[type="button"]:hover {
+	.btn:hover, input[type="submit"]:hover, input[type="reset"]:hover, input[type="button"]:hover {
 		background-color: var(--color-hover);
 		border-color: var(--color-hover);
-		color: #f9f9f9;
+		// color: #f9f9f9;
 		outline: 0; }
 
 textarea, select, input {
@@ -312,6 +314,8 @@ details > summary {
 	color: var(--color-highlighted)
 .error
 	color: darkred // css4 @apply fade-in
+.small
+	font-size: 80%
 .flex
 	display: flex
 	@media screen and (max-width: 600px) {
@@ -338,5 +342,5 @@ details > summary {
 	@extend .fill-w, .fill-h
 .box
 	box-shadow: 1px 2px 7px 1px #eee
-	background: rgba(255,255,255,0.8)
+	background: rgba(255,255,255,0.88)
 </style>
