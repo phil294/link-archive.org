@@ -3,8 +3,7 @@
 table
 	thead
 		tr
-			td.small
-				div.center Filters ➙
+			td
 			td.filters each=showerId
 				result-view/result-table/filters :filters=filtersByAttributeId[showerId] :attributeId=showerId
 		tr
@@ -140,6 +139,6 @@ td.datum
 		right: 0
 		bottom: 0
 		&.verified
-			color: #be9
+			color: #9d7
 
 </style>

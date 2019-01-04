@@ -2,13 +2,15 @@
 # :_='
 div
 	div.filters.justify-center
-		div.filter each=filter
+		div.filter.box each=filter
 			span $conditionById[filter.condition].long
 			strong if=filter.conditionValue
 				| &nbsp; $filter.conditionValue
 			button @click=removeFilter(filter) × # 🗙
-		button.add.btn.fade-in if=!showForm @click=showForm=true
-			| +
+		label.justify-center if=!showForm
+			span.disabled if=!filters.length Add filter
+			button.disabled.fade-in @click=showForm=true
+				| +
 	div.center.column
 		popup if=showForm @close=showForm=false
 			promise-form#form button-label="Add" :action=addFilter button-float-right
@@ -107,11 +109,11 @@ export default Vue.extend(
 .filters
 	flex-wrap: wrap
 	font-size: 80%
-	.filter, .add
-		margin: 3px
-		padding: 4px
+	> *
+		margin: 3px // TODO: only distance to each other, none to outside
 	.filter
-		background: var(--color-main)
+		padding: 2px 4px
+		// background: lightgrey
 #form
 	max-width: 750px
 	.attribute-select, .condition-value
