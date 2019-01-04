@@ -129,9 +129,9 @@ body {
 */
 
 h1, h2, h3, h4, h5, h6 {
-	line-height: 1.1;
-	font-family: Verdana, Geneva, sans-serif;
-	font-weight: 700;
+//	line-height: 1.1;
+//	font-family: Verdana, Geneva, sans-serif;
+	font-weight: bold;
 	overflow-wrap: break-word;
 	word-wrap: break-word;
 	-ms-word-break: break-all;
@@ -139,25 +139,8 @@ h1, h2, h3, h4, h5, h6 {
 	-ms-hyphens: auto;
 	-moz-hyphens: auto;
 	-webkit-hyphens: auto;
-	hyphens: auto; }
-
-h1 {
-	font-size: 2.35em; }
-
-h2 {
-	font-size: 2.00em; }
-
-h3 {
-	font-size: 1.75em; }
-
-h4 {
-	font-size: 1.5em; }
-
-h5 {
-	font-size: 1.25em; }
-
-h6 {
-	font-size: 1em; }
+	hyphens: auto;
+	margin: initial; }
 
 small, sub, sup {
 	font-size: 75%; }
@@ -205,17 +188,17 @@ button // buttons, by default, should not have any specific styling so they can 
 	border: initial
 	color: inherit // FF bug
 
-button, .btn, input[type="submit"], input[type="reset"], input[type="button"]
+button, input[type="submit"], input[type="reset"], input[type="button"], label
 	cursor: pointer
 
 .button[disabled], button[disabled], input[type="submit"][disabled], input[type="reset"][disabled], input[type="button"][disabled] {
 	cursor: default;
 	opacity: .5;
 }
-
+// TODO: .btn = button-like styling, should not be used as button identifier
 .btn, input[type="submit"], input[type="reset"], input[type="button"] {
 	display: inline-block;
-	padding: 1px 6px;
+	padding: 2px 6px;
 	text-align: center;
 	text-decoration: none;
 	white-space: nowrap;
@@ -261,9 +244,10 @@ body, html {
 	width: 100%;
 	height: 100%;
 }
-input:not([type=checkbox]), label, select {
-	width: 100%;
-}
+form
+	input:not([type=checkbox]), label, select {
+		width: 100%;
+	}
 input[type=checkbox] + label {
 	display: inline;
 }
@@ -271,7 +255,7 @@ a {
 	cursor: pointer;
 }
 fieldset {
-	border: 2px solid #eeeeee;
+	border: 2px solid #eeeeee; // TODO: breaks .box in login, also has border or shadow or both
 }
 details > summary {
 	cursor: pointer;
@@ -341,6 +325,8 @@ details > summary {
 .fill
 	@extend .fill-w, .fill-h
 .box
-	box-shadow: 1px 2px 7px 1px #eee
+	// box-shadow: 1px 2px 7px 1px #eee
+	// box-shadow: 1px 1px 1px 1px #ddd
+	border: 1px solid #ddd
 	background: rgba(255,255,255,0.88)
 </style>
