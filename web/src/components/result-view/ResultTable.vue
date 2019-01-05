@@ -6,9 +6,9 @@ table
 			td
 			td.filters each=showerId
 				result-view/result-table/filters :filters=filtersByAttributeId[showerId] :attributeId=showerId
-		tr
-			th
-			th each=showerId
+		tr.attributes
+			th drop=moveShowerTo(0)
+			th v-for="showerId, index in showerIds" :key="showerId+'_'+index" drag=showerId drop=moveShowerTo(index+1)
 				.attribute.center
 					span.name $attributesById[showerId].name
 					div.sort.column
@@ -56,7 +56,8 @@ export default Vue.extend(
 			@$store.dispatch('search/toggleSortDirection', { attributeId, direction })
 		datumClicked: (product, attributeId) ->
 			@$emit('datumClicked', { product, attributeId })
-
+		moveShowerTo: index -> showerId =>
+			@$store.dispatch('search/moveShowerTo', { showerId, index })
 	}
 	computed: {
 		...mapState('search', [
@@ -121,6 +122,8 @@ tbody td:not(:first-child):not(:last-child), th:not(:first-child):not(:last-chil
 th
 	z-index: 2
 	top: 0
+.attributes > th.drop
+	border-right: 2px solid var(--color-highlighted)
 .attribute
 	.sort
 		padding-left: 0.2em

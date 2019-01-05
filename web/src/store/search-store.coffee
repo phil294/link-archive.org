@@ -63,7 +63,7 @@ export default
 		showerIds: []
 		sorters: [
 		]
-		columns: 3
+		columns: 5
 		### server response; readonly ###
 		attributes: []
 		products: []
@@ -104,8 +104,8 @@ export default
 		addProductDatum: (state, { product, attributeId, datum }) ->
 			Vue.set(product.data, attributeId, datum)
 		setShowerIds: (state, showerIds) -> state.showerIds = showerIds
-		#removeShowerIdAt: (state, index) -> Vue.delete(state.showerIds, index)
-		#addShowerIdAt: (state, { index, showerId }) -> state.showerIds.splice(index, 0, showerId)
+		removeShowerIdAt: (state, index) -> Vue.delete(state.showerIds, index)
+		addShowerIdAt: (state, { index, showerId }) -> state.showerIds.splice(index, 0, showerId)
 		setAttributes: (state, attributes) ->
 			state.attributes = attributes
 		addFilter: (state, filter) -> state.filters.push(filter)
@@ -142,7 +142,7 @@ export default
 			} })
 			commit('setShowerIds', response.data.showerIds)
 			commit('setProducts', response.data.products)
-		###addShowerAt: ({ dispatch, commit, state }, { index, showerId }) ->
+		moveShowerTo: ({ dispatch, commit, state }, { index, showerId }) ->
 			currentPos = state.showerIds.findIndex(e => e == showerId)
 			newPos = index
 			if currentPos > -1
@@ -151,7 +151,7 @@ export default
 					newPos -= 1
 			commit('addShowerIdAt', { index: newPos, showerId })
 			if newPos != currentPos
-				dispatch('search')###
+				dispatch('search')
 		addProduct: ({ commit, state }, { formData }) ->
 			formData.append('type', state.type)
 			response = await axios.post('p', formData)
