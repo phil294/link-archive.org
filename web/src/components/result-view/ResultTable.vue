@@ -13,9 +13,9 @@ table
 					span.name $attributesById[showerId].name
 					div.sort.column
 						button.sort-up.disabled @click="toggleSortDirection(showerId, 1)" :class.highlighted=sortersByAttributeId[showerId].direction===1
-							| ⮝
+							| ▲
 						button.sort-down.disabled @click="toggleSortDirection(showerId, -1)" :class.highlighted=sortersByAttributeId[showerId].direction===-1
-							| ⮟
+							| ▼
 					div.small.highlighted if="sortersAmount > 1 && sortersByAttributeId[showerId].index >= 0"
 						| $sortersByAttributeId[showerId].index+1
 	tbody
@@ -99,39 +99,42 @@ tr
 	background: #fff
 tbody
 	tr:nth-child(odd)
-		background: #f2f2f2
+		background: #f5f5f5
 td, th
+	max-width: 150px
+	position: relative
+tbody td, th
 	padding: 8px 6px
 	border-bottom-fix: var(--separator)
 	min-width: 100px
-	max-width: 150px
 	word-wrap: break-word
-	position: relative
 td:first-child, th // would be better on thead but this does not seem possible
 	position: sticky
 	background: inherit
-td:first-child, th:first-child
+tbody td:first-child
 	z-index: 1
 	left: 0
+tbody td:first-child
 	border-right-fix: var(--separator)
-tbody td:not(:first-child)
+tbody td:not(:first-child):not(:last-child), th:not(:first-child):not(:last-child)
 	border-right: var(--separator)
 th
 	z-index: 2
 	top: 0
 .attribute
 	.sort
-		padding-left: 0.7vw
+		padding-left: 0.2em
 		position: relative
 		.sort-up, .sort-down
+			padding: 0
 			&:hover
 				color: var(--color-main)
 		.sort-up
 			position: relative
-			top: -0.2em
+			top: -0.5em
 		.sort-down
 			position: absolute
-			bottom: -0.6em
+			bottom: -0.3em
 td.datum
 	text-align: center
 	button.edit
