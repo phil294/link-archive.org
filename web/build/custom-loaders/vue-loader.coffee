@@ -40,7 +40,7 @@ module.exports = (doc) ->
 			camelCase = name
 				.replace(/-(.)/g, ($1) => $1[1].toUpperCase())
 			CamelCase = camelCase[0].toUpperCase() + camelCase.slice(1)
-			return {
+			{
 				path: path
 				name: CamelCase
 			}

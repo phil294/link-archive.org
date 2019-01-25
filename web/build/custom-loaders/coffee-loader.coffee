@@ -1,5 +1,5 @@
 module.exports = (coffeedoc) ->
-	return coffeedoc
+	coffeedoc
 		### Allow single lambda parameter without quotes: Change "xyz: a -> ..." to "xyz: (a) -> ..." ###
 		.replace(///
 			(?<=					# before: either

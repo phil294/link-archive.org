@@ -45,7 +45,7 @@ export default Vue.extend(
 			values = [...formData.entries()]
 				.reduce((all, entry) =>
 					all[entry[0]] = entry[1]
-					return all
+					all
 				, {})
 			try
 				await @$props.action({ formData, values, event })
