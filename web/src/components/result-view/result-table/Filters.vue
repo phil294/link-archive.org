@@ -3,12 +3,12 @@
 div
 	div.filters.justify-center
 		div.filter.box each=filter
-			span $conditionById[filter.condition].long
+			span $conditionById[filter.condition].long&nbsp;
 			strong if=filter.conditionValue
-				| &nbsp; $filter.conditionValue
-			button @click=removeFilter(filter) × # 🗙
-		label.justify-center if=!showForm
-			span.disabled if=!filters.length Add filter
+				| $filter.conditionValue&nbsp;
+			button @click=removeFilter(filter) if=!readonly × # 🗙
+		label.justify-center if="!showForm && !readonly"
+			span.disabled if=!filters.length Add filter&nbsp;
 			button.disabled.fade-in @click=showForm=true
 				| +
 	div.center.column
@@ -24,7 +24,7 @@ div
 						label.column
 							| Condition
 							select name=condition required model=conditionId
-								option each=condition :value=condition.id html=conditionToOption(condition)
+								option each=condition :value=condition.id html=conditionToOption(condition) # todo why html not | ¿
 					div.condition-value.padding
 						label.column if=conditionNeedsValue
 							| Value
@@ -44,6 +44,8 @@ export default Vue.extend(
 		attributeId:
 			type: String
 			default: ''
+		readonly:
+			default: false
 	data: ->
 		showForm: false
 		conditionId: 'eq'

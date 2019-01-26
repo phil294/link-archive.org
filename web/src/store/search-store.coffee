@@ -116,8 +116,7 @@ export default
 			if sorter
 				commit('removeSorterAt', sorter.index)
 				if sorter.direction == direction
-					dispatch('search')
-					return
+					return dispatch('search')
 			commit('addSorter', { attributeId, direction })
 			dispatch('search')
 		### aka getProducts ###

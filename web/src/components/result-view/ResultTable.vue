@@ -5,19 +5,28 @@ table
 		tr
 			td
 			td.filters each=showerId
-				result-view/result-table/filters :filters=filtersByAttributeId[showerId] :attributeId=showerId
+				result-view/result-table/filters :filters=filtersByAttributeId[showerId] :attributeId=showerId :readonly=readonly
 		tr.attributes
 			th drop=moveShowerTo(0)
-			th v-for="showerId, index in showerIds" :key="showerId+'_'+index" drag=showerId drop=moveShowerTo(index+1)
-				.attribute.center
-					span.name $attributesById[showerId].name
-					div.sort.column
-						button.sort-up.disabled @click="toggleSortDirection(showerId, 1)" :class.highlighted=sortersByAttributeId[showerId].direction===1
-							| ▲
-						button.sort-down.disabled @click="toggleSortDirection(showerId, -1)" :class.highlighted=sortersByAttributeId[showerId].direction===-1
-							| ▼
-					div.small.highlighted if="sortersAmount > 1 && sortersByAttributeId[showerId].index >= 0"
-						| $sortersByAttributeId[showerId].index+1
+				| Name
+			th v-for="showerId, index in showerIds" :key="showerId+'_'+index" drop=moveShowerTo(index+1)
+				.attribute.column
+					div.actions.center if="!readonly && !canDrag"
+						button.moveto ← # &lt;
+						button.remove 🗙
+						button.moveto → # &gt;
+					div.name.center
+						div drag="!readonly && canDrag && showerId"
+							span.grip if=!readonly ⠿
+							| $attributesById[showerId].name
+						div.sort.column
+							button.sort-up.disabled :disabled=readonly @click="toggleSortDirection(showerId, 1)" :class.highlighted=sortersByAttributeId[showerId].direction===1
+								| ▲ # ˄
+							button.sort-down.disabled :disabled=readonly @click="toggleSortDirection(showerId, -1)" :class.highlighted=sortersByAttributeId[showerId].direction===-1
+								| ▼ # ˅
+						div.small.highlighted if="sortersAmount > 1 && sortersByAttributeId[showerId].index >= 0"
+							| $sortersByAttributeId[showerId].index+1
+
 	tbody
 		tr.product each=product
 			td.name
@@ -27,17 +36,17 @@ table
 					div if=product.data[showerId].verified
 						span
 							| $product.data[showerId].value
-						button.edit.verified @click=datumClicked(product,showerId)
+						button.edit.verified @click=datumClicked(product,showerId) if=!readonly
 							| ✓ # ✔
 					div else
 						span.disabled
 							| $product.data[showerId].value
-						button.edit.disabled @click=datumClicked(product,showerId)
+						button.edit.disabled @click=datumClicked(product,showerId) if=!readonly
 							| ✎
 				div else
 					span.small
 						| # &#63; # ¿
-					button.edit.disabled @click=datumClicked(product,showerId)
+					button.edit.disabled @click=datumClicked(product,showerId) if=!readonly
 						| + # 🖉
 # '
 </template>
@@ -48,6 +57,11 @@ import { mapActions, mapState, mapGetters } from 'vuex'
 
 export default Vue.extend(
 	name: 'ResultView'
+	props:
+		readonly:
+			default: false
+	data: =>
+		canDrag: !('ontouchstart' in window || navigator.maxTouchPoints)
 	methods: {
 		...mapActions('search', [
 			
@@ -55,6 +69,7 @@ export default Vue.extend(
 		toggleSortDirection: (attributeId, direction) ->
 			@$store.dispatch('search/toggleSortDirection', { attributeId, direction })
 		datumClicked: (product, attributeId) ->
+			if @readonly then return
 			@$emit('datumClicked', { product, attributeId })
 		moveShowerTo: index -> showerId =>
 			@$store.dispatch('search/moveShowerTo', { showerId, index })
@@ -82,6 +97,7 @@ border-fix()
 		position: absolute
 		right: 0
 		bottom: 0
+		z-index: -1
 border-right-fix()
 	border-fix()
 	&::after
@@ -103,41 +119,58 @@ tbody
 		background: #f5f5f5
 td, th
 	max-width: 150px
+td, th, .attribute
 	position: relative
-tbody td, th
+tbody td
 	padding: 8px 6px
-	border-bottom-fix: var(--separator)
 	min-width: 100px
 	word-wrap: break-word
-td:first-child, th // would be better on thead but this does not seem possible
+td:first-child, th // TODO: hier weiter: geht nicht, vmtl weil scrolling wieder kaputt (und ist auch schon wieder container statt nur table height scroll)
 	position: sticky
 	background: inherit
-tbody td:first-child
-	z-index: 1
-	left: 0
-tbody td:first-child
-	border-right-fix: var(--separator)
-tbody td:not(:first-child):not(:last-child), th:not(:first-child):not(:last-child)
-	border-right: var(--separator)
 th
 	z-index: 2
 	top: 0
+	padding: 6px
+	border-bottom-fix: var(--separator)
+tbody td:first-child
+	z-index: 1
+	left: 0
+tbody td
+	border-bottom: var(--separator)
+tbody td:first-child, th:not(:last-child)
+	border-right-fix: var(--separator)
+tbody td:not(:first-child):not(:last-child)
+	border-right: var(--separator)
 .attributes > th.drop
-	border-right: 2px solid var(--color-highlighted)
+	border-right-fix: 2px solid var(--color-highlighted)
 .attribute
+	padding: 1px 6px
+	.name
+		.grip
+			font-weight: normal
+			color: #bbb
+			font-size: 70%
+			margin-right: 4px
 	.sort
 		padding-left: 0.2em
 		position: relative
 		.sort-up, .sort-down
 			padding: 0
+			font-size: 70%
 			&:hover
 				color: var(--color-main)
 		.sort-up
 			position: relative
-			top: -0.5em
+			top: -4px
 		.sort-down
 			position: absolute
-			bottom: -0.3em
+			bottom: -4px
+	.actions
+		height: 8px
+		.remove
+			font-size: 50%
+			margin: 0 13px
 td.datum
 	text-align: center
 	button.edit

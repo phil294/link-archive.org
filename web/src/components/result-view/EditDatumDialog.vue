@@ -1,7 +1,7 @@
 <template lang="slm">
 # :_='
 div
-	h6
+	h5
 		| $product.name: $attribute.name
 	promise-form :action=saveDatum
 		label
