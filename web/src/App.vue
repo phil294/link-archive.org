@@ -186,6 +186,7 @@ button // buttons, by default, should not have any specific styling so they can 
 	-webkit-appearance: none
 	background: initial
 	border: initial
+	padding: initial
 	color: inherit // FF bug
 
 button, input[type="submit"], input[type="reset"], input[type="button"], label
@@ -260,8 +261,8 @@ fieldset {
 details > summary {
 	cursor: pointer;
 }
-[draggable] {
-	cursor: pointer;
+[draggable] { // TODO: == true or wat, wrong on readonly
+	cursor: move;
 }
 
 // CLASSES /////////////////////////
@@ -310,6 +311,9 @@ details > summary {
 .column
 	display: flex
 	flex-direction: column
+.row
+	display: flex
+	flex-direction: row
 .justify-center
 	display: flex
 	justify-content: center
@@ -326,7 +330,7 @@ details > summary {
 	@extend .fill-w, .fill-h
 .box
 	// box-shadow: 1px 2px 7px 1px #eee
-	// box-shadow: 1px 1px 1px 1px #ddd
-	border: 1px solid #ddd
+	box-shadow: 1px 1px 1px 1px #ddd
+	// border: 1px solid #ddd
 	background: rgba(255,255,255,0.88)
 </style>
