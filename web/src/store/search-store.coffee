@@ -152,8 +152,22 @@ export default
 			commit('addShowerIdAt', { index: newPos, showerId })
 			if newPos != currentPos
 				dispatch('search')
-		removeShower: ({ commit }, showerId) ->
+		removeShower: ({ commit, getters, dispatch }, showerId) ->
+			search = false
+			attributeFilters = getters.filtersByAttributeId[showerId]
+			if attributeFilters.length
+				if !confirm("There are #{attributeFilters.length} filter(s) configured for '#{getters.attributesById[showerId].name}' that will be removed. Continue?")
+					return
+				for filter from attributeFilters
+					commit('removeFilter', filter)
+				search = true
+			attributeSorter = getters.sortersByAttributeId[showerId]
+			if attributeSorter.direction
+				commit('removeSorterAt', attributeSorter.index)
+				search = true
 			commit('removeShowerId', showerId)
+			if search
+				dispatch('search')
 		addProduct: ({ commit, state }, { formData }) ->
 			formData.append('type', state.type)
 			response = await axios.post('p', formData)

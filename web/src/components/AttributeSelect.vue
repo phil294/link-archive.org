@@ -1,7 +1,7 @@
 <template lang="slm">
 # :_='
 div.column
-	input#quicksearch model=filter placeholder="Quick search..."
+	input#quicksearch type=search model=filter placeholder="Quick search..."
 	select :name=name :required=required # todo use datalist some day when its supported widely enough
 		option each=filteredAttribute :value=filteredAttribute._id
 			| $filteredAttribute.name

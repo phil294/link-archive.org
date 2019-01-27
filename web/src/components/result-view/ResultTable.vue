@@ -161,7 +161,7 @@ tbody td:first-child, th:not(:last-child)
 tbody td:not(:first-child):not(:last-child)
 	border-right: var(--separator)
 .attributes.drop-target > th.dropzone
-	color: #124
+	color: #246
 	&.drop
 		&.move
 			border-left-fix: 2px solid var(--color-highlighted)
