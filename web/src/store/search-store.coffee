@@ -105,6 +105,7 @@ export default
 			Vue.set(product.data, attributeId, datum)
 		setShowerIds: (state, showerIds) -> state.showerIds = showerIds
 		removeShowerIdAt: (state, index) -> Vue.delete(state.showerIds, index)
+		removeShowerId: (state, showerId) -> Vue.delete(state.showerIds, state.showerIds.indexOf(showerId)) # todo add prototy .remove method
 		addShowerIdAt: (state, { index, showerId }) -> state.showerIds.splice(index, 0, showerId)
 		setAttributes: (state, attributes) ->
 			state.attributes = attributes
@@ -151,6 +152,8 @@ export default
 			commit('addShowerIdAt', { index: newPos, showerId })
 			if newPos != currentPos
 				dispatch('search')
+		removeShower: ({ commit }, showerId) ->
+			commit('removeShowerId', showerId)
 		addProduct: ({ commit, state }, { formData }) ->
 			formData.append('type', state.type)
 			response = await axios.post('p', formData)

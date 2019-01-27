@@ -6,18 +6,20 @@ table
 			td
 			td.filters each=showerId
 				result-view/result-table/filters :filters=filtersByAttributeId[showerId] :attributeId=showerId :readonly=readonly
-		tr.attributes
-			th drop=moveShowerTo(0)
-				| Name
-			th v-for="showerId, index in showerIds" :key="showerId+'_'+index" drop=moveShowerTo(index+1)
+		tr.attributes :class.drop-target=draggingColumn
+			th.dropzone.remove.column if=draggingColumn drop=removeShower
+				div 🗙
+				div.description Hide column
+			th else Name
+			th.dropzone.move v-for="showerId, index in showerIds" :key="showerId+'_'+index" drop=moveShowerTo(index)
 				.attribute.column
 					div.actions.center if="!readonly && !canDrag"
-						button.moveto ← # &lt;
-						button.remove 🗙
-						button.moveto → # &gt;
+						button.moveto @click=moveShowerTo(index-1)(showerId) ←
+						button.remove @click=removeShower(showerId) 🗙
+						button.moveto @click=moveShowerTo(index+2)(showerId) →
 					div.name.center
-						div drag="!readonly && canDrag && showerId"
-							span.grip if=!readonly ⠿
+						div drag="!readonly && canDrag && showerId" @dragstart=draggingColumn=true @dragend=draggingColumn=false
+							span.grip if="!readonly && canDrag" ⠿
 							| $attributesById[showerId].name
 						div.sort.column
 							button.sort-up.disabled :disabled=readonly @click="toggleSortDirection(showerId, 1)" :class.highlighted=sortersByAttributeId[showerId].direction===1
@@ -61,7 +63,8 @@ export default Vue.extend(
 		readonly:
 			default: false
 	data: =>
-		canDrag: !('ontouchstart' in window || navigator.maxTouchPoints)
+		canDrag: true
+		draggingColumn: false
 	methods: {
 		...mapActions('search', [
 			
@@ -73,6 +76,8 @@ export default Vue.extend(
 			@$emit('datumClicked', { product, attributeId })
 		moveShowerTo: index -> showerId =>
 			@$store.dispatch('search/moveShowerTo', { showerId, index })
+		removeShower: showerId ->
+			@$store.dispatch('search/removeShower', showerId)
 	}
 	computed: {
 		...mapState('search', [
@@ -86,28 +91,41 @@ export default Vue.extend(
 			'attributesById'
 		])
 	}
+	mounted: ->
+		@$data.canDrag = !(`'ontouchstart' in window` || navigator.maxTouchPoints)
 )
 </script>
 
 <style lang="stylus" scoped>
 // Bug: sticky + border-collapse + border: border not shown. SO#41882616. todo: remove once fixed everywhere (lol).
-border-fix()
+border-base-fix()
 	&::after
 		content: ''
 		position: absolute
-		right: 0
 		bottom: 0
 		z-index: -1
 border-right-fix()
-	border-fix()
+	border-base-fix()
 	&::after
 		border-right: arguments
 		height: 100%
+		right: 0
+border-left-fix()
+	border-base-fix()
+	&::after
+		border-left: arguments
+		height: 100%
+		left: 0
 border-bottom-fix()
-	border-fix()
+	border-base-fix()
 	&::after
 		border-bottom: arguments
 		width: 100%
+		right: 0
+border-fix()
+	border-right-fix(arguments)
+	border-left-fix(arguments)
+	border-bottom-fix(arguments)
 table
 	--separator: 1px solid #e3e3e3
 	border-collapse: collapse
@@ -125,7 +143,7 @@ tbody td
 	padding: 8px 6px
 	min-width: 100px
 	word-wrap: break-word
-td:first-child, th // TODO: hier weiter: geht nicht, vmtl weil scrolling wieder kaputt (und ist auch schon wieder container statt nur table height scroll)
+td:first-child, th
 	position: sticky
 	background: inherit
 th
@@ -142,8 +160,16 @@ tbody td:first-child, th:not(:last-child)
 	border-right-fix: var(--separator)
 tbody td:not(:first-child):not(:last-child)
 	border-right: var(--separator)
-.attributes > th.drop
-	border-right-fix: 2px solid var(--color-highlighted)
+.attributes.drop-target > th.dropzone
+	color: #124
+	&.drop
+		&.move
+			border-left-fix: 2px solid var(--color-highlighted)
+		&.remove
+			color: var(--color-highlighted)
+	&.remove .description
+		text-transform: uppercase
+		font-size: 80%
 .attribute
 	padding: 1px 6px
 	.name
