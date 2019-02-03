@@ -9,5 +9,6 @@ rules: {
     max-line-length: false,
     object-literal-sort-keys: false,
     curly: false,
-    variable-name: false
+    variable-name: false,
+    import-name: false
 }
