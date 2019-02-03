@@ -6,7 +6,7 @@ import * as request from 'request-promise-native';
 import { ExternalType } from '../models/User';
 import MailService from '../services/MailService';
 import TokenService from '../services/TokenService';
-import user_secured from '../user_secured';
+import user_secured from '../user-secured';
 
 export default ((token_service: TokenService, mail_service: MailService,
                  WEB_ROOT: string, GOOGLE_CLIENT_ID: string, FACEBOOK_APP_ID: string, FACEBOOK_APP_SECRET: string, WEBSITE_NAME: string) => {

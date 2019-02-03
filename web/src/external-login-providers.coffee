@@ -48,7 +48,7 @@ facebook_login_provider.login = ->
 	new Promise((ok, notok) =>
 		window.FB.login(response =>
 			if response.status == 'connected'
-				ok(response.auth_response.access_t§§Token)
+				ok(response.auth_response.access_token)
 			else
 				notok(response)))
 

@@ -30,7 +30,7 @@ div
 						| You can log in by clicking the link in the email
 					p.center
 						strong - OR -
-					token-input @success=authenticated # todo ??
+					token-input @success=login_successful
 				hr
 				a @click=show_mail_sent=false ⮜ Send another mail
 		fieldset#with-external.box
@@ -71,6 +71,8 @@ export default Vue.extend(
 			await @$store.dispatch('session/external_login_provider_login_with_token',
 				token: token # todo can this throw? #todo shorthand
 				provider_name: provider.name)
+			@login_successful()
+		login_successful: ->
 			@$emit('authenticated')
 	}
 )

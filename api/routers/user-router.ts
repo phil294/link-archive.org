@@ -1,5 +1,5 @@
 import express from 'express';
-import user_secured from '../user_secured';
+import user_secured from '../user-secured';
 
 const user_router = express.Router();
 user_router.patch('/', user_secured, async (req, res) => {
