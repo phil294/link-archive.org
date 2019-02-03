@@ -3,18 +3,18 @@ import express from 'express';
 import expressFormData from 'express-form-data';
 import { NO_CONTENT } from 'http-status-codes';
 import 'reflect-metadata';
-import authenticationMiddleware from './authenticationMiddleware';
+import authentication_middleware from './authentication_middleware';
 import connection from './connection';
-import authenticationRouter from './routers/authenticationRouter';
-import userRouter from './routers/userRouter';
+import authentication_router from './routers/authentication_router';
+import user_router from './routers/user_router';
 import MailService from './services/MailService';
 import TokenService from './services/TokenService';
 import { env, error, log } from './utils';
 
 // ///////////////// CONFIG
 
-const mailService = new MailService(env('MAIL_SENDER_SERVICE'), env('MAIL_SENDER_USER'), env('MAIL_SENDER_PASSWORD'));
-const tokenService = new TokenService(env('TOKEN_SECRET'));
+const mail_service = new MailService(env('MAIL_SENDER_SERVICE'), env('MAIL_SENDER_USER'), env('MAIL_SENDER_PASSWORD'));
+const token_service = new TokenService(env('TOKEN_SECRET'));
 
 // ////////////////// ROUTES
 
@@ -36,12 +36,12 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use(authenticationMiddleware(tokenService));
-app.use('/authentication', authenticationRouter(
-    tokenService, mailService,
+app.use(authentication_middleware(token_service));
+app.use('/authentication', authentication_router(
+    token_service, mail_service,
     env('WEB_ROOT'), env('GOOGLE_CLIENT_ID'), env('FACEBOOK_APP_ID'), env('FACEBOOK_APP_SECRET'), env('WEBSITE_NAME'),
 ));
-app.use('/user', userRouter);
+app.use('/user', user_router);
 
 // @ts-ignore
 // Global error fallback handler, including promises

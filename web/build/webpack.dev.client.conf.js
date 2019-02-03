@@ -1,11 +1,11 @@
 const merge = require('webpack-merge');
 const webpack = require('webpack');
-const baseClientWebpackConfig = require('./webpack.base.client.conf');
-const devBaseWebpackConfig = require('./webpack.dev.base.conf');
+const base_client_webpack_config = require('./webpack.base.client.conf');
+const dev_base_webpack_config = require('./webpack.dev.base.conf');
 
 module.exports = merge.smartStrategy({
 	'module.rules.use': 'prepend',
-})(devBaseWebpackConfig, baseClientWebpackConfig, {
+})(dev_base_webpack_config, base_client_webpack_config, {
 	entry: {
 		app: [
 			'webpack-hot-middleware/client',

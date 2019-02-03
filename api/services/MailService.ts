@@ -3,22 +3,22 @@ import Mail from 'nodemailer/lib/mailer'; // tslint:disable-line:import-name
 
 class MailService {
     private sender: string;
-    private nodemailerTransport: Mail;
-    constructor(service: string, sender: string, senderPassword: string) {
+    private nodemailer_transport: Mail;
+    constructor(service: string, sender: string, sender_password: string) {
         this.sender = sender;
-        this.nodemailerTransport = createTransport({
+        this.nodemailer_transport = createTransport({
             service,
             auth: {
-                pass: senderPassword,
+                pass: sender_password,
                 user: this.sender,
             },
         });
     }
-    public sendMail(recepient: string, subject: string, bodyHtml: string): Promise<SentMessageInfo> {
-        return this.nodemailerTransport.sendMail({
+    public send_mail(recepient: string, subject: string, body_html: string): Promise<SentMessageInfo> {
+        return this.nodemailer_transport.sendMail({
             subject,
             from: this.sender,
-            html: bodyHtml,
+            html: body_html,
             to: recepient,
         });
     }

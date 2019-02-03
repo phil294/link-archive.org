@@ -2,22 +2,22 @@ import { decode, encode } from 'jwt-simple';
 import { User } from '../models/User';
 
 class TokenService {
-    private tokenSecret: string;
-    constructor(tokenSecret: string) {
-        this.tokenSecret = tokenSecret;
+    private token_secret: string;
+    constructor(token_secret: string) {
+        this.token_secret = token_secret;
     }
     /** validates or throws, and returns queried/created user from db */
-    public async toUser(token: string): Promise<User> {
-        const payload: any = decode(token, this.tokenSecret);
-        return User.findOneOrCreate(payload);
+    public async to_user(token: string): Promise<User> {
+        const payload: any = decode(token, this.token_secret);
+        return User.find_one_or_create(payload);
     }
-    /** create a never-expering token. no validity checks here for customData. todo? */
-    public create(customData: any): string {
+    /** create a never-expering token. no validity checks here for custom_data. todo? */
+    public create(custom_data: any): string {
         const payload = {
             iat: Date.now() / 1000,
-            ...customData,
+            ...custom_data,
         };
-        return encode(payload, this.tokenSecret);
+        return encode(payload, this.token_secret);
     }
 }
 

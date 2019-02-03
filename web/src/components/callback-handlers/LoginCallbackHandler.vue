@@ -10,7 +10,7 @@ import Vue from 'vue'
 export default Vue.extend
 	name: 'LoginCallbackHandler'
 	created: ->
-		this.$store.dispatch 'hideAuthenticateModal' # in case user entered the link manually while having login modal open
+		this.$store.dispatch 'hide_authenticate_modal' # in case user entered the link manually while having login modal open
 	methods:
 		redirect: ->
 			this.$router.push '/'

@@ -3,13 +3,13 @@ class ExternalLoginProvider
 	constructor: @name ->
 		@initialized = false
 
-	@appendScript: url ->
-		scriptEl = document.createElement('script')
+	@append_script: url ->
+		script_el = document.createElement('script')
 		new Promise((ok, notok) =>
-			scriptEl.onload = ok
-			scriptEl.onerror = notok
-			scriptEl.src = url
-			document.head.appendChild(scriptEl))
+			script_el.onload = ok
+			script_el.onerror = notok
+			script_el.src = url
+			document.head.appendChild(script_el))
 
 	setup: ->
 		await @initialize()
@@ -24,32 +24,32 @@ class ExternalLoginProvider
 	# @returns token
 	login: ->
 
-googleLoginProvider = new ExternalLoginProvider('google')
-googleLoginProvider.load = ->
-	await ExternalLoginProvider.appendScript('https://apis.google.com/js/api.js') # todo is this functionality available as a module?
+google_login_provider = new ExternalLoginProvider('google')
+google_login_provider.load = ->
+	await ExternalLoginProvider.append_script('https://apis.google.com/js/api.js') # todo is this functionality available as a module?
 	await new Promise(ok =>
 		window.gapi.load('auth2', ok))
-googleLoginProvider.initialize = ->
-	@googleAuth = await window.gapi.auth2.init(
+google_login_provider.initialize = ->
+	@google_auth = await window.gapi.auth2.init(
 		client_id: process.env.GOOGLE_CLIENT_ID)
-googleLoginProvider.login = ->
-	googleUser = await @googleAuth.signIn()
-	googleUser.getAuthResponse().id_token
+google_login_provider.login = ->
+	google_user = await @google_auth.signIn()
+	google_user.getAuthResponse().id_token
 
-facebookLoginProvider = new ExternalLoginProvider('facebook')
-facebookLoginProvider.load = ->
-	await ExternalLoginProvider.appendScript('https://connect.facebook.net/en_US/sdk.js')
-	window.fbAsyncInit = => window.FB.init(
+facebook_login_provider = new ExternalLoginProvider('facebook')
+facebook_login_provider.load = ->
+	await ExternalLoginProvider.append_script('https://connect.facebook.net/en_US/sdk.js')
+	window.fb_async_init = => window.FB.init(
 		appId: process.env.FACEBOOK_APP_ID
 		cookie: true
 		xfbml: true
 		version: 'v3.0')
-facebookLoginProvider.login = ->
+facebook_login_provider.login = ->
 	new Promise((ok, notok) =>
 		window.FB.login(response =>
 			if response.status == 'connected'
-				ok(response.authResponse.accessToken)
+				ok(response.auth_response.access_t§§Token)
 			else
 				notok(response)))
 
-export default [ googleLoginProvider, facebookLoginProvider ]
+export default [ google_login_provider, facebook_login_provider ]

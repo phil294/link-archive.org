@@ -2,12 +2,12 @@ const merge = require('webpack-merge');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const baseClientWebpackConfig = require('./webpack.base.client.conf');
-const prodBaseWebpackConfig = require('./webpack.prod.base.conf');
+const base_client_webpack_config = require('./webpack.base.client.conf');
+const prod_base_webpack_config = require('./webpack.prod.base.conf');
 
 module.exports = merge.smartStrategy({
 	'module.rules.use': 'prepend',
-})(prodBaseWebpackConfig, baseClientWebpackConfig, {
+})(prod_base_webpack_config, base_client_webpack_config, {
 	optimization: {
 		minimizer: [
 			new UglifyJsPlugin({

@@ -1,11 +1,11 @@
 import express from 'express';
-import userSecured from '../userSecured';
+import user_secured from '../user_secured';
 
-const userRouter = express.Router();
-userRouter.patch('/', userSecured, async (req, res) => {
+const user_router = express.Router();
+user_router.patch('/', user_secured, async (req, res) => {
     const user = res.locals.user;
     [
-        'minIat', // If set, this will lead to the invalidation of all tokens prior to the date
+        'min_iat', // If set, this will lead to the invalidation of all tokens prior to the date
     ].forEach((prop) => {
         if (req.body[prop])
             user[prop] = req.body[prop];
@@ -14,4 +14,4 @@ userRouter.patch('/', userSecured, async (req, res) => {
     res.send(user);
 });
 
-export default userRouter;
+export default user_router;

@@ -5,8 +5,8 @@ div
 	div#register-or-login
 		fieldset#with-email.box
 			legend With email
-			div if=!showMailSent
-				promise-form button-label="Request mail to log in" :action=requestMail
+			div if=!show_mail_sent
+				promise-form button-label="Request mail to log in" :action=request_mail
 					label
 						| Email
 						input model=email type=email name=email placeholder=email@example.com required
@@ -32,11 +32,11 @@ div
 						strong - OR -
 					token-input @success=authenticated # todo ??
 				hr
-				a @click=showMailSent=false ⮜ Send another mail
+				a @click=show_mail_sent=false ⮜ Send another mail
 		fieldset#with-external.box
 			legend Or
-			div v-for="provider in externalLoginProviders" :key=provider.name
-				promise-button.center if=provider.initialized :action=externalLogin(provider)
+			div v-for="provider in external_login_providers" :key=provider.name
+				promise-button.center if=provider.initialized :action=external_login(provider)
 					img.logo :src='static/'+provider.name+'.png'
 					| Log in with $provider.name
 				div.note v-else Loading $provider.name login scripts...
@@ -46,31 +46,31 @@ div
 <script lang="coffee">
 import Vue from 'vue'
 import { mapActions } from 'vuex'
-import externalLoginProviders from '@/external-login-providers'
+import external_login_providers from '@/external-login-providers'
 
-loadedExternalLoginProviders = {}
+loaded_external_login_providers = {}
 
 export default Vue.extend(
 	name: 'Authenticate'
 	data: =>
 		email: ''
-		showMailSent: false
-		externalLoginProviders: externalLoginProviders # todo shorthand?
+		show_mail_sent: false
+		external_login_providers: external_login_providers # todo shorthand?
 	created: ->
-		for provider from @$data.externalLoginProviders
-			if !loadedExternalLoginProviders[provider.name]
+		for provider from @$data.external_login_providers
+			if !loaded_external_login_providers[provider.name]
 				await provider.load() # todo without () ?
-				loadedExternalLoginProviders[provider.name] = true
+				loaded_external_login_providers[provider.name] = true
 			await provider.setup()
 	methods: {
-		requestMail: ({ values }) ->
-			await @$store.dispatch('session/requestTokenMail', values.email)
-			@$data.showMailSent = true
-		externalLogin: provider -> =>
+		request_mail: ({ values }) ->
+			await @$store.dispatch('session/request_token_mail', values.email)
+			@$data.show_mail_sent = true
+		external_login: provider -> =>
 			token = await provider.login()
-			await @$store.dispatch('session/externalLoginProviderLoginWithToken',
+			await @$store.dispatch('session/external_login_provider_login_with_token',
 				token: token # todo can this throw? #todo shorthand
-				providerName: provider.name)
+				provider_name: provider.name)
 			@$emit('authenticated')
 	}
 )

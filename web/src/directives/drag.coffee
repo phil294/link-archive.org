@@ -1,18 +1,18 @@
 import Vue from 'vue'
 
-setElValue = (el, { value }) =>
-	el.setAttribute('draggable', !!value)
+set_el_value = (el, { value }) =>
+	el.set_attribute('draggable', !!value)
 	if value
-		el.dataset.dragValue = value
+		el.dataset.drag_value = value
 
 Vue.directive('drag',
 	bind: (el, binding) =>
-		el.addEventListener('dragstart', e =>
+		el.addEvent_listener('dragstart', e =>
 			e.dataTransfer.setData('application/json',
-				JSON.stringify(el.dataset.dragValue))
+				JSON.stringify(el.dataset.drag_value))
 			e.dataTransfer.dropEffect = 'move'
 		)
-		setElValue(el, binding)
-	update: setElValue
+		set_el_value(el, binding)
+	update: set_el_value
 		
 )
