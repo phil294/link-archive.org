@@ -40,9 +40,9 @@
     // "
     // after: whitespace
     ],
-    // :class.myclass="condition" to :class="{myclass:condition}"
+    // :class.myclass="condition" to :class="{'myclass':condition}"
     [/(?<=\s:class)\.([\w-]+)="([^"]+)"(?=\s)/g,
-    '="{$1:$2}"']
+    '="{\'$1\':$2}"']
   ];
 
   // Keywords that should allowed to be followed and preceded by whitespace without anything else. This has the potential to break plain text horribly

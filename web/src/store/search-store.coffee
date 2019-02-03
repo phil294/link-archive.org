@@ -152,7 +152,7 @@ export default
 			commit('addShowerIdAt', { index: newPos, showerId })
 			if newPos != currentPos
 				dispatch('search')
-		removeShower: ({ commit, getters, dispatch }, showerId) ->
+		removeShower: ({ commit, getters, dispatch }, showerId ) ->
 			search = false
 			attributeFilters = getters.filtersByAttributeId[showerId]
 			if attributeFilters.length
