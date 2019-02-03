@@ -1,23 +1,23 @@
 <template lang="slm">
 # :_='
 section#app.column.fill-h
-	popup if=authenticatePopup @close=hideAuthenticatePopup
-		authenticate @authenticated=hideAuthenticatePopup
-	modal if=loadingCounter
+	popup if=authenticate_popup @close=hide_authenticate_popup
+		authenticate @authenticated=hide_authenticate_popup
+	modal if=loading_counter
 		.box.padding-l
-			| Loading... ({{loadingCounter}})
+			| Loading... ($loading_counter)
 	header.center.padding
 		nav
 			router-link exact to=/ [LOGO]
 			router-link exact to=/settings Settings
 			router-link exact to=/p search result
-		div#loginStatus if=isLoggedIn
+		div#login_status if=is_logged_in
 			| Logged in as 
 			span if=session.name $session.name
 			span else-if=session.email $session.email
-			span else-if=session.externalType $session.externalIdentifier [$session.externalType]
+			span else-if=session.external_type $session.external_identifier [$session.external_type]
 			button.btn @click=logout Logout
-		button.btn if=!isLoggedIn @click=showAuthenticatePopup
+		button.btn if=!is_logged_in @click=show_authenticate_popup
 			| Sign in
 	main.flex-fill.column
 			router-view
@@ -31,21 +31,21 @@ export default
 	name: 'App'
 	computed: {
 		...mapState([
-			'appName'
-			'loadingCounter'
-			'authenticatePopup'
+			'app_name'
+			'loading_counter'
+			'authenticate_popup'
 		])
 		...mapState('session', [
 			'session'
 		])
 		...mapGetters('session', [
-			'isLoggedIn'
+			'is_logged_in'
 		])
 	}
 	methods: {
 		...mapActions([
-			'hideAuthenticatePopup'
-			'showAuthenticatePopup'
+			'hide_authenticate_popup'
+			'show_authenticate_popup'
 		])
 		...mapActions('session', [
 			'logout'

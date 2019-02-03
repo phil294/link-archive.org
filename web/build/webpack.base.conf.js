@@ -25,7 +25,7 @@ const environment = [
 }, {});
 
 
-const webpackBaseConfig = {
+const webpack_base_config = {
 	output: {
 		path: utils.resolve('dist'),
 		filename: '[name].[chunkhash:6].js',
@@ -55,7 +55,7 @@ const webpackBaseConfig = {
 						},
 					},
 					{
-						loader: utils.resolveCustomLoader('vue-loader'),
+						loader: utils.resolve_custom_loader('vue-loader'),
 					},
 				],
 			},
@@ -66,7 +66,7 @@ const webpackBaseConfig = {
 						loader: 'coffee-loader',
 					},
 					{
-						loader: utils.resolveCustomLoader('coffee-loader'),
+						loader: utils.resolve_custom_loader('coffee-loader'),
 					},
 				],
 			},
@@ -77,14 +77,14 @@ const webpackBaseConfig = {
 			},
 			{
 				test: /\.slm$/,
-				loader: utils.resolveCustomLoader('slm-loader'),
+				loader: utils.resolve_custom_loader('slm-loader'),
 			},
 			{
 				test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
 				loader: 'url-loader',
 				options: {
 					limit: 10000,
-					name: utils.assetsPath('img/[name].[hash:6].[ext]'),
+					name: utils.assets_path('img/[name].[hash:6].[ext]'),
 				},
 			},
 			{
@@ -92,7 +92,7 @@ const webpackBaseConfig = {
 				loader: 'url-loader',
 				options: {
 					limit: 10000,
-					name: utils.assetsPath('media/[name].[hash:6].[ext]'),
+					name: utils.assets_path('media/[name].[hash:6].[ext]'),
 				},
 			},
 			{
@@ -100,7 +100,7 @@ const webpackBaseConfig = {
 				loader: 'url-loader',
 				options: {
 					limit: 10000,
-					name: utils.assetsPath('fonts/[name].[hash:6].[ext]'),
+					name: utils.assets_path('fonts/[name].[hash:6].[ext]'),
 				},
 			},
 		],
@@ -127,7 +127,7 @@ const webpackBaseConfig = {
 };
 
 if (false) {
-	webpackBaseConfig.plugins.push(new BundleAnalyzerPlugin());
+	webpack_base_config.plugins.push(new BundleAnalyzerPlugin());
 }
 
-module.exports = webpackBaseConfig;
+module.exports = webpack_base_config;

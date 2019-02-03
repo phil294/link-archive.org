@@ -2,17 +2,17 @@ import Vue from 'vue'
 import { sync } from 'vuex-router-sync'
 import axios from 'axios'
 import App from './App'
-import createRouter from './vue-router'
-import createStore from './store/root-store'
-import storageService from '@/services/storage-service'
+import create_router from './vue-router'
+import create_store from './store/root-store'
+import storage_service from '@/services/storage-service'
 import './directives/drag'
 import './directives/drop'
 
 Vue.config.productionTip = false
 
 export default ->
-	router = createRouter()
-	store = createStore()
+	router = create_router()
+	store = create_store()
 	sync(store, router)
 
 	axios.defaults.baseURL = process.env.API_ROOT
@@ -37,9 +37,9 @@ export default ->
 			 * which is not part of ssr (client-only, for API
 			 * interaction)
 			###
-			token = storageService.get('token')
+			token = storage_service.get('token')
 			if token
-				@$store.dispatch('session/loginWithToken', token)
+				@$store.dispatch('session/login_with_token', token)
 		render: h => h(App)
 	)
 	{ app, router, store }

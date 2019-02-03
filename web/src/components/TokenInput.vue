@@ -1,10 +1,10 @@
 <template lang="slm">
 # :_='
 div
-	promise-form#insert-code button-label=Ok :action=loginWithToken
+	promise-form#insert-code button-label=Ok :action=login_with_token
 		label
 			| paste the token here:
-			input model=tokenModel name=token required
+			input model=token_model name=token required
 # '
 </template>
 
@@ -18,15 +18,15 @@ export default Vue.extend(
 			type: String
 			default: ''
 	data: ->
-		tokenModel: @$props.token
+		token_model: @$props.token
 	mounted: ->
-		if @$data.tokenModel
-			@loginWithToken()
+		if @$data.token_model
+			@login_with_token()
 	methods:
 		# throws
-		loginWithToken: ->
-			@$data.tokenError = ''
-			@$store.dispatch('session/loginWithToken', @$data.tokenModel)
+		login_with_token: ->
+			@$data.token_error = ''
+			@$store.dispatch('session/login_with_token', @$data.token_model)
 			@$emit('success')
 )
 </script>

@@ -2,10 +2,10 @@ const webpack = require('webpack');
 const VueSSRClientPlugin = require('vue-server-renderer/client-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
 
-const cssLoader = {
+const css_loader = {
 	loader: 'css-loader',
 	options: {
-		sourceMap: true,
+		source_map: true,
 	},
 };
 
@@ -25,13 +25,13 @@ module.exports = {
 			{
 				test: /\.styl(us)?$/,
 				use: [
-					cssLoader,
+					css_loader,
 					'stylus-loader',
 				],
 			},
 			{
 				test: /\.css$/,
-				use: cssLoader,
+				use: css_loader,
 			},
 		],
 	},

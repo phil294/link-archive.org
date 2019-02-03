@@ -1,6 +1,6 @@
 <template lang="slm">
 # :_='
-one-time-button :used-prompt=buttonPrompt @click=clicked ref=otb
+one-time-button :used-prompt=button_prompt @click=clicked ref=otb
 	slot
 # '
 </template>
@@ -17,22 +17,22 @@ export default Vue.extend(
 		action:
 			type: Function
 			required: true
-		resetAfterSuccess:
+		reset_after_success:
 			type: Boolean
 			default: true
-		successPrompt:
+		success_prompt:
 			type: String
 			default: 'Done!'
 	data: =>
-		buttonPrompt: undefined
+		button_prompt: undefined
 	methods:
 		clicked: ->
 			try
 				await this.$props.action()
-				if @$props.resetAfterSuccess
+				if @$props.reset_after_success
 					@$refs.otb.reset()
 				else
-					@$data.buttonPrompt = @$props.successPrompt
+					@$data.button_prompt = @$props.success_prompt
 			catch e
 				# todo error message like promiseform? aka google like mail login error
 				@$refs.otb.reset()

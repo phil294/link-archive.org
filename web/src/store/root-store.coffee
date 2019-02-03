@@ -1,6 +1,6 @@
 import Vuex from 'vuex'
 import Vue from 'vue'
-import sessionModule from './session-store'
+import session_module from './session-store'
 
 Vue.use(Vuex)
 
@@ -8,25 +8,25 @@ export default =>
 	new Vuex.Store(
 		strict: process.env.NODE_ENV != 'production',
 		state:
-			appName: 'My App'
-			loadingCounter: 0
-			authenticatePopup: false
+			app_name: 'My App'
+			loading_counter: 0
+			authenticate_popup: false
 			test: {}
 		mutations:
-			toggleAuthenticatePopup: (state, show) ->
-				state.authenticatePopup = show
-			setAppName: (state, appName) ->
-				state.appName = appName
-			increaseLoadingCounter: state ->
-				state.loadingCounter++
-			decreaseLoadingCounter: state ->
-				state.loadingCounter--
+			toggle_authenticate_popup: (state, show) ->
+				state.authenticate_popup = show
+			set_app_name: (state, app_name) ->
+				state.app_name = app_name
+			increase_loading_counter: state ->
+				state.loading_counter++
+			decrease_loading_counter: state ->
+				state.loading_counter--
 		actions:
-			showAuthenticatePopup: ({ commit }) ->
-				commit('toggleAuthenticatePopup', true)
-			hideAuthenticatePopup: ({ commit }) ->
-				commit('toggleAuthenticatePopup', false)
+			show_authenticate_popup: ({ commit }) ->
+				commit('toggle_authenticate_popup', true)
+			hide_authenticate_popup: ({ commit }) ->
+				commit('toggle_authenticate_popup', false)
 		modules:
-			session: sessionModule
+			session: session_module
 			# When adding here, see ssr docs. Global submodules *seem* to need a factory wrapper too
 	)

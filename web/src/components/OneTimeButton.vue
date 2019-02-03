@@ -2,7 +2,7 @@
 # :_='
 button.btn :disabled=used :type=type @click=clicked
 	slot if=!used Click me
-	span else $usedPrompt
+	span else $used_prompt
 # '
 </template>
 
@@ -10,8 +10,8 @@ button.btn :disabled=used :type=type @click=clicked
 ###
  * Button that, when clicked, replaces itself with a loading animation
  * and fires $click-event.
- * Alternatively, call .setLoading() and .reset() manually and disable
- * automatic loading state with setLoadingAutomatically=false.
+ * Alternatively, call .set_loading() and .reset() manually and disable
+ * automatic loading state with set_loading_automatically=false.
 ###
 export default
 	name: 'ProgressButton'
@@ -19,22 +19,22 @@ export default
 		type:
 			type: String
 			default: 'button'
-		setLoadingAutomatically:
+		set_loading_automatically:
 			type: Boolean
 			default: true
-		usedPrompt:
+		used_prompt:
 			type: String
 			default: 'loading...'
 	data: =>
 		used: false
 	methods:
 		clicked: ->
-			if @$props.setLoadingAutomatically
+			if @$props.set_loading_automatically
 				@$data.used = true
 			@$emit('click')
 		reset: ->
 			@$data.used = false
-		setUsed: ->
+		set_used: ->
 			@$data.used = true
 </script>
 

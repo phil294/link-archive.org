@@ -1,4 +1,4 @@
-import storageService from '@/services/storage-service'
+import storage_service from '@/services/storage-service'
 import axios from 'axios'
 
 export default
@@ -7,39 +7,39 @@ export default
 		token: null
 		session: null
 	getters:
-		isLoggedIn: state ->
+		is_logged_in: state ->
 			!!state.session
 	mutations:
-		setToken: (state, token) ->
+		set_token: (state, token) ->
 			state.token = token
-		setSession: (state, session) ->
+		set_session: (state, session) ->
 			state.session = session
 	actions:
 		# validate token and set token & session. throws
-		loginWithToken: ({ commit }, token) ->
+		login_with_token: ({ commit }, token) ->
 			try
 				payload = JSON.parse(window.atob(token.trim().split('.')[1].replace('-', '+').replace('_', '/')))
 			catch error
 				throw new Error('Malformed token')
 			session = payload
-			if !session.email && !session.externalType
-				throw new Error('Invalid token: no email and no externalType')
-			commit('setToken', token)
-			storageService.set('token', token)
-			commit('setSession', session)
-		requestTokenMail: (_, email) ->
+			if !session.email && !session.external_type
+				throw new Error('Invalid token: no email and no external_type')
+			commit('set_token', token)
+			storage_service.set('token', token)
+			commit('set_session', session)
+		request_token_mail: (_, email) ->
 			await axios.get("authentication/requesttokenmail?email=#{email}")
-		externalLoginProviderLoginWithToken: ({ dispatch }, { token, providerName }) ->
-			response = await axios.post("authentication/#{providerName}tokenlogin?token=#{token}")
+		external_login_provider_login_with_token: ({ dispatch }, { token, provider_name }) ->
+			response = await axios.post("authentication/#{provider_name}tokenlogin?token=#{token}")
 			jwt = response.data
-			dispatch('loginWithToken', jwt)
+			dispatch('login_with_token', jwt)
 		logout: ({ commit }) ->
-			commit('setToken', null)
-			commit('setSession', null)
-			storageService.set('token', null)
-		invalidateAllTokens: ({ dispatch }) ->
+			commit('set_token', null)
+			commit('set_session', null)
+			storage_service.set('token', null)
+		invalidate_all_tokens: ({ dispatch }) ->
 			now = Date.now() / 1000
 			response = await axios.get('authentication/refreshtoken') # date + 1
 			jwt = response.data
-			await dispatch('loginWithToken', jwt) # shouldnt be called login..? is just parsing token & setting session
-			await axios.patch('user', { minIat: now - 1 }) # this might also log out the current user if his date is inaccurate. but can live with that
+			await dispatch('login_with_token', jwt) # shouldnt be called login..? is just setting token
+			await axios.patch('user', { min_iat: now - 1 }) # this might also log out the current user if his date is inaccurate. but can live with that

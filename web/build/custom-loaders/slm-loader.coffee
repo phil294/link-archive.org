@@ -32,7 +32,7 @@ replaces = [
 ]
 
 # Keywords that should allowed to be followed and preceded by whitespace without anything else. This has the potential to break plain text horribly
-standaloneKeywords = [
+standalone_keywords = [
 	'v-else'
 	'required'
 	'disabled'
@@ -48,10 +48,10 @@ module.exports = (slmdoc) ->
 	# Allow inline comments: # followed by whitespace
 	slmdoc = slmdoc.replace(/# .*/g, '')
 	
-	# Allow attributes without quotes syntax. E.g: input @click=myMethod
+	# Allow attributes without quotes syntax. E.g: input @click=my_method
 	.replace(///
 		(?<=\s[a-zA-Z.@%:-]+=)	# [WS]%src=
-		([^\s"]+)			# mySrc				<- captured
+		([^\s"]+)			# my_src				<- captured
 		(?=\s|$)			# [WS]
 	///g, '"$1"')			# Add quotes
 	
@@ -60,7 +60,7 @@ module.exports = (slmdoc) ->
 		slmdoc = slmdoc.replace(rule[0], rule[1])
 
 	# All standalone keywords
-	for keyword from standaloneKeywords
+	for keyword from standalone_keywords
 		slmdoc = slmdoc.replace(new RegExp(
 			'(?<=\\s)(' \	# [WS]
 			+ keyword \		# The keyword		<- captured

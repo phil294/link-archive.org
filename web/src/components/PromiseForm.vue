@@ -2,8 +2,8 @@
 # :_='
 form @submit.prevent=submit
 	slot
-	one-time-button.submit :class.right=buttonFloatRight ref=submit type=submit :set-loading-automatically=false $buttonLabel
-	div.error.fade-in if=errorMessage $errorMessage
+	one-time-button.submit :class.right=button_float_right ref=submit type=submit :set-loading-automatically=false $button_label
+	div.error.fade-in if=error_message $error_message
 # '
 </template>
 
@@ -18,13 +18,13 @@ import Vue from 'vue'
 export default Vue.extend(
 	name: 'PromiseForm'
 	props:
-		buttonLabel:
+		button_label:
 			type: String
 			default: 'Submit'
-		buttonFloatRight:
+		button_float_right:
 			type: Boolean
 			default: false
-		errorCaption:
+		error_caption:
 			type: String
 			default: 'Submit failed'
 		### docs ###
@@ -32,26 +32,29 @@ export default Vue.extend(
 			type: Function
 			required: true
 	data: =>
-		errorResponse: ''
+		error_response: ''
 	computed:
-		errorMessage: ->
-			if @$data.errorResponse then "#{@$props.errorCaption}: #{@$data.errorResponse}" else ''
+		error_message: ->
+			if @$data.error_response
+				"#{@$props.error_caption}: #{@$data.error_response}"
+			else
+				''
 	methods:
 		submit: event ->
-			@$data.errorResponse = ''
-			@$refs.submit.setUsed()
+			@$data.error_response = ''
+			@$refs.submit.set_used()
 			@$emit('submit', event)
-			formData = new FormData(event.target)
-			values = [...formData.entries()]
+			form_data = new FormData(event.target)
+			values = [...form_data.entries()]
 				.reduce((all, entry) =>
 					all[entry[0]] = entry[1]
 					all
 				, {})
 			try
-				await @$props.action({ formData, values, event })
+				await @$props.action({ form_data, values, event })
 			catch e
 				await @$nextTick() # enforce transition effect even if follow-up error+
-				@$data.errorResponse = e
+				@$data.error_response = e
 				throw e
 			finally
 				if @$refs.submit # component still alive?

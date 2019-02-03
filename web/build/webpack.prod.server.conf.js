@@ -1,5 +1,5 @@
 const merge = require('webpack-merge');
-const prodBaseWebpackConfig = require('./webpack.prod.base.conf');
-const baseServerWebpackConfig = require('./webpack.base.server.conf');
+const prod_base_webpack_config = require('./webpack.prod.base.conf');
+const base_server_webpack_config = require('./webpack.base.server.conf');
 
-module.exports = merge(prodBaseWebpackConfig, baseServerWebpackConfig);
+module.exports = merge(prod_base_webpack_config, base_server_webpack_config);
