@@ -2,7 +2,7 @@
 # :_='
 form @submit.prevent=submit
 	slot
-	one-time-button.submit :class.right=button_float_right ref=submit type=submit :set-loading-automatically=false $button_label
+	one-time-button.submit :class.right=button_float_right ref=submit type=submit :set_loading_automatically=false $button_label
 	div.error.fade-in if=error_message $error_message
 # '
 </template>

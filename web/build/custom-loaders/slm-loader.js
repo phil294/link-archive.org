@@ -1,5 +1,5 @@
 (function() {
-  var replaces, slm, standaloneKeywords;
+  var replaces, slm, standalone_keywords;
 
   slm = require('slm');
 
@@ -46,15 +46,15 @@
   ];
 
   // Keywords that should allowed to be followed and preceded by whitespace without anything else. This has the potential to break plain text horribly
-  standaloneKeywords = ['v-else', 'required', 'disabled', 'draggable', 'selected', 'exact', 'drag', 'drop', 'button-float-right'];
+  standalone_keywords = ['v-else', 'required', 'disabled', 'draggable', 'selected', 'exact', 'drag', 'drop', 'button-float-right'];
 
   module.exports = function(slmdoc) {
     var keyword, rule;
     // Allow inline comments: # followed by whitespace
     
-    // Allow attributes without quotes syntax. E.g: input @click=myMethod
-    slmdoc = slmdoc.replace(/# .*/g, '').replace(/(?<=\s[a-zA-Z.@%:-]+=)([^\s"]+)(?=\s|$)/g, '"$1"'); // [WS]%src= // Add quotes
-    // mySrc				<- captured
+    // Allow attributes without quotes syntax. E.g: input @click=my_method
+    slmdoc = slmdoc.replace(/# .*/g, '').replace(/(?<=\s[a-zA-Z.@%:_-]+=)([^\s"]+)(?=\s|$)/g, '"$1"'); // [WS]%src= // Add quotes
+    // my_src				<- captured
     // [WS]
     
     // All replace rules
@@ -62,7 +62,7 @@
       slmdoc = slmdoc.replace(rule[0], rule[1]);
     }
 // All standalone keywords
-    for (keyword of standaloneKeywords) {
+    for (keyword of standalone_keywords) {
       slmdoc = slmdoc.replace(new RegExp('(?<=\\s)(' + keyword + ')(?=\\s|$)', 'g'), '$1=""'); // [WS] // The keyword		<- captured // [WS]
     }
     // Should now be pure coffee

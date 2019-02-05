@@ -5,7 +5,7 @@ const ManifestPlugin = require('webpack-manifest-plugin');
 const css_loader = {
 	loader: 'css-loader',
 	options: {
-		source_map: true,
+		sourceMap: true,
 	},
 };
 
