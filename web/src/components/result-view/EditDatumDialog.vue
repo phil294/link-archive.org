@@ -3,7 +3,7 @@
 div
 	h5
 		| $product.name: $attribute.name
-	promise-form :action=saveDatum
+	promise-form :action=save_datum
 		label
 			| Value
 			input name=value placeholder=Value required
@@ -23,28 +23,28 @@ export default Vue.extend(
 		product:
 			type: Object
 			required: true
-		attributeId:
+		attribute_id:
 			type: String
 			required: true
 	methods: {
 		...mapActions('search', [
-			'addProduct'
+			'add_product'
 		])
-		saveDatum: ({ formData }) ->
-			@$store.dispatch('search/saveDatum', {
-				formData,
+		save_datum: ({ form_data }) ->
+			@$store.dispatch('search/save_datum', {
+				form_data,
 				product: @product
-				attributeId: @attributeId
+				attribute_id: @attribute_id
 			})
 	}
 	computed: {
 		...mapGetters('search', [
-			'attributesById'
+			'attributes_by_id'
 		])
 		attribute: ->
-			@attributesById[@attributeId]
+			@attributes_by_id[@attribute_id]
 		datum: ->
-			@product.data[@attributeId] || {}
+			@product.data[@attribute_id] || {}
 	}
 )
 </script>
