@@ -2,16 +2,16 @@ import express from 'express';
 import { NOT_FOUND, UNPROCESSABLE_ENTITY } from 'http-status-codes';
 import { ObjectID } from 'mongodb';
 import { FindOptionsOrder } from 'typeorm';
-import adminSecured from '../adminSecured';
+import admin_secured from '../admin-secured';
 import Attribute from '../models/Attribute';
 import PrimaryProductDatum from '../models/PrimaryProductDatum';
 import Product from '../models/Product';
 import ProductDatum from '../models/ProductDatum';
 import ProductDatumProposal from '../models/ProductDatumProposal';
 
-const productRouter = express.Router();
+const product_router = express.Router();
 
-productRouter.post('/', async (req, res) => {
+product_router.post('/', async (req, res) => {
     const { name, type } = req.body;
     const product = Object.assign(new Product(), {
         name,
@@ -23,25 +23,25 @@ productRouter.post('/', async (req, res) => {
     res.send(product);
 });
 
-productRouter.delete('/:id', adminSecured, async (req, res) => {
+product_router.delete('/:id', admin_secured, async (req, res) => {
     return await Product.delete({
         _id: new ObjectID(req.params._id),
     });
 });
 
 /** Propose a ProductDatum */
-productRouter.post('/:productId/data/:attributeId', async (req, res) => {
-    const { productId, attributeId } = req.params;
+product_router.post('/:product_id/data/:attribute_id', async (req, res) => {
+    const { product_id, attribute_id } = req.params;
     const { value, source } = req.body;
-    const attribute = await Attribute.findOne({ _id: new ObjectID(attributeId) });
+    const attribute = await Attribute.findOne({ _id: new ObjectID(attribute_id) });
     if (!attribute) {
         res.status(NOT_FOUND).send('Attribute not found');
         return;
     }
-    const productObjId = new ObjectID(productId);
+    const product_obj_id = new ObjectID(product_id);
     const product = await Product.findOne({
-        where: { _id: productObjId },
-        // select: [ `data.${attributeId}` ] // todo
+        where: { _id: product_obj_id },
+        // select: [ `data.${attribute_id}` ] // todo
     });
     if (!product) {
         res.status(NOT_FOUND).send('Product not found');
@@ -50,19 +50,19 @@ productRouter.post('/:productId/data/:attributeId', async (req, res) => {
     const datum = Object.assign(new ProductDatum(), {
         value, // todo validation? various places. typeorm?
         source,
-        user: res.locals.userId,
+        user: res.locals.user_id,
     });
-    const datumProposal = Object.assign(new ProductDatumProposal(), {
+    const datum_proposal = Object.assign(new ProductDatumProposal(), {
         ...datum,
         attribute: attribute._id,
         product: product._id,
     });
-    const primaryDatum = Object.assign(new PrimaryProductDatum(), {
+    const primary_datum = Object.assign(new PrimaryProductDatum(), {
         ...datum,
     });
 
     try {
-        await datumProposal.save();
+        await datum_proposal.save();
     } catch (e) {
         res.status(UNPROCESSABLE_ENTITY).send(e.message);
         return;
@@ -72,88 +72,88 @@ productRouter.post('/:productId/data/:attributeId', async (req, res) => {
     if (!product.data) {
         product.data = {};
     }
-    if (!product.data[attributeId]) {
-        product.data[attributeId] = primaryDatum;
+    if (!product.data[attribute_id]) {
+        product.data[attribute_id] = primary_datum;
         // await product.save(); // s typeorm#3184 todo
         // todo which one?  what if product select todo is active?
         await Product.update({
-            _id: productObjId,
+            _id: product_obj_id,
         }, {
-            [`data.${attributeId}`]: primaryDatum,
+            [`data.${attribute_id}`]: primary_datum,
         });
     }
-    res.send(datumProposal);
+    res.send(datum_proposal);
 });
 
 interface ISorter {
-    attributeId: string;
+    attribute_id: string;
     direction: number;
 }
 interface IFilter {
-    attributeId: string;
+    attribute_id: string;
     condition: string;
-    conditionValue: string;
+    condition_value: string;
 }
 type IMongoFilterArray = Array<{[key: string]: any}>;
 
 // todo types missing everywhere
-productRouter.get('/', async (req, res) => {
+product_router.get('/', async (req, res) => {
     /*********** parse  *********/
     const type: string = req.query.t;
-    let showerIds: string[] = req.query.sh
+    let shower_ids: string[] = req.query.sh
         .split(',').filter(Boolean);
-    const sortersParam: string = req.query.so;
-    const sorters: ISorter[] = sortersParam
+    const sorters_param: string = req.query.so;
+    const sorters: ISorter[] = sorters_param
         .split(',').filter(Boolean)
         .map((s: string): ISorter => {
             const split = s.split(':');
             return {
-                attributeId: split[0],
+                attribute_id: split[0],
                 direction: Number(split[1]),
             };
         });
-    const sortersFormatted: FindOptionsOrder<Product> = sorters
+    const sorters_formatted: FindOptionsOrder<Product> = sorters
         .map((sorter): ISorter => ({
-            attributeId: `data.${sorter.attributeId}.value`,
+            attribute_id: `data.${sorter.attribute_id}.value`,
             direction: Number(sorter.direction), // todo#a1: mongo treats empty as the smallest value. NULLS LAST does not exist
         }))
         .reduce((all: object, sorter) => ({
             ...all,
-            [sorter.attributeId]: sorter.direction,
+            [sorter.attribute_id]: sorter.direction,
         }), {});
-    const filterParam: string = req.query.f;
-    const filtersFormatted: IMongoFilterArray = filterParam
+    const filter_param: string = req.query.f;
+    const filters_formatted: IMongoFilterArray = filter_param
         .split(',').filter(Boolean)
         .map((s: string): IFilter => {
-            const [attributeId, condition, conditionValue] = s.split(':');
+            const [attribute_id, condition, condition_value] = s.split(':');
             return {
-                attributeId, condition, conditionValue,
+                attribute_id, condition, condition_value,
             };
         })
         .map((filter) => {
-            let filterConditionFormatted;
+            let filter_condition_formatted;
             switch (filter.condition) {
             case 'lt':
-                filterConditionFormatted = { $lt: filter.conditionValue }; break;
+                filter_condition_formatted = { $lt: filter.condition_value }; break;
             case 'gt':
-                filterConditionFormatted = { $gt: filter.conditionValue }; break;
+                filter_condition_formatted = { $gt: filter.condition_value }; break;
             case 'nu':
-                filterConditionFormatted = { $exists: false }; break;
+                filter_condition_formatted = { $exists: false }; break;
             case 'nn':
-                filterConditionFormatted = { $exists: true }; break;
+                filter_condition_formatted = { $exists: true }; break;
             case 'ne':
-                filterConditionFormatted = { $ne: filter.conditionValue }; break;
+                filter_condition_formatted = { $ne: filter.condition_value }; break;
             case 'eq':
             default:
-                filterConditionFormatted = filter.conditionValue; break;
+                filter_condition_formatted = filter.condition_value; break;
             }
-            return { [`data.${filter.attributeId}.value`]: filterConditionFormatted };
+            return { [`data.${filter.attribute_id}.value`]: filter_condition_formatted };
         });
 
     /*********** determine showers if not given **********/
-    if (!showerIds.length) {
+    if (!shower_ids.length) {
         const count: number = Number(req.query.c);
-        showerIds = (await Attribute.find({
+        shower_ids = (await Attribute.find({
             select: ['_id'],
             where: {
                 type,
@@ -167,7 +167,7 @@ productRouter.get('/', async (req, res) => {
     }
 
     /************ compute *************/
-    const showerIdsFormatted = showerIds.map(id => `data.${id}`) as Array<(keyof Product)>;
+    const shower_ids_formatted = shower_ids.map(id => `data.${id}`) as Array<(keyof Product)>;
 
     /********** Search ***********/
     /* this is only a temporary solution because too slow for very big data.
@@ -189,15 +189,15 @@ productRouter.get('/', async (req, res) => {
         where: {
             $and: [
                 { type },
-                ...filtersFormatted,
+                ...filters_formatted,
             ],
         } as any,
         select: [
             '_id', 'name', 'verified', // todo
-            ...showerIdsFormatted,
+            ...shower_ids_formatted,
         ],
         order: {
-            ...sortersFormatted,
+            ...sorters_formatted,
         },
     });
 
@@ -211,8 +211,8 @@ productRouter.get('/', async (req, res) => {
     /********** return **********/
     res.send({
         products,
-        showerIds, // maybe as seperate request?
+        shower_ids, // maybe as seperate request?
     });
 });
 
-export default productRouter;
+export default product_router;

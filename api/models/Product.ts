@@ -2,7 +2,7 @@ import { BaseEntity, Column, Entity, ObjectID, ObjectIdColumn } from 'typeorm';
 import PrimaryProductDatum from './PrimaryProductDatum';
 
 interface IPrimaryProductData {
-    [attributeId: string]: PrimaryProductDatum;
+    [attribute_id: string]: PrimaryProductDatum;
 }
 
 @Entity()
@@ -15,7 +15,7 @@ class Product extends BaseEntity {
     public name!: string; // required todo
     @Column()
     public verified: boolean = false; // public .. ? todo
-    /** {attributeId: datum} */
+    /** {attribute_id: datum} */
     @Column()
     public data!: IPrimaryProductData;
 }

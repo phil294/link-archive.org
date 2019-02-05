@@ -3,8 +3,8 @@
 div.column
 	input#quicksearch type=search model=filter placeholder="Quick search..."
 	select :name=name :required=required # todo use datalist some day when its supported widely enough
-		option each=filteredAttribute :value=filteredAttribute._id
-			| $filteredAttribute.name
+		option each=filtered_attribute :value=filtered_attribute._id
+			| $filtered_attribute.name
 # '
 </template>
 
@@ -13,12 +13,12 @@ import { mapActions, mapState, mapGetters } from 'vuex'
 export default
 	name: 'AttributeSelect'
 	props:
-		attributeIds:
+		attribute_ids:
 			type: Array
 			required: true
 		name:
 			type: String
-			default: 'attributeId'
+			default: 'attribute_id'
 		required:
 			type: Boolean
 			default: false
@@ -26,11 +26,11 @@ export default
 		filter: ''
 	computed: {
 		...mapGetters('search', [
-			'attributesById'
+			'attributes_by_id'
 		])
 		attributes: ->
-			@attributeIds.map(id => @attributesById[id])
-		filteredAttributes: ->
+			@attribute_ids.map(id => @attributes_by_id[id])
+		filtered_attributes: ->
 			@attributes.filter(a => a.name.includes(@$data.filter))
 	}
 </script>
@@ -40,6 +40,4 @@ export default
 	padding: 0
 	color: grey
 	margin-bottom: 0
-#quicksearch, select
-	// width: 120px
 </style>

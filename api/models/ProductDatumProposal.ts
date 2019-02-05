@@ -9,7 +9,7 @@ import ProductDatum from './ProductDatum';
  */
 class ProductDatumProposal extends ProductDatum {
     @Column()
-    public attribute!: string; // objid? todo: call attributeId? / joins?
+    public attribute!: string; // objid? todo: call attribute_id? / joins?
     public product!: string;
     // votes
     // comments

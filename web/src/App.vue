@@ -301,24 +301,28 @@ details > summary {
 	color: darkred // css4 @apply fade-in
 .small
 	font-size: 80%
-.flex
+.flex-base
 	display: flex
+	min-height: 0
+	min-width: 0
+.flex
+	@extend .flex-base
 	@media screen and (max-width: 600px) {
 		flex-direction: column
 	}
 .flex-fill
 	flex: 1
 .column
-	display: flex
+	@extend .flex-base
 	flex-direction: column
 .row
-	display: flex
+	@extend .flex-base
 	flex-direction: row
 .justify-center
-	display: flex
+	@extend .flex-base
 	justify-content: center
 .align-center
-	display: flex
+	@extend .flex-base
 	align-items: center
 .center
 	@extend .justify-center, .align-center

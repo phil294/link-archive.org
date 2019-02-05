@@ -2,9 +2,9 @@ import { ObjectID } from 'bson';
 import express from 'express';
 import Attribute from '../models/Attribute';
 
-const attributeRouter = express.Router();
+const attribute_router = express.Router();
 
-attributeRouter.post('/', async (req, res) => {
+attribute_router.post('/', async (req, res) => {
     const { name, type } = req.body;
     const attribute = Object.assign(new Attribute(), {
         name,
@@ -15,7 +15,7 @@ attributeRouter.post('/', async (req, res) => {
     res.send(attribute);
 });
 
-attributeRouter.get('/', async (req, res) => {
+attribute_router.get('/', async (req, res) => {
     const type = req.query.t;
     const attributes = await Attribute.find({
         where: {
@@ -25,4 +25,4 @@ attributeRouter.get('/', async (req, res) => {
     res.send(attributes);
 });
 
-export default attributeRouter;
+export default attribute_router;

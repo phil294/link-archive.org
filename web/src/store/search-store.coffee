@@ -1,4 +1,4 @@
-import storageService from '@/services/storage-service'
+import storage_service from '@/services/storage-service'
 import axios from 'axios'
 import Vue from 'vue'
 
@@ -41,12 +41,12 @@ Seperate query:
 overview to avoid duplicate lists:
 
 - filters, sorters, showers
-- sortersByAttribute
-- sortersAmount
+- sorters_by_attribute
+- sorters_amount
 
 - attributes
-- attributesById
-- hiddenAttributes
+- attributes_by_id
+- hidden_attributes
 
 attributes = showers + hidden
 
@@ -60,7 +60,7 @@ export default
 		type: 'test'
 		filters: [
 		]
-		showerIds: []
+		shower_ids: []
 		sorters: [
 		]
 		columns: 5
@@ -68,119 +68,119 @@ export default
 		attributes: []
 		products: []
 	getters:
-		attributeIds: state ->
+		attribute_ids: state ->
 			state.attributes.map(a => a._id)
-		attributesById: state ->
+		attributes_by_id: state ->
 			state.attributes.reduce((all, attribute) =>
 				all[attribute._id] = attribute
 				all
 			, {})
-		sortersByAttributeId: (state, getters) ->
-			getters.attributeIds.reduce((all, attributeId) =>
-				sorterIndex = state.sorters.findIndex(sorter => sorter.attributeId == attributeId)
-				if sorterIndex > -1
-					all[attributeId] =
-						index: sorterIndex
-						direction: state.sorters[sorterIndex].direction
+		sorters_by_attribute_id: (state, getters) ->
+			getters.attribute_ids.reduce((all, attribute_id) =>
+				sorter_index = state.sorters.findIndex(sorter => sorter.attribute_id == attribute_id)
+				if sorter_index > -1
+					all[attribute_id] =
+						index: sorter_index
+						direction: state.sorters[sorter_index].direction
 				else
-					all[attributeId] = {}
+					all[attribute_id] = {}
 				all
 			, {})
-		filtersByAttributeId: (state, getters) ->
-			getters.attributeIds.reduce((all, attributeId) =>
-				all[attributeId] = state.filters.filter(filter => filter.attributeId == attributeId)
+		filters_by_attribute_id: (state, getters) ->
+			getters.attribute_ids.reduce((all, attribute_id) =>
+				all[attribute_id] = state.filters.filter(filter => filter.attribute_id == attribute_id)
 				all
 			, {})
-		sortersAmount: state -> state.sorters.length
-		hiddenAttributeIds: (state, getters) ->
-			getters.attributeIds
-				.filter(attributeId =>
-					!state.showers.includes(attributeId))
+		sorters_amount: state -> state.sorters.length
+		hidden_attribute_ids: (state, getters) ->
+			getters.attribute_ids
+				.filter(attribute_id =>
+					!state.showers.includes(attribute_id))
 	mutations:
-		removeSorterAt: (state, index) -> Vue.delete(state.sorters, index)
-		addSorter: (state, sorter) -> state.sorters.push(sorter)
-		setProducts: (state, products) -> state.products = products
-		addProduct: (state, product) -> state.products.push(product)
-		addProductDatum: (state, { product, attributeId, datum }) ->
-			Vue.set(product.data, attributeId, datum)
-		setShowerIds: (state, showerIds) -> state.showerIds = showerIds
-		removeShowerIdAt: (state, index) -> Vue.delete(state.showerIds, index)
-		removeShowerId: (state, showerId) -> Vue.delete(state.showerIds, state.showerIds.indexOf(showerId)) # todo add prototy .remove method
-		addShowerIdAt: (state, { index, showerId }) -> state.showerIds.splice(index, 0, showerId)
-		setAttributes: (state, attributes) ->
+		remove_sorter_at: (state, index) -> Vue.delete(state.sorters, index)
+		add_sorter: (state, sorter) -> state.sorters.push(sorter)
+		set_products: (state, products) -> state.products = products
+		add_product: (state, product) -> state.products.push(product)
+		add_product_datum: (state, { product, attribute_id, datum }) ->
+			Vue.set(product.data, attribute_id, datum)
+		set_shower_ids: (state, shower_ids) -> state.shower_ids = shower_ids
+		remove_shower_id_at: (state, index) -> Vue.delete(state.shower_ids, index)
+		remove_shower_id: (state, shower_id) -> Vue.delete(state.shower_ids, state.shower_ids.indexOf(shower_id)) # todo add prototy .remove method
+		add_shower_id_at: (state, { index, shower_id }) -> state.shower_ids.splice(index, 0, shower_id)
+		set_attributes: (state, attributes) ->
 			state.attributes = attributes
-		addFilter: (state, filter) -> state.filters.push(filter)
-		removeFilter: (state, filter) -> Vue.delete(state.filters, state.filters.indexOf(filter))
+		add_filter: (state, filter) -> state.filters.push(filter)
+		remove_filter: (state, filter) -> Vue.delete(state.filters, state.filters.indexOf(filter))
 	actions:
-		toggleSortDirection: ({ commit, dispatch, state, getters }, { attributeId, direction }) ->
-			sorter = getters.sortersByAttributeId[attributeId]
+		toggle_sort_direction: ({ commit, dispatch, state, getters }, { attribute_id, direction }) ->
+			sorter = getters.sorters_by_attribute_id[attribute_id]
 			if sorter
-				commit('removeSorterAt', sorter.index)
+				commit('remove_sorter_at', sorter.index)
 				if sorter.direction == direction
 					return dispatch('search')
-			commit('addSorter', { attributeId, direction })
+			commit('add_sorter', { attribute_id, direction })
 			dispatch('search')
-		### aka getProducts ###
+		### aka get_products ###
 		search: ({ commit, state }) ->
-			# commit('setShowerIds', [])
-			commit('setProducts', [])
+			# commit('set_shower_ids', [])
+			commit('set_products', [])
 			{ type, columns } = state
-			showerIdsParam = state.showerIds
+			shower_ids_param = state.shower_ids
 				.join(',')
-			sortersParam = state.sorters
-				.map(sorter => "#{sorter.attributeId}:#{sorter.direction}")
+			sorters_param = state.sorters
+				.map(sorter => "#{sorter.attribute_id}:#{sorter.direction}")
 				.join(',')
-			filtersParam = state.filters
-				.map(filter => "#{filter.attributeId}:#{filter.condition}:#{filter.conditionValue}")
+			filters_param = state.filters
+				.map(filter => "#{filter.attribute_id}:#{filter.condition}:#{filter.condition_value}")
 				.join(',')
 			response = await axios.get('p', { params: {
 				t: type,
-				sh: showerIdsParam,
-				f: filtersParam,
-				so: sortersParam,
+				sh: shower_ids_param,
+				f: filters_param,
+				so: sorters_param,
 				c: columns
 			} })
-			commit('setShowerIds', response.data.showerIds)
-			commit('setProducts', response.data.products)
-		moveShowerTo: ({ dispatch, commit, state }, { index, showerId }) ->
-			currentPos = state.showerIds.findIndex(e => e == showerId)
-			newPos = index
-			if currentPos > -1
-				commit('removeShowerIdAt', currentPos) # user moved shower from pos A to B
-				if index > currentPos
-					newPos -= 1
-			commit('addShowerIdAt', { index: newPos, showerId })
-			if newPos != currentPos
+			commit('set_shower_ids', response.data.shower_ids)
+			commit('set_products', response.data.products)
+		move_shower_to: ({ dispatch, commit, state }, { index, shower_id }) ->
+			current_pos = state.shower_ids.findIndex(e => e == shower_id)
+			new_pos = index
+			if current_pos > -1
+				commit('remove_shower_id_at', current_pos) # user moved shower from pos A to B
+				if index > current_pos
+					new_pos -= 1
+			commit('add_shower_id_at', { index: new_pos, shower_id })
+			if new_pos != current_pos
 				dispatch('search')
-		removeShower: ({ commit, getters, dispatch }, showerId ) ->
+		remove_shower: ({ commit, getters, dispatch }, shower_id ) ->
 			search = false
-			attributeFilters = getters.filtersByAttributeId[showerId]
-			if attributeFilters.length
-				if !confirm("There are #{attributeFilters.length} filter(s) configured for '#{getters.attributesById[showerId].name}' that will be removed. Continue?")
+			attribute_filters = getters.filters_by_attribute_id[shower_id]
+			if attribute_filters.length
+				if !confirm("There are #{attribute_filters.length} filter(s) configured for '#{getters.attributes_by_id[shower_id].name}' that will be removed. Continue?")
 					return
-				for filter from attributeFilters
-					commit('removeFilter', filter)
+				for filter from attribute_filters
+					commit('remove_filter', filter)
 				search = true
-			attributeSorter = getters.sortersByAttributeId[showerId]
-			if attributeSorter.direction
-				commit('removeSorterAt', attributeSorter.index)
+			attribute_sorter = getters.sorters_by_attribute_id[shower_id]
+			if attribute_sorter.direction
+				commit('remove_sorter_at', attribute_sorter.index)
 				search = true
-			commit('removeShowerId', showerId)
+			commit('remove_shower_id', shower_id)
 			if search
 				dispatch('search')
-		addProduct: ({ commit, state }, { formData }) ->
-			formData.append('type', state.type)
-			response = await axios.post('p', formData)
-			commit('addProduct', response.data)
-		saveDatum: ({ commit, state }, { product, attributeId, formData }) ->
-			response = await axios.post("p/#{product._id}/data/#{attributeId}", formData)
-			commit('addProductDatum', { product, attributeId, datum: response.data })
-		getAttributes: ({ commit, state }) ->
+		add_product: ({ commit, state }, { form_data }) ->
+			form_data.append('type', state.type)
+			response = await axios.post('p', form_data)
+			commit('add_product', response.data)
+		save_datum: ({ commit, state }, { product, attribute_id, form_data }) ->
+			response = await axios.post("p/#{product._id}/data/#{attribute_id}", form_data)
+			commit('add_product_datum', { product, attribute_id, datum: response.data })
+		get_attributes: ({ commit, state }) ->
 			response = await axios.get('a', { params: { t: state.type } })
-			commit('setAttributes', response.data)
-		addFilter: ({ commit, dispatch }, { values }) ->
-			commit('addFilter', values)
+			commit('set_attributes', response.data)
+		add_filter: ({ commit, dispatch }, { values }) ->
+			commit('add_filter', values)
 			dispatch('search')
-		removeFilter: ({ commit, dispatch }, filter) ->
-			commit('removeFilter', filter)
+		remove_filter: ({ commit, dispatch }, filter) ->
+			commit('remove_filter', filter)
 			dispatch('search')

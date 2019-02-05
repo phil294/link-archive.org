@@ -1,47 +1,46 @@
 <template lang="slm">
 # :_='
-	div#kaa.flex-fill.column		
+	div.flex-fill.column		
 
 		div#readonly-mode
 			label
 				| Readonly mode
 				input type=checkbox model=readonly
 
-		div#blub.column
-			div#bla.margin
-				result-view/result-table if=attributes.length @datumClicked=datumClicked($event) :readonly=readonly
-				p.disabled.center else Loading...
+		div#result-table-container
+			result-view/result-table#result-table if=attributes.length @datum_clicked=datum_clicked($event) :readonly=readonly
+			p.disabled.center else Loading...
 
 		popup if=editing @close=editing=null
-			result-view/edit-datum-dialog :product=editing.product :attributeId=editing.attributeId
+			result-view/edit-datum-dialog :product=editing.product :attribute_id=editing.attribute_id
 		
 		div if=!readonly
-			button if=!showAddProductDialog @click=showAddProductDialog=true
+			button if=!show_add_product_dialog @click=show_add_product_dialog=true
 				| +
-			button else @click=showAddProductDialog=false
+			button else @click=show_add_product_dialog=false
 				| -
-			result-view/add-product-dialog if=showAddProductDialog
+			result-view/add-product-dialog if=show_add_product_dialog
 # '
 </template>
 
 <script lang="coffee">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import searchStoreModule from '@/store/search-store'
+import search_store_module from '@/store/search-store'
 
 export default Vue.extend(
 	name: 'ResultView'
-	asyncDataHook: ({ store }) ->
-		store.registerModule('search', searchStoreModule)
+	async_data_hook: ({ store }) ->
+		store.registerModule('search', search_store_module)
 		Promise.all([
 			store.dispatch('search/search'),
-			store.dispatch('search/getAttributes')])
+			store.dispatch('search/get_attributes')])
 	data: ->
-		showAddProductDialog: false
+		show_add_product_dialog: false
 		editing: null
 		readonly: false
 	methods:
-		datumClicked: editing ->
+		datum_clicked: editing ->
 			@$data.editing = editing
 	computed: {
 		...mapState('search', [
@@ -54,14 +53,10 @@ export default Vue.extend(
 </script>
 
 <style lang="stylus" scoped>
-#kaa
-	overflow: auto // FF
-#blub
+#result-table-container
 	overflow: auto
-	width: 100%
-#bla
+#result-table
 	margin: 0 auto
-	// overflow: auto
-	min-height: 50% // FF: always effective by parent overflowing. Chrome: ignored, parent keeps size. :(
-	max-height: 90%
+	min-height: 50%
+	max-width: 100%
 </style>

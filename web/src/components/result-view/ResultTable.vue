@@ -4,51 +4,51 @@ table
 	thead
 		tr
 			td
-			td.filters each=showerId
-				result-view/result-table/filters :filters=filtersByAttributeId[showerId] :attributeId=showerId :readonly=readonly
-		tr.attributes :class.drop-target=draggingColumn
-			th.dropzone.remove.column if=draggingColumn drop=removeShower
+			td.filters each=shower_id
+				result-view/result-table/filters :filters=filters_by_attribute_id[shower_id] :attribute_id=shower_id :readonly=readonly
+		tr.attributes :class.drop-target=dragging_column
+			th.dropzone.remove.column if=dragging_column drop=remove_shower
 				div 🗙
 				div.description Hide column
 			th else Name
-			th.dropzone.move v-for="showerId, index in showerIds" :key="showerId+'_'+index" drop=moveShowerTo(index)
+			th.dropzone.move v-for="shower_id, index in shower_ids" :key="shower_id+'_'+index" drop=move_shower_to(index)
 				.attribute.column
-					div.actions.center if="!readonly && !canDrag"
-						button.moveto @click=moveShowerTo(index-1)(showerId) ←
-						button.remove @click=removeShower(showerId) 🗙
-						button.moveto @click=moveShowerTo(index+2)(showerId) →
+					div.actions.center if="!readonly && !can_drag"
+						button.moveto @click=move_shower_to(index-1)(shower_id) ←
+						button.remove @click=remove_shower(shower_id) 🗙
+						button.moveto @click=move_shower_to(index+2)(shower_id) →
 					div.name.center
-						div drag="!readonly && canDrag && showerId" @dragstart=draggingColumn=true @dragend=draggingColumn=false
-							span.grip if="!readonly && canDrag" ⠿
-							| $attributesById[showerId].name
+						div drag="!readonly && can_drag && shower_id" @dragstart=dragging_column=true @dragend=dragging_column=false
+							span.grip if="!readonly && can_drag" ⠿
+							| $attributes_by_id[shower_id].name
 						div.sort.column
-							button.sort-up.disabled :disabled=readonly @click="toggleSortDirection(showerId, 1)" :class.highlighted=sortersByAttributeId[showerId].direction===1
+							button.sort-up.disabled :disabled=readonly @click="toggle_sort_direction(shower_id, 1)" :class.highlighted=sorters_by_attribute_id[shower_id].direction===1
 								| ▲ # ˄
-							button.sort-down.disabled :disabled=readonly @click="toggleSortDirection(showerId, -1)" :class.highlighted=sortersByAttributeId[showerId].direction===-1
+							button.sort-down.disabled :disabled=readonly @click="toggle_sort_direction(shower_id, -1)" :class.highlighted=sorters_by_attribute_id[shower_id].direction===-1
 								| ▼ # ˅
-						div.small.highlighted if="sortersAmount > 1 && sortersByAttributeId[showerId].index >= 0"
-							| $sortersByAttributeId[showerId].index+1
+						div.small.highlighted if="sorters_amount > 1 && sorters_by_attribute_id[shower_id].index >= 0"
+							| $sorters_by_attribute_id[shower_id].index+1
 
 	tbody
 		tr.product each=product
 			td.name
 				| $product.name
-			td.datum each=showerId @click=datumClicked(product,showerId)
-				div if=product.data[showerId]
-					div if=product.data[showerId].verified
+			td.datum each=shower_id @click=datum_clicked(product,shower_id)
+				div if=product.data[shower_id]
+					div if=product.data[shower_id].verified
 						span
-							| $product.data[showerId].value
-						button.edit.verified @click=datumClicked(product,showerId) if=!readonly
+							| $product.data[shower_id].value
+						button.edit.verified @click=datum_clicked(product,shower_id) if=!readonly
 							| ✓ # ✔
 					div else
 						span.disabled
-							| $product.data[showerId].value
-						button.edit.disabled @click=datumClicked(product,showerId) if=!readonly
+							| $product.data[shower_id].value
+						button.edit.disabled @click=datum_clicked(product,shower_id) if=!readonly
 							| ✎
 				div else
 					span.small
 						| # &#63; # ¿
-					button.edit.disabled @click=datumClicked(product,showerId) if=!readonly
+					button.edit.disabled @click=datum_clicked(product,shower_id) if=!readonly
 						| + # 🖉
 # '
 </template>
@@ -63,36 +63,36 @@ export default Vue.extend(
 		readonly:
 			default: false
 	data: =>
-		canDrag: true
-		draggingColumn: false
+		can_drag: true
+		dragging_column: false
 	methods: {
 		...mapActions('search', [
 			
 		])
-		toggleSortDirection: (attributeId, direction) ->
-			@$store.dispatch('search/toggleSortDirection', { attributeId, direction })
-		datumClicked: (product, attributeId) ->
+		toggle_sort_direction: (attribute_id, direction) ->
+			@$store.dispatch('search/toggle_sort_direction', { attribute_id, direction })
+		datum_clicked: (product, attribute_id) ->
 			if @readonly then return
-			@$emit('datumClicked', { product, attributeId })
-		moveShowerTo: index -> showerId =>
-			@$store.dispatch('search/moveShowerTo', { showerId, index })
-		removeShower: showerId ->
-			@$store.dispatch('search/removeShower', showerId)
+			@$emit('datum_clicked', { product, attribute_id })
+		move_shower_to: index -> shower_id =>
+			@$store.dispatch('search/move_shower_to', { shower_id, index })
+		remove_shower: shower_id ->
+			@$store.dispatch('search/remove_shower', shower_id)
 	}
 	computed: {
 		...mapState('search', [
 			'products'
-			'showerIds'
+			'shower_ids'
 		])
 		...mapGetters('search', [
-			'filtersByAttributeId'
-			'sortersByAttributeId'
-			'sortersAmount'
-			'attributesById'
+			'filters_by_attribute_id'
+			'sorters_by_attribute_id'
+			'sorters_amount'
+			'attributes_by_id'
 		])
 	}
 	mounted: ->
-		@$data.canDrag = !(`'ontouchstart' in window` || navigator.maxTouchPoints)
+		@$data.can_drag = !(`'ontouchstart' in window` || navigator.maxTouchPoints)
 )
 </script>
 

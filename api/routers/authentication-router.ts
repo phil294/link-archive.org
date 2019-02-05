@@ -45,6 +45,7 @@ export default ((token_service: TokenService, mail_service: MailService,
             let login_ticket: LoginTicket | null;
             try {
                 login_ticket = await google_oAuth2Client.verifyIdToken(({ // todo can this even throw?? docs pleeeease
+                    // fixme this await does  not work anymore for some reason (??) immediately sends response
                     audience: GOOGLE_CLIENT_ID,
                     idToken: req.query.token,
                 }));

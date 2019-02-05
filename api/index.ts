@@ -5,8 +5,8 @@ import { NO_CONTENT } from 'http-status-codes';
 import 'reflect-metadata';
 import authentication_middleware from './authentication-middleware';
 import connection from './connection';
-import attributeRouter from './routers/attribute-router';
-import productRouter from './routers/product-router';
+import attribute_router from './routers/attribute-router';
+import product_router from './routers/product-router';
 import authentication_router from './routers/authentication-router';
 import user_router from './routers/user-router';
 import MailService from './services/MailService';
@@ -43,10 +43,10 @@ app.use(authentication_middleware(token_service));
 app.use('/authentication', authentication_router(
     token_service, mail_service,
     env('WEB_ROOT'), env('GOOGLE_CLIENT_ID'), env('FACEBOOK_APP_ID'), env('FACEBOOK_APP_SECRET'), env('WEBSITE_NAME'),
-    ));
-    app.use('/user', user_router);
-    app.use('/p', productRouter);
-    app.use('/a', attributeRouter);
+));
+app.use('/user', user_router);
+app.use('/p', product_router);
+app.use('/a', attribute_router);
 
 // @ts-ignore
 // Global error fallback handler, including promises

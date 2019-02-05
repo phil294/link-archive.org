@@ -3,32 +3,32 @@
 div
 	div.filters.justify-center
 		div.filter.box each=filter
-			span $conditionById[filter.condition].long&nbsp;
-			strong if=filter.conditionValue
-				| $filter.conditionValue&nbsp;
-			button @click=removeFilter(filter) if=!readonly × # 🗙
-		label.justify-center if="!showForm && !readonly"
+			span $condition_by_id[filter.condition].long&nbsp;
+			strong if=filter.condition_value
+				| $filter.condition_value&nbsp;
+			button @click=remove_filter(filter) if=!readonly × # 🗙
+		label.justify-center if="!show_form && !readonly"
 			span.disabled if=!filters.length Add filter&nbsp;
-			button.disabled.fade-in @click=showForm=true
+			button.disabled.fade-in @click=show_form=true
 				| +
 	div.center.column
-		popup if=showForm @close=showForm=false
-			promise-form#form button-label="Add" :action=addFilter button-float-right
+		popup if=show_form @close=show_form=false
+			promise-form#form button-label="Add" :action=add_filter button-float-right
 				div.flex
-					div.attribute-select.padding if=!attributeId # todo currently unused
+					div.attribute-select.padding if=!attribute_id # todo currently unused
 						label.column
 							| Attribute
-							attribute-select name=attributeId required :attribute-ids=attributeIds
-					input else type=hidden name=attributeId :value=attributeId
+							attribute-select name=attribute_id required :attribute_ids=attribute_ids
+					input else type=hidden name=attribute_id :value=attribute_id
 					div.condition.padding
 						label.column
 							| Condition
-							select name=condition required model=conditionId
-								option each=condition :value=condition.id html=conditionToOption(condition) # todo why html not | ¿
+							select name=condition required model=condition_id
+								option each=condition :value=condition.id html=condition_to_option(condition) # todo why html not | ¿
 					div.condition-value.padding
-						label.column if=conditionNeedsValue
+						label.column if=condition_needs_value
 							| Value
-							input name=conditionValue required
+							input name=condition_value required
 # '
 </template>
 
@@ -41,33 +41,33 @@ export default Vue.extend(
 		filters:
 			type: Array
 			required: true
-		attributeId:
+		attribute_id:
 			type: String
 			default: ''
 		readonly:
 			default: false
 	data: ->
-		showForm: false
-		conditionId: 'eq'
+		show_form: false
+		condition_id: 'eq'
 		conditions: [
 				id: 'eq'
 				abbr: '&nbsp;&equals;'
-				needsValue: true
+				needs_value: true
 			,
 				id: 'ne'
 				abbr: '&excl;&equals;'
 				long: 'not'
-				needsValue: true
+				needs_value: true
 			,
 				id: 'lt'
 				abbr: '&nbsp;&lt'
 				long: 'less than'
-				needsValue: true
+				needs_value: true
 			,
 				id: 'gt'
 				abbr: '&nbsp;&gt'
 				long: 'more than'
-				needsValue: true
+				needs_value: true
 			,
 				id: 'nu'
 				abbr: '&nbsp;&#8709;'
@@ -80,29 +80,29 @@ export default Vue.extend(
 		]
 	methods: {
 		...mapActions('search', [
-			'removeFilter'
-			'addFilter'
+			'remove_filter'
+			'add_filter'
 		])
-		conditionToOption: condition ->
+		condition_to_option: condition ->
 			option = "#{condition.abbr} (is"
 			if condition.long
 				option += " #{condition.long}"
-			if condition.needsValue
+			if condition.needs_value
 				option += '...'
 			option += ')'
 			option
 	}
 	computed: {
 		...mapGetters('search', [
-			'attributeIds'
-			'attributesById'
+			'attribute_ids'
+			'attributes_by_id'
 		])
-		conditionById: -> @conditions.reduce((all, condition) =>
+		condition_by_id: -> @conditions.reduce((all, condition) =>
 			all[condition.id] = condition
 			all
 		, {})
-		conditionNeedsValue: ->
-			@conditionById[@$data.conditionId].needsValue
+		condition_needs_value: ->
+			@condition_by_id[@$data.condition_id].needs_value
 	}
 )
 </script>

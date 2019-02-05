@@ -12,9 +12,9 @@ const attributes = [...Array(30).keys()].map(i => (Object.assign(new Attribute()
     _id: new ObjectID('facebeefbadefaceaffeb0' + `${i}`.padStart(2, '0')), // tslint:disable-line
 })));
 
-const attributeIds = attributes.map(a => a._id.toString());
+const attribute_ids = attributes.map(a => a._id.toString());
 
-const generateRandomPrimaryProductData = () => attributeIds
+const generate_random_primary_product_data = () => attribute_ids
     .sort(() => 0.5 - Math.random()) // random order
     .slice(0, Math.floor(Math.random() * 25)) // pick some
     .map(a => [a, `${Math.floor(Math.random() * 10)}`]) // random value v0-v-9
@@ -38,7 +38,7 @@ const generateRandomPrimaryProductData = () => attributeIds
     const products = [...Array(100).keys()].map(i => (Object.assign(new Product(), {
         type: 'test',
         name: `product ${i}`,
-        data: generateRandomPrimaryProductData(),
+        data: generate_random_primary_product_data(),
         _id: new ObjectID(`${i}`.padStart(24, '0')),
         verified: Math.random() > 0.1, // most are verified
     })));
