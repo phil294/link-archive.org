@@ -10,17 +10,20 @@ div
 					label
 						| Email
 						input model=email type=email name=email placeholder=email@example.com required
-				read-more.note summary="(Why no password?)"
-					p
-						| You can simply login by requesting a login link via mail. If you are afraid someone else might have gained access to the login link, you can invalidate all current ones in the user settings.
-					p
-						| The main reasons for implementing a password-less login can be found in 
-						a href="https://goo.gl/czxFnf" this article
-						|. In short: Passwords are more of a security threat than measurement.
-					p
-						| If you feel you 
-						em really 
-						| need to use a password, you can configure one in the account settings once you are logged in.
+					read-more.note summary="(Why no password?)"
+						p
+							| You can simply login by requesting a login link via mail. If you are afraid someone else might have gained access to the login link, you can invalidate all current ones in the user settings.
+						p
+							| The main reasons for implementing a password-less login can be found in 
+							a href="https://goo.gl/czxFnf" this article
+							|. In short: Passwords are more of a security threat than measurement.
+						p
+							| If you feel you 
+							em really 
+							| need to use a password, you can configure one in the account settings once you are logged in.
+						label
+							| If you did that, you can log in with it here:
+							input type=password name=password
 			div#mail-sent.padding-l else
 				div
 					p
@@ -64,8 +67,11 @@ export default Vue.extend(
 			await provider.setup()
 	methods: {
 		request_mail: ({ values }) ->
-			await @$store.dispatch('session/request_token_mail', values.email)
-			@$data.show_mail_sent = true
+			if values.password
+				# todo: implement entire password stuff
+			else
+				await @$store.dispatch('session/request_token_mail', values.email)
+				@$data.show_mail_sent = true
 		external_login: provider -> =>
 			token = await provider.login()
 			await @$store.dispatch('session/external_login_provider_login_with_token',
