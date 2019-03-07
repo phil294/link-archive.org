@@ -9,6 +9,8 @@ rules: {
     max-line-length: false,
     object-literal-sort-keys: false,
     curly: false,
+    arrow-parens: false,
+    prefer-array-literal: false,
     variable-name: false,
     import-name: false
 }
