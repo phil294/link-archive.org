@@ -15,7 +15,7 @@ import Vue from 'vue'
  * Component fires $submit event and calls `action` prop just
  * like `promise-button` (?)+
 ###
-export default Vue.extend(
+export default Vue.extend( # <- todo ?
 	name: 'PromiseForm'
 	props:
 		button_label:

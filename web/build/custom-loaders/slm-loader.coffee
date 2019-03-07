@@ -47,6 +47,9 @@ standalone_keywords = [
 module.exports = (slmdoc) ->
 	# Allow inline comments: # followed by whitespace
 	slmdoc = slmdoc.replace(/# .*/g, '')
+
+	# Allow ` instead of "
+	slmdoc = slmdoc.replace(/`/g, '"')
 	
 	# Allow attributes without quotes syntax. E.g: input @click=my_method
 	.replace(///
