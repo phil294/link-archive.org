@@ -77,7 +77,14 @@ const webpack_base_config = {
 			},
 			{
 				test: /\.slm$/,
-				loader: utils.resolve_custom_loader('slm-loader'),
+				use: [
+					{
+						loader: 'slm-loader',
+					},
+					{
+						loader: utils.resolve_custom_loader('slm-loader'),
+					},
+				],
 			},
 			{
 				test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
