@@ -19,7 +19,7 @@ export default
 		login_with_token: ({ commit }, token) ->
 			try
 				payload = JSON.parse(window.atob(token.trim().split('.')[1].replace('-', '+').replace('_', '/')))
-			catch error
+			catch
 				throw new Error('Malformed token')
 			session = payload
 			if !session.email && !session.external_type
@@ -39,7 +39,7 @@ export default
 			storage_service.set('token', null)
 		invalidate_all_tokens: ({ dispatch }) ->
 			now = Date.now() / 1000
-			response = await axios.get('authentication/refreshtoken') # date + 1
+			response = await axios.get('authentication/refreshtoken') # date
 			jwt = response.data
 			await dispatch('login_with_token', jwt) # shouldnt be called login..? is just setting token
-			await axios.patch('user', { min_iat: now - 1 }) # this might also log out the current user if his date is inaccurate. but can live with that
+			await axios.patch('user', { min_iat: now - 1 }) # date -1. this might also log out the current user if his date is inaccurate. but can live with that
