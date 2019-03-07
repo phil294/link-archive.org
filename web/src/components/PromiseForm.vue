@@ -64,5 +64,5 @@ export default Vue.extend( # <- todo ?
 
 <style lang="stylus" scoped>
 .right
-	float: right
+	float right
 </style>

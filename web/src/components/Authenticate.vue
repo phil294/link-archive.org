@@ -80,10 +80,10 @@ export default Vue.extend(
 
 <style lang="stylus" scoped>
 fieldset
-	margin-bottom:20px
+	margin-bottom 20px
 #with-external button
-	width:200px
-	margin-bottom:10px
+	width 200px
+	margin-bottom 10px
 #with-external button img.logo 
-	margin-right: 5px
+	margin-right 5px
 </style>
