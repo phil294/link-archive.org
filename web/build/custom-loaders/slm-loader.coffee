@@ -1,4 +1,4 @@
-slm = require('slm')
+slm = require('slm') # todo make this be a seperate loader instead, like coffee loader config
 
 # Things to replace
 replaces = [
