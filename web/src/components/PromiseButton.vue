@@ -23,6 +23,9 @@ export default Vue.extend(
 		success_prompt:
 			type: String
 			default: 'Done!'
+		test:
+			type: Boolean
+			default: true
 	data: =>
 		button_prompt: undefined
 	methods:
