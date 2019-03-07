@@ -6,24 +6,21 @@ div
 		fieldset#with-email.box
 			legend With email
 			div if=!show_mail_sent
-				promise-form button-label="Request mail to log in" :action=request_mail
+				promise-form button-label=`Request mail to log in` :action=request_mail
 					label
 						| Email
 						input model=email type=email name=email placeholder=email@example.com required
-					read-more.note summary="(Why no password?)"
-						p
-							| You can simply login by requesting a login link via mail. If you are afraid someone else might have gained access to the login link, you can invalidate all current ones in the user settings.
-						p
-							| The main reasons for implementing a password-less login can be found in 
-							a href="https://goo.gl/czxFnf" this article
-							|. In short: Passwords are more of a security threat than measurement.
-						p
-							| If you feel you 
-							em really 
-							| need to use a password, you can configure one in the account settings once you are logged in.
-						label
-							| If you did that, you can log in with it here:
-							input type=password name=password
+				read-more.note summary=`(Why no password?)`
+					p
+						| You can simply login by requesting a login link via mail. If you are afraid someone else might have gained access to the login link, you can invalidate all current ones in the user settings.
+					p
+						| The main reasons for implementing a password-less login can be found in 
+						a href=`https://goo.gl/czxFnf` this article
+						|. In short: Passwords are more of a security threat than measurement.
+					p
+						| If you feel you 
+						em really 
+						| need to use a password, you can configure one in the account settings once you are logged in.
 			div#mail-sent.padding-l else
 				div
 					p
@@ -38,9 +35,9 @@ div
 				a @click=show_mail_sent=false ⮜ Send another mail
 		fieldset#with-external.box
 			legend Or
-			div v-for="provider in external_login_providers" :key=provider.name
+			div v-for=`provider in external_login_providers` :key=provider.name
 				promise-button.center if=provider.initialized :action=external_login(provider)
-					img.logo :src='static/'+provider.name+'.png'
+					img.logo :src=`'static/'+provider.name+'.png'`
 					| Log in with $provider.name
 				div.note v-else Loading $provider.name login scripts...
 # '
@@ -62,7 +59,7 @@ export default Vue.extend(
 	created: ->
 		for provider from @$data.external_login_providers
 			if !loaded_external_login_providers[provider.name]
-				await provider.load() # todo without () ?
+				await provider.load()
 				loaded_external_login_providers[provider.name] = true
 			await provider.setup()
 	methods: {
