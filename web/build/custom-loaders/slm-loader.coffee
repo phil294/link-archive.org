@@ -7,6 +7,9 @@ module.exports = (slmdoc) ->
 	
 	# Allow attributes without quotes syntax. E.g: input @click=my_method
 	.replace(///
+		(?<=\s[a-zA-Z.@%:_-]+=)	# [WS]%src=
+		([^\s"]+)			# my_src				<- captured
+		(?=\s|$)			# [WS]
 	///g, '"$1"')			# Add quotes
 	# Things to replace
 	replaces = [
@@ -56,8 +59,9 @@ module.exports = (slmdoc) ->
 	for keyword from standalone_keywords
 		slmdoc = slmdoc.replace(new RegExp(
 			'(?<=\\s)(' \	# [WS]
-			+ keyword \		# The keyword		<- captured
+			+ keyword \		# The keyword		<- captured # todo coffee supports vars in regexes
 			+ ')(?=\\s|$)'	# [WS]
 		, 'g'), '$1=""')
 
+	#console.log slmdoc
 	slmdoc
