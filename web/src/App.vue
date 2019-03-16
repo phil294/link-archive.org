@@ -29,26 +29,26 @@ import { mapState, mapGetters, mapActions } from 'vuex'
 export default
 	name: 'App'
 	computed: {
-		...mapState([
-			'app_name'
-			'loading_counter'
-			'authenticate_popup'
-		])
-		...mapState('session', [
-			'session'
-		])
-		...mapGetters('session', [
-			'is_logged_in'
-		])
+		...mapState(
+			-	'app_name'
+			-	'loading_counter'
+			-	'authenticate_popup'
+		)
+		...mapState('session',
+			- 'session'
+		)
+		...mapGetters('session',
+			- 'is_logged_in'
+		)
 	}
 	methods: {
-		...mapActions([
-			'hide_authenticate_popup'
-			'show_authenticate_popup'
-		])
-		...mapActions('session', [
-			'logout'
-		])
+		...mapActions(
+			- 'hide_authenticate_popup'
+			- 'show_authenticate_popup'
+		)
+		...mapActions('session',
+			- 'logout'
+		)
 	}
 </script>
 
