@@ -15,9 +15,9 @@ import { mapActions } from 'vuex'
 export default Vue.extend(
 	name: 'Settings'
 	methods: {
-		...mapActions('session', [
-			'invalidate_all_tokens'
-		])
+		...mapActions('session',
+			- 'invalidate_all_tokens'
+		)
 	}
 )
 </script>
