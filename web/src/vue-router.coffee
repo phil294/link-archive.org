@@ -6,21 +6,24 @@ Vue.use(VueRouter)
 export default ->
 	new VueRouter(
 		mode: 'history'
+		routes:
+			-	path: '/'
+				name: 'Index'
+				component: => `import('@/components/Index')`
+			-	path: '/logincallback'
+				name: 'LoginCallbackHandler'
+				component: => `import('@/components/callback-handlers/LoginCallbackHandler')`
+			-	path: '/settings',
+				name: 'Settings',
+				component: => `import('@/components/secure/Settings')`
+			-	path: '/p',
+				name: 'ResultView',
+				component: => `import('@/components/ResultView')`
+	)
+###
 		routes: [
 			path: '/'
 			name: 'Index'
 			component: => `import('@/components/Index')`
 		,
-			path: '/logincallback'
-			name: 'LoginCallbackHandler'
-			component: => `import('@/components/callback-handlers/LoginCallbackHandler')`
-		,
-			path: '/settings',
-			name: 'Settings',
-			component: => `import('@/components/secure/Settings')`
-		,
-			path: '/p',
-			name: 'ResultView',
-			component: => `import('@/components/ResultView')`
-		]
-	)
+###
