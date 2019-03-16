@@ -11,22 +11,22 @@ table
 				div 🗙
 				div.description Hide column
 			th else Name
-			th.dropzone.move v-for="shower_id, index in shower_ids" :key="shower_id+'_'+index" drop=move_shower_to(index)
+			th.dropzone.move v-for=`shower_id, index in shower_ids` :key=`shower_id+'_'+index` drop=move_shower_to(index)
 				.attribute.column
-					div.actions.center if="!readonly && !can_drag"
+					div.actions.center if=`!readonly && !can_drag`
 						button.moveto @click=move_shower_to(index-1)(shower_id) ←
 						button.remove @click=remove_shower(shower_id) 🗙
 						button.moveto @click=move_shower_to(index+2)(shower_id) →
 					div.name.center
-						div drag="!readonly && can_drag && shower_id" @dragstart=dragging_column=true @dragend=dragging_column=false
-							span.grip if="!readonly && can_drag" ⠿
+						div drag=`!readonly && can_drag && shower_id` @dragstart=dragging_column=true @dragend=dragging_column=false
+							span.grip if=`!readonly && can_drag` ⠿
 							| $attributes_by_id[shower_id].name
 						div.sort.column
-							button.sort-up.disabled :disabled=readonly @click="toggle_sort_direction(shower_id, 1)" :class.highlighted=sorters_by_attribute_id[shower_id].direction===1
+							button.sort-up.disabled :disabled=readonly @click=`toggle_sort_direction(shower_id, 1)` :class.highlighted=sorters_by_attribute_id[shower_id].direction===1
 								| ▲ # ˄
-							button.sort-down.disabled :disabled=readonly @click="toggle_sort_direction(shower_id, -1)" :class.highlighted=sorters_by_attribute_id[shower_id].direction===-1
+							button.sort-down.disabled :disabled=readonly @click=`toggle_sort_direction(shower_id, -1)` :class.highlighted=sorters_by_attribute_id[shower_id].direction===-1
 								| ▼ # ˅
-						div.small.highlighted if="sorters_amount > 1 && sorters_by_attribute_id[shower_id].index >= 0"
+						div.small.highlighted if=`sorters_amount > 1 && sorters_by_attribute_id[shower_id].index >= 0`
 							| $sorters_by_attribute_id[shower_id].index+1
 
 	tbody

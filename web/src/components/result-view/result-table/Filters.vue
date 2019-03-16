@@ -7,13 +7,13 @@ div
 			strong if=filter.condition_value
 				| $filter.condition_value&nbsp;
 			button @click=remove_filter(filter) if=!readonly × # 🗙
-		label.justify-center if="!show_form && !readonly"
+		label.justify-center if=`!show_form && !readonly`
 			span.disabled if=!filters.length Add filter&nbsp;
 			button.disabled.fade-in @click=show_form=true
 				| +
 	div.center.column
 		popup if=show_form @close=show_form=false
-			promise-form#form button-label="Add" :action=add_filter button-float-right
+			promise-form#form button-label=`Add` :action=add_filter button_float_right
 				div.flex
 					div.attribute-select.padding if=!attribute_id # todo currently unused
 						label.column
