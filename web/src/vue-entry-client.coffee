@@ -30,8 +30,7 @@ Vue.mixin(
                 store: @$store
                 route: @$route
             ).finally( =>
-                store.commit('decrease_loading_counter')
-            )
+                store.commit('decrease_loading_counter'))
 )
 
 router.onReady(=>
