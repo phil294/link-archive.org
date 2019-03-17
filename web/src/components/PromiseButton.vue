@@ -11,7 +11,7 @@ import Vue from 'vue'
 ###
  * Pass an `action` to this component that will resolve to a promise. The button will wait for this promise before it resets its loading state.
 ###
-export default Vue.extend(
+export default Vue.extend
 	name: 'PromiseButton'
 	props:
 		action:
@@ -40,6 +40,4 @@ export default Vue.extend(
 				# todo error message like promiseform? aka google like mail login error
 				@$refs.otb.reset()
 				throw e
-
-)
 </script>

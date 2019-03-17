@@ -10,11 +10,10 @@ modal @close=close
 <script lang="coffee">
 import Vue from 'vue'
 
-export default Vue.extend(
+export default Vue.extend
 	name: 'Popup'
 	methods:
-		close: -> @$emit('close')
-)
+		close: -> @$emit 'close'
 </script>
 
 <style lang="stylus" scoped>

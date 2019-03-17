@@ -6,9 +6,13 @@ module.exports = (coffeedoc) ->
 				(?::\s)			|	# ": " or
 				(?:=\s)			|	# "= " or
 				\(				|	# "(" or
+				(?:[a-zA-Z_]\s)	|	# "someword " or
 				(?:,\s)			|	# ", " or
 				(?:(?:-|=)>\s)		# "-> " or "=> "
 			)
+			(?<!(?:						# before: neither
+				export|import|require
+			)\ )
 			([\w$@]+)		# $my_paramName@123
 			(?=
 				\ 			# space

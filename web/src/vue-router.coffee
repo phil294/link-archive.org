@@ -1,10 +1,10 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
-Vue.use(VueRouter)
+Vue.use VueRouter
 
 export default ->
-	new VueRouter(
+	new VueRouter
 		mode: 'history'
 		routes:
 			-	path: '/'
@@ -17,4 +17,3 @@ export default ->
 				name: 'Settings',
 				component: => `import('@/components/secure/Settings')`
 			# corresponding store modules can also be lazyloaded. see ssr vuejs docs
-	)

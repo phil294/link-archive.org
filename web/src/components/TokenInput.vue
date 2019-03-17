@@ -11,7 +11,7 @@ div
 <script lang="coffee">
 import Vue from 'vue'
 
-export default Vue.extend(
+export default Vue.extend
 	name: 'TokenInput'
 	props:
 		token:
@@ -26,9 +26,8 @@ export default Vue.extend(
 		# throws
 		login_with_token: ->
 			@$data.token_error = ''
-			@$store.dispatch('session/login_with_token', @$data.token_model)
-			@$emit('success')
-)
+			@$store.dispatch 'session/login_with_token', @$data.token_model
+			@$emit 'success'
 </script>
 
 <style lang="stylus" scoped>

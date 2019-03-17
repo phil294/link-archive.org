@@ -5,9 +5,8 @@ div INDEX
 <script lang="coffee">
 import Vue from 'vue'
 
-export default Vue.extend(
+export default Vue.extend
 	name: 'Index'
 	async_data: ({ store }) ->
-		# store.dispatch('test')
-)
+		# store.dispatch 'test'
 </script>

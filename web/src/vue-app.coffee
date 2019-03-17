@@ -13,17 +13,17 @@ Vue.config.productionTip = false
 export default ->
 	router = create_router()
 	store = create_store()
-	sync(store, router)
+	sync store, router
 
 	axios.defaults.baseURL = process.env.API_ROOT
-	axios.interceptors.request.use(config =>
+	axios.interceptors.request.use config =>
 		config.headers.common.Authorization = "Bearer #{store.state.session.token}"
-		config)
-	axios.interceptors.response.use((response => response), error =>
-		console.error(error.response)
-		Promise.reject(error.response && (error.response.data || error.response.statusText || error.response.status) || error.response || error))
+		config
+	axios.interceptors.response.use (response => response), error =>
+		console.error error.response
+		Promise.reject(error.response && (error.response.data || error.response.statusText || error.response.status) || error.response || error)
 
-	app = new Vue(
+	app = new Vue
 		router: router
 		store: store
 		beforeMount: ->
@@ -37,9 +37,8 @@ export default ->
 			 * which is not part of ssr (client-only, for API
 			 * interaction)
 			###
-			token = storage_service.get('token')
+			token = storage_service.get 'token'
 			if token
-				@$store.dispatch('session/login_with_token', token)
-		render: h => h(App)
-	)
+				@$store.dispatch 'session/login_with_token', token
+		render: h => h App
 	{ app, router, store }

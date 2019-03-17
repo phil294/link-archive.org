@@ -31,7 +31,7 @@ export default
 		clicked: ->
 			if @$props.set_loading_automatically
 				@$data.used = true
-			@$emit('click')
+			@$emit 'click'
 		reset: ->
 			@$data.used = false
 		set_used: ->

@@ -51,7 +51,7 @@ import external_login_providers from '@/external-login-providers'
 
 loaded_external_login_providers = {}
 
-export default Vue.extend(
+export default Vue.extend
 	name: 'Authenticate'
 	data: =>
 		email: ''
@@ -63,23 +63,21 @@ export default Vue.extend(
 				await provider.load()
 				loaded_external_login_providers[provider.name] = true
 			await provider.setup()
-	methods: {
+	methods:
 		request_mail: ({ values }) ->
 			if values.password
 				# todo: implement entire password stuff
 			else
-				await @$store.dispatch('session/request_token_mail', values.email)
+				await @$store.dispatch 'session/request_token_mail', values.email
 				@$data.show_mail_sent = true
 		external_login: provider -> =>
 			token = await provider.login()
-			await @$store.dispatch('session/external_login_provider_login_with_token',
+			await @$store.dispatch 'session/external_login_provider_login_with_token',
 				token: token # todo can this throw? #todo shorthand
-				provider_name: provider.name)
+				provider_name: provider.name
 			@login_successful()
 		login_successful: ->
-			@$emit('authenticated')
-	}
-)
+			@$emit 'authenticated'
 </script>
 
 <style lang="stylus" scoped>
