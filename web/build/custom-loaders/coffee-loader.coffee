@@ -22,9 +22,7 @@ module.exports = (coffeedoc) ->
 		([\w\W]*?)\n				# \1: anything before
 			(						# \2: the array body
 			(?:(\t+)				# \3: indent
-			-						# an array element
-				\t
-				.+\n				# till end of line
+			- \t.+\n				# an array element
 					(?:\3\t\t
 					.+\n)* 			# arbitrary nested stuff
 			(?:\3\t

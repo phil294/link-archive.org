@@ -54,7 +54,7 @@ module.exports = (slmdoc) ->
 		'exact'
 		'drag'
 		'drop'
-		'button-float-right'
+		'button_float_right'
 	]
 	for keyword from standalone_keywords
 		slmdoc = slmdoc.replace(new RegExp(
