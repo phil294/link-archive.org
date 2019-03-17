@@ -1,10 +1,10 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
-Vue.use(VueRouter)
+Vue.use VueRouter
 
 export default ->
-	new VueRouter(
+	new VueRouter
 		mode: 'history'
 		routes:
 			-	path: '/'
@@ -13,17 +13,10 @@ export default ->
 			-	path: '/logincallback'
 				name: 'LoginCallbackHandler'
 				component: => `import('@/components/callback-handlers/LoginCallbackHandler')`
-			-	path: '/settings',
-				name: 'Settings',
+			-	path: '/settings'
+				name: 'Settings'
 				component: => `import('@/components/secure/Settings')`
-			-	path: '/p',
-				name: 'ResultView',
+			-	path: '/p'
+				name: 'ResultView'
 				component: => `import('@/components/ResultView')`
-	)
-###
-		routes: [
-			path: '/'
-			name: 'Index'
-			component: => `import('@/components/Index')`
-		,
-###
+			# corresponding store modules can also be lazyloaded. see ssr vuejs docs

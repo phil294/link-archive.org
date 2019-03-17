@@ -13,14 +13,13 @@ import Vue from 'vue'
 ###
  * <details>-wrapper
 ###
-export default Vue.extend(
+export default Vue.extend
 	name: 'ReadMore'
 	props:
 		summary:
 			type: String
 			default: 'Read more'
 			required: true
-)
 </script>
 
 <style lang="stylus" scoped>

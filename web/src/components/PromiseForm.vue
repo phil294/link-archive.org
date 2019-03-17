@@ -15,7 +15,7 @@ import Vue from 'vue'
  * Component fires $submit event and calls `action` prop just
  * like `promise-button` (?)+
 ###
-export default Vue.extend( # <- todo ?
+export default Vue.extend # <- todo ?
 	name: 'PromiseForm'
 	props:
 		button_label:
@@ -43,15 +43,15 @@ export default Vue.extend( # <- todo ?
 		submit: event ->
 			@$data.error_response = ''
 			@$refs.submit.set_used()
-			@$emit('submit', event)
-			form_data = new FormData(event.target)
+			@$emit 'submit', event
+			form_data = new FormData event.target
 			values = [...form_data.entries()]
 				.reduce((all, entry) =>
 					all[entry[0]] = entry[1]
 					all
 				, {})
 			try
-				await @$props.action({ form_data, values, event })
+				await @$props.action { form_data, values, event }
 			catch e
 				await @$nextTick() # enforce transition effect even if follow-up error+
 				@$data.error_response = e
@@ -59,7 +59,6 @@ export default Vue.extend( # <- todo ?
 			finally
 				if @$refs.submit # component still alive?
 					@$refs.submit.reset()
-)
 </script>
 
 <style lang="stylus" scoped>

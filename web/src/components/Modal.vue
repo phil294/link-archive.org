@@ -9,13 +9,12 @@ div#modal.center.fade-in @keyup.esc=close tabindex=-1 ref=modal # todo use <dial
 <script lang="coffee">
 import Vue from 'vue'
 
-export default Vue.extend(
+export default Vue.extend
 	name: 'Modal'
 	methods:
-		close: -> @$emit('close')
+		close: -> @$emit 'close'
 	mounted: ->
 		@$refs.modal.focus()
-)
 </script>
 
 <style lang="stylus" scoped>
