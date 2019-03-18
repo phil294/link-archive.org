@@ -36,7 +36,7 @@ export default
 
 <style lang="stylus" scoped>
 #quicksearch
-	padding: 0
-	color: grey
-	margin-bottom: 0
+	padding 0
+	color grey
+	margin-bottom 0
 </style>

@@ -100,23 +100,23 @@ export default Vue.extend
 
 <style lang="stylus" scoped>
 .filters
-	flex-wrap: wrap
-	font-size: 80%
+	flex-wrap wrap
+	font-size 80%
 	> *
-		margin: 3px // TODO: only distance to each other, none to outside
+		margin 3px // TODO: only distance to each other, none to outside
 	.filter
-		padding: 2px 4px
+		padding 2px 4px
 		// background: lightgrey
 #form
-	max-width: 750px
+	max-width 750px
 	.attribute-select, .condition-value
-		width: 155px
+		width 155px
 	.condition
 		select
-			width: 62px
-			font-family: monospace
-			margin: 0 auto
+			width 62px
+			font-family monospace
+			margin 0 auto
 	.condition-value
 		input
-			width: 130px
+			width 130px
 </style>

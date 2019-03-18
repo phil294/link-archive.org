@@ -43,7 +43,6 @@ export default Vue.extend
 		datum: ->
 			@product.data[@attribute_id] || {}
 	}
-)
 </script>
 
 <style lang="stylus" scoped>
