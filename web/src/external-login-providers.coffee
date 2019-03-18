@@ -5,7 +5,7 @@ class ExternalLoginProvider
 
 	@append_script: url ->
 		script_el = document.createElement 'script'
-		new Promise(ok, notok) =>
+		new Promise (ok, notok) =>
 			script_el.onload = ok
 			script_el.onerror = notok
 			script_el.src = url
