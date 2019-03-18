@@ -6,8 +6,8 @@ import 'reflect-metadata';
 import authentication_middleware from './authentication-middleware';
 import connection from './connection';
 import attribute_router from './routers/attribute-router';
-import product_router from './routers/product-router';
 import authentication_router from './routers/authentication-router';
+import product_router from './routers/product-router';
 import user_router from './routers/user-router';
 import MailService from './services/MailService';
 import TokenService from './services/TokenService';
@@ -35,7 +35,7 @@ app.use((req, res, next) => {
         return;
     }
     log(req.method, req.url);
-    setTimeout(next, 150);
+    // setTimeout(next, 150);
     next();
 });
 

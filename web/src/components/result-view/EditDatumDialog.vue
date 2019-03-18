@@ -30,8 +30,8 @@ export default Vue.extend
 		...mapActions 'search',
 			-	'add_product'
 		save_datum: ({ form_data }) ->
-			@$store.dispatch 'search/save_datum'
-				form_data,
+			@$store.dispatch 'search/save_datum',
+				form_data: form_data
 				product: @product
 				attribute_id: @attribute_id
 	}

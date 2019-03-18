@@ -41,27 +41,16 @@ export default ((token_service: TokenService, mail_service: MailService,
     /** post google token, return jwt */
     authentication_router.post('/googletokenlogin', async (req, res) => {
         const google_oAuth2Client = await new OAuth2Client(GOOGLE_CLIENT_ID);
-        const payload: TokenPayload | undefined = await (async () => {
-            let login_ticket: LoginTicket | null;
-            try {
-                login_ticket = await google_oAuth2Client.verifyIdToken(({ // todo can this even throw?? docs pleeeease
-                    // fixme this await does  not work anymore for some reason (??) immediately sends response
-                    audience: GOOGLE_CLIENT_ID,
-                    idToken: req.query.token,
-                }));
-            } catch (error) {
-                return undefined;
+        let payload: TokenPayload | undefined;
+        try {
+            const login_ticket: LoginTicket | null = await google_oAuth2Client.verifyIdToken(({ // todo can this even throw?? docs pleeeease
+                audience: GOOGLE_CLIENT_ID,
+                idToken: req.query.token,
+            }));
+            if (login_ticket) {
+                payload = login_ticket.getPayload();
             }
-            if (!login_ticket) {
-                return undefined;
-            }
-            const payload = login_ticket.getPayload(); // tslint:disable-line:no-shadowed-variable
-            if (!payload)
-                return undefined;
-            if (!payload.sub)
-                return undefined;
-            return payload;
-        })();
+        } catch (error) {/* payload could not be determined */}
         if (!payload) {
             res.status(UNAUTHORIZED).end();
             return;

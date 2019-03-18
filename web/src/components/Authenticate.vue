@@ -37,7 +37,7 @@ div
 		fieldset#with-external.box
 			legend Or
 			div v-for=`provider in external_login_providers` :key=provider.name
-				promise-button.center if=provider.initialized :action=external_login(provider)
+				promise-button.center if=provider.initialized :action=external_login(provider) # if this goes wrong, nothing is shown todo
 					img.logo :src=`'static/'+provider.name+'.png'`
 					| Log in with $provider.name
 				div.note v-else Loading $provider.name login scripts...
