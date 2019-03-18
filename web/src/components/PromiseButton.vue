@@ -32,7 +32,7 @@ export default Vue.extend
 		clicked: ->
 			try
 				await this.$props.action()
-				if @$props.reset_after_success
+				if @$props.reset_after_success && @$refs.otb
 					@$refs.otb.reset()
 				else
 					@$data.button_prompt = @$props.success_prompt
