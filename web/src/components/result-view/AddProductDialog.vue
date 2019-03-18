@@ -15,7 +15,7 @@ import { mapActions, mapState, mapGetters } from 'vuex'
 export default Vue.extend
 	name: 'AddProductDialog'
 	methods: {
-		...mapActions 'search'
+		...mapActions 'search',
 			'add_product'
 	}
 </script>
