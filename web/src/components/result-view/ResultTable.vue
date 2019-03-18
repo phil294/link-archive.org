@@ -57,7 +57,7 @@ table
 import Vue from 'vue'
 import { mapActions, mapState, mapGetters } from 'vuex'
 
-export default Vue.extend(
+export default Vue.extend
 	name: 'ResultView'
 	props:
 		readonly:
@@ -65,35 +65,28 @@ export default Vue.extend(
 	data: =>
 		can_drag: true
 		dragging_column: false
-	methods: {
-		...mapActions('search', [
-			
-		])
+	methods:
 		toggle_sort_direction: (attribute_id, direction) ->
-			@$store.dispatch('search/toggle_sort_direction', { attribute_id, direction })
+			@$store.dispatch 'search/toggle_sort_direction', { attribute_id, direction }
 		datum_clicked: (product, attribute_id) ->
 			if @readonly then return
-			@$emit('datum_clicked', { product, attribute_id })
+			@$emit 'datum_clicked', { product, attribute_id }
 		move_shower_to: index -> shower_id =>
-			@$store.dispatch('search/move_shower_to', { shower_id, index })
+			@$store.dispatch 'search/move_shower_to', { shower_id, index }
 		remove_shower: shower_id ->
-			@$store.dispatch('search/remove_shower', shower_id)
-	}
+			@$store.dispatch 'search/remove_shower', shower_id
 	computed: {
-		...mapState('search', [
-			'products'
-			'shower_ids'
-		])
-		...mapGetters('search', [
-			'filters_by_attribute_id'
-			'sorters_by_attribute_id'
-			'sorters_amount'
-			'attributes_by_id'
-		])
+		...mapState 'search',
+			-	'products'
+			-	'shower_ids'
+		...mapGetters 'search',
+			-	'filters_by_attribute_id'
+			-	'sorters_by_attribute_id'
+			-	'sorters_amount'
+			-	'attributes_by_id'
 	}
 	mounted: ->
-		@$data.can_drag = !(`'ontouchstart' in window` || navigator.maxTouchPoints)
-)
+		@$data.can_drag = !(`'ontouchstart' in window` || navigator.maxTouchPoints) # todo "in" in cs?
 </script>
 
 <style lang="stylus" scoped>

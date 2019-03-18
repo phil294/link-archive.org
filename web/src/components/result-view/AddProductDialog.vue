@@ -12,14 +12,12 @@ div
 import Vue from 'vue'
 import { mapActions, mapState, mapGetters } from 'vuex'
 
-export default Vue.extend(
+export default Vue.extend
 	name: 'AddProductDialog'
 	methods: {
-		...mapActions('search', [
+		...mapActions 'search'
 			'add_product'
-		])
 	}
-)
 </script>
 
 <style lang="stylus" scoped>

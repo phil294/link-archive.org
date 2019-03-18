@@ -35,7 +35,7 @@ div
 <script lang="coffee">
 import Vue from 'vue'
 import { mapActions, mapState, mapGetters } from 'vuex'
-export default Vue.extend(
+export default Vue.extend
 	name: 'ResultTableFilters'
 	props:
 		filters:
@@ -49,40 +49,33 @@ export default Vue.extend(
 	data: ->
 		show_form: false
 		condition_id: 'eq'
-		conditions: [
-				id: 'eq'
+		conditions:
+			-	id: 'eq'
 				abbr: '&nbsp;&equals;'
 				needs_value: true
-			,
-				id: 'ne'
+			-	id: 'ne'
 				abbr: '&excl;&equals;'
 				long: 'not'
 				needs_value: true
-			,
-				id: 'lt'
+			-	id: 'lt'
 				abbr: '&nbsp;&lt'
 				long: 'less than'
 				needs_value: true
-			,
-				id: 'gt'
+			-	id: 'gt'
 				abbr: '&nbsp;&gt'
 				long: 'more than'
 				needs_value: true
-			,
-				id: 'nu'
+			-	id: 'nu'
 				abbr: '&nbsp;&#8709;'
 				long: 'empty'
-			,
-				id: 'nn'
+			-	id: 'nn'
 				abbr: '&excl;&#8709;'
 				long: 'not empty'
-			# todo: contains
-		]
+				# todo: contains, regex
 	methods: {
-		...mapActions('search', [
-			'remove_filter'
-			'add_filter'
-		])
+		...mapActions 'search',
+			-	'remove_filter'
+			-	'add_filter'
 		condition_to_option: condition ->
 			option = "#{condition.abbr} (is"
 			if condition.long
@@ -93,10 +86,9 @@ export default Vue.extend(
 			option
 	}
 	computed: {
-		...mapGetters('search', [
-			'attribute_ids'
-			'attributes_by_id'
-		])
+		...mapGetters 'search',
+			-	'attribute_ids'
+			-	'attributes_by_id'
 		condition_by_id: -> @conditions.reduce((all, condition) =>
 			all[condition.id] = condition
 			all
@@ -104,7 +96,6 @@ export default Vue.extend(
 		condition_needs_value: ->
 			@condition_by_id[@$data.condition_id].needs_value
 	}
-)
 </script>
 
 <style lang="stylus" scoped>

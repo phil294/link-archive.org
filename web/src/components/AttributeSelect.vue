@@ -25,13 +25,12 @@ export default
 	data: ->
 		filter: ''
 	computed: {
-		...mapGetters('search', [
-			'attributes_by_id'
-		])
+		...mapGetters 'search',
+			-	'attributes_by_id'
 		attributes: ->
-			@attribute_ids.map(id => @attributes_by_id[id])
+			@attribute_ids.map id => @attributes_by_id[id]
 		filtered_attributes: ->
-			@attributes.filter(a => a.name.includes(@$data.filter))
+			@attributes.filter a => a.name.includes(@$data.filter)
 	}
 </script>
 

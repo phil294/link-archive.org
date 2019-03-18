@@ -17,7 +17,7 @@ div
 import Vue from 'vue'
 import { mapActions, mapState, mapGetters } from 'vuex'
 
-export default Vue.extend(
+export default Vue.extend
 	name: 'EditDatumDialog'
 	props:
 		product:
@@ -27,20 +27,17 @@ export default Vue.extend(
 			type: String
 			required: true
 	methods: {
-		...mapActions('search', [
-			'add_product'
-		])
+		...mapActions 'search',
+			-	'add_product'
 		save_datum: ({ form_data }) ->
-			@$store.dispatch('search/save_datum', {
+			@$store.dispatch 'search/save_datum'
 				form_data,
 				product: @product
 				attribute_id: @attribute_id
-			})
 	}
 	computed: {
-		...mapGetters('search', [
-			'attributes_by_id'
-		])
+		...mapGetters 'search',
+			-	'attributes_by_id'
 		attribute: ->
 			@attributes_by_id[@attribute_id]
 		datum: ->
