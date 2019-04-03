@@ -1,10 +1,8 @@
 <template lang="slm">
-# :_='
 details
 	summary $summary
 	div#details
 		slot
-# '
 </template>
 
 <script lang="coffee">

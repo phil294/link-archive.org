@@ -1,9 +1,7 @@
 <template lang="slm">
-# :_='
 div#modal.center.fade-in @keyup.esc=close tabindex=-1 ref=modal # todo use <dialog> as soon as it is supported everywhere
 	div#background.fill @click=close
 	slot
-# '
 </template>
 
 <script lang="coffee">

@@ -1,9 +1,7 @@
 <template lang="slm">
-# :_='
 button.btn :disabled=used :type=type @click=clicked
 	slot if=!used Click me
 	span else $used_prompt
-# '
 </template>
 
 <script lang="coffee">

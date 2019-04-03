@@ -1,21 +1,20 @@
 <template lang="slm">
-# :_='
 div
 	h1 Log in or create account	
 	div#register-or-login
 		fieldset#with-email.box
 			legend With email
 			div if=!show_mail_sent
-				promise-form button-label=`Request mail to log in` :action=request_mail
+				promise-form button-label="Request mail to log in" :action=request_mail
 					label
 						| Email
 						input model=email type=email name=email placeholder=email@example.com required
-					read-more.note summary=`(Why no password?)`
+					read-more.note summary="(Why no password?)"
 						p
 							| You can simply login by requesting a login link via mail. If you are afraid someone else might have gained access to the login link, you can invalidate all current ones in the user settings.
 						p
 							| The main reasons for implementing a password-less login can be found in 
-							a href=`https://goo.gl/czxFnf` this article
+							a href="https://goo.gl/czxFnf" this article
 							|. In short: Passwords are more of a security threat than measurement.
 						p
 							| If you feel you <em>really</em> need to use a password, you can configure one in the account settings once you are logged in.
@@ -36,12 +35,11 @@ div
 				a @click=show_mail_sent=false ⮜ Send another mail
 		fieldset#with-external.box
 			legend Or
-			div v-for=`provider in external_login_providers` :key=provider.name
+			div v-for="provider in external_login_providers" :key=provider.name
 				promise-button.center if=provider.initialized :action=external_login(provider)
-					img.logo :src=`'static/'+provider.name+'.png'`
+					img.logo :src="'static/'+provider.name+'.png'"
 					| Log in with $provider.name
 				div.note v-else Loading $provider.name login scripts...
-# '
 </template>
 
 <script lang="coffee">
@@ -58,7 +56,7 @@ export default Vue.extend
 		show_mail_sent: false
 		external_login_providers: external_login_providers # todo shorthand?
 	created: ->
-		for provider from @$data.external_login_providers
+		for provider from @$data.external_login_providers # fixme todo this should be an async loop (so all are loaded simultaneously). instead rn, it is sync commands inside an async block
 			if !loaded_external_login_providers[provider.name]
 				await provider.load()
 				loaded_external_login_providers[provider.name] = true

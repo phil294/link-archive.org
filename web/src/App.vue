@@ -1,5 +1,4 @@
 <template lang="slm">
-# :_='
 section#app.column.fill-h
 	popup if=authenticate_popup @close=hide_authenticate_popup
 		authenticate @authenticated=hide_authenticate_popup
@@ -20,7 +19,6 @@ section#app.column.fill-h
 			| Sign in
 	main.flex-fill.column
 			router-view
-# '
 </template>
 
 <script lang="coffee">
