@@ -54,9 +54,9 @@ export default Vue.extend
 	data: =>
 		email: ''
 		show_mail_sent: false
-		external_login_providers: external_login_providers # todo shorthand?
+		external_login_providers: external_login_providers
 	created: ->
-		for provider from @$data.external_login_providers # fixme todo this should be an async loop (so all are loaded simultaneously). instead rn, it is sync commands inside an async block
+		@$data.external_login_providers.forEach provider =>
 			if !loaded_external_login_providers[provider.name]
 				await provider.load()
 				loaded_external_login_providers[provider.name] = true
@@ -65,13 +65,14 @@ export default Vue.extend
 		request_mail: ({ values }) ->
 			if values.password
 				# todo: implement entire password stuff
+				alert("password mechanic not yet implemented.")
 			else
 				await @$store.dispatch 'session/request_token_mail', values.email
 				@$data.show_mail_sent = true
 		external_login: provider -> =>
 			token = await provider.login()
 			await @$store.dispatch 'session/external_login_provider_login_with_token',
-				token: token # todo can this throw? #todo shorthand
+				token: token # todo can this throw?
 				provider_name: provider.name
 			@login_successful()
 		login_successful: ->
