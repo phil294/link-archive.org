@@ -174,7 +174,7 @@ td, th {
 textarea {
 	width: 100%; }
 
-button // buttons, by default, should not have any specific styling so they can be used better semantically. for typical button-buttons, use .btn-
+button // buttons, by default, should not have any specific styling so they can be used better semantically. for typical button-buttons, use .btn
 	-webkit-appearance: none
 	background: initial
 	border: initial
@@ -253,7 +253,7 @@ fieldset {
 details > summary {
 	cursor: pointer;
 }
-[draggable] { // TODO: == true or wat, wrong on readonly
+[draggable=true] {
 	cursor: move;
 }
 

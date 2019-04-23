@@ -16,7 +16,6 @@ export default Vue.extend
 	props:
 		summary:
 			type: String
-			default: 'Read more'
 			required: true
 </script>
 
