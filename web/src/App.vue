@@ -1,5 +1,4 @@
 <template lang="slm">
-# :_='
 section#app.column.fill-h
 	popup if=authenticate_popup @close=hide_authenticate_popup
 		authenticate @authenticated=hide_authenticate_popup
@@ -21,7 +20,6 @@ section#app.column.fill-h
 			| Sign in
 	main.flex-fill.column
 			router-view
-# '
 </template>
 
 <script lang="coffee">
@@ -113,16 +111,6 @@ body {
 	background-color: #fff;
 }
 
-/* todo
-@media (max-width: 684px) {
-	body {
-		font-size: 1.53rem; } }
-
-@media (max-width: 382px) {
-	body {
-		font-size: 1.35rem; } }
-*/
-
 h1, h2, h3, h4, h5, h6 {
 //	line-height: 1.1;
 //	font-family: Verdana, Geneva, sans-serif;
@@ -177,7 +165,7 @@ pre > code {
 textarea {
 	width: 100%; }
 
-button // buttons, by default, should not have any specific styling so they can be used better semantically. for typical button-buttons, use .btn-
+button // buttons, by default, should not have any specific styling so they can be used better semantically. for typical button-buttons, use .btn
 	-webkit-appearance: none
 	background: initial
 	border: initial
@@ -256,7 +244,7 @@ fieldset {
 details > summary {
 	cursor: pointer;
 }
-[draggable] { // TODO: == true or wat, wrong on readonly
+[draggable=true] {
 	cursor: move;
 }
 

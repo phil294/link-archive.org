@@ -63,5 +63,4 @@ module.exports = (slmdoc) ->
 			+ ')(?=\\s|$)'	# [WS]
 		, 'g'), '$1=""')
 
-	#console.log slmdoc
 	slmdoc

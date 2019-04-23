@@ -14,6 +14,7 @@ const environment = [
 	if (!process.env[name]) {
 		e = new Error(`environment variable ${name} is missing`);
 	} else if (!process.env[name].match(/^(['"]).+\1$/)) {
+		// TODO: there are better ways to do this
 		e = new Error(`environment variable ${name} needs to be quoted twice`);
 	}
 	if (e)

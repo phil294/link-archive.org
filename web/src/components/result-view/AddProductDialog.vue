@@ -16,7 +16,7 @@ export default Vue.extend
 	name: 'AddProductDialog'
 	methods: {
 		...mapActions 'search',
-			'add_product'
+			-	'add_product'
 	}
 </script>
 

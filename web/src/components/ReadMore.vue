@@ -1,10 +1,8 @@
 <template lang="slm">
-# :_='
 details
 	summary $summary
 	div#details
 		slot
-# '
 </template>
 
 <script lang="coffee">
@@ -18,7 +16,6 @@ export default Vue.extend
 	props:
 		summary:
 			type: String
-			default: 'Read more'
 			required: true
 </script>
 

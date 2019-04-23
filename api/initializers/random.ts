@@ -31,8 +31,14 @@ const generate_random_primary_product_data = () => attribute_ids
 (async () => {
     await connection;
 
+    error('Deleting all attributes');
+    await Attribute.delete({ type: 'test' }); // TODO: doesnt work ??
+
     error('Adding dummy attributes');
     await Attribute.save(attributes);
+
+    error('Deleting all products');
+    await Product.find({ type: 'test' });
 
     error('Generating dummy products');
     const products = [...Array(100).keys()].map(i => (Object.assign(new Product(), {

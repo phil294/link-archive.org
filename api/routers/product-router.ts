@@ -74,13 +74,13 @@ product_router.post('/:product_id/data/:attribute_id', async (req, res) => {
     }
     if (!product.data[attribute_id]) {
         product.data[attribute_id] = primary_datum;
-        // await product.save(); // s typeorm#3184 todo
+        await product.save();
         // todo which one?  what if product select todo is active?
-        await Product.update({
+        /*await Product.update({
             _id: product_obj_id,
         }, {
             [`data.${attribute_id}`]: primary_datum,
-        });
+        });*/
     }
     res.send(datum_proposal);
 });
@@ -193,7 +193,7 @@ product_router.get('/', async (req, res) => {
             ],
         } as any,
         select: [
-            '_id', 'name', 'verified', // todo
+            '_id', 'name', 'verified', // todo select doesnt work at all (?) https://github.com/typeorm/typeorm/pull/3756
             ...shower_ids_formatted,
         ],
         order: {

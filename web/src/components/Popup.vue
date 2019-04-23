@@ -1,10 +1,8 @@
 <template lang="slm">
-# :_='
 modal @close=close
 	main.box.padding-xl
-		button#close.btn type=button @click=close 🗙
+		button#close.btn type=button @click=close 🗙 # TODO: type=button necessary?
 		slot
-# '
 </template>
 
 <script lang="coffee">
