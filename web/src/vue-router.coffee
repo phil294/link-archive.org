@@ -9,7 +9,7 @@ export default ->
 		routes:
 			-	path: '/'
 				name: 'Index'
-				component: => `import('@/components/Index')`
+				component: => `import('@/components/Index')` # todo this is soon supported natively by cs
 			-	path: '/logincallback'
 				name: 'LoginCallbackHandler'
 				component: => `import('@/components/callback-handlers/LoginCallbackHandler')`

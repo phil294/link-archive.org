@@ -7,7 +7,7 @@ module.exports = (slmdoc) ->
 	
 	# Allow attributes without quotes syntax. E.g: input @click=my_method
 	.replace(///
-		(?<=\s[a-zA-Z_.@%:-]+=)	# [WS]%src=
+		(?<=\s[a-zA-Z.@%:_-]+=)	# [WS]%src=
 		([^\s"]+)			# my_src				<- captured
 		(?=\s|$)			# [WS]
 	///g, '"$1"')			# Add quotes
