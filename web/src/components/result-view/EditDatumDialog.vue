@@ -1,5 +1,4 @@
 <template lang="slm">
-# :_='
 div
 	h5
 		| $product.name: $attribute.name
@@ -10,7 +9,6 @@ div
 		label
 			| Source
 			input name=source placeholder=Source required
-# '
 </template>
 
 <script lang="coffee">

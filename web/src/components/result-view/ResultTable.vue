@@ -1,5 +1,4 @@
 <template lang="slm">
-# :_='
 table
 	thead
 		tr
@@ -11,22 +10,22 @@ table
 				div 🗙
 				div.description Hide column
 			th else Name
-			th.dropzone.move v-for=`shower_id, index in shower_ids` :key=`shower_id+'_'+index` drop=move_shower_to(index)
+			th.dropzone.move v-for="shower_id, index in shower_ids" :key="shower_id+'_'+index" drop=move_shower_to(index)
 				.attribute.column
-					div.actions.center if=`!readonly && !can_drag`
+					div.actions.center if="!readonly && !can_drag"
 						button.moveto @click=move_shower_to(index-1)(shower_id) ←
 						button.remove @click=remove_shower(shower_id) 🗙
 						button.moveto @click=move_shower_to(index+2)(shower_id) →
 					div.name.center
-						div drag=`!readonly && can_drag && shower_id` @dragstart=dragging_column=true @dragend=dragging_column=false
-							span.grip if=`!readonly && can_drag` ⠿
+						div drag="!readonly && can_drag && shower_id" @dragstart=dragging_column=true @dragend=dragging_column=false
+							span.grip if="!readonly && can_drag" ⠿
 							| $attributes_by_id[shower_id].name
 						div.sort.column
-							button.sort-up.disabled :disabled=readonly @click=`toggle_sort_direction(shower_id, 1)` :class.highlighted=sorters_by_attribute_id[shower_id].direction===1
+							button.sort-up.disabled :disabled=readonly @click="toggle_sort_direction(shower_id, 1)" :class.highlighted=sorters_by_attribute_id[shower_id].direction===1
 								| ▲ # ˄
-							button.sort-down.disabled :disabled=readonly @click=`toggle_sort_direction(shower_id, -1)` :class.highlighted=sorters_by_attribute_id[shower_id].direction===-1
+							button.sort-down.disabled :disabled=readonly @click="toggle_sort_direction(shower_id, -1)" :class.highlighted=sorters_by_attribute_id[shower_id].direction===-1
 								| ▼ # ˅
-						div.small.highlighted if=`sorters_amount > 1 && sorters_by_attribute_id[shower_id].index >= 0`
+						div.small.highlighted if="sorters_amount > 1 && sorters_by_attribute_id[shower_id].index >= 0"
 							| $sorters_by_attribute_id[shower_id].index+1
 
 	tbody
@@ -38,7 +37,7 @@ table
 					div if=product.data[shower_id].verified
 						span
 							| $product.data[shower_id].value
-						button.edit.verified @click=datum_clicked(product,shower_id) if=!readonly
+						button.edit.verified @click=datum_clicked(product,shower_id) if=!readonly # todo those 3 datum_clicked() shouldnt be necessary because parent has this already (?)
 							| ✓ # ✔
 					div else
 						span.disabled
@@ -47,10 +46,9 @@ table
 							| ✎
 				div else
 					span.small
-						| # &#63; # ¿
+						| # &#63; # ?
 					button.edit.disabled @click=datum_clicked(product,shower_id) if=!readonly
 						| + # 🖉
-# '
 </template>
 
 <script lang="coffee">
@@ -58,7 +56,7 @@ import Vue from 'vue'
 import { mapActions, mapState, mapGetters } from 'vuex'
 
 export default Vue.extend
-	name: 'ResultView'
+	# name: 'ResultTable' todo?
 	props:
 		readonly:
 			default: false
@@ -86,7 +84,7 @@ export default Vue.extend
 			-	'attributes_by_id'
 	}
 	mounted: ->
-		@$data.can_drag = !(`'ontouchstart' in window` || navigator.maxTouchPoints) # todo "in" in cs?
+		@$data.can_drag = !(`'ontouchstart' in window` || navigator.maxTouchPoints) # todo "in" in cs? / todo css solution? media query blah
 </script>
 
 <style lang="stylus" scoped>

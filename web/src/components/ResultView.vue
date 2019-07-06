@@ -1,5 +1,4 @@
 <template lang="slm">
-# :_='
 	div.flex-fill.column		
 
 		div#readonly-mode
@@ -13,14 +12,13 @@
 
 		popup if=editing @close=editing=null
 			result-view/edit-datum-dialog :product=editing.product :attribute_id=editing.attribute_id
-		
+
 		div if=!readonly
-			button if=!show_add_product_dialog @click=show_add_product_dialog=true
+			button if=!show_add_product_dialog @click=show_add_product_dialog=true # todo add toggle component
 				| +
 			button else @click=show_add_product_dialog=false
 				| -
 			result-view/add-product-dialog if=show_add_product_dialog
-# '
 </template>
 
 <script lang="coffee">

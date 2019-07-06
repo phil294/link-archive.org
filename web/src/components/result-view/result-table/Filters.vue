@@ -1,5 +1,4 @@
 <template lang="slm">
-# :_='
 div
 	div.filters.justify-center
 		div.filter.box each=filter
@@ -7,13 +6,13 @@ div
 			strong if=filter.condition_value
 				| $filter.condition_value&nbsp;
 			button @click=remove_filter(filter) if=!readonly × # 🗙
-		label.justify-center if=`!show_form && !readonly`
+		label.justify-center if="!show_form && !readonly"
 			span.disabled if=!filters.length Add filter&nbsp;
 			button.disabled.fade-in @click=show_form=true
 				| +
 	div.center.column
 		popup if=show_form @close=show_form=false
-			promise-form#form button-label=`Add` :action=add_filter button_float_right
+			promise-form#form button-label="Add" :action=add_filter button_float_right
 				div.flex
 					div.attribute-select.padding if=!attribute_id # todo currently unused
 						label.column
@@ -29,7 +28,6 @@ div
 						label.column if=condition_needs_value
 							| Value
 							input name=condition_value required
-# '
 </template>
 
 <script lang="coffee">
@@ -66,10 +64,10 @@ export default Vue.extend
 				long: 'more than'
 				needs_value: true
 			-	id: 'nu'
-				abbr: '&nbsp;&#8709;'
+				abbr: '&nbsp;&#8709;' # todo symbol
 				long: 'empty'
 			-	id: 'nn'
-				abbr: '&excl;&#8709;'
+				abbr: '&excl;&#8709;' # .
 				long: 'not empty'
 				# todo: contains, regex
 	methods: {

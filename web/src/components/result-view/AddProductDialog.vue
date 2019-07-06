@@ -1,11 +1,9 @@
 <template lang="slm">
-# :_='
 div
-	promise-form button-label=`Add product` :action=add_product
+	promise-form button-label="Add product" :action=add_product
 		label
 			| Name
 			input name=name placeholder=Name required
-# '
 </template>
 
 <script lang="coffee">
