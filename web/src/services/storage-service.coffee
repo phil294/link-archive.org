@@ -1,5 +1,5 @@
 export default
-	get: item =>
+	get: item => # todo getter setter instead
 		JSON.parse localStorage.getItem(item)
 	set: (item, value) =>
 		if !value
