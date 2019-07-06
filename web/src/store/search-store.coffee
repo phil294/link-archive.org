@@ -121,7 +121,7 @@ export default
 					return dispatch 'search'
 			commit 'add_sorter', { attribute_id, direction }
 			dispatch 'search'
-		### aka get_products ###
+		### aka get_products ### # todo rename
 		search: ({ commit, state }) ->
 			# commit('set_shower_ids', [])
 			commit 'set_products', []
@@ -179,7 +179,7 @@ export default
 		get_attributes: ({ commit, state }) ->
 			response = await axios.get 'a', { params: { t: state.type } }
 			commit 'set_attributes', response.data
-		add_filter: ({ commit, dispatch }, { values }) ->
+		add_filter: ({ commit, dispatch }, { values }) -> # todo formdata?
 			commit 'add_filter', values
 			dispatch 'search'
 		remove_filter: ({ commit, dispatch }, filter) ->
