@@ -21,7 +21,7 @@ if (isProd) {
 	const serverBundle = require('./dist/vue-ssr-server-bundle.json');
 	const template = fs.readFileSync('./src/index.template.html', 'utf-8');
 	const clientManifest = require('./dist/vue-ssr-client-manifest.json');
-	renderer = Renderer.createBundleRenderer(serverBundle, {
+	renderer = Renderer.createBundleRenderer(serverBundle, { // todo hackernews also contains lru cache here
 		template,
 		clientManifest,
 		runInNewContext: false,
@@ -32,7 +32,7 @@ if (isProd) {
 	require('./build/setup-dev-server.js')(server).then(
 		({ bundle, template, clientManifest }) => {
 			log('dev renderer initialized');
-			const prefetchload = true; // for debugging purposes, deactivable
+			const prefetchload = true; // for debugging purposes, deactivable (todo in prod in internet save mode too..?)
 			renderer = Renderer.createBundleRenderer(bundle, {
 				template,
 				clientManifest,
@@ -57,7 +57,7 @@ server.get('*', async (req, res) => {
 	let html;
 	try {
 		html = await renderer.renderToString({
-			title: 'ka  title',
+			title: 'ka  title', // TODO
 			url: req.url,
 		});
 	} catch (e) {
