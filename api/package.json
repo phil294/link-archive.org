@@ -1,7 +1,7 @@
 {
   "name": "api",
   "version": "1.0.0",
-  "author": "phil294 <eochgls@web.de>",
+  "author": "phil294 <philip@waritschlager.de>",
   "license": "MIT",
   "scripts": {
     "lint": "tslint",
