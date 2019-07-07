@@ -297,7 +297,7 @@ details > summary {
 	display: flex
 	min-height: 0
 	min-width: 0
-.flex
+.flex // todo this is kinda stupid
 	@extend .flex-base
 	@media screen and (max-width: 600px) {
 		flex-direction: column
