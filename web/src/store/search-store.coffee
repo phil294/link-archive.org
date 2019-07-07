@@ -53,7 +53,7 @@ attributes = showers + hidden
 ###
 export default
 	namespaced: true
-	state:
+	state: =>
 		### static ###
 		#
 		### (optionally) user-defined ###

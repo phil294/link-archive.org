@@ -7,7 +7,7 @@
 				input type=checkbox model=readonly
 
 		div#result-table-container
-			result-view/result-table#result-table if=attributes.length @datum_clicked=datum_clicked($event) :readonly=readonly
+			result-view/result-table#result-table if=table_data_fetched @datum_clicked=datum_clicked($event) :readonly=readonly
 			p.disabled.center else Loading...
 
 		popup if=editing @close=editing=null
@@ -24,29 +24,39 @@
 <script lang="coffee">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import search_store_module from '@/store/search-store'
+######import search_store_module from '@/store/search-store'
 
 export default Vue.extend(
 	name: 'ResultView'
-	async_data_hook: ({ store }) ->
-		store.registerModule('search', search_store_module)
-		Promise.all([
-			store.dispatch('search/search'),
-			store.dispatch('search/get_attributes')])
+	serverPrefetch: -> # note: docs say: You may find the same fetchItem() logic repeated multiple times (in serverPrefetch, mounted and watch callbacks) in each component - it is recommended to create your own abstraction (e.g. a mixin or a plugin) to simplify such code.
+		######@register_search_store()
+		######console.log(@$store.state.search.type)
+		@fetch_table_data()
 	data: ->
 		show_add_product_dialog: false
 		editing: null
 		readonly: false
 	methods:
+		######register_search_store: ->
+		######	@$store.registerModule 'search', search_store_module, { preserveState: true } # this doesnt work; state is missing inside search mutation afterwards. with preserveState:false, ssr data gets overridden. declaring module globally now, not sure whose fault this is
+		fetch_table_data: ->
+			Promise.all([ # todo yarn array syntax?
+				@$store.dispatch('search/search'),
+				@$store.dispatch('search/get_attributes')])
 		datum_clicked: editing ->
 			@$data.editing = editing
 	computed: {
-		...mapState('search', [
-			'attributes'
-		])
+		...mapState 'search',
+			-	'attributes'
+		######table_data_fetched: -> @$store.state.search && @$store.state.search.attributes
+		table_data_fetched: -> !!@attributes.length # todo chage to accept  no attributes (e.g. when new type)
 	}
+	mounted: ->
+		######@register_search_store()
+		if !@table_data_fetched
+			@fetch_table_data()
 	destroyed: ->
-		@$store.unregisterModule('search')
+		######@$store.unregisterModule('search')
 )
 </script>
 
