@@ -8,7 +8,7 @@ table
 		tr.attributes :class.drop-target=dragging_column
 			th.dropzone.remove.column if=dragging_column drop=remove_shower
 				div 🗙
-				div.description Hide column
+				div.description Hide column # todo color red somewhat
 			th else Name
 			th.dropzone.move v-for="shower_id, index in shower_ids" :key="shower_id+'_'+index" drop=move_shower_to(index)
 				.attribute.column

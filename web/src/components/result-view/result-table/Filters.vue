@@ -12,7 +12,7 @@ div
 				| +
 	div.center.column
 		popup if=show_form @close=show_form=false
-			promise-form#form button-label="Add" :action=add_filter button_float_right
+			promise-form#form :action=add_filter button_float_right
 				div.flex
 					div.attribute-select.padding if=!attribute_id # todo currently unused
 						label.column
@@ -23,11 +23,13 @@ div
 						label.column
 							| Condition
 							select name=condition required model=condition_id
-								option each=condition :value=condition.id html=condition_to_option(condition) # todo why html not | ¿
+								option each=condition :value=condition.id html=condition_to_option(condition) # todo why html not | ?
 					div.condition-value.padding
 						label.column if=condition_needs_value
 							| Value
 							input name=condition_value required
+				template #button_label Add
+				
 </template>
 
 <script lang="coffee">

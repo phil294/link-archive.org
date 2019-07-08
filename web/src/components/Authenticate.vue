@@ -5,7 +5,7 @@ div
 		fieldset#with-email.box
 			legend With email
 			div if=!show_mail_sent
-				promise-form button-label=`Request mail to log in` :action=request_mail
+				promise-form :action=request_mail
 					label
 						| Email
 						input model=email type=email name=email placeholder=email@example.com required
@@ -21,6 +21,7 @@ div
 						label
 							| If you did that, you can log in with it here:
 							input type=password name=password
+					template #button_label Request mail to log in
 			div#mail-sent.padding-l else
 				div
 					p
@@ -36,7 +37,7 @@ div
 		fieldset#with-external.box
 			legend Or
 			div v-for="provider in external_login_providers" :key=provider.name
-				promise-button.center if=provider.initialized :action=external_login(provider) # if this goes wrong, nothing is shown todo
+				promise-button.center if=provider.initialized :action=external_login(provider)
 					img.logo :src="'static/'+provider.name+'.png'"
 					| Log in with $provider.name
 				div.note v-else Loading $provider.name login scripts...

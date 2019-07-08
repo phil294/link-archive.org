@@ -10,7 +10,7 @@
 			result-view/result-table#result-table if=table_data_fetched @datum_clicked=datum_clicked($event) :readonly=readonly
 			p.disabled.center else Loading...
 
-		popup if=editing @close=editing=null
+		popup if=editing @close=editing=null # maybe use linus borgs portal instead?
 			result-view/edit-datum-dialog :product=editing.product :attribute_id=editing.attribute_id
 
 		div if=!readonly
