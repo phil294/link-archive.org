@@ -1,7 +1,7 @@
 <template lang="slm">
 button.btn :disabled=used :type=type @click=clicked
 	slot if=!used Click me
-	span else $used_prompt
+	slot else name=used_prompt loading...
 </template>
 
 <script lang="coffee">
@@ -20,9 +20,6 @@ export default
 		set_loading_automatically:
 			type: Boolean
 			default: true
-		used_prompt:
-			type: String
-			default: 'loading...'
 	data: =>
 		used: false
 	methods:
