@@ -1,8 +1,15 @@
 <template lang="slm">
 form @submit.prevent=submit
 	slot
-	one-time-button.submit :class.right=button_float_right ref=submit type=submit :set_loading_automatically=false $button_label
-	div.error.fade-in if=error_message $error_message
+	slot name=button
+		one-time-button.submit :class.right=button_float_right ref=submit type=submit :set_loading_automatically=false
+			slot name=button_label
+				| Submit
+	div.error.fade-in if=error_response
+		span
+			slot name=error_caption
+				| Submit failed: 
+			| $error_response
 </template>
 
 <script lang="coffee">
@@ -16,27 +23,15 @@ import Vue from 'vue'
 export default Vue.extend # <- todo ?
 	name: 'PromiseForm'
 	props:
-		button_label:
-			type: String
-			default: 'Submit'
 		button_float_right:
 			type: Boolean
 			default: false
-		error_caption:
-			type: String
-			default: 'Submit failed'
 		### docs ###
 		action:
 			type: Function
 			required: true
 	data: =>
 		error_response: ''
-	computed:
-		error_message: ->
-			if @$data.error_response
-				"#{@$props.error_caption}: #{@$data.error_response}"
-			else
-				''
 	methods:
 		submit: event ->
 			@$data.error_response = ''

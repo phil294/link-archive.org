@@ -2,16 +2,12 @@ module.exports = (slmdoc) ->
 	# Allow inline comments: # followed by whitespace
 	slmdoc = slmdoc.replace(/# .*/g, '')
 
-	# Allow ` instead of "
-	slmdoc = slmdoc.replace(/`/g, '"')
-	
 	# Allow attributes without quotes syntax. E.g: input @click=my_method
 	.replace(///
-		(?<=\s[a-zA-Z.@%:_-]+=)	# [WS]%src=
+		(?<=\s[a-zA-Z.@%#:_-]+=)	# [WS]%src=
 		([^\s"]+)			# my_src				<- captured
 		(?=\s|$)			# [WS]
 	///g, '"$1"')			# Add quotes
-	
 	# Things to replace
 	replaces = [
 		[/(?<=\s)if="/g, ' v-if="']
@@ -41,6 +37,7 @@ module.exports = (slmdoc) ->
 			"			# "
 			(?=\s)		# after: whitespace
 		///g, '="{\'$1\':$2}"']
+		[/(?<=\s)#(.+)(?=\s)/g, 'v-slot:$1'] # this is in fact supported by vue itself natively already, but slm loader does not like it. so this one is more of a polyfill
 	]
 	for rule from replaces
 		slmdoc = slmdoc.replace(rule[0], rule[1])
@@ -56,6 +53,7 @@ module.exports = (slmdoc) ->
 		'drag'
 		'drop'
 		'button_float_right'
+		'v-slot:\\w+'
 	]
 	for keyword from standalone_keywords
 		slmdoc = slmdoc.replace(new RegExp(

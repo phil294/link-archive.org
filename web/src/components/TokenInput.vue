@@ -1,9 +1,10 @@
 <template lang="slm">
 div
-	promise-form#insert-code button-label=Ok :action=login_with_token
+	promise-form#insert-code :action=login_with_token
 		label
 			| paste the token here:
 			input model=token_model name=token required
+		template #button_label Ok
 </template>
 
 <script lang="coffee">

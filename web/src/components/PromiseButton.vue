@@ -1,6 +1,10 @@
 <template lang="slm">
-one-time-button :used_prompt=button_prompt @click=clicked ref=otb
+one-time-button @click=clicked ref=otb if=!error
 	slot
+	template #used_prompt
+		slot name=success_prompt
+			| Done!
+div.error.fade-in else $error
 </template>
 
 <script lang="coffee">
@@ -18,24 +22,15 @@ export default Vue.extend
 		reset_after_success:
 			type: Boolean
 			default: true
-		success_prompt:
-			type: String
-			default: 'Done!'
-		test:
-			type: Boolean
-			default: true
 	data: =>
-		button_prompt: undefined
+		error: ''
 	methods:
 		clicked: ->
 			try
 				await this.$props.action()
 				if @$props.reset_after_success
 					@$refs.otb.reset()
-				else
-					@$data.button_prompt = @$props.success_prompt
 			catch e
-				# todo error message like promiseform? aka google like mail login error
-				@$refs.otb.reset()
+				@$data.error = e
 				throw e
 </script>
