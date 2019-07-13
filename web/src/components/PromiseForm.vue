@@ -1,15 +1,16 @@
 <template lang="slm">
 form @submit.prevent=submit
-	slot
-	slot name=button
-		one-time-button.submit :class.right=button_float_right ref=submit type=submit :set_loading_automatically=false
-			slot name=button_label
-				| Submit
-	div.error.fade-in if=error_response
-		span
-			slot name=error_caption
-				| Submit failed: 
-			| $error_response
+	fieldset :disabled=loading
+		slot
+		slot name=button
+			button.btn :class.right=button_float_right :disabled=loading
+				slot name=button_label
+					| Submit
+		div.error.fade-in if=error_response
+			span
+				slot name=error_caption # todo make more use of
+					| Submit failed: 
+				| $error_response
 </template>
 
 <script lang="coffee">
@@ -32,10 +33,11 @@ export default Vue.extend # <- todo ?
 			required: true
 	data: =>
 		error_response: ''
+		loading: false
 	methods:
 		submit: event ->
 			@$data.error_response = ''
-			@$refs.submit.set_used()
+			@$data.loading = true
 			@$emit 'submit', event
 			form_data = new FormData event.target
 			values = [...form_data.entries()]
@@ -48,10 +50,9 @@ export default Vue.extend # <- todo ?
 			catch e
 				await @$nextTick() # enforce transition effect even if follow-up error+
 				@$data.error_response = e
-				throw e
+				# throw e
 			finally
-				if @$refs.submit # component still alive?
-					@$refs.submit.reset()
+				@$data.loading = false
 </script>
 
 <style lang="stylus" scoped>
