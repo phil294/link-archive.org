@@ -34,7 +34,7 @@ class User extends BaseEntity {
             user = user_optional;
             if (payload.iat < user.min_iat) {
                 // min_iat had been set to disallow the given token -> All tokens had been invalidated -> Expired -> Unauthorized
-                throw new Error(`${UNAUTHORIZED}`);
+                throw new Error('The token expired');
             }
         }
         return user;
