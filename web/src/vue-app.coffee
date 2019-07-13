@@ -20,6 +20,8 @@ export default ->
 		config.headers.common.Authorization = "Bearer #{store.state.session.token}"
 		config
 	axios.interceptors.response.use (response => response), error =>
+		if error.response && error.response.status == 401
+			store.dispatch 'session/logout'	
 		console.error error.response
 		Promise.reject(error.response && (error.response.data || error.response.statusText || error.response.status) || error.response || error)
 
@@ -40,5 +42,6 @@ export default ->
 			token = storage_service.get 'token'
 			if token
 				@$store.dispatch 'session/login_with_token', token
+				@$store.dispatch 'session/refresh_token' # make sure the token is still valid by asking the server for a new one
 		render: h => h App
 	{ app, router, store }
