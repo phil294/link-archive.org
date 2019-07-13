@@ -4,7 +4,7 @@ div
 		label
 			| paste the token here:
 			input model=token_model name=token required
-		template #button_label Ok
+		template #button_label Log in
 </template>
 
 <script lang="coffee">
