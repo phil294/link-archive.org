@@ -1,7 +1,7 @@
 <template lang="slm">
 modal @close=close
 	main.box.padding-xl
-		button#close.btn type=button @click=close 🗙 # TODO: type=button necessary?
+		button#close.btn @click=close 🗙
 		slot
 </template>
 
