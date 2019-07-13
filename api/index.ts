@@ -1,3 +1,4 @@
+/// <reference types="./types/express-form-data" />
 import bodyParser from 'body-parser';
 import express from 'express';
 import expressFormData from 'express-form-data';
