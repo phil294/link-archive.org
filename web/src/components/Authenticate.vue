@@ -1,8 +1,8 @@
 <template lang="slm">
 div
-	h1 Log in or create account	
+	h1 Log in or create account
 	div#register-or-login
-		fieldset#with-email.box
+		section#with-email.box.padding-l
 			legend With email
 			div if=!show_mail_sent
 				promise-form button-label="Request mail to log in" :action=request_mail
@@ -33,12 +33,12 @@ div
 					token-input @success=login_successful
 				hr
 				a @click=show_mail_sent=false ⮜ Send another mail
-		fieldset#with-external.box
+		section#with-external.box.padding-l
 			legend Or
-			div v-for="provider in external_login_providers" :key=provider.name
-				promise-button.center if=provider.initialized :action=external_login(provider) # if this goes wrong, nothing is shown todo
+			div.center v-for="provider in external_login_providers" :key=provider.name
+				promise-button.center if=provider.initialized :action=external_login(provider)
 					img.logo :src="'static/'+provider.name+'.png'"
-					| Log in with $provider.name
+					div.flex-fill Log in with $provider.name
 				div.note v-else Loading $provider.name login scripts...
 </template>
 
@@ -80,7 +80,7 @@ export default Vue.extend
 </script>
 
 <style lang="stylus" scoped>
-fieldset
+section
 	margin-bottom 20px
 #with-external button
 	width 200px
