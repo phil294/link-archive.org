@@ -35,7 +35,7 @@ export default ((token_service: TokenService, mail_service: MailService,
                     Bye`)
             .then(() => res.end())
             .catch((error: any) => {
-                res.status(INTERNAL_SERVER_ERROR).send(error.code);
+                res.status(INTERNAL_SERVER_ERROR).send('Internal mail sending error');
             });
     });
     /** post google token, return jwt */
