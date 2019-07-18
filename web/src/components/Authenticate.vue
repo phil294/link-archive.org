@@ -56,7 +56,7 @@ export default Vue.extend
 		show_mail_sent: false
 		external_login_providers: external_login_providers
 	created: ->
-		@$data.external_login_providers.forEach provider =>
+		@external_login_providers.forEach provider =>
 			if !loaded_external_login_providers[provider.name]
 				await provider.load()
 				loaded_external_login_providers[provider.name] = true
@@ -68,7 +68,7 @@ export default Vue.extend
 				alert("password mechanic not yet implemented.")
 			else
 				await @$store.dispatch 'session/request_token_mail', values.email
-				@$data.show_mail_sent = true
+				@show_mail_sent = true
 		external_login: provider -> =>
 			token = await provider.login()
 			await @$store.dispatch 'session/external_login_provider_login_with_token',

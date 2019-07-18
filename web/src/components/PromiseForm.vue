@@ -36,8 +36,8 @@ export default Vue.extend # <- todo ?
 		loading: false
 	methods:
 		submit: event ->
-			@$data.error_response = ''
-			@$data.loading = true
+			@error_response = ''
+			@loading = true
 			@$emit 'submit', event
 			form_data = new FormData event.target
 			values = [...form_data.entries()]
@@ -49,10 +49,10 @@ export default Vue.extend # <- todo ?
 				await @$props.action { form_data, values, event }
 			catch e
 				await @$nextTick() # enforce transition effect even if follow-up error+
-				@$data.error_response = e
+				@error_response = e
 				# throw e
 			finally
-				@$data.loading = false
+				@loading = false
 </script>
 
 <style lang="stylus" scoped>
