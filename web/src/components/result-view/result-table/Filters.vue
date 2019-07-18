@@ -94,7 +94,7 @@ export default Vue.extend
 			all
 		, {})
 		condition_needs_value: ->
-			@condition_by_id[@$data.condition_id].needs_value
+			@condition_by_id[@condition_id].needs_value
 	}
 </script>
 

@@ -44,7 +44,7 @@ export default Vue.extend(
 				@$store.dispatch('search/search'),
 				@$store.dispatch('search/get_attributes')])
 		datum_clicked: editing ->
-			@$data.editing = editing
+			@editing = editing
 	computed: {
 		...mapState 'search',
 			-	'attributes'

@@ -84,7 +84,7 @@ export default Vue.extend
 			-	'attributes_by_id'
 	}
 	mounted: ->
-		@$data.can_drag = !(`'ontouchstart' in window` || navigator.maxTouchPoints) # todo "in" in cs? / todo css solution? media query blah
+		@can_drag = !(`'ontouchstart' in window` || navigator.maxTouchPoints) # todo "in" in cs? / todo css solution? media query blah
 </script>
 
 <style lang="stylus" scoped>

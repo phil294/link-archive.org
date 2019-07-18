@@ -28,7 +28,7 @@ export default
 		attributes: ->
 			@attribute_ids.map id => @attributes_by_id[id]
 		filtered_attributes: ->
-			@attributes.filter a => a.name.includes(@$data.filter)
+			@attributes.filter a => a.name.includes(@filter)
 	}
 </script>
 
