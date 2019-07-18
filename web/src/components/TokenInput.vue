@@ -19,13 +19,13 @@ export default Vue.extend
 	data: ->
 		token_model: @$props.token
 	mounted: ->
-		if @$data.token_model
+		if @token_model
 			try await @login_with_token() # if unsuccessful, dont show an error yet. let the user submit the form again and handle the error there
 	methods:
 		# throws
 		login_with_token: ->
-			@$data.token_error = ''
-			@$store.dispatch 'session/login_with_token', @$data.token_model
+			@token_error = ''
+			@$store.dispatch 'session/login_with_token', @token_model
 			try await @$store.dispatch 'session/refresh_token' # make sure the passed token is valid by asking the server for a new one
 			catch e
 				throw new Error('The token expired. This was probably issued by the user itself. Please request a new login link above.')

@@ -31,6 +31,6 @@ export default Vue.extend
 				if @$props.reset_after_success && @$refs.otb
 					@$refs.otb.reset()
 			catch e
-				@$data.error = e
+				@error = e
 				throw e
 </script>

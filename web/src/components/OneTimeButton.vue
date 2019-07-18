@@ -25,12 +25,12 @@ export default
 	methods:
 		clicked: ->
 			if @$props.set_loading_automatically
-				@$data.used = true
+				@used = true
 			@$emit 'click'
 		reset: ->
-			@$data.used = false
+			@used = false
 		set_used: ->
-			@$data.used = true
+			@used = true
 </script>
 
 <style lang="stylus" scoped>
