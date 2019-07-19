@@ -68,7 +68,7 @@ small, sub, sup {
 	font-size: 75%; }
 
 a {
-	text-decoration: none;
+	// text-decoration: none;
 	color: var(--color-foreground); }
 	a:hover {
 		color: var(--color-hover);
@@ -219,7 +219,7 @@ details > summary {
 	color: var(--color-disabled)
 .highlighted
 	color: var(--color-highlighted)
-.error
+.error, .danger
 	color: darkred // css4 @apply fade-in
 .small
 	font-size: 80%
