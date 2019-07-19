@@ -1,5 +1,5 @@
 <template lang="slm">
-	div.flex-fill.column		
+	div.flex-fill.column
 
 		div#readonly-mode
 			label
