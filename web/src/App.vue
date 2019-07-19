@@ -20,6 +20,7 @@ section#app.column.fill-h
 			button.btn if=!is_logged_in @click=show_authenticate_popup
 				| Sign in
 	main.flex-fill.column
+		p.center.error if=global_error_message $global_error_message
 		router-view
 </template>
 
@@ -33,6 +34,7 @@ export default
 			-	'app_name'
 			-	'loading_counter'
 			-	'authenticate_popup'
+			-	'global_error_message'
 		...mapState 'session',
 			-	'session'
 		...mapGetters 'session',
@@ -51,9 +53,8 @@ export default
 #app > header
 	border-bottom 1px solid lightgrey
 	justify-content space-between
-	nav > *
-		white-space nowrap
-		margin-right 3vw
+	nav > *:not(:last-child)
+		margin-right 1.5em
 		display inline
 a.router-link-active
 	font-weight bold
