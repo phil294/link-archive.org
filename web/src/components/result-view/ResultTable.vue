@@ -8,7 +8,7 @@ table
 		tr.attributes :class.drop-target=dragging_column
 			th.dropzone.remove.column if=dragging_column drop=remove_shower
 				div 🗙
-				div.description Hide column # todo color red somewhat
+				div.description.danger Hide column
 			th else Name
 			th.dropzone.move v-for="shower_id, index in shower_ids" :key="shower_id+'_'+index" drop=move_shower_to(index)
 				.attribute.column
@@ -22,7 +22,7 @@ table
 							| $attributes_by_id[shower_id].name
 						div.sort.column
 							button.sort-up.disabled :disabled=readonly @click="toggle_sort_direction(shower_id, 1)" :class.highlighted=sorters_by_attribute_id[shower_id].direction===1
-								| ▲ # ˄
+								| ▲ # ˄ todo svg
 							button.sort-down.disabled :disabled=readonly @click="toggle_sort_direction(shower_id, -1)" :class.highlighted=sorters_by_attribute_id[shower_id].direction===-1
 								| ▼ # ˅
 						div.small.highlighted if="sorters_amount > 1 && sorters_by_attribute_id[shower_id].index >= 0"
@@ -35,19 +35,19 @@ table
 			td.datum each=shower_id @click=datum_clicked(product,shower_id)
 				div if=product.data[shower_id]
 					div if=product.data[shower_id].verified
-						span
+						span.verified
 							| $product.data[shower_id].value
-						button.edit.verified @click=datum_clicked(product,shower_id) if=!readonly # todo those 3 datum_clicked() shouldnt be necessary because parent has this already (?)
-							| ✓ # ✔
+						button.edit.disabled if=!readonly
+							| ✎ # ✓ # ✔
 					div else
 						span.disabled
 							| $product.data[shower_id].value
-						button.edit.disabled @click=datum_clicked(product,shower_id) if=!readonly
+						button.edit if=!readonly
 							| ✎
 				div else
 					span.small
 						| # &#63; # ?
-					button.edit.disabled @click=datum_clicked(product,shower_id) if=!readonly
+					button.edit.create if=!readonly
 						| + # 🖉
 </template>
 
@@ -171,7 +171,7 @@ tbody td:not(:first-child):not(:last-child)
 			font-size 70%
 			margin-right 4px
 	.sort
-		padding-left 0.2em
+		padding-left 3px
 		position relative
 		.sort-up, .sort-down
 			padding 0
@@ -180,7 +180,7 @@ tbody td:not(:first-child):not(:last-child)
 				color var(--color-main)
 		.sort-up
 			position relative
-			top -4px
+			top -5px
 		.sort-down
 			position absolute
 			bottom -4px
@@ -195,7 +195,9 @@ td.datum
 		position absolute
 		right 0
 		bottom 0
-		&.verified
-			color #9d7
+		&.create
+			color #A0AB82
+	.verified
+		color #0B6721
 
 </style>
