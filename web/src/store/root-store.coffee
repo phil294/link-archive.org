@@ -30,7 +30,9 @@ export default =>
 			hide_authenticate_popup: ({ commit }) ->
 				commit 'toggle_authenticate_popup', false
 			server_unreachable: ({ commit }) ->
-				commit 'set_global_error_message', 'Server unreachable!' # todo some kind of global error display
+				commit 'set_global_error_message', 'Server unreachable!'
+			server_reachable: ({ commit }) ->
+				commit 'set_global_error_message', ''
 		modules:
 			session: session_module
 			# When adding here, see ssr docs. Global submodules *seem* to need a factory wrapper too

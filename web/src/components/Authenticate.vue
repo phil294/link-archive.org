@@ -44,8 +44,6 @@ div
 </template>
 
 <script lang="coffee">
-import Vue from 'vue'
-import { mapActions } from 'vuex'
 import external_login_providers from '@/external-login-providers'
 
 loaded_external_login_providers = {}

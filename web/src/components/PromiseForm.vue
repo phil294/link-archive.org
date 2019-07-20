@@ -14,7 +14,6 @@ form @submit.prevent=submit
 </template>
 
 <script lang="coffee">
-import Vue from 'vue'
 
 ###
  * Standardform component: includes only submit (progress-)button.

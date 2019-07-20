@@ -3,7 +3,6 @@ token-input :token=$route.query.token @success=redirect
 </template>
 
 <script lang="coffee">
-import Vue from 'vue'
 ### Route '/logincallback': "Callback" handler for email links, google and alike. ###
 export default Vue.extend
 	name: 'LoginCallbackHandler'

@@ -17,6 +17,7 @@ export default ->
 
 	axios.defaults.baseURL = process.env.API_ROOT
 	axios.interceptors.request.use config =>
+		store.dispatch 'server_reachable'
 		config.headers.common.Authorization = "Bearer #{store.state.session.token}"
 		config
 	axios.interceptors.response.use (response => response), error =>
@@ -24,8 +25,11 @@ export default ->
 			store.dispatch 'session/logout'	
 		else if error.response == undefined or error.code == 'ECONNABORTED'
 			store.dispatch 'server_unreachable'
-		console.error error.response
-		Promise.reject(error.response && (error.response.data || error.response.statusText || error.response.status) || error.response || error)
+		formatted_error = # todo better not use axios then
+			data: error.response && (error.response.data || error.response.statusText || '') || null
+			status: error.response && error.response.status || 0
+		console.error formatted_error
+		Promise.reject(formatted_error)
 
 	app = new Vue
 		router: router

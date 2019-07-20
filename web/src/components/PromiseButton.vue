@@ -8,7 +8,6 @@ div.error.fade-in else $error
 </template>
 
 <script lang="coffee">
-import Vue from 'vue'
 
 ###
  * Pass an `action` to this component that will resolve to a promise. The button will wait for this promise before it resets its loading state.

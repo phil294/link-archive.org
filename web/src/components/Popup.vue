@@ -6,8 +6,6 @@ modal @close=close
 </template>
 
 <script lang="coffee">
-import Vue from 'vue'
-
 export default Vue.extend
 	name: 'Popup'
 	methods:
