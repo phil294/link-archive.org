@@ -22,8 +22,6 @@
 </template>
 
 <script lang="coffee">
-import Vue from 'vue'
-import { mapState } from 'vuex'
 ######import search_store_module from '@/store/search-store'
 
 export default Vue.extend(
@@ -31,7 +29,9 @@ export default Vue.extend(
 	serverPrefetch: -> # note: docs say: You may find the same fetchItem() logic repeated multiple times (in serverPrefetch, mounted and watch callbacks) in each component - it is recommended to create your own abstraction (e.g. a mixin or a plugin) to simplify such code.
 		######@register_search_store()
 		######console.log(@$store.state.search.type)
-		@fetch_table_data()
+		@fetch_table_data() # axios networking error handler doesnt display ssr: it modifies another component; this serverPrefetch only cares for ResultView. thus, serverPrefetch errors must (and semantically also should) be handled individually
+		# if error, bubble throw: Then dont allow the rendering process to continue. Better to see a page with no data than not seeing any page at all for the user, but status code should really be 500, especially for bots
+
 	data: ->
 		show_add_product_dialog: false
 		editing: null
