@@ -5,8 +5,6 @@ div#modal.center.fade-in @keyup.esc=close tabindex=-1 ref=modal # todo use <dial
 </template>
 
 <script lang="coffee">
-import Vue from 'vue'
-
 export default Vue.extend
 	name: 'Modal'
 	methods:

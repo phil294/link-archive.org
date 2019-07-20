@@ -8,8 +8,6 @@ div
 </template>
 
 <script lang="coffee">
-import Vue from 'vue'
-
 export default Vue.extend
 	name: 'TokenInput'
 	props:
@@ -26,10 +24,12 @@ export default Vue.extend
 		login_with_token: ->
 			@token_error = ''
 			@$store.dispatch 'session/login_with_token', @token_model
-			try await @$store.dispatch 'session/refresh_token' # make sure the passed token is valid by asking the server for a new one
-			catch e
-				throw new Error('The token expired. This was probably issued by the user itself. Please request a new login link above.')
-			@$emit 'success'
+			try
+				await @$store.dispatch 'session/refresh_token' # make sure the passed token is valid by asking the server for a new one
+				@$emit 'success'
+			catch e # fixme network error etc
+				if e.status == 401
+					throw new Error('The token expired. This was probably issued by the user itself. Please request a new login link above.')
 </script>
 
 <style lang="stylus" scoped>

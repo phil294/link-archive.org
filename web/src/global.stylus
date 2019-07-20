@@ -221,7 +221,7 @@ details > summary {
 	color: var(--color-highlighted)
 .error, .danger
 	color: darkred // css4 @apply fade-in
-.small
+.small // todo html small instead
 	font-size: 80%
 .flex-base
 	display: flex

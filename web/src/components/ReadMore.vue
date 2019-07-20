@@ -6,7 +6,6 @@ details
 </template>
 
 <script lang="coffee">
-import Vue from 'vue'
 
 ###
  * <details>-wrapper

@@ -52,7 +52,7 @@ module.exports = (doc) ->
 		.map((component) => component.name)
 		.join(',')
 	# todo: component name from file ...?
-	x = "#{template_tag}#{html}#{middle}\n#{imports}\n#{export_statement}\tcomponents:{#{components_string}}\n#{js_and_css}"
+	x = "#{template_tag}#{html}#{middle}\n#{imports}\nimport Vue from 'vue'\n\nimport { mapActions, mapState, mapGetters } from 'vuex'\n#{export_statement}\tcomponents:{#{components_string}}\n#{js_and_css}"
 	# if x.includes('datum_clicked')
 		# console.log x
 	x

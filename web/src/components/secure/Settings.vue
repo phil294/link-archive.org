@@ -8,9 +8,6 @@ div
 </template>
 
 <script lang="coffee">
-import Vue from 'vue'
-import { mapActions } from 'vuex'
-
 export default Vue.extend
 	name: 'Settings'
 	methods: {

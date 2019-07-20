@@ -19,13 +19,11 @@ section#app.column.fill-h
 			button.btn if=!is_logged_in @click=show_authenticate_popup
 				| Sign in
 	main.flex-fill.column
-		p.center.error if=global_error_message $global_error_message
+		p.center.error.fade-in if=global_error_message $global_error_message
 		router-view
 </template>
 
 <script lang="coffee">
-import { mapState, mapGetters, mapActions } from 'vuex'
-
 export default
 	name: 'App'
 	computed: {
