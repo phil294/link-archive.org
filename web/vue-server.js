@@ -61,7 +61,6 @@ server.get('*', async (req, res) => {
 			url: req.url,
 		});
 	} catch (e) {
-		error(e);
 		if (e.url)
 			return res.redirect(e.url);
 		if (e.code === 404)
