@@ -10,7 +10,7 @@ class Product extends BaseEntity {
     @ObjectIdColumn()
     public _id!: ObjectID;
     @Column()
-    public type!: string; // objectid?
+    public subject!: string; // objectid?
     @Column()
     public name!: string; // required todo
     @Column()

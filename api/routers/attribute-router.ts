@@ -5,10 +5,10 @@ import Attribute from '../models/Attribute';
 const attribute_router = express.Router();
 
 attribute_router.post('/', async (req, res) => {
-    const { name, type } = req.body;
+    const { name, subject } = req.body;
     const attribute = Object.assign(new Attribute(), {
         name,
-        type,
+        subject,
         verified: false,
     });
     await attribute.save();
@@ -16,10 +16,10 @@ attribute_router.post('/', async (req, res) => {
 });
 
 attribute_router.get('/', async (req, res) => {
-    const type = req.query.t;
+    const subject = req.query.t;
     const attributes = await Attribute.find({
         where: {
-            type,
+            subject,
         },
     });
     res.send(attributes);

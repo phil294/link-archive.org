@@ -28,7 +28,7 @@ export default Vue.extend(
 	name: 'ResultView'
 	serverPrefetch: -> # note: docs say: You may find the same fetchItem() logic repeated multiple times (in serverPrefetch, mounted and watch callbacks) in each component - it is recommended to create your own abstraction (e.g. a mixin or a plugin) to simplify such code.
 		######@register_search_store()
-		######console.log(@$store.state.search.type)
+		######console.log(@$store.state.search.subject)
 		@fetch_table_data() # axios networking error handler doesnt display ssr: it modifies another component; this serverPrefetch only cares for ResultView. thus, serverPrefetch errors must (and semantically also should) be handled individually
 		# if error, bubble throw: Then dont allow the rendering process to continue. Better to see a page with no data than not seeing any page at all for the user, but status code should really be 500, especially for bots
 
@@ -49,7 +49,7 @@ export default Vue.extend(
 		...mapState 'search',
 			-	'attributes'
 		######table_data_fetched: -> @$store.state.search && @$store.state.search.attributes
-		table_data_fetched: -> !!@attributes.length # todo chage to accept  no attributes (e.g. when new type)
+		table_data_fetched: -> !!@attributes.length # todo chage to accept  no attributes (e.g. when new subject)
 	}
 	mounted: ->
 		######@register_search_store()

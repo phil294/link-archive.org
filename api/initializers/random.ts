@@ -7,7 +7,7 @@ import { error } from '../utils';
 
 error('Generating attributes');
 const attributes = [...Array(30).keys()].map(i => (Object.assign(new Attribute(), {
-    type: 'test',
+    subject: 'test',
     name: `attribute ${i}`,
     _id: new ObjectID('facebeefbadefaceaffeb0' + `${i}`.padStart(2, '0')), // tslint:disable-line
 })));
@@ -32,17 +32,17 @@ const generate_random_primary_product_data = () => attribute_ids
     await connection;
 
     error('Deleting all attributes');
-    await Attribute.delete({ type: 'test' }); // TODO: doesnt work ??
+    await Attribute.delete({ subject: 'test' }); // TODO: doesnt work ??
 
     error('Adding dummy attributes');
     await Attribute.save(attributes);
 
     error('Deleting all products');
-    await Product.find({ type: 'test' });
+    await Product.find({ subject: 'test' });
 
     error('Generating dummy products');
     const products = [...Array(100).keys()].map(i => (Object.assign(new Product(), {
-        type: 'test',
+        subject: 'test',
         name: `product ${i}`,
         data: generate_random_primary_product_data(),
         _id: new ObjectID(`${i}`.padStart(24, '0')),

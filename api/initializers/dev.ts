@@ -12,7 +12,7 @@ import { error } from '../utils';
 
     await Product.save(
         [...Array(50).keys()].map(i => (Object.assign(new Product(), {
-            type: 'test',
+            subject: 'test',
             name: `product ${i}`,
             /* data: {
                 facebeefbadefaceaffeb004: {
@@ -29,9 +29,9 @@ import { error } from '../utils';
 
     await Attribute.save(
         [...Array(30).keys()].map(i => (Object.assign(new Attribute(), {
-            type: 'test',
+            subject: 'test',
             name: `attribute ${i}`,
-            _id: new ObjectID('facebeefbadefaceaffeb0' + `${i}`.padStart(2, '0')), // tslint:disable-line
+            _id: new ObjectID('facebeefbadefaceaffeb0' + (i+'').padStart(2, '0')), // tslint:disable-line
         }))));
 
     error('Finished');

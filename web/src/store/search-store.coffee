@@ -6,7 +6,7 @@ import Vue from 'vue'
 # Search request
 
 A search request consists out of user-defined request modifiers:
-- `type`: string
+- `subject`: string
 	What to search for
 - `filters`: {} - optional
 	Attributes to filter by
@@ -57,7 +57,7 @@ export default
 		### static ###
 		#
 		### (optionally) user-defined ###
-		type: 'test'
+		subject: 'test'
 		filters: [
 		]
 		shower_ids: []
@@ -125,7 +125,7 @@ export default
 		search: ({ commit, state }) ->
 			# commit('set_shower_ids', [])
 			commit 'set_products', []
-			{ type, columns } = state
+			{ subject, columns } = state
 			shower_ids_param = state.shower_ids
 				.join ','
 			sorters_param = state.sorters
@@ -136,7 +136,7 @@ export default
 				.join ','
 			response = await axios.get 'p',
 				params:
-					t: type,
+					t: subject,
 					sh: shower_ids_param,
 					f: filters_param,
 					so: sorters_param,
@@ -170,14 +170,14 @@ export default
 			if search
 				dispatch 'search'
 		add_product: ({ commit, state }, { form_data }) ->
-			form_data.append 'type', state.type
+			form_data.append 'subject', state.subject
 			response = await axios.post 'p', form_data
 			commit 'add_product', response.data
 		save_datum: ({ commit, state }, { product, attribute_id, form_data }) ->
 			response = await axios.post "p/#{product._id}/data/#{attribute_id}", form_data
 			commit 'add_product_datum', { product, attribute_id, datum: response.data }
 		get_attributes: ({ commit, state }) ->
-			response = await axios.get 'a', { params: { t: state.type } }
+			response = await axios.get 'a', { params: { t: state.subject } }
 			commit 'set_attributes', response.data
 		add_filter: ({ commit, dispatch }, { values }) -> # todo formdata?
 			commit 'add_filter', values

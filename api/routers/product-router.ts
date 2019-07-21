@@ -12,10 +12,10 @@ import ProductDatumProposal from '../models/ProductDatumProposal';
 const product_router = express.Router();
 
 product_router.post('/', async (req, res) => {
-    const { name, type } = req.body;
+    const { name, subject } = req.body;
     const product = Object.assign(new Product(), {
         name,
-        type,
+        subject,
         verified: false,
         data: {},
     });
@@ -97,9 +97,10 @@ interface IFilter {
 type IMongoFilterArray = Array<{[key: string]: any}>;
 
 // todo types missing everywhere
+// todo probably should be using graphql
 product_router.get('/', async (req, res) => {
     /*********** parse  *********/
-    const type: string = req.query.t;
+    const subject: string = req.query.t;
     let shower_ids: string[] = req.query.sh
         .split(',').filter(Boolean);
     const sorters_param: string = req.query.so;
@@ -156,7 +157,7 @@ product_router.get('/', async (req, res) => {
         shower_ids = (await Attribute.find({
             select: ['_id'],
             where: {
-                type,
+                subject,
             },
             take: count,
             order: {
@@ -188,7 +189,7 @@ product_router.get('/', async (req, res) => {
     const products = await Product.find({
         where: {
             $and: [
-                { type },
+                { subject },
                 ...filters_formatted,
             ],
         } as any,
