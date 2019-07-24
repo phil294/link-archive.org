@@ -5,6 +5,8 @@ import Attribute from '../models/Attribute';
 import Product from '../models/Product';
 import { error } from '../utils';
 
+exit(); // todo broken; compare to random.ts, probably delete this file
+
 (async () => {
     await connection;
 

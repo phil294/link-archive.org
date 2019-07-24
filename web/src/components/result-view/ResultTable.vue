@@ -20,6 +20,7 @@ table
 						div drag="!readonly && can_drag && shower_id" @dragstart=dragging_column=true @dragend=dragging_column=false
 							span.grip if="!readonly && can_drag" ⠿
 							| $attributes_by_id[shower_id].name
+							# FIXME UNIT if number
 						div.sort.column
 							button.sort-up.disabled :disabled=readonly @click="toggle_sort_direction(shower_id, 1)" :class.highlighted=sorters_by_attribute_id[shower_id].direction===1
 								| ▲ # ˄ todo svg

@@ -3,7 +3,7 @@ div
 	promise-form :action=add_product
 		label
 			| Name
-			input name=name placeholder=Name required
+			input name=name placeholder=Name maxlength=255 minlength=3 required
 		template #button_label Add product
 </template>
 

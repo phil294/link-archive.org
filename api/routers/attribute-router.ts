@@ -5,11 +5,15 @@ import Attribute from '../models/Attribute';
 const attribute_router = express.Router();
 
 attribute_router.post('/', async (req, res) => {
-    const { name, subject } = req.body;
-    const attribute = Object.assign(new Attribute(), {
-        name,
+    const { name, description, subject, unit, type } = req.body;
+    const attribute = new Attribute({
         subject,
         verified: false,
+        interest: 0,
+        name,
+        description,
+        unit,
+        type,
     });
     await attribute.save();
     res.send(attribute);

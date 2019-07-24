@@ -1,9 +1,9 @@
 import express from 'express';
-import { NOT_FOUND, UNPROCESSABLE_ENTITY } from 'http-status-codes';
+import { INTERNAL_SERVER_ERROR, NOT_FOUND, UNPROCESSABLE_ENTITY } from 'http-status-codes';
 import { ObjectID } from 'mongodb';
 import { FindOptionsOrder } from 'typeorm';
 import admin_secured from '../admin-secured';
-import Attribute from '../models/Attribute';
+import Attribute, { AttributeType } from '../models/Attribute';
 import PrimaryProductDatum from '../models/PrimaryProductDatum';
 import Product from '../models/Product';
 import ProductDatum from '../models/ProductDatum';
@@ -13,7 +13,7 @@ const product_router = express.Router();
 
 product_router.post('/', async (req, res) => {
     const { name, subject } = req.body;
-    const product = Object.assign(new Product(), {
+    const product = new Product({
         name,
         subject,
         verified: false,
@@ -24,19 +24,18 @@ product_router.post('/', async (req, res) => {
 });
 
 product_router.delete('/:id', admin_secured, async (req, res) => {
-    return await Product.delete({
+    res.send(await Product.delete({
         _id: new ObjectID(req.params._id),
-    });
+    }));
 });
 
 /** Propose a ProductDatum */
 product_router.post('/:product_id/data/:attribute_id', async (req, res) => {
     const { product_id, attribute_id } = req.params;
-    const { value, source } = req.body;
+    const { value: input_value, source } = req.body;
     const attribute = await Attribute.findOne({ _id: new ObjectID(attribute_id) });
     if (!attribute) {
-        res.status(NOT_FOUND).send('Attribute not found');
-        return;
+        return res.status(NOT_FOUND).send('Attribute not found');
     }
     const product_obj_id = new ObjectID(product_id);
     const product = await Product.findOne({
@@ -44,28 +43,58 @@ product_router.post('/:product_id/data/:attribute_id', async (req, res) => {
         // select: [ `data.${attribute_id}` ] // todo
     });
     if (!product) {
-        res.status(NOT_FOUND).send('Product not found');
-        return;
+        return res.status(NOT_FOUND).send('Product not found');
     }
-    const datum = Object.assign(new ProductDatum(), {
-        value, // todo validation? various places. typeorm?
+
+    // value validation //////
+    let value: AttributeType = input_value;
+    if (attribute.type === 'string') {
+        if (typeof input_value !== 'string' && input_value !== null) {
+            return res.status(UNPROCESSABLE_ENTITY).send(`Wrong type: Expected 'string' or 'null', got '${typeof input_value}'!`);
+        }
+        if (!input_value.length) {
+            return res.status(UNPROCESSABLE_ENTITY).send('Missing value!');
+        }
+    } else if (attribute.type === 'boolean') {
+        if (input_value == null || input_value === 'off' || input_value === false) {
+            value = false;
+        } else {
+            value = true;
+        }
+    } else if (attribute.type === 'number') {
+        if (attribute.float) {
+            value = Number.parseFloat(input_value);
+        } else {
+            value = Number.parseInt(input_value); // tslint:disable-line radix - Generously accept dec and 0xhex
+        }
+        if (Number.isNaN(value)) {
+            return res.status(UNPROCESSABLE_ENTITY).send(`Value '${input_value}' cannot be parsed as a number!`);
+        }
+        if (attribute.min != null && value < attribute.min || attribute.max != null && value > attribute.max) {
+            return res.status(UNPROCESSABLE_ENTITY).send(`Value '${value}' is outside the allowed boundaries: min: ${attribute.min}, max: ${attribute.max}.`);
+        }
+    }
+
+    const datum = {
+        value,
         source,
         user: res.locals.user_id,
-    });
-    const datum_proposal = Object.assign(new ProductDatumProposal(), {
+    };
+    const datum_proposal = new ProductDatumProposal({ // todo shouldnt these be asking for T aka the attribute type?
         ...datum,
+        // @ts-ignore fixme adjust to objectid
         attribute: attribute._id,
+        // @ts-ignore fixme adjust to objectid
         product: product._id,
     });
-    const primary_datum = Object.assign(new PrimaryProductDatum(), {
+    const primary_datum = new PrimaryProductDatum({
         ...datum,
     });
 
     try {
         await datum_proposal.save();
     } catch (e) {
-        res.status(UNPROCESSABLE_ENTITY).send(e.message);
-        return;
+        return res.status(UNPROCESSABLE_ENTITY).send(e.message);
     }
 
     // todo same as below
@@ -82,7 +111,7 @@ product_router.post('/:product_id/data/:attribute_id', async (req, res) => {
             [`data.${attribute_id}`]: primary_datum,
         });*/
     }
-    res.send(datum_proposal);
+    return res.send(datum_proposal);
 });
 
 interface ISorter {

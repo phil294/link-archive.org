@@ -4,13 +4,21 @@ import connection from '../connection';
 import Attribute from '../models/Attribute';
 import Product from '../models/Product';
 import { error } from '../utils';
+import { attributeTypeTypes } from './../models/Attribute';
 
 error('Generating attributes');
-const attributes = [...Array(30).keys()].map(i => (Object.assign(new Attribute(), {
+const attributes = [...Array(30).keys()].map(i => new Attribute({
     subject: 'test',
     name: `attribute ${i}`,
-    _id: new ObjectID('facebeefbadefaceaffeb0' + `${i}`.padStart(2, '0')), // tslint:disable-line
-})));
+    description: 'some description...',
+    unit: 'kg',
+    type: attributeTypeTypes[Math.floor(Math.random() * attributeTypeTypes.length)],
+    min: 0,
+    max: 20.4,
+    float: Math.random() > 0.5,
+    // @ts-ignore FIXME: simply change above import to the one in attribute.ts and check if it still works
+    _id: new ObjectID('facebeefbadefaceaffeb0' + `${i}`.padStart(2, '0')),
+}));
 
 const attribute_ids = attributes.map(a => a._id.toString());
 
@@ -41,13 +49,14 @@ const generate_random_primary_product_data = () => attribute_ids
     await Product.find({ subject: 'test' });
 
     error('Generating dummy products');
-    const products = [...Array(100).keys()].map(i => (Object.assign(new Product(), {
+    const products = [...Array(100).keys()].map(i => new Product({
         subject: 'test',
         name: `product ${i}`,
         data: generate_random_primary_product_data(),
+        // @ts-ignore fixme hier auch
         _id: new ObjectID(`${i}`.padStart(24, '0')),
         verified: Math.random() > 0.1, // most are verified
-    })));
+    }));
     error('Adding dummy products');
     await Product.insert(products);
 
