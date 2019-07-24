@@ -1,5 +1,6 @@
+import { validateOrReject } from 'class-validator';
 import { INTERNAL_SERVER_ERROR, UNAUTHORIZED } from 'http-status-codes';
-import { BaseEntity, Column, Entity, ObjectID, ObjectIdColumn } from 'typeorm';
+import { BaseEntity, BeforeInsert, BeforeUpdate, Column, Entity, ObjectID, ObjectIdColumn } from 'typeorm';
 
 enum ExternalType {
     GOOGLE,
@@ -9,7 +10,7 @@ enum ExternalType {
 @Entity()
 class User extends BaseEntity {
     public static ADMIN_ID = 1;
-    public static async find_one_or_create(payload: any) {
+    public static async find_one_or_create(payload: any) { // fixme why any? this is used in user constructor
         let user_optional: User | undefined;
         // external
         if (payload.external_type && payload.external_identifier) {
@@ -28,7 +29,7 @@ class User extends BaseEntity {
         let user: User;
         if (!user_optional) {
             // this is a first valid token login. create account
-            user = Object.assign(new User(), payload);
+            user = new User(payload);
             await user.save();
         } else {
             user = user_optional;
@@ -55,6 +56,16 @@ class User extends BaseEntity {
     @Column()
     public min_iat: number = 0;
 
+    public constructor(init: Partial<User>) {
+        super();
+        Object.assign(this, init);
+    }
+
+    @BeforeInsert()
+    @BeforeUpdate()
+    public async validate() {
+        await validateOrReject(this, { validationError: { target: false } });
+    }
 }
 
 export { User, ExternalType };

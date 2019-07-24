@@ -48,7 +48,7 @@ export default Vue.extend # <- todo ?
 				await @$props.action { form_data, values, event }
 			catch e
 				await @$nextTick() # enforce transition effect even if follow-up error+
-				@error_response = e
+				@error_response = e.data || e
 				# throw e
 			finally
 				@loading = false
