@@ -1,11 +1,11 @@
 {
   "name": "api",
   "version": "1.0.0",
-  "author": "phil294 <eochgls@web.de>",
+  "author": "phil294 <philip@waritschlager.de>",
   "license": "MIT",
   "scripts": {
     "lint": "tslint",
-    "ts-node-debug": "node --inspect node_modules/.bin/ts-node --files",
+    "ts-node-debug": "node --inspect node_modules/.bin/ts-node --files --",
     "dev": "yarn ts-node-debug index.ts",
     "upgrade-all": "ncu -a && yarn install && yarn upgrade"
   },
