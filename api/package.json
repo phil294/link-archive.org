@@ -7,11 +7,11 @@
     "lint": "tslint",
     "ts-node-debug": "node --inspect node_modules/.bin/ts-node --files --",
     "dev": "yarn ts-node-debug index.ts",
-    "upgrade-all": "ncu -a && yarn install && yarn upgrade"
+    "upgrade-all": "ncu -u && yarn install && yarn upgrade"
   },
   "dependencies": {
     "@types/jwt-simple": "^0.5.33",
-    "@types/mongodb": "^3.1.19",
+    "@types/mongodb": "^3.1.30",
     "@types/node": "^12.6.8",
     "@types/nodemailer": "^6.2.1",
     "body-parser": "^1.19.0",
