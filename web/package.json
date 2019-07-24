@@ -2,7 +2,7 @@
   "name": "web",
   "version": "1.0.0",
   "description": "ls_web",
-  "author": "phil294 <eochgls@web.de>",
+  "author": "phil294 <philip@waritschlager.de>",
   "private": true,
   "scripts": {
     "dev": "NODE_ENV=development node --inspect=9228 vue-server.js",
