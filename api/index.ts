@@ -1,8 +1,9 @@
 /// <reference types="./types/express-form-data" />
 import bodyParser from 'body-parser';
+import { ValidationError } from 'class-validator';
 import express from 'express';
 import expressFormData from 'express-form-data';
-import { NO_CONTENT } from 'http-status-codes';
+import { NO_CONTENT, UNPROCESSABLE_ENTITY } from 'http-status-codes';
 import 'reflect-metadata';
 import authentication_middleware from './authentication-middleware';
 import connection from './connection';
@@ -53,7 +54,10 @@ app.use('/a', attribute_router);
 // Global error fallback handler, including promises
 app.use((err, req, res, next) => {
     error(err);
-    res.status(500).send(err && (err.status || err.errmsg));
+    if (err.length && err[0] instanceof ValidationError) { // todo is there a prettier typeorm-ish way to do this?
+        return res.status(UNPROCESSABLE_ENTITY).send(err);
+    }
+    return res.status(500).send(err && (err.status || err.errmsg));
 });
 
 (async () => {

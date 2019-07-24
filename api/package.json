@@ -17,6 +17,7 @@
     "@types/node": "^10.12.21",
     "@types/nodemailer": "^4.6.5",
     "body-parser": "^1.18.3",
+    "class-validator": "^0.9.1",
     "express": "^5.0.0-alpha.7",
     "express-form-data": "^2.0.8",
     "google-auth-library": "^3.0.",
