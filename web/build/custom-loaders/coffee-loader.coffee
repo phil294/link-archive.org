@@ -37,10 +37,13 @@ module.exports = (coffeedoc) ->
 		([\w\W]*) 					# \4: anything after
 	///m)
 		[_, before, arraybody, indent, after] = hasYamlsyntaxArray
+		console.log arraybody
 		arraybody_transformed = arraybody
-			.replace(/^\t/gm, '') # one less indent
-			.replace(/^(\t*)-/, '$1') # rm first -
-			.replace(/^(\t*)-/gm, '$1,\n$1') # change remaining - to ,
+			.replace(///^#{indent}-///, indent) # rm first -
+			.replace(///^#{indent}-///gm, "#{indent},\n#{indent}") # change the other remaining - to ,
+			.replace(/^\t/gm, '') # everything one less indent
+		console.log "afteeeeeeeer"
+		console.log "[\n#{arraybody_transformed}#{indent}]\n"
 		coffeedoc = "#{before} [\n#{arraybody_transformed}#{indent}]\n#{after}"
 
 	coffeedoc
