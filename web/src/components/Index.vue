@@ -12,9 +12,9 @@ export default Vue.extend
 		fetch_index_data: ->
 			# @$store.dispatch('index_action'),
 	computed: {
-		table_data_fetched: -> true # this needs to determined by store as actual data is disregarded from ssr->client
+		index_data_fetched: -> true # this needs to determined by store as actual data is disregarded from ssr->client
 	}
 	mounted: ->
-		if !@table_data_fetched
+		if !@index_data_fetched
 			@fetch_index_data()
 </script>

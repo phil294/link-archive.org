@@ -10,7 +10,7 @@ module.exports = merge.smartStrategy({
 })(prod_base_webpack_config, base_client_webpack_config, {
 	optimization: {
 		minimizer: [
-			new UglifyJsPlugin({
+			new UglifyJsPlugin({ // todo use terser instead? can uglify es6. why isnt es6 outputted anyway (is it?)
 				uglifyOptions: {
 					warnings: false, // verbose/true/false(default) // todo
 					mangle: {

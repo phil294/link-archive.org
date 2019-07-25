@@ -134,7 +134,7 @@ const webpack_base_config = {
 	],
 };
 
-if (false) {
+if (false) { // FIXME
 	webpack_base_config.plugins.push(new BundleAnalyzerPlugin());
 }
 
