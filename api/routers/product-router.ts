@@ -91,11 +91,7 @@ product_router.post('/:product_id/data/:attribute_id', async (req, res) => {
         ...datum,
     });
 
-    try {
-        await datum_proposal.save();
-    } catch (e) {
-        return res.status(UNPROCESSABLE_ENTITY).send(e.message);
-    }
+    await datum_proposal.save();
 
     // todo same as below
     if (!product.data) {
@@ -223,7 +219,7 @@ product_router.get('/', async (req, res) => {
             ],
         } as any,
         select: [
-            '_id', 'name', 'verified', // todo select doesnt work at all (?) https://github.com/typeorm/typeorm/pull/3756
+            '_id', 'name', 'verified', // todo select doesnt work at all (?) https://github.com/typeorm/typeorm/pull/3756 edit only if no default values in class/constructor (?)
             ...shower_ids_formatted,
         ],
         order: {

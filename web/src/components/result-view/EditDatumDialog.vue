@@ -15,7 +15,7 @@ div
 			| Active
 		label
 			| Source
-			input name=source placeholder=Source required
+			input type=url name=source placeholder=Source required
 </template>
 
 <script lang="coffee">
