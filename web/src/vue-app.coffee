@@ -18,16 +18,20 @@ export default ->
 	axios.defaults.baseURL = process.env.API_ROOT
 	axios.interceptors.request.use config =>
 		store.dispatch 'server_reachable'
-		config.headers.common.Authorization = "Bearer #{store.state.session.token}"
+		token = store.state.session.token
+		if token
+			config.headers.common.Authorization = "Bearer #{token}"
 		config
 	axios.interceptors.response.use (response => response), error =>
-		if error.response && error.response.status == 401
-			store.dispatch 'session/logout'	
-		else if error.response == undefined or error.code == 'ECONNABORTED'
-			store.dispatch 'server_unreachable'
-		formatted_error = # todo better not use axios then
+		formatted_error =
 			data: error.response && (error.response.data || error.response.statusText || '') || null
 			status: error.response && error.response.status || 0
+		if error.response && error.response.status == 401
+			store.dispatch 'session/logout'	
+			router.push '/login'
+		else if error.response == undefined or error.code == 'ECONNABORTED'
+			store.dispatch 'server_unreachable'
+			formatted_error.data = 'Cannot reach server'
 		console.error formatted_error
 		Promise.reject(formatted_error)
 

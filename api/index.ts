@@ -57,7 +57,10 @@ app.use((err, req, res, next) => {
     if (err.length && err[0] instanceof ValidationError) { // todo is there a prettier typeorm-ish way to do this?
         return res.status(UNPROCESSABLE_ENTITY).send(err);
     }
-    return res.status(500).send(err && (err.status || err.errmsg));
+    let info = 'Internal server error';
+    if (!is_production)
+        info += ': ' + err && (err.status || err.errmsg || err.message || err) || 'no error message available';
+    return res.status(500).send(info);
 });
 
 (async () => {
