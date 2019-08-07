@@ -11,8 +11,8 @@ import './directives/drop'
 Vue.config.productionTip = false
 
 export default ->
-	router = create_router()
 	store = create_store()
+	router = create_router(store)
 	sync store, router
 
 	axios.defaults.baseURL = process.env.API_ROOT

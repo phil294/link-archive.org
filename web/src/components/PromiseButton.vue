@@ -11,6 +11,7 @@ div.error.fade-in else $error
 
 ###
  * Pass an `action` to this component that will resolve to a promise. The button will wait for this promise before it resets its loading state.
+ * If there is at least one input associated to the button, use PromiseForm instead.
 ###
 export default Vue.extend
 	name: 'PromiseButton'

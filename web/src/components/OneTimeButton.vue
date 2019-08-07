@@ -10,9 +10,10 @@ button.btn :disabled=used :type=type @click=clicked
  * and fires $click-event.
  * Alternatively, call .set_loading() and .reset() manually and disable
  * automatic loading state with set_loading_automatically=false.
+ * Also see PromiseButton for coupling this button to a promising action.
 ###
 export default
-	name: 'ProgressButton'
+	name: 'ProgressButton' # todo
 	props:
 		type:
 			type: String
