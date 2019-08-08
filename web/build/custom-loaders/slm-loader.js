@@ -6,7 +6,6 @@
     slmdoc = slmdoc.replace(/# .*/g, '').replace(/(?<=\s[a-zA-Z.@%#:_-]+=)([^\s"]+)(?=\s|$)/g, '"$1"'); // [WS]%src= // Add quotes
     // my_src				<- captured
     // [WS]
-    
     // Things to replace
     replaces = [
       [/(?<=\s)if="/g,
@@ -42,10 +41,23 @@
       // "
       // after: whitespace
       ],
-      // :class.myclass="condition" to :class="{'myclass':condition}"
-      [/(?<=\s:class)\.([\w-]+)="([^"]+)"(?=\s)/g,
+      [
+        // :class.myclass="condition" to :class="{'myclass':condition}"
+        /(?<=\s:class)\.([\w-]+)="([^"]+)"(?=\s)/g,
+        '="{\'$1\':$2}"' // before:
+      // whitespace
+      // :class
+      // .myprop
+      // ="
+      // condition
+      // "
+      // after: whitespace
+      ],
+      // :style.some-prop="condition" to :style="{'some-prop':condition}" (same syntax as above but with style binding)
+      [/(?<=\s:style)\.([\w-]+)="([^"]+)"(?=\s)/g,
       '="{\'$1\':$2}"'],
       [
+        // slot
         /(?<=\s)#(.+)(?=\s)/g,
         'v-slot:$1' // this is in fact supported by vue itself natively already, but slm loader does not like it. so this one is more of a polyfill
       ]
