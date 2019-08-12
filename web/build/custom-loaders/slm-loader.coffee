@@ -61,6 +61,7 @@ module.exports = (slmdoc) ->
 		'required'
 		'disabled'
 		'draggable'
+		'contained'
 		'selected'
 		'exact'
 		'drag'
