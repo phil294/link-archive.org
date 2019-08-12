@@ -1,5 +1,4 @@
 <template lang="slm">
-div#modal.center.fade-in @keyup.esc=close tabindex=-1 ref=modal # todo use <dialog> as soon as it is supported everywhere
 	div#background.fill @click=close
 	slot
 </template>
@@ -7,10 +6,15 @@ div#modal.center.fade-in @keyup.esc=close tabindex=-1 ref=modal # todo use <dial
 <script lang="coffee">
 export default Vue.extend
 	name: 'Modal'
+	props:
+		contained:
+			type: Boolean
+			default: false
 	methods:
 		close: -> @$emit 'close'
 	mounted: ->
-		@$refs.modal.focus()
+		if not @contained
+			@$refs.modal.focus()
 </script>
 
 <style lang="stylus" scoped>
@@ -23,6 +27,9 @@ export default Vue.extend
 	z-index 999
 	box-sizing border-box
 	background rgba(0,0,0,0.08)
+	&.contained
+		position absolute
+		box-shadow inset 0 0 8px 5px white
 #background
 	position absolute
 </style>
