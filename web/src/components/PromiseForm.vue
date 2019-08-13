@@ -1,16 +1,26 @@
 <template lang="slm">
-form @submit.prevent=submit
-	fieldset :disabled=loading
-		slot
+form.column :class.no-click=loading @submit.prevent=submit
+	legend
+		slot name=legend
+	slot
+	div#actions
 		slot name=button
 			button.btn :class.right=button_float_right :disabled=loading
-				slot name=button_label
+				slot if=!loading name=button_label
 					| Submit
-		div.error.fade-in if=error_response
-			span
-				slot name=error_caption # todo make more use of
-					| Submit failed: 
-				| $error_response
+				slot else name=button_label_loading
+					| Loading...
+		button.btn if=cancelable :class.right=button_float_right :disabled=loading type=button @click=$emit('cancel')
+			slot name=cancel_button_label
+				| Cancel
+		button.btn if=resetable :class.right=button_float_right :disabled=loading type=reset # TODO: disabled when form is unchanged
+			slot name=reset_button_label
+				| Reset
+	div.error.fade-in if=error_response
+		span
+			slot name=error_caption # todo make more use of
+				| Submit failed: 
+			| $error_response
 </template>
 
 <script lang="coffee">
@@ -57,4 +67,9 @@ export default Vue.extend # <- todo ?
 <style lang="stylus" scoped>
 .right
 	float right
+button
+	margin-right 5px
+form
+	> *:not(:last-child) # todo use children-spacing here and everywhere
+		margin-bottom 1.2vh
 </style>
