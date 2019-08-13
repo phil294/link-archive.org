@@ -64,8 +64,13 @@ h1, h2, h3, h4, h5, h6 {
 //	margin: initial;
 }
 
-small, sub, sup {
-	font-size: 75%; }
+h2 {
+	font-size: 30px;
+}
+
+h3 {
+	font-size: 20px;
+}
 
 a {
 	// text-decoration: none;

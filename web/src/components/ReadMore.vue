@@ -1,6 +1,7 @@
 <template lang="slm">
 details
-	summary $summary
+	summary
+		slot name=summary
 	div#details
 		slot
 </template>
@@ -12,10 +13,6 @@ details
 ###
 export default Vue.extend
 	name: 'ReadMore'
-	props:
-		summary:
-			type: String
-			required: true
 </script>
 
 <style lang="stylus" scoped>
