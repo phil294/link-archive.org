@@ -1,37 +1,40 @@
 <template lang="slm">
-button.btn :disabled=used :type=type @click=clicked
-	slot if=!used Click me
-	slot else name=used_prompt loading...
+button.btn :disabled=loading :type=type @click=clicked
+	slot if=!loading Click me
+	slot else name=used_prompt Loading...
 </template>
 
 <script lang="coffee">
 ###
- * Button that, when clicked, replaces itself with a loading animation
- * and fires $click-event.
- * Alternatively, call .set_loading() and .reset() manually and disable
- * automatic loading state with set_loading_automatically=false.
- * Also see PromiseButton for coupling this button to a promising action.
+ * Normal button with two states, normal and loading. You can either bind :loading or
+ * pass load_on_click as an attribute.
+ * When the loading property is bound to a promise, you should probably be using
+ * promise-button or promise-form instead.
 ###
 export default
-	name: 'ProgressButton' # todo
+	name: 'LoadingButton'
 	props:
 		type:
 			type: String
-			default: 'button'
-		set_loading_automatically:
+			default: ''
+		load_on_click:
 			type: Boolean
-			default: true
+			default: false
 	data: =>
-		used: false
+		loading: false
 	methods:
-		clicked: ->
-			if @$props.set_loading_automatically
-				@used = true
+		clicked: event ->
 			@$emit 'click'
-		reset: ->
-			@used = false
-		set_used: ->
-			@used = true
+			if @$props.load_on_click
+				if @type == 'submit' or event.currentTarget.form
+					# Do not set :disabled right away because that would prevent
+					# parent form submit events from happening. $nextTick doesnt do
+					# it, timeout 1 seems to be fine.
+					# Alternative: Manual event.currentTarget.form.submit() when
+					# available, but for some reason this doesnt trigger the form
+					# handler also
+					await new Promise ok => setTimeout(ok, 1)
+				@loading = true
 </script>
 
 <style lang="stylus" scoped>
