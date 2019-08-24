@@ -1,6 +1,7 @@
 <template lang="slm">
 	div#background.fill @click=close
-	slot
+	.slot-container
+		slot
 </template>
 
 <script lang="coffee">
@@ -30,6 +31,8 @@ export default Vue.extend
 	&.contained
 		position absolute
 		box-shadow inset 0 0 8px 5px white
+	.slot-container
+		position relative // Otherwise button presses can fail due to background in foreground
 #background
 	position absolute
 </style>
