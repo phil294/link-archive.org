@@ -34,6 +34,8 @@ export default Vue.extend
 		box-shadow inset 0 0 8px 5px white
 	.slot-container
 		position relative // Otherwise button presses can fail due to background in foreground
+		max-width 100%
+		overflow auto
 #background
 	position absolute
 </style>
