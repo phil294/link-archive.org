@@ -129,7 +129,7 @@ button, input[type="submit"], input[type="reset"], input[type="button"], label
 	padding: 2px 6px;
 	text-align: center;
 	text-decoration: none;
-	white-space: nowrap;
+	// white-space: nowrap;
 	background-color: var(--color-main);
 	color: var(--color-foreground);
 	border-radius: 1px;
