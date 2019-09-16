@@ -1,5 +1,5 @@
 <template lang="slm">
-button.btn :disabled=loading :type=type @click=clicked
+button.btn :disabled="loading || disabled" :type=type @click=clicked
 	slot if=!loading Click me
 	slot else name=used_prompt Loading...
 </template>
@@ -17,6 +17,12 @@ export default
 		type:
 			type: String
 			default: ''
+		disabled:
+			type: Boolean
+			default: false
+		loading:
+			type: Boolean
+			default: false
 		load_on_click:
 			type: Boolean
 			default: false
