@@ -5,7 +5,7 @@ form.column :class.no-click=loading @submit.prevent=submit
 	slot
 	div#actions
 		slot name=button
-			loading-button :class.right=button_float_right :loading=button_loading
+			loading-button :class.right=button_float_right :loading=button_loading :disabled=nosubmit
 				slot name=button_label
 					| Submit
 				template #used_prompt
@@ -49,6 +49,9 @@ export default Vue.extend
 			type: Boolean
 			default: false
 		onetime:
+			type: Boolean
+			default: false
+		nosubmit:
 			type: Boolean
 			default: false
 	data: =>
