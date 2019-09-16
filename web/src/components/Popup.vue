@@ -15,6 +15,8 @@ export default Vue.extend
 <style lang="stylus" scoped>
 main
 	max-height 100%
+	min-width 50px
+	min-height 50px
 	overflow auto
 	box-sizing border-box
 	position relative
