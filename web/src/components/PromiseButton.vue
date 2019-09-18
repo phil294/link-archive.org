@@ -3,7 +3,7 @@ div#container
 	loading-button :loading=button_loading||disabled @click=clicked if=show_button
 		slot
 		template #used_prompt
-			slot name=success_prompt
+			slot name=success_prompt # todo pass loading as slotscope (as in promiseform)
 				span if=loading
 					slot name=loading_prompt
 						| Loading...
