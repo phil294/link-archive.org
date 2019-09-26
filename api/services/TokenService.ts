@@ -9,7 +9,7 @@ class TokenService {
     /** validates or throws */
     public async decode(token: string): Promise<any> {
         const payload: any = decode(token, this.token_secret);
-        if (!payload.email)
+        if (!payload.user || !payload.user.email)
             throw new Error('Email missing');
         return payload;
     }

@@ -15,19 +15,22 @@ export default (token_service: TokenService) =>
             }
 
             let user_optional: User | undefined;
+            if (!payload.user) {
+                throw new Error('Payload not identifiable.');
+            }
             // external
-            if (payload.external_type && payload.external_identifier) {
+            if (payload.user.external_type && payload.user.external_identifier) {
                 user_optional = await User.findOne({
-                    external_identifier: payload.external_identifier,
-                    external_type: payload.external_type,
+                    external_identifier: payload.user.external_identifier,
+                    external_type: payload.user.external_type,
                 });
             // local (email)
-            } else if (payload.email) {
+            } else if (payload.user.email) {
                 user_optional = await User.findOne({
-                    email: payload.email,
+                    email: payload.user.email,
                 });
             } else {
-                throw new Error(`${INTERNAL_SERVER_ERROR}`); // 'payload not identifiable' todo can this ever happen? would mean an invalid token generation somewhere
+                throw new Error('Payload not identifiable'); // todo can this ever happen? would mean an invalid token generation somewhere
             }
             let user: User;
             if (!user_optional) {
@@ -36,7 +39,7 @@ export default (token_service: TokenService) =>
                 await user.save();
             } else {
                 user = user_optional;
-                if (payload.iat < user.min_iat) {
+                if (payload.user.iat < user.min_iat) {
                     // min_iat had been set to disallow the given token -> All tokens had been invalidated -> Expired -> Unauthorized
                     throw new Error('The token expired');
                 }
