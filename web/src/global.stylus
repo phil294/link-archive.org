@@ -1,6 +1,123 @@
+// GLOBAL ///////////////////////// 
 
-// SAKURA /////////////////////////
+:root {
+	--color-main: #d8d8d8;
+	--color-foreground: #444;
+	--color-hover: #c4c4c4;
+	--color-disabled: #a6a6a6;
+	--color-highlighted: darkorange;
+	--color-border: var(--color-hover);
+}
 
+body, html {
+	padding: 0;
+	margin: 0;
+	width: 100%;
+	height: 100%;
+}
+form
+	input:not([type=checkbox]), label, select {
+		width: 100%;
+	}
+input[type=checkbox] + label {
+	display: inline;
+}
+a {
+	cursor: pointer;
+}
+fieldset {
+	border: 2px solid #eeeeee; // TODO: breaks .box in login, also has border or shadow or both
+}
+details > summary {
+	cursor: pointer;
+}
+[draggable=true] {
+	cursor: move;
+}
+
+// CLASSES /////////////////////////
+
+.padding
+	padding: 0.5vw
+.padding-l
+	padding: 1vw
+.padding-xl
+	padding: 3vw
+.margin
+	margin: 0.5vw
+.margin-l
+	margin: 1vw
+.margin-xl
+	margin: 3vw
+.note
+	font-size:80%
+	opacity:0.8
+@keyframes fadein
+	from {opacity: 0}
+	to {opacity: 1}
+// works with v-if etc.
+.fade-in
+	animation: fadein 0.5s
+.fade-toggle
+	transition: opacity 0.5s
+// does not work with v-if, keeps size, but enables fade out animation. use like: ... class=fade-toggle :class.hidden=_var_
+.fade-toggle.hidden
+	opacity: 0
+.disabled // todo rename inactive or similar & use disabled attribute instead where appropriate
+	color: var(--color-disabled)
+.highlighted
+	color: var(--color-highlighted)
+.error, .danger
+	color: darkred // css4 @apply fade-in
+.small // todo html small instead
+	font-size: 80%
+.flex-base
+	display: flex
+	min-height: 0
+	min-width: 0
+.flex // todo this is kinda stupid
+	@extend .flex-base
+	@media screen and (max-width: 600px) {
+		flex-direction: column
+	}
+.flex-fill
+	flex: 1
+.column
+	@extend .flex-base
+	flex-direction: column
+.row
+	@extend .flex-base
+	flex-direction: row
+.justify-center
+	@extend .flex-base
+	justify-content: center
+.align-center
+	@extend .flex-base
+	align-items: center
+.center
+	@extend .justify-center, .align-center
+.fill-w
+	width: 100%
+.fill-h
+	height: 100%
+.fill
+	@extend .fill-w, .fill-h
+.box
+	// box-shadow: 1px 2px 7px 1px #eee
+	box-shadow: 1px 1px 1px 1px #ddd
+	// border: 1px solid #ddd
+	background: rgba(255,255,255,0.88)
+
+.no-click button
+	pointer-events none
+
+.force-hidden
+	display none !important
+
+
+// The below code is partly adopted from the Sakura CSS style/reset
+// This will be redone and limited to what is only actually needed, probably
+// eliminating any 3rd party fragments. For the moment, here's the licence:
 /* Sakura.css v1.0.0
  * ================
  * Minimal css theme.
@@ -29,15 +146,6 @@
  */
 
 // @import 'https://fonts.googleapis.com/css?family=Fira+Mono|Noto+Serif|Noto+Sans:300,400,500';
-
-:root {
-	--color-main: #d8d8d8;
-	--color-foreground: #444;
-	--color-hover: #c4c4c4;
-	--color-disabled: #a6a6a6;
-	--color-highlighted: darkorange;
-	--color-border: var(--color-hover);
-}
 
 /* Body */
 html {
@@ -162,111 +270,3 @@ legend, label {
 }
 legend {
 	font-weight: 600; }
-
-
-// GLOBAL ///////////////////////// 
-
-body, html {
-	padding: 0;
-	margin: 0;
-	width: 100%;
-	height: 100%;
-}
-form
-	input:not([type=checkbox]), label, select {
-		width: 100%;
-	}
-input[type=checkbox] + label {
-	display: inline;
-}
-a {
-	cursor: pointer;
-}
-fieldset {
-	border: 2px solid #eeeeee; // TODO: breaks .box in login, also has border or shadow or both
-}
-details > summary {
-	cursor: pointer;
-}
-[draggable=true] {
-	cursor: move;
-}
-
-// CLASSES /////////////////////////
-
-.padding
-	padding: 0.5vw
-.padding-l
-	padding: 1vw
-.padding-xl
-	padding: 3vw
-.margin
-	margin: 0.5vw
-.margin-l
-	margin: 1vw
-.margin-xl
-	margin: 3vw
-.note
-	font-size:80%
-	opacity:0.8
-@keyframes fadein
-	from {opacity: 0}
-	to {opacity: 1}
-// works with v-if etc.
-.fade-in
-	animation: fadein 0.5s
-.fade-toggle
-	transition: opacity 0.5s
-// does not work with v-if, keeps size, but enables fade out animation. use like: ... class=fade-toggle :class.hidden=_var_
-.fade-toggle.hidden
-	opacity: 0
-.disabled // todo rename inactive or similar & use disabled attribute instead where appropriate
-	color: var(--color-disabled)
-.highlighted
-	color: var(--color-highlighted)
-.error, .danger
-	color: darkred // css4 @apply fade-in
-.small // todo html small instead
-	font-size: 80%
-.flex-base
-	display: flex
-	min-height: 0
-	min-width: 0
-.flex // todo this is kinda stupid
-	@extend .flex-base
-	@media screen and (max-width: 600px) {
-		flex-direction: column
-	}
-.flex-fill
-	flex: 1
-.column
-	@extend .flex-base
-	flex-direction: column
-.row
-	@extend .flex-base
-	flex-direction: row
-.justify-center
-	@extend .flex-base
-	justify-content: center
-.align-center
-	@extend .flex-base
-	align-items: center
-.center
-	@extend .justify-center, .align-center
-.fill-w
-	width: 100%
-.fill-h
-	height: 100%
-.fill
-	@extend .fill-w, .fill-h
-.box
-	// box-shadow: 1px 2px 7px 1px #eee
-	box-shadow: 1px 1px 1px 1px #ddd
-	// border: 1px solid #ddd
-	background: rgba(255,255,255,0.88)
-
-.no-click button
-	pointer-events none
-
-.force-hidden
-	display none !important
