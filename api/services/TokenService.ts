@@ -1,4 +1,5 @@
 import { decode, encode } from 'jwt-simple';
+import { User } from '../models/User';
 
 class TokenService {
     private token_secret: string;
