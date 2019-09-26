@@ -22,6 +22,7 @@ section#app.column.fill-h
 	main.flex-fill.column
 		p.center.error.fade-in if=global_error_message $global_error_message
 		router-view
+		strong.warn.force-hidden Your browser is not working properly (CSS disabled)
 </template>
 
 <script lang="coffee">

@@ -64,8 +64,13 @@ h1, h2, h3, h4, h5, h6 {
 //	margin: initial;
 }
 
-small, sub, sup {
-	font-size: 75%; }
+h2 {
+	font-size: 30px;
+}
+
+h3 {
+	font-size: 20px;
+}
 
 a {
 	// text-decoration: none;
@@ -124,7 +129,7 @@ button, input[type="submit"], input[type="reset"], input[type="button"], label
 	padding: 2px 6px;
 	text-align: center;
 	text-decoration: none;
-	white-space: nowrap;
+	// white-space: nowrap;
 	background-color: var(--color-main);
 	color: var(--color-foreground);
 	border-radius: 1px;
@@ -215,7 +220,7 @@ details > summary {
 // does not work with v-if, keeps size, but enables fade out animation. use like: ... class=fade-toggle :class.hidden=_var_
 .fade-toggle.hidden
 	opacity: 0
-.disabled // todo rename inactive or similar
+.disabled // todo rename inactive or similar & use disabled attribute instead where appropriate
 	color: var(--color-disabled)
 .highlighted
 	color: var(--color-highlighted)
@@ -259,3 +264,9 @@ details > summary {
 	box-shadow: 1px 1px 1px 1px #ddd
 	// border: 1px solid #ddd
 	background: rgba(255,255,255,0.88)
+
+.no-click button
+	pointer-events none
+
+.force-hidden
+	display none !important

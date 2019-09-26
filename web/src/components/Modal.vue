@@ -1,16 +1,22 @@
 <template lang="slm">
-div#modal.center.fade-in @keyup.esc=close tabindex=-1 ref=modal # todo use <dialog> as soon as it is supported everywhere
+div#modal.center.fade-in :class.contained=contained @keyup.esc=close :tabindex="!contained?-1:null" ref=modal
 	div#background.fill @click=close
-	slot
+	.slot-container
+		slot
 </template>
 
 <script lang="coffee">
 export default Vue.extend
 	name: 'Modal'
+	props:
+		contained:
+			type: Boolean
+			default: false
 	methods:
 		close: -> @$emit 'close'
 	mounted: ->
-		@$refs.modal.focus()
+		if not @contained
+			@$refs.modal.focus()
 </script>
 
 <style lang="stylus" scoped>
@@ -23,6 +29,13 @@ export default Vue.extend
 	z-index 999
 	box-sizing border-box
 	background rgba(0,0,0,0.08)
+	&.contained
+		position absolute
+		box-shadow inset 0 0 8px 5px white
+	.slot-container
+		position relative // Otherwise button presses can fail due to background in foreground
+		max-width 100%
+		overflow auto
 #background
 	position absolute
 </style>

@@ -17,7 +17,7 @@ module.exports = (coffeedoc) ->
 			([\w$@]+)		# $my_paramName@123
 			(?=
 				\ 			# space
-				(-|=>)		# "->" or "=>"
+				(->|=>)		# "->" or "=>"
 			)
 		///g, '($1)')
 

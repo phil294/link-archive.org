@@ -1,16 +1,28 @@
 <template lang="slm">
-form @submit.prevent=submit
-	fieldset :disabled=loading
-		slot
-		slot name=button
-			button.btn :class.right=button_float_right :disabled=loading
+form.column :class.no-click=loading @submit.prevent=submit
+	legend
+		slot name=legend
+	slot
+	div#actions
+		slot name=button # todo pass loading as slotscope prop to parent
+			loading-button :class.right=button_float_right :loading=button_loading :disabled=nosubmit
 				slot name=button_label
 					| Submit
-		div.error.fade-in if=error_response
-			span
-				slot name=error_caption # todo make more use of
-					| Submit failed: 
-				| $error_response
+				template #used_prompt
+					slot name=button_label_loading
+						span if=loading Loading...
+						span else Done!
+		button.btn if=cancelable :class.right=button_float_right :disabled=loading type=button @click=$emit('cancel')
+			slot name=cancel_button_label
+				| Cancel
+		button.btn if=resetable :class.right=button_float_right :disabled=loading type=reset # TODO: disabled when form is unchanged
+			slot name=reset_button_label
+				| Reset
+	div.error.fade-in if=error_response
+		span
+			slot name=error_caption
+				| Submit failed: 
+			| $error_response
 </template>
 
 <script lang="coffee">
@@ -20,7 +32,7 @@ form @submit.prevent=submit
  * Component fires $submit event and calls `action` prop just
  * like `promise-button` (?)+
 ###
-export default Vue.extend # <- todo ?
+export default Vue.extend
 	name: 'PromiseForm'
 	props:
 		button_float_right:
@@ -30,13 +42,27 @@ export default Vue.extend # <- todo ?
 		action:
 			type: Function
 			required: true
+		cancelable:
+			type: Boolean
+			default: false
+		resetable:
+			type: Boolean
+			default: false
+		onetime:
+			type: Boolean
+			default: false
+		nosubmit:
+			type: Boolean
+			default: false
 	data: =>
 		error_response: ''
 		loading: false
+		button_loading: false
 	methods:
 		submit: event ->
 			@error_response = ''
 			@loading = true
+			@button_loading = true
 			@$emit 'submit', event
 			form_data = new FormData event.target
 			values = [...form_data.entries()]
@@ -46,6 +72,8 @@ export default Vue.extend # <- todo ?
 				, {})
 			try
 				await @$props.action { form_data, values, event }
+				if not @onetime
+					@button_loading = false
 			catch e
 				await @$nextTick() # enforce transition effect even if follow-up error+
 				error = e.data || e
@@ -60,4 +88,9 @@ export default Vue.extend # <- todo ?
 <style lang="stylus" scoped>
 .right
 	float right
+button
+	margin-right 5px
+form
+	> *:not(:last-child)
+		margin-bottom 1.2vh
 </style>

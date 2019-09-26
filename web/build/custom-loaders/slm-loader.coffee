@@ -50,7 +50,7 @@ module.exports = (slmdoc) ->
 			(?=\s)		# after: whitespace
 		///g, '="{\'$1\':$2}"']
 		# slot
-		[/(?<=\s)#(.+)(?=\s)/g, 'v-slot:$1'] # this is in fact supported by vue itself natively already, but slm loader does not like it. so this one is more of a polyfill
+		[/(?<=\S[\t ]+)#(.+)(?=\s)/g, 'v-slot:$1'] # this is in fact supported by vue itself natively already, but slm loader does not like it. so this one is more of a polyfill
 	]
 	for rule from replaces
 		slmdoc = slmdoc.replace(rule[0], rule[1])
@@ -61,6 +61,8 @@ module.exports = (slmdoc) ->
 		'required'
 		'disabled'
 		'draggable'
+		'contained'
+		'onetime'
 		'selected'
 		'exact'
 		'drag'
