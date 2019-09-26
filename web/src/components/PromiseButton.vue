@@ -29,7 +29,7 @@ export default Vue.extend
 			required: true
 		onetime:
 			type: Boolean
-			default: true
+			default: false
 		disabled:
 			type: Boolean
 			default: false

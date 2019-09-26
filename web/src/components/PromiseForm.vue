@@ -80,7 +80,7 @@ export default Vue.extend
 				if error.length
 					error = error[0]
 				@error_response = error
-				# throw e
+				throw e
 			finally
 				@loading = false
 </script>
