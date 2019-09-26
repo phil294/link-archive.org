@@ -16,7 +16,7 @@ export default
 			state.session = session
 	actions:
 		# validate token and set token & session. throws # todo rename this to set_token or set_session or similar
-		login_with_token: ({ commit }, token) ->
+		login_with_token: ({ commit }, token) -> # todo rename to set_token?
 			try
 				payload = JSON.parse(window.atob(token.trim().split('.')[1].replace('-', '+').replace('_', '/')))
 			catch
