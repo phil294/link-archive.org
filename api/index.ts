@@ -58,8 +58,8 @@ app.use((err, req, res, next) => {
         return res.status(UNPROCESSABLE_ENTITY).send(err);
     }
     let info = 'Internal server error';
-    if (!is_production)
-        info += ': ' + err && (err.status || err.errmsg || err.message || err) || 'no error message available';
+    // if (!is_production) // TODO revert
+    info += ': ' + err && (err.status || err.errmsg || err.message || err) || 'no error message available';
     return res.status(500).send(info);
 });
 
