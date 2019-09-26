@@ -124,7 +124,7 @@ tr
 	background #fff
 tbody
 	tr:nth-child(odd)
-		background #f5f5f5
+		background #f8f8f8
 td, th
 	max-width 150px
 td, th, .attribute
