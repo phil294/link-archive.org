@@ -1,23 +1,21 @@
 <template lang="slm">
-	div.flex-fill.column
+	div.flex-fill.column.padding-l
 
 		div#readonly-mode
 			label
 				| Readonly mode
 				input type=checkbox model=readonly
 
-		div#result-table-container
+		div#result-table-container.flex-fill
 			result-view/result-table#result-table if=table_data_fetched @datum_clicked=datum_clicked($event) :readonly=readonly
 			p.disabled.center else Loading...
 
 		popup if=editing @close=editing=null # maybe use linus borgs portal instead?
 			result-view/edit-datum-dialog :product=editing.product :attribute_id=editing.attribute_id
 
-		div if=!readonly
-			button if=!show_add_product_dialog @click=show_add_product_dialog=true # todo add toggle component
-				| +
-			button else @click=show_add_product_dialog=false
-				| -
+		div.center.margin-l if=!readonly
+			button.btn @click=show_add_product_dialog=true # todo add toggle component
+				| + Add
 			result-view/add-product-dialog if=show_add_product_dialog
 </template>
 
