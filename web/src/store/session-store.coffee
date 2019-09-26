@@ -21,7 +21,7 @@ export default
 				payload = JSON.parse(window.atob(token.trim().split('.')[1].replace('-', '+').replace('_', '/')))
 			catch
 				throw new Error 'Malformed token'
-			session = payload
+			session = payload.user
 			if !session.email && !session.external_type
 				throw new Error 'Invalid token: no email and no external_type'
 			commit 'set_token', token
