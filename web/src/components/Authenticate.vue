@@ -9,7 +9,8 @@ div
 					label
 						| Email
 						input model=email type=email name=email placeholder=email@example.com required
-					read-more.note summary="(Why no password?)"
+					read-more.note
+						template #summary (Why no password?)
 						p
 							| You can simply login by requesting a login link via mail. If you are afraid someone else might have gained access to the login link, you can invalidate all current ones in the user settings.
 						p
