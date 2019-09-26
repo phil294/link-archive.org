@@ -30,6 +30,7 @@ export default Vue.extend
 			catch e # fixme network error etc
 				if e.status == 401
 					throw new Error('The token was not accepted. It probably expired. This was probably issued by the user itself. Please request a new login link above.')
+				throw e
 </script>
 
 <style lang="stylus" scoped>
