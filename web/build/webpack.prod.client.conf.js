@@ -1,6 +1,6 @@
 const merge = require('webpack-merge');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const base_client_webpack_config = require('./webpack.base.client.conf');
 const prod_base_webpack_config = require('./webpack.prod.base.conf');
@@ -9,20 +9,20 @@ module.exports = merge.smartStrategy({
 	'module.rules.use': 'prepend',
 })(prod_base_webpack_config, base_client_webpack_config, {
 	optimization: {
+		minimize: true,
 		minimizer: [
-			new UglifyJsPlugin({ // todo use terser instead? can uglify es6. why isnt es6 outputted anyway (is it?)
-				uglifyOptions: {
-					warnings: false, // verbose/true/false(default) // todo
-					mangle: {
-						toplevel: true,
-					},
-					toplevel: true, // drops unused ariables and functions? todo
-					// more: todo
+			new TerserPlugin({ // todo is es6 correctly outputted?
+				terserOptions: {
+					ecma: 6,
+					compress: true,
+					output: {
+						comments: false,
+						beautify: false
+					}
 				},
 				sourceMap: true,
 				parallel: true,
 				cache: true,
-				// extractComments: 'all', // todo
 			}),
 			new OptimizeCSSAssetsPlugin(),
 		],
