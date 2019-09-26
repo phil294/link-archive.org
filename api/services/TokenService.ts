@@ -12,10 +12,10 @@ class TokenService {
         return User.find_one_or_create(payload);
     }
     /** create a never-expering token. no validity checks here for custom_data. todo? */
-    public create(custom_data: any): string {
+    public create(user_data: Partial<User>): string { // TODO: type is User plus iat plus..?
         const payload = {
             iat: Date.now() / 1000,
-            ...custom_data,
+            user: user_data,
         };
         return encode(payload, this.token_secret);
     }
