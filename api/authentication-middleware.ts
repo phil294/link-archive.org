@@ -13,7 +13,7 @@ export default (token_service: TokenService) =>
             } catch (error) {
                 return res.status(UNAUTHORIZED).send(error);
             }
-            const user = await User.findOne({ email: payload.email });
+            const user = await User.findOne({ email: payload.email }); // todo merge from ls here
             if (!user)
                 return res.status(UNAUTHORIZED).send('User not found');
             if (payload.iat < user.min_iat)

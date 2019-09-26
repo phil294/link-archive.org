@@ -76,7 +76,7 @@ export default Vue.extend
 					@button_loading = false
 			catch e
 				await @$nextTick() # enforce transition effect even if follow-up error+
-				@error_response = e.data || e
+				@error_response = e.data || e # todo  merge from ls here
 				throw e
 			finally
 				@loading = false
