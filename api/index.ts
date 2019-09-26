@@ -54,7 +54,7 @@ app.use('/a', attribute_router);
 // Global error fallback handler, including promises
 app.use((err, req, res, next) => {
     error(err);
-    if (err.length && err[0] instanceof ValidationError) { // todo is there a prettier typeorm-ish way to do this?
+    if (err.length && (err[0] instanceof ValidationError || err[0].constraints)) { // TODO: class-validator whitelisting errors arent instanceof ValidationError. Probably a bug?
         return res.status(UNPROCESSABLE_ENTITY).send(err);
     }
     let info = 'Internal server error';
