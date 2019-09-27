@@ -18,9 +18,6 @@ export default store ->
 				component: => `import('@/components/secure/Settings')`
 				meta:
 					requires_auth: true
-			-	path: '/p'
-				name: 'ResultView'
-				component: => `import('@/components/ResultView')`
 			-	path: '*'
 				redirect: '/'
 			# corresponding store modules can also be lazyloaded. see ssr vuejs docs
