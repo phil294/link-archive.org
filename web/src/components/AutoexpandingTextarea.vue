@@ -1,5 +1,5 @@
 <template lang="slm">
-textarea rows=1 :maxlength=maxlength :required=required :value=value @input=on_input ref=ref :style.height=height
+textarea :name=name rows=1 :maxlength=maxlength :required=required :placeholder=placeholder :value=model @input=on_input @focus=on_focus @blur=on_blur ref=ref :style.height=height
 </template>
 
 <script lang="coffee">
@@ -15,18 +15,39 @@ export default
 		required:
 			type: Boolean
 			default: false
-	data: ->
-		height: 0
+		placeholder:
+			type: String
+			default: ''
+		name:
+			type: String
 	mounted: ->
-		@autoadjust_height()
+		await @update_content_height()
+		await @on_blur()
+	data: ->
+		### model and thus, textarea value, take their value either from
+		dynamically changing @$props.value or from user input directly. ###
+		model: @$props.value
+		height: 'inherit'
+		content_height: 0
 	methods:
 		on_input: event ->
-			@$emit 'input', event.target.value
-			@autoadjust_height()
-		autoadjust_height: ->
+			new_value = event.target.value
+			@model = new_value
+			@$emit 'input', new_value
+			@update_content_height()
+		on_focus: ->
+			@height = @content_height
+		on_blur: ->
+			@content_height = @height
+			await @$nextTick()
+			@height = 'inherit'
+		update_content_height: ->
 			@height = ''
 			await @$nextTick()
 			@height = @$refs.ref.scrollHeight + 'px'
+	watch:
+		value: new_value ->
+			@model = new_value
 </script>
 
 <style lang="stylus" scoped>
