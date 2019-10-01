@@ -2,7 +2,7 @@
 details
 	summary
 		slot name=summary
-	div#details
+	div#details.fade-in
 		slot
 </template>
 
