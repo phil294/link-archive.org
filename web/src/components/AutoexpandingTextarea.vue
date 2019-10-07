@@ -1,40 +1,25 @@
 <template lang="slm">
-textarea :name=name rows=1 :maxlength=maxlength :required=required :placeholder=placeholder :value=model @input=on_input @focus=on_focus @blur=on_blur ref=ref :style.height=height
+textarea :name=name rows=1 :maxlength=maxlength :required=required :placeholder=placeholder model=model @focus=on_focus @blur=on_blur ref=ref :style.height=height
 </template>
 
 <script lang="coffee">
+import emitting_model from '@/mixins/EmittingModel'
 export default
 	name: 'AutoexpandingTextarea'
+	mixins: [ emitting_model ]
 	props:
-		### enable v-model ###
-		value:
-			type: String
-			default: ''
 		maxlength:
 			default: null
-		required:
-			type: Boolean
-			default: false
 		placeholder:
 			type: String
 			default: ''
-		name:
-			type: String
 	mounted: ->
 		await @update_content_height()
 		await @on_blur()
 	data: ->
-		### model and thus, textarea value, take their value either from
-		dynamically changing @$props.value or from user input directly. ###
-		model: @$props.value
 		height: 'inherit'
 		content_height: 0
 	methods:
-		on_input: event ->
-			new_value = event.target.value
-			@model = new_value
-			@$emit 'input', new_value
-			@update_content_height()
 		on_focus: ->
 			@height = @content_height
 		on_blur: ->
@@ -46,8 +31,8 @@ export default
 			await @$nextTick()
 			@height = @$refs.ref.scrollHeight + 'px'
 	watch:
-		value: new_value ->
-			@model = new_value
+		model: ->
+			@update_content_height()
 </script>
 
 <style lang="stylus" scoped>
