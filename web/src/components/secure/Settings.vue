@@ -1,7 +1,7 @@
 <template lang="slm">
 div
-	h1 Settings
-	promise-button :action=invalidate_all_tokens :reset_after_success=false
+	h2 Settings
+	promise-button.btn :action=invalidate_all_tokens
 		| Log out everywhere
 	small
 		read-more

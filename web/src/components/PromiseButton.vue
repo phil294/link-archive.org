@@ -1,16 +1,17 @@
 <template lang="slm">
-div#container
-	loading-button :loading=button_loading||disabled @click=clicked if=show_button
-		slot
-		template #used_prompt
-			slot name=success_prompt # todo pass loading as slotscope (as in promiseform)
-				span if=loading
-					slot name=loading_prompt
-						| Loading...
-				span else
-					slot name=done_prompt
-						| Done!
-	div.error.fade-in if=error $error
+loading-button :loading=button_loading||disabled @click=clicked
+	slot
+	template #used_prompt
+		slot name=success_prompt if=!error # todo pass loading as slotscope (as in promiseform)
+			span if=loading
+				slot name=loading_prompt
+					| Loading...
+			span else
+				slot name=done_prompt
+					| Done!
+		slot name=error_prompt else :error=error
+			| UNEXPECTED ERROR: 
+			span.warn $error
 </template>
 
 <script lang="coffee">
@@ -18,6 +19,8 @@ div#container
 ###
  * Pass an `action` to this component that will resolve to a promise. The button will wait for this promise before it resets its loading state.
  * If there is at least one input associated to the button, use PromiseForm instead.
+ * Shows error if anything fails, but is *not* supposed to be an error handling
+ * component. If desired, PromiseForm instead.
 ###
 export default Vue.extend
 	name: 'PromiseButton'
@@ -49,19 +52,18 @@ export default Vue.extend
 					action_response = @$props.action()
 					# if not action_response typeof Promise
 					# 	throw 'PromiseForm action response is not typeof Promise!'
-					# ^ there is no reason to accept non-promises here
+					# ^ there is no reason not to accept non-promises here
 					# as promise-button also serves the purpose of displaying
 					# errors
 					await action_response
+				if not @$props.onetime
+					@button_loading = false
+				# if the action fails, do not reenable the button. show error and become stale.
 			catch e
 				@error = e
 				throw e
 			finally
 				@loading = false
-				if ! @$props.onetime
-					@button_loading = false
-	computed:
-		show_button: -> ! @onetime or ! @error
 </script>
 
 <style lang="stylus" scoped>

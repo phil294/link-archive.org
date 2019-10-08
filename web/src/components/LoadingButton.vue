@@ -1,5 +1,5 @@
 <template lang="slm">
-button.btn :disabled="loading || disabled" :type=type @click=clicked
+button :disabled="loading || disabled" :type=type @click=clicked
 	slot if=!loading Click me
 	slot else name=used_prompt Loading...
 </template>
