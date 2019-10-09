@@ -16,8 +16,10 @@ export default Vue.extend
 </script>
 
 <style lang="stylus" scoped>
-details
-	padding 8px
+#details
+	margin-top 4px
 #details > *
 	padding-left 2vw
+summary
+	white-space nowrap
 </style>
