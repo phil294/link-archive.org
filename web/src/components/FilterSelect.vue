@@ -1,6 +1,6 @@
 <template lang="slm">
-.row.align-center.children-spacing-l
-	select :name=name :required=required model=model
+.filter-select.row.align-center.children-spacing-l
+	select.flex-fill :name=name :required=required model=model
 		option each=filtered_option :value=filtered_option.value
 			| $filtered_option.name
 	input.filter type=text placeholder="Quick search..." model=filter
@@ -26,7 +26,8 @@ export default Vue.extend
 	methods:
 		check_model: ->
 			if not @model or not @filtered_options.map((o)=>o.value).includes @model
-				@model = @filtered_options[0]?.value
+				# do not use @model as it might result in an endless loop, freezing the site to death
+				@internal_value = @filtered_options[0]?.value
 	computed:
 		filtered_options: ->
 			@$props.options.filter option =>
@@ -40,4 +41,8 @@ export default Vue.extend
 @media only screen and (max-width: 767px)
 	input.filter
 		display none
+select, input.filter
+	width unset
+.filter-select
+	width 100%
 </style>
