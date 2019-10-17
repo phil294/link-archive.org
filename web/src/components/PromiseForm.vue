@@ -3,7 +3,7 @@ form.column :class.no-click=loading @submit.prevent=submit
 	legend
 		slot name=legend
 	slot
-	div#actions
+	#actions.row.align-center
 		slot name=button # todo pass loading as slotscope prop to parent
 			loading-button.btn :class.right=button_float_right :loading=button_loading :disabled=nosubmit
 				slot name=button_label
