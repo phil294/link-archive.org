@@ -35,6 +35,7 @@ export default Vue.extend
 	.slot-container
 		position relative // Otherwise button presses can fail due to background in foreground
 		max-width 100%
+		max-height 100%
 		overflow auto
 #background
 	position absolute
