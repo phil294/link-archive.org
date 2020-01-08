@@ -4,23 +4,21 @@ form.column :class.no-click=loading @submit.prevent=submit
 		slot name=legend
 	slot
 	#actions.row.align-center
-		/ todo pass loading as slotscope prop to parent
-		slot name=button
+		slot name=button # todo pass loading as slotscope prop to parent
 			loading-button.btn :class.right=button_float_right :loading=button_loading :disabled=nosubmit
 				slot name=button_label
 					| Submit
-				template #used_prompt=""
+				template #used_prompt
 					slot name=button_label_loading
-						span v-if=loading Loading...
-						span v-else="" Done!
-		button.btn v-if=cancelable :class.right=button_float_right :disabled=loading type=button @click=$emit('cancel')
+						span if=loading Loading...
+						span else Done!
+		button.btn.btn-2.cancel if=cancelable :class.right=button_float_right :disabled=loading type=button @click=$emit('cancel')
 			slot name=cancel_button_label
 				| Cancel
-		/ TODO: disabled="" when form is unchanged
-		button.btn v-if=resetable :class.right=button_float_right :disabled=loading type=reset
+		button.btn if=resetable :class.right=button_float_right :disabled=loading type=reset # TODO: disabled when form is unchanged
 			slot name=reset_button_label
 				| Reset
-	div.error.fade-in v-if=error_response
+	div.error.fade-in if=error_response
 		span
 			slot name=error_caption
 				| Submit failed: 
@@ -61,7 +59,7 @@ export default Vue.extend
 		loading: false
 		button_loading: false
 	methods:
-		submit: (event) ->
+		submit: event ->
 			@error_response = ''
 			@loading = true
 			@button_loading = true
@@ -78,10 +76,8 @@ export default Vue.extend
 					@button_loading = false
 			catch e
 				await @$nextTick() # enforce transition effect even if follow-up error+
-				error = e.data || e
-				if error.length
-					error = error[0]
-				@error_response = error
+				@error_response = e.data || e
+				@button_loading = false
 				throw e
 			finally
 				@loading = false
@@ -92,7 +88,7 @@ export default Vue.extend
 	float right
 button
 	margin-right 5px
-form
-	> *:not(:last-child)
+form:not(.row)
+	> *:not(:last-child):not(:first-child)
 		margin-bottom 1.2vh
 </style>

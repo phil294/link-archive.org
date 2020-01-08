@@ -26,8 +26,6 @@ export default
 		load_on_click:
 			type: Boolean
 			default: false
-	data: =>
-		loading: false
 	methods:
 		clicked: (event) ->
 			@$emit 'click'
