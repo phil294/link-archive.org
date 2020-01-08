@@ -7,9 +7,7 @@ import { NO_CONTENT, UNPROCESSABLE_ENTITY } from 'http-status-codes';
 import 'reflect-metadata';
 import authentication_middleware from './authentication-middleware';
 import connection from './connection';
-import attribute_router from './routers/attribute-router';
 import authentication_router from './routers/authentication-router';
-import product_router from './routers/product-router';
 import user_router from './routers/user-router';
 import MailService from './services/MailService';
 import TokenService from './services/TokenService';
@@ -47,8 +45,6 @@ app.use('/authentication', authentication_router(
     env('WEB_ROOT'), env('GOOGLE_CLIENT_ID'), env('FACEBOOK_APP_ID'), env('FACEBOOK_APP_SECRET'), env('WEBSITE_NAME'),
 ));
 app.use('/user', user_router);
-app.use('/p', product_router);
-app.use('/a', attribute_router);
 
 // @ts-ignore
 // Global error fallback handler, including promises
