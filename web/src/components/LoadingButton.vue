@@ -1,7 +1,7 @@
 <template lang="slm">
 button :disabled="loading || disabled" :type=type @click=clicked
-	slot if=!loading Click me
-	slot else name=used_prompt Loading...
+	slot v-if=!loading Click me
+	slot v-else="" name=used_prompt Loading...
 </template>
 
 <script lang="coffee">
@@ -29,7 +29,7 @@ export default
 	data: =>
 		loading: false
 	methods:
-		clicked: event ->
+		clicked: (event) ->
 			@$emit 'click'
 			if @$props.load_on_click
 				if @type == 'submit' or event.currentTarget.form
@@ -39,7 +39,7 @@ export default
 					# Alternative: Manual event.currentTarget.form.submit() when
 					# available, but for some reason this doesnt trigger the form
 					# handler also
-					await new Promise ok => setTimeout(ok, 1)
+					await new Promise (ok) => setTimeout(ok, 1)
 				@loading = true
 </script>
 

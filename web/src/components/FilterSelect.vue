@@ -1,9 +1,9 @@
 <template lang="slm">
 .filter-select.row.align-center.children-spacing-l
-	select.flex-fill :name=name :required=required model=model
-		option each=filtered_option :value=filtered_option.value
+	select.flex-fill :name=name :required=required v-model=model
+		option v-for="filtered_option in filtered_options" :value=filtered_option.value
 			| $filtered_option.name
-	input.filter type=text placeholder="Quick search..." model=filter
+	input.filter type=text placeholder="Quick search..." v-model=filter
 </template>
 
 <script lang="coffee">
@@ -30,7 +30,7 @@ export default Vue.extend
 				@internal_value = @filtered_options[0]?.value
 	computed:
 		filtered_options: ->
-			@$props.options.filter option =>
+			@$props.options.filter (option) =>
 				option.name.includes @filter
 	watch:
 		filtered_options: ->

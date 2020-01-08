@@ -1,9 +1,8 @@
-import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 Vue.use VueRouter
 
-export default store ->
+export default (store) ->
 	router = new VueRouter
 		mode: 'history'
 		routes:
@@ -22,7 +21,7 @@ export default store ->
 				redirect: '/'
 			# corresponding store modules can also be lazyloaded. see ssr vuejs docs
 	router.beforeEach (to, from, next) =>
-		if to.matched.some record => record.meta.requires_auth
+		if to.matched.some (record) => record.meta.requires_auth
 			if ! store.getters['session/is_logged_in']
 				next
 					# Example:

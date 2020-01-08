@@ -1,15 +1,16 @@
 <template lang="slm">
 loading-button :loading=button_loading||disabled @click=clicked
 	slot
-	template #used_prompt
-		slot name=success_prompt if=!error # todo pass loading as slotscope (as in promiseform)
-			span if=loading
+	template #used_prompt=""
+		/ todo pass loading as slotscope (as in promiseform)
+		slot name=success_prompt v-if=!error
+			span v-if=loading
 				slot name=loading_prompt
 					| Loading...
-			span else
+			span v-else=""
 				slot name=done_prompt
 					| Done!
-		slot name=error_prompt else :error=error
+		slot name=error_prompt v-else="" :error=error
 			| UNEXPECTED ERROR: 
 			span.warn $error
 </template>

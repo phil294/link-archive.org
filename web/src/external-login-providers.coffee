@@ -1,9 +1,9 @@
 # should be abstract
 class ExternalLoginProvider
-	constructor: @name ->
+	constructor: (@name) ->
 		@initialized = false
 
-	@append_script: url ->
+	@append_script: (url) ->
 		script_el = document.createElement 'script'
 		new Promise (ok, notok) =>
 			script_el.onload = ok
@@ -27,7 +27,7 @@ class ExternalLoginProvider
 google_login_provider = new ExternalLoginProvider('google')
 google_login_provider.load = ->
 	await ExternalLoginProvider.append_script 'https://apis.google.com/js/api.js' # todo is this functionality available as a module?
-	await new Promise ok => window.gapi.load('auth2', ok)
+	await new Promise (ok) => window.gapi.load('auth2', ok)
 google_login_provider.initialize = ->
 	@google_auth = await window.gapi.auth2.init
 		client_id: process.env.GOOGLE_CLIENT_ID
@@ -45,7 +45,7 @@ facebook_login_provider.load = ->
 		version: 'v3.0'
 facebook_login_provider.login = ->
 	new Promise (ok, notok) =>
-		window.FB.login response =>
+		window.FB.login (response) =>
 			if response.status == 'connected'
 				ok response.auth_response.access_token
 			else

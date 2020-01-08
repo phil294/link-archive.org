@@ -1,4 +1,3 @@
-import Vue from 'vue'
 import create_app from './vue-app'
 
 { app, router, store } = create_app()

@@ -3,11 +3,13 @@ div
 	promise-form#insert-code :action=login_with_token
 		label
 			| paste the token here:
-			input model=token_model name=token required
-		template #button_label Log in
+			input v-model=token_model name=token required=""
+		template #button_label="" Log in
 </template>
 
 <script lang="coffee">
+import Vue from 'vue'
+
 export default Vue.extend
 	name: 'TokenInput'
 	props:

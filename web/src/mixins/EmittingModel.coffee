@@ -23,9 +23,9 @@ export default
 	computed:
 		model:
 			get: -> @internal_value
-			set: new_value ->
+			set: (new_value) ->
 				@internal_value = new_value
 				@$emit 'input', new_value
 	watch:
-		value: new_value ->
+		value: (new_value) ->
 			@internal_value = new_value

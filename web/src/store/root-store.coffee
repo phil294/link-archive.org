@@ -1,5 +1,4 @@
 import Vuex from 'vuex'
-import Vue from 'vue'
 import session_module from './session-store'
 
 Vue.use Vuex
@@ -17,9 +16,9 @@ export default =>
 				state.authenticate_popup = show
 			set_app_name: (state, app_name) ->
 				state.app_name = app_name
-			increase_loading_counter: state ->
+			increase_loading_counter: (state) ->
 				state.loading_counter++
-			decrease_loading_counter: state ->
+			decrease_loading_counter: (state) ->
 				state.loading_counter--
 			set_global_error_message: (state, msg) ->
 				state.global_error_message = msg

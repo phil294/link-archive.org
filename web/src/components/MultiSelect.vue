@@ -1,14 +1,14 @@
 <template lang="slm">
 .column
 	promise-form.add-form.row.align-center.children-spacing-l :action=add
-		filter-select required name=selected_option :options=unselected_options
-		template #button_label Add
+		filter-select required="" name=selected_option :options=unselected_options
+		template #button_label="" Add
 	div.margin-l
 		slot name=rendered :add=add :remove=remove :selected_options=selected_options
-			.none-selected if=!selected_options.length
+			.none-selected v-if=!selected_options.length
 				small.disabled empty selection
 			.selected-options.row.justify-center.children-spacing
-				.selected-option.row.center.box each=selected_option
+				.selected-option.row.center.box v-for="selected_option in selected_options"
 					button.name.remove title="Remove this option" @click=remove(selected_option.value) $selected_option.name ×
 </template>
 
@@ -30,15 +30,15 @@ export default Vue.extend
 		add: ({ values }) ->
 			@model.push values.selected_option
 			@model = @model
-		remove: value ->
+		remove: (value) ->
 			@model.splice @model.indexOf(value), 1
 			@model = @model
 	computed:
 		selected_options: ->
-			@$props.options.filter option =>
+			@$props.options.filter (option) =>
 				@model.includes option.value
 		unselected_options: ->
-			@$props.options.filter option =>
+			@$props.options.filter (option) =>
 				not @selected_options.includes option
 	watch:
 		options: ->

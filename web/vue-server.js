@@ -3,6 +3,10 @@ const Renderer = require('vue-server-renderer');
 const fs = require('fs');
 const path = require('path');
 
+// GLOBAL.window = GLOBAL;
+const Vue = require('vue');
+global.Vue = Vue
+
 const { log, error } = console;
 
 const isProd = process.env.NODE_ENV === 'production';
@@ -65,6 +69,7 @@ server.get('*', async (req, res) => {
 			return res.redirect(e.url);
 		if (e.code === 404)
 			return res.status(404).end();
+		console.error(e);
 		return res.status(500).send(e.message);
 	}
 	return res.send(html);

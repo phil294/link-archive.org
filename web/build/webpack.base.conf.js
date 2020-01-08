@@ -55,9 +55,6 @@ const webpack_base_config = {
 							extractCSS: false,
 						},
 					},
-					{
-						loader: utils.resolve_custom_loader('vue-loader'),
-					},
 				],
 			},
 			{

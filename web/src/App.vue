@@ -1,32 +1,44 @@
 <template lang="slm">
 section#app.column.fill-h
-	popup if=authenticate_popup @close=hide_authenticate_popup
+	popup v-if=authenticate_popup @close=hide_authenticate_popup
 		authenticate @authenticated=hide_authenticate_popup
-	modal if=loading_counter
+	modal v-if=loading_counter
 		.box.padding-l
 			| Loading... ($loading_counter)
 	header.center.padding
 		nav
-			router-link exact to=/ [LOGO]
-			router-link exact to=/p search result
+			router-link exact="" to=/ [LOGO]
+			router-link exact="" to=/p search result
 		nav
-			div if=is_logged_in # todo
+			/ todo
+			div v-if=is_logged_in
 				| Logged in as 
-				span if=session.name $session.name
-				span else-if=session.email $session.email
-				span else-if=session.external_type $session.external_identifier [$session.external_type]
-			router-link if=is_logged_in exact to=/settings Settings
-			button.btn if=is_logged_in @click=logout Logout
-			button.btn if=!is_logged_in @click=show_authenticate_popup
+				span v-if=session.name $session.name
+				span v-else-if=session.email $session.email
+				span v-else-if=session.external_type $session.external_identifier [$session.external_type]
+			router-link v-if=is_logged_in exact="" to=/settings Settings
+			button.btn v-if=is_logged_in @click=logout Logout
+			button.btn v-if=!is_logged_in @click=show_authenticate_popup
 				| Sign in
 	main.flex-fill.column
-		p.center.error.fade-in if=global_error_message $global_error_message
+		p.center.error.fade-in v-if=global_error_message $global_error_message
 		router-view
 		strong.warn.force-hidden Your browser is not working properly (CSS disabled)
 </template>
 
 <script lang="coffee">
+import Vue from 'vue'
+import { mapActions, mapState, mapGetters } from 'vuex'
+import Authenticate from '@/components/Authenticate'
+
+if window # todo if ssr
+	window.Vue = Vue
+	window.mapActions = mapActions
+	window.mapState = mapState
+	window.mapGetters = mapGetters
+
 export default
+	components: { Authenticate }
 	name: 'App'
 	computed: {
 		...mapState
