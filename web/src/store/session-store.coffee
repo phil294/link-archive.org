@@ -42,6 +42,6 @@ export default
 			commit 'set_session', null
 			storage_service.set 'token', null
 		invalidate_all_tokens: ({ dispatch }) ->
-			now = Date.now() / 1000
+			now = Math.round(Date.now() / 1000)
 			await dispatch 'refresh_token' # with current date
 			await axios.patch 'user', { min_iat: now - 5 } # with date -5. this might also log out the current user if his date is inaccurate. but can live with that
