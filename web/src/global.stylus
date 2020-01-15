@@ -228,8 +228,8 @@ button, input[type="submit"], input[type="reset"], input[type="button"], label
 	cursor: pointer
 
 .button[disabled], button[disabled], input[type="submit"][disabled], input[type="reset"][disabled], input[type="button"][disabled] {
-	cursor: default;
-	opacity: .5;
+	cursor default
+	color: var(--color-disabled)
 }
 // TODO: .btn = button-like styling, should not be used as button identifier
 .btn, input[type="submit"], input[type="reset"], input[type="button"] {
@@ -270,3 +270,11 @@ legend, label {
 }
 legend {
 	font-weight: 600; }
+
+progress
+	-webkit-appearance none // necessary for chrome, otherwise colors wont change
+	appearance none // idk
+	&::-webkit-progress-value
+		background var(--color-main)
+	&::-webkit-progress-bar
+		background var(--color-disabled)

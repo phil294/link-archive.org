@@ -11,7 +11,9 @@ form.column :class.no-click=loading @submit.prevent=submit
 					| Submit
 				template #used_prompt=""
 					slot name=button_label_loading
-						span v-if=loading Loading...
+						.column v-if=loading
+							span Loading...
+							progress :value=progress
 						span v-else="" Done!
 		button.btn.btn-2.cancel v-if=cancelable :class.right=button_float_right :disabled=loading type=button @click=$emit('cancel')
 			slot name=cancel_button_label
@@ -60,6 +62,7 @@ export default Vue.extend
 		error_response: ''
 		loading: false
 		button_loading: false
+		progress: 0
 	methods:
 		submit: (event) ->
 			@error_response = ''
@@ -73,7 +76,9 @@ export default Vue.extend
 					all
 				, {})
 			try
-				await @$props.action { form_data, values, event }
+				progress_callback = (progress) =>
+					@progress = progress
+				await @$props.action { form_data, values, event, progress: progress_callback }
 				if not @onetime
 					@button_loading = false
 			catch e
@@ -90,6 +95,9 @@ export default Vue.extend
 	float right
 button
 	margin-right 5px
+	progress
+		width 100%
+		height 2px
 form:not(.row)
 	> *:not(:last-child):not(:first-child)
 		margin-bottom 1.2vh

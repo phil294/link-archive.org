@@ -4,9 +4,10 @@ loading-button :loading=button_loading||disabled @click=clicked
 	template #used_prompt=""
 		/ todo pass loading as slotscope (as in promiseform)
 		slot name=success_prompt v-if=!error
-			span v-if=loading
+			.column v-if=loading
 				slot name=loading_prompt
 					| Loading...
+				progress :value=progress
 			span v-else=""
 				slot name=done_prompt
 					| Done!
@@ -41,6 +42,7 @@ export default Vue.extend
 		error: ''
 		loading: false
 		button_loading: false
+		progress: 0
 	methods:
 		clicked: ->
 			@error = ''
@@ -50,7 +52,9 @@ export default Vue.extend
 				if @$props.action instanceof Promise
 					await @$props.action
 				else
-					action_response = @$props.action()
+					progress_callback = (progress) =>
+						@progress = progress
+					action_response = @$props.action progress_callback
 					# if not action_response typeof Promise
 					# 	throw 'PromiseForm action response is not typeof Promise!'
 					# ^ there is no reason not to accept non-promises here
@@ -68,6 +72,8 @@ export default Vue.extend
 </script>
 
 <style lang="stylus" scoped>
-div#container
-	display inline-block
+button
+	progress
+		width 100%
+		height 2px
 </style>
