@@ -4,21 +4,23 @@ form.column :class.no-click=loading @submit.prevent=submit
 		slot name=legend
 	slot
 	#actions.row.align-center
-		slot name=button # todo pass loading as slotscope prop to parent
+		/ todo pass loading as slotscope prop to parent
+		slot name=button
 			loading-button.btn :class.right=button_float_right :loading=button_loading :disabled=nosubmit
 				slot name=button_label
 					| Submit
-				template #used_prompt
+				template #used_prompt=""
 					slot name=button_label_loading
-						span if=loading Loading...
-						span else Done!
-		button.btn.btn-2.cancel if=cancelable :class.right=button_float_right :disabled=loading type=button @click=$emit('cancel')
+						span v-if=loading Loading...
+						span v-else="" Done!
+		button.btn.btn-2.cancel v-if=cancelable :class.right=button_float_right :disabled=loading type=button @click=$emit('cancel')
 			slot name=cancel_button_label
 				| Cancel
-		button.btn if=resetable :class.right=button_float_right :disabled=loading type=reset # TODO: disabled when form is unchanged
+		/ TODO: disabled="" when form is unchanged
+		button.btn v-if=resetable :class.right=button_float_right :disabled=loading type=reset
 			slot name=reset_button_label
 				| Reset
-	div.error.fade-in if=error_response
+	div.error.fade-in v-if=error_response
 		span
 			slot name=error_caption
 				| Submit failed: 
@@ -59,7 +61,7 @@ export default Vue.extend
 		loading: false
 		button_loading: false
 	methods:
-		submit: event ->
+		submit: (event) ->
 			@error_response = ''
 			@loading = true
 			@button_loading = true
