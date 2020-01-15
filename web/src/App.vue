@@ -8,7 +8,6 @@ section#app.column.fill-h
 	header.center.padding
 		nav
 			router-link exact="" to=/ [LOGO]
-			router-link exact="" to=/p search result
 		nav
 			/ todo
 			div v-if=is_logged_in
