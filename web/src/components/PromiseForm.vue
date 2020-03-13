@@ -58,11 +58,14 @@ export default Vue.extend
 		nosubmit:
 			type: Boolean
 			default: false
+		stepcount:
+			type: [ Number, String ]
+			default: null
 	data: =>
 		error_response: ''
 		loading: false
 		button_loading: false
-		progress: 0
+		progress: 1
 	methods:
 		submit: (event) ->
 			@error_response = ''
@@ -77,7 +80,12 @@ export default Vue.extend
 				, {})
 			try
 				progress_callback = (progress) =>
-					@progress = progress
+					if progress != undefined
+						@progress = progress
+					else if @$props.stepcount
+						@progress += 1/@$props.stepcount
+					else
+						throw new Error "Unexpected  progress #{progress}"
 				await @$props.action { form_data, values, event, progress: progress_callback }
 				if not @onetime
 					@button_loading = false

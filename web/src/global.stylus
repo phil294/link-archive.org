@@ -274,9 +274,12 @@ legend {
 	font-weight: 600; }
 
 progress
-	-webkit-appearance none // necessary for chrome, otherwise colors wont change
+	border none /* FF */
+	-webkit-appearance none /* chrome */
 	appearance none // idk
-	&::-webkit-progress-value
+	&::-webkit-progress-value /* chrome */
 		background var(--color-main)
-	&::-webkit-progress-bar
+	&::-moz-progress-bar /* FF */ // for some reason, this cant be on the same line as above. no idea why, might be a bug.
+		background var(--color-main)
+	&::-webkit-progress-bar /* chrome */, & /* FF */
 		background var(--color-disabled)

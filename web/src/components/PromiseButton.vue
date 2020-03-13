@@ -38,11 +38,14 @@ export default Vue.extend
 		disabled:
 			type: Boolean
 			default: false
+		stepcount:
+			type: [ Number, String ]
+			default: null
 	data: =>
 		error: ''
 		loading: false
 		button_loading: false
-		progress: 0
+		progress: 1
 	methods:
 		clicked: ->
 			@error = ''
@@ -53,7 +56,12 @@ export default Vue.extend
 					await @$props.action
 				else
 					progress_callback = (progress) =>
-						@progress = progress
+						if progress != undefined
+							@progress = progress
+						else if @$props.stepcount
+							@progress += 1/@$props.stepcount
+						else
+							throw new Error "Unexpected progress #{progress}"
 					action_response = @$props.action progress_callback
 					# if not action_response typeof Promise
 					# 	throw 'PromiseForm action response is not typeof Promise!'
