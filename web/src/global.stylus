@@ -72,7 +72,9 @@ details > summary {
 .small // todo html small instead
 	font-size: 80%
 .flex-base
-	display: flex
+	@media not print
+		// hack to fix firefox printing https://stackoverflow.com/q/45414152/3779853
+		display: flex
 	min-height: 0
 	min-width: 0
 .flex // todo this is kinda stupid
