@@ -56,7 +56,7 @@ app.use((err, req, res, next) => {
     let info = 'Internal server error';
     // if (!is_production) // TODO revert
     info += ': ';
-    info += err && (err.status || err.errmsg || err.message || err) || 'no error message available';
+    info += err && (err.stack || err.status || err.errmsg || err.message || err) || 'no error message available';
     return res.status(500).send(info);
 });
 
