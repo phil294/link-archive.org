@@ -14,5 +14,6 @@ rules: {
     variable-name: false,
     import-name: false,
     object-shorthand-properties-first: false,
-    prefer-template: false
+    prefer-template: false,
+    no-increment-decrement: false
 }

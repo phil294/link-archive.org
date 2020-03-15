@@ -38,7 +38,7 @@ div
 		section#with-external.box.padding-l
 			legend Or
 			div.center v-for="provider in external_login_providers" :key=provider.name
-				promise-button.center v-if=provider.initialized :action=external_login(provider)
+				promise-button.btn.center v-if=provider.initialized :action=external_login(provider)
 					img.logo :src="'static/'+provider.name+'.png'"
 					div.flex-fill Log in with $provider.name
 				div.note v-else="" Loading $provider.name login scripts...

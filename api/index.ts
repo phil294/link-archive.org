@@ -15,7 +15,7 @@ import { env, error, log } from './utils';
 
 // ///////////////// CONFIG
 
-const mail_service = new MailService(env('MAIL_SENDER_SERVICE'), env('MAIL_SENDER_USER'), env('MAIL_SENDER_PASSWORD'));
+const mail_service = new MailService(env('MAIL_SENDER_SMTP_HOST'), env('MAIL_SENDER_USER'), env('MAIL_SENDER_PASSWORD'));
 const token_service = new TokenService(env('TOKEN_SECRET'));
 
 // ////////////////// ROUTES

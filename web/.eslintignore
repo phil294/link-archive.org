@@ -3,5 +3,6 @@
 # todo doesnt work??
 /dist/
 /*.js
+*.vue
 /test/unit/coverage/
 /node_modules/
