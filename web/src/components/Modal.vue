@@ -36,7 +36,6 @@ export default Vue.extend
 		position relative // Otherwise button presses can fail due to background in foreground
 		max-width 98%
 		max-height 98%
-		overflow auto
 		display flex
 #background
 	position absolute

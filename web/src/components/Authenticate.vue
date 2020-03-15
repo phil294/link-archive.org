@@ -74,6 +74,8 @@ export default Vue.extend
 				@show_mail_sent = true
 		external_login: (provider) -> =>
 			token = await provider.login()
+			if not token
+				return
 			await @$store.dispatch 'session/external_login_provider_login_with_token',
 				token: token # todo can this throw?
 				provider_name: provider.name

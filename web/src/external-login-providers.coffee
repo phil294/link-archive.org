@@ -32,8 +32,13 @@ google_login_provider.initialize = ->
 	@google_auth = await window.gapi.auth2.init
 		client_id: process.env.GOOGLE_CLIENT_ID
 google_login_provider.login = ->
-	google_user = await @google_auth.signIn()
-	google_user.getAuthResponse().id_token
+	try
+		google_user = await @google_auth.signIn()
+		return google_user.getAuthResponse().id_token
+	catch e
+		if e.error == "popup_closed_by_user"
+			return null
+		throw e
 
 facebook_login_provider = new ExternalLoginProvider 'facebook'
 facebook_login_provider.load = ->

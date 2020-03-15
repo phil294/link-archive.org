@@ -234,22 +234,80 @@ button, input[type="submit"], input[type="reset"], input[type="button"], label
 	color: var(--color-disabled)
 }
 // TODO: .btn = button-like styling, should not be used as button identifier
-.btn, input[type="submit"], input[type="reset"], input[type="button"] {
-	display: inline-block;
-	padding: 2px 6px;
-	text-align: center;
-	text-decoration: none;
-	// white-space: nowrap;
-	background-color: var(--color-main);
-	color: var(--color-foreground);
-	border-radius: 1px;
-	border: 1px solid var(--color-border);
-	box-sizing: border-box; }
-	.btn:hover, input[type="submit"]:hover, input[type="reset"]:hover, input[type="button"]:hover {
-		background-color: var(--color-hover);
-		border-color: var(--color-hover);
-		// color: #f9f9f9;
-		outline: 0; }
+.btn, input[type="submit"], input[type="reset"], input[type="button"]
+	display: inline-block
+	// padding: 6px 13px
+	padding: 0.5em 1.3em;
+	text-align: center
+	text-decoration: none
+	// white-space: nowrap
+	background-color: #f1f1f1
+	color: var(--color-foreground)
+	background-image: linear-gradient(rgba(255, 255, 255, 0.45) 50%, transparent 52%);
+	box-sizing: border-box
+	font-weight bolder
+	transition all .1s linear
+	position: relative
+	border-radius 0
+
+	/** 3D effect via borders ********/
+	$right_border_width = 3px
+	$bottom_border_width = 2px
+	$push_in_width = 2px
+	border-style solid
+	// bottom + right border, 3d-y
+	border-width 0 $right_border_width $bottom_border_width 0
+	border-color transparent #ccc #bbb transparent
+	background-clip padding-box
+	// some 0815 bottom/right shadow
+	$basic_shadow = 1px 2px 5px -3px grey
+	box-shadow \
+		$basic_shadow, \
+		/* top + left border, only subtle and thin */ \
+		-1px -1px 0 0 #f3f3f3
+	// little transparent triangular spaces that cover the edges
+	// so they actually look 3d
+	&:before, &:after
+		content: '';
+		outline: none
+		position: absolute;
+		width: 0;
+		height: 0;
+		border-width: 0 5px 6px	0
+		border-style: solid;
+	&:before
+		bottom: -5px;
+		left: -1px;
+		border-color: transparent;
+		border-bottom-color: #FFF;
+	&:after
+		right: -5px;
+		top: -1px;
+		border-color: #FFF;
+		border-bottom-color: transparent;
+	&:active
+		opacity: 0.7
+		background unset
+		border-width \
+			/* Top border, from 0 to push width: Transparent:
+			 Only necessary to compensate for the now decreased bottom border width.
+			 This could also be achieved e.g. with a margin, but margins are
+			 often overwritten for layout purposes */ \
+			$push_in_width \
+			/* Right border: decreased */ \
+			$right_border_width - $push_in_width \
+			/* Bottom border: decreased */ \
+			$bottom_border_width - $push_in_width \
+			/* Left border: Compensate for decreased right border (equiv.) */ \
+			$push_in_width
+		box-shadow $basic_shadow
+		&:before
+			bottom -3px
+			left -2px
+		&:after
+			right -3px
+			top -2px
+	/*********************************/
 
 textarea, select, input {
 	color: #4a4a4a;
@@ -282,3 +340,16 @@ progress
 		background var(--color-main)
 	&::-webkit-progress-bar /* chrome */, & /* FF */
 		background var(--color-disabled)
+
+*:focus
+	// Overwrite the styling for focussed elements
+	// This can be removed once focus-visible works........
+	outline none
+	background-color rgba(255,254,221,1)
+	// ........... .
+	&::-moz-focus-inner
+		border initial
+	// support for this is very patchy, chrome only with flag and firefox not at all
+	// there is a polyfill, but it's 4 KB, zipped 1 KB :-(
+	&:not(:focus-visible)
+		background-color unset

@@ -1,7 +1,7 @@
 <template lang="slm">
 modal @close=close
 	main.box.padding-xl
-		button#close.btn @click=close 🗙
+		button#close @click=close 🗙
 		slot
 </template>
 
@@ -19,9 +19,9 @@ main
 	min-height 50px
 	overflow auto
 	box-sizing border-box
-	position relative
 #close
 	position absolute
-	top 0
-	right 0
+	line-height 1em
+	top 2em
+	right 2em
 </style>
