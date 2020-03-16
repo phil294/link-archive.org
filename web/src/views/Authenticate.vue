@@ -39,7 +39,7 @@ div
 			legend Or
 			div.center v-for="provider in external_login_providers" :key=provider.name
 				promise-button.btn.center v-if=provider.initialized :action=external_login(provider)
-					img.logo :src="'static/'+provider.name+'.png'"
+					img.logo :src="'public/img/'+provider.name+'.png'"
 					div.flex-fill Log in with $provider.name
 				div.note v-else="" Loading $provider.name login scripts...
 </template>
@@ -47,7 +47,7 @@ div
 <script lang="coffee">
 import Vue from 'vue'
 import external_login_providers from '@/external-login-providers'
-import TokenInput from '@/components/TokenInput'
+import TokenInput from '@/views/TokenInput'
 
 loaded_external_login_providers = {}
 
