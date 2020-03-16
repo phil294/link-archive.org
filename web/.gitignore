@@ -1,0 +1,7 @@
+# local env files
+.env.local
+.env.*.local
+
+/test/unit/coverage/
+/test/e2e/reports/
+/custom-loaders/*.js

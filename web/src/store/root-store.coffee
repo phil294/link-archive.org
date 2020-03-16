@@ -3,11 +3,11 @@ import session_module from './session-store'
 
 Vue.use Vuex
 
-export default =>
+export create_store = =>
 	new Vuex.Store
-		strict: process.env.NODE_ENV != 'production'
+		# strict: process.env.NODE_ENV != 'production' # TODO: https://github.com/Akryum/vue-cli-plugin-ssr/issues/184
 		state: ->
-			app_name: 'My App'
+			app_name: 'MEVN App name'
 			loading_counter: 0
 			authenticate_popup: false
 			global_error_message: ''

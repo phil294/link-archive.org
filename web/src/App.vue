@@ -28,9 +28,14 @@ section#app.column.fill-h
 <script lang="coffee">
 import Vue from 'vue'
 import { mapActions, mapState, mapGetters } from 'vuex'
-import Authenticate from '@/components/Authenticate'
+import Authenticate from '@/views/Authenticate'
 
-if window # todo if ssr
+if global
+	global.Vue = Vue
+	global.mapActions = mapActions
+	global.mapState = mapState
+	global.mapGetters = mapGetters
+else if window
 	window.Vue = Vue
 	window.mapActions = mapActions
 	window.mapState = mapState

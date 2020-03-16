@@ -2,19 +2,20 @@ import VueRouter from 'vue-router'
 
 Vue.use VueRouter
 
-export default (store) ->
+export create_router = (store) ->
 	router = new VueRouter
 		mode: 'history'
+		base: process.env.BASE_URL # maybe maybe
 		routes:
 			-	path: '/'
 				name: 'Index'
-				component: => `import('@/components/Index')` # todo this is soon supported natively by cs
+				component: => `import('@/views/Index')` # todo this is soon supported natively by cs
 			-	path: '/logincallback'
 				name: 'LoginCallbackHandler'
-				component: => `import('@/components/callback-handlers/LoginCallbackHandler')`
+				component: => `import('@/views/callback-handlers/LoginCallbackHandler')`
 			-	path: '/settings'
 				name: 'Settings'
-				component: => `import('@/components/secure/Settings')`
+				component: => `import('@/views/secure/Settings')`
 				meta:
 					requires_auth: true
 			-	path: '*'

@@ -30,7 +30,7 @@ google_login_provider.load = ->
 	await new Promise (ok) => window.gapi.load('auth2', ok)
 google_login_provider.initialize = ->
 	@google_auth = await window.gapi.auth2.init
-		client_id: process.env.GOOGLE_CLIENT_ID
+		client_id: process.env.VUE_APP_GOOGLE_CLIENT_ID
 google_login_provider.login = ->
 	try
 		google_user = await @google_auth.signIn()
@@ -44,7 +44,7 @@ facebook_login_provider = new ExternalLoginProvider 'facebook'
 facebook_login_provider.load = ->
 	await ExternalLoginProvider.append_script 'https://connect.facebook.net/en_US/sdk.js'
 	window.fb_async_init = => window.FB.init
-		appId: process.env.FACEBOOK_APP_ID
+		appId: process.env.VUE_APP_FACEBOOK_APP_ID
 		cookie: true
 		xfbml: true
 		version: 'v3.0'
