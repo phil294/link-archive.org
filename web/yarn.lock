@@ -2,10 +2,9 @@
 # yarn lockfile v1
 
 
-"@akryum/vue-cli-plugin-ssr@~0.6.0":
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/@akryum/vue-cli-plugin-ssr/-/vue-cli-plugin-ssr-0.6.0.tgz#1e63dc16dee38fc3c4c1979a19d8b4d10689105f"
-  integrity sha512-5vJ6xWbD/VOM4GUbGejBOF+/LQ6839hSN3nIv3H6j2h7A9Qt7OiMmGbK14l0IDAwfmnCsk6XnNj0o6etLVuxZQ==
+"@akryum/vue-cli-plugin-ssr@git://github.com/phil294/vue-cli-plugin-ssr.git#d19fb4f":
+  version "0.5.0"
+  resolved "git://github.com/phil294/vue-cli-plugin-ssr.git#d19fb4f21553e01a83a7709d5c2aeb3c47817275"
   dependencies:
     chalk "^2.4.2"
     clipboardy "^2.1.0"

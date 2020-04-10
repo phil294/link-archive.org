@@ -6,6 +6,10 @@ process.env.VUE_APP_APP_VERSION = require('./package.json').version;
 
 module.exports = {
   productionSourceMap: true, // doesnt work: https://github.com/Akryum/vue-cli-plugin-ssr/issues/84
+  css: {
+    extract: true,
+    sourceMap: true,
+  },
   chainWebpack: (config) => {
     config.resolve.extensions
       .add('.coffee')
@@ -59,7 +63,19 @@ module.exports = {
     ssr: {
       port: 8080,
       defaultTitle: 'MEVN Base Title',
-      criticalCSS: false
+      criticalCSS: false,
+      host: '0.0.0.0',
+      copyUrlOnStart: false,
+      clustered: true, // untested todo
+      lruCacheOptions: {
+        // See https://ssr.vuejs.org/guide/caching.html
+        // TODO
+      },
+      onError: error => {
+        // TODO
+      },
+      // TODO in public?
+      // error500Html: path.resolve(__dirname, './dist/500.html'),
     }
   }
 }

@@ -1,0 +1,13 @@
+Comparison of unicode characters across different browsers
+
+y = ok
+n = looks rather weird
+N = wrong icon or custom style or entirely missing
+
+character         × ╳ ☓ ✕ ✖ ❌ ❎ ⨉ ⨯ 🗙 🗴 🞩
+
+linux chromium	  y y n y y N N y  y y n y
+linux firefox     y y n y y N N y  y y n y
+windows firefox	  y y n y y N N y  y y n y
+android 4 firefox y y N y y N N N  N N N N
+android 4 chrome  y y N y y N N
