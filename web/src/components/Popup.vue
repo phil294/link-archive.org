@@ -1,12 +1,15 @@
 <template lang="slm">
 modal @close=close
-	main.box.padding-xl
+	main.box.padding-xl ref=main
+		/ FIXME: Only on mobile, same as result table handles, via css
+		div#titlebar.center v-moveable="{parent:true}"
+			| ⠿⠿⠿⠿⠿
 		button#close @click=close ╳
 		slot
 </template>
 
 <script lang="coffee">
-export default Vue.extend
+export default
 	name: 'Popup'
 	methods:
 		close: ->
@@ -16,14 +19,21 @@ export default Vue.extend
 
 <style lang="stylus" scoped>
 main
-	max-height 100%
+	max-height 98vh
 	min-width 50px
 	min-height 50px
+	position relative
 	overflow auto
 	box-sizing border-box
-#close
+	resize both
+#titlebar, #close
 	position absolute
 	line-height 1em
-	top 2em
-	right 2em
+	top 1.5rem
+#close, #titlebar
+	right 1.5rem
+#titlebar
+	left 1.5rem
+	color var(--color-border)
+	user-select none
 </style>

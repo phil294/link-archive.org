@@ -10,7 +10,7 @@ div
 <script lang="coffee">
 import Vue from 'vue'
 
-export default Vue.extend
+export default
 	name: 'TokenInput'
 	props:
 		token:

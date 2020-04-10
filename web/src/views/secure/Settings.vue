@@ -10,7 +10,9 @@ div
 </template>
 
 <script lang="coffee">
-export default Vue.extend
+import { mapState, mapGetters, mapActions } from 'vuex'
+
+export default
 	name: 'Settings'
 	methods: {
 		...mapActions 'session',

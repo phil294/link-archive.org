@@ -12,7 +12,7 @@ details
 ###
  * <details>-wrapper
 ###
-export default Vue.extend
+export default
 	name: 'ReadMore'
 </script>
 

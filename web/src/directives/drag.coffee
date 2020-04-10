@@ -1,3 +1,4 @@
+import Vue from 'vue'
 
 set_el_value = (el, { value }) =>
 	el.setAttribute 'draggable', !!value

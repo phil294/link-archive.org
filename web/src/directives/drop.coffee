@@ -1,3 +1,4 @@
+import Vue from 'vue'
 
 Vue.directive 'drop',
 	bind: (el, { value }) =>

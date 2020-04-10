@@ -108,13 +108,16 @@ details > summary {
 	// box-shadow: 1px 2px 7px 1px #eee
 	box-shadow: 1px 1px 1px 1px #ddd
 	// border: 1px solid #ddd
-	background: rgba(255,255,255,0.88)
+	background: rgba(255,255,255,0.93)
 
 .no-click button
 	pointer-events none
 
 .force-hidden
 	display none !important
+
+.moveable
+	cursor move
 
 
 // The below code is partly adopted from the Sakura CSS style/reset

@@ -5,7 +5,7 @@ token-input :token=$route.query.token @success=redirect
 <script lang="coffee">
 ### Route '/logincallback': "Callback" handler for email links, google and alike. ###
 import TokenInput from '@/views/TokenInput'
-export default Vue.extend
+export default
 	components: { TokenInput }
 	name: 'LoginCallbackHandler'
 	created: ->

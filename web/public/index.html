@@ -8,11 +8,11 @@
     <title><%= htmlWebpackPlugin.options.title %></title>
   </head>
   <body>
-    <p>wrong template, use ssr instead (?)</p>
-    <!--<noscript>
-      <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+    <noscript>
+      <strong class="highlighted">This page doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
-    <div id="app"></div>-->
-    <!-- built files will be auto injected -->
+    <strong class="highlighted force-hidden">Your browser is not working properly (CSS disabled)</strong>
+    <div id="app"></div>
+    <!--vue-ssr-outlet-->
   </body>
 </html>

@@ -17,7 +17,7 @@ import emitting_model from '@/mixins/EmittingModel'
 ###
  * .........
 ###
-export default Vue.extend
+export default
 	name: 'MultiSelect'
 	mixins: [ emitting_model ]
 	props:

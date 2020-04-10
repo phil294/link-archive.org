@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import axios from 'axios'
 import App from './App'
 import { create_router } from './vue-router'
@@ -5,6 +6,7 @@ import { create_store } from './store/root-store'
 import storage_service from '@/services/storage-service'
 import './directives/drag'
 import './directives/drop'
+import './directives/moveable'
 # todo all in /components/ ?
 import AutoexpandingTextarea from '@/components/AutoexpandingTextarea'
 import FilterSelect from '@/components/FilterSelect'

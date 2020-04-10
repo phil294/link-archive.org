@@ -36,7 +36,7 @@ form.column :class.no-click=loading @submit.prevent=submit
  * Component fires $submit event and calls `action` prop just
  * like `promise-button` (?)+
 ###
-export default Vue.extend
+export default
 	name: 'PromiseForm'
 	props:
 		button_float_right:

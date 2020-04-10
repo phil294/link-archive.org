@@ -24,7 +24,7 @@ loading-button :loading=button_loading||disabled @click=clicked
  * Shows error if anything fails, but is *not* supposed to be an error handling
  * component. If desired, PromiseForm instead.
 ###
-export default Vue.extend
+export default
 	name: 'PromiseButton'
 	props:
 		action:
