@@ -54,7 +54,7 @@ app.use(async (err, req, res, next) => {
     error(err);
     const info = err && (err.stack || err.status || err.errmsg || err.message || err) || 'no error message available';
     await mail_service.send_mail(
-        'error@produpedia.org',
+        'FIXME - Insert desired error message receiving email here',
         'API 500 / 422',
         html_escape(info));
     if (err.length && (err[0] instanceof ValidationError || err[0].constraints)) { // TODO: class-validator whitelisting errors arent instanceof ValidationError. Probably a bug?
