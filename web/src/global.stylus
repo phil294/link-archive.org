@@ -345,7 +345,8 @@ progress
 	// Overwrite the styling for focussed elements
 	// This can be removed once focus-visible works........
 	outline none
-	background-color rgba(255,254,221,1)
+	&:not([tabindex="-1"])
+		background-color #fffdb5
 	// ........... .
 	&::-moz-focus-inner
 		border initial
