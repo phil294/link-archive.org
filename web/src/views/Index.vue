@@ -1,5 +1,5 @@
 <template lang="slm">
-div INDEX
+div App v $app_version
 </template>
 
 <script lang="coffee">
@@ -13,6 +13,8 @@ export default Vue.extend
 			# @$store.dispatch('index_action'),
 	computed: {
 		index_data_fetched: -> true # this needs to determined by store as actual data is disregarded from ssr->client
+		...mapState
+			-	'app_version'
 	}
 	mounted: ->
 		if !@index_data_fetched
