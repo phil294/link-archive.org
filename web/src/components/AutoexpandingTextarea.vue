@@ -8,6 +8,10 @@ export default
 	name: 'AutoexpandingTextarea'
 	mixins: [ emitting_model ]
 	props:
+		# TODO: unfortunately, maxlength isnt checked when the value is updated
+		# via JS (in this case, if `model` is set wihtout user interaction).
+		# Here's a SO question about it https://stackoverflow.com/questions/60758779
+		# And the only solution seems to be to implement a JS check
 		maxlength:
 			default: null
 		placeholder:
@@ -15,6 +19,7 @@ export default
 			default: ''
 	mounted: ->
 		await @update_content_height()
+		@height = @content_height
 		await @on_blur()
 	data: ->
 		height: '100%'
@@ -25,15 +30,16 @@ export default
 			@height = @content_height
 			@focussed = true
 		on_blur: ->
-			@content_height = @height
 			await @$nextTick()
-			@height = '100%'
+			if not @$props.noshrink
+				# shrink to fit container. else: keep showing entire content height
+				@height = '100%'
 			@focussed = false
 		update_content_height: ->
 			@height = ''
 			await @$nextTick()
 			if @$refs.ref # idk, was buggy
-				@height = @$refs.ref.scrollHeight + 'px'
+				@content_height = @$refs.ref.scrollHeight + 'px'
 	computed:
 		style: ->
 			height: @height
@@ -41,6 +47,8 @@ export default
 	watch:
 		model: ->
 			@update_content_height()
+			if @focussed
+				@height = @content_height
 </script>
 
 <style lang="stylus" scoped>
