@@ -1,6 +1,7 @@
 const path = require('path');
 const coffeescript = require('coffeescript');
 const fs = require('fs');
+const fetch = require('node-fetch');
 
 process.env.VUE_APP_APP_VERSION = require('./package.json').version;
 
@@ -10,6 +11,7 @@ module.exports = {
     extract: true,
     sourceMap: true,
   },
+  
   chainWebpack: (config) => {
     config.resolve.extensions
       .add('.coffee')
@@ -58,7 +60,6 @@ module.exports = {
     }
   },
   pluginOptions: {
-    // TODO: Check these
     // https://vue-cli-plugin-ssr.netlify.com/guide/configuration.html
     ssr: {
       port: 8080,
@@ -71,11 +72,31 @@ module.exports = {
         // See https://ssr.vuejs.org/guide/caching.html
         // TODO
       },
-      onError: error => {
-        // TODO
-      },
-      // TODO in public?
-      // error500Html: path.resolve(__dirname, './dist/500.html'),
+      error500Html: './dist/500.html', // TODO this is weird, doesnt work in dev and so on (only updates dist in prod)
+      onError: async (s) => {
+        console.error(s);
+        const stringified = ((()=>{ try { return JSON.stringify(s); } catch(_){} })()) || s.status || 'Unknown error';
+        const error_stringified = `SSR BUILD FAILURE ----
+            ${s.message || s.data || s.msg || s.body} -
+            ${s.stack || ''} -
+            ${s.toString()} -
+            ${stringified} -
+            ${Error().stack}`
+        console.log(error_stringified);
+        try {
+          const resp = await fetch(`${process.env.VUE_APP_API_ROOT}/error`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ error: error_stringified })
+          });
+          const text = await resp.text()
+          if(resp.status !== 200) {
+            console.error(`Fetching error failed: ${resp.status}, ${text}`);
+          }
+        } catch(e1) {
+          console.error("fetch post error failed 2: ", e1);
+        }
+      }
     }
   }
 }

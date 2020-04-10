@@ -47,13 +47,9 @@ export create_app = ({ before_app = =>, after_app = => } = {}) ->
 		formatted_error =
 			data: error.response && (error.response.data || error.response.statusText || '') || null
 			status: error.response && error.response.status || 0
-		if error.response && error.response.status == 401 # fixme  put this into some kind of global exception handler. it does not belong in this network interceptor as cought exceptions should not log out the user by themselves
-			store.dispatch 'session/logout'	
-			router.push '/login'
-		else if error.response == undefined or error.code == 'ECONNABORTED'
-			store.dispatch 'server_unreachable'
-			formatted_error.data = 'Cannot reach server'
-		console.error formatted_error
+		# Not sure if this would ever be possible
+		if (error.response == undefined or error.code == 'ECONNABORTED') and formatted_error.status != 0
+			formatted_error.status = 0
 		Promise.reject(formatted_error)
 
 	app = new Vue {

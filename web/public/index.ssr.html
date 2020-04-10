@@ -8,13 +8,23 @@
     <title>{{ title }}</title>
     {{{ renderResourceHints() }}}
     {{{ renderStyles() }}}
+    <style>
+      /* Critical CSS. TODO: Minify */
+      button {
+        background: initial;
+        border: initial;
+        padding: initial;
+      }
+    </style>
   </head>
   <body>
     <noscript>
-      <strong>This page doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+      <strong class="highlighted">This page doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
+		<strong class="highlighted force-hidden">Your browser is not working properly (CSS disabled)</strong>
     <!--vue-ssr-outlet-->
     {{{ renderState() }}}
+    <!-- FIXME: -->
     {{{ renderState({ contextKey: 'apolloState', windowKey: '__APOLLO_STATE__' }) }}}
     {{{ renderScripts() }}}
   </body>

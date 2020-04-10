@@ -8,10 +8,11 @@ import 'reflect-metadata';
 import authentication_middleware from './authentication-middleware';
 import connection from './connection';
 import authentication_router from './routers/authentication-router';
+import error_router from './routers/error-router';
 import user_router from './routers/user-router';
 import MailService from './services/MailService';
 import TokenService from './services/TokenService';
-import { env, error, log } from './utils';
+import { env, error, html_escape, log } from './utils';
 
 // ///////////////// CONFIG
 
@@ -45,19 +46,24 @@ app.use('/authentication', authentication_router(
     env('WEB_ROOT'), env('GOOGLE_CLIENT_ID'), env('FACEBOOK_APP_ID'), env('FACEBOOK_APP_SECRET'), env('WEBSITE_NAME'),
 ));
 app.use('/user', user_router);
+app.use('/error', error_router(mail_service));
 
 // @ts-ignore
 // Global error fallback handler, including promises
-app.use((err, req, res, next) => {
+app.use(async (err, req, res, next) => {
     error(err);
+    const info = err && (err.stack || err.status || err.errmsg || err.message || err) || 'no error message available';
+    await mail_service.send_mail(
+        'error@produpedia.org',
+        'API 500 / 422',
+        html_escape(info));
     if (err.length && (err[0] instanceof ValidationError || err[0].constraints)) { // TODO: class-validator whitelisting errors arent instanceof ValidationError. Probably a bug?
         return res.status(UNPROCESSABLE_ENTITY).send(err);
     }
-    let info = 'Internal server error';
+    const user_message = 'Internal Server Error';
     // if (!is_production) // TODO revert
-    info += ': ';
-    info += err && (err.stack || err.status || err.errmsg || err.message || err) || 'no error message available';
-    return res.status(500).send(info);
+    //  user_message += ' - ' + info;
+    return res.status(500).send(user_message);
 });
 
 (async () => {

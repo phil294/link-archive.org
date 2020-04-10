@@ -35,6 +35,10 @@ export create_store = =>
 				commit 'set_global_error_message', 'Server unreachable!'
 			server_reachable: ({ commit }) ->
 				commit 'set_global_error_message', ''
+			set_global_error_message: ({ commit }, msg) ->
+				commit 'set_global_error_message', msg
+			reset_global_error_message: ({ commit }) ->
+				commit 'set_global_error_message', ''
 			set_default_focus_target: ({ commit }, el) ->
 				commit 'set_default_focus_target', el
 			offer_focus: ({ state }) ->

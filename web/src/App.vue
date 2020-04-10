@@ -20,9 +20,12 @@ section#app.column.fill-h
 			button.btn v-if=!is_logged_in @click=show_authenticate_popup
 				| Sign in
 	main.flex-fill.column
-		p.center.error.fade-in v-if=global_error_message $global_error_message
+		div.error.fade-in.column v-if=global_error_message
+			pre $global_error_message
+			div.center
+				promise-button.btn :action=reset_global_error_message
+					| Hide
 		router-view
-		strong.warn.force-hidden Your browser is not working properly (CSS disabled)
 </template>
 
 <script lang="coffee">
@@ -59,18 +62,24 @@ export default
 		...mapActions
 			-	'hide_authenticate_popup'
 			-	'show_authenticate_popup'
+			-	'reset_global_error_message'
 		...mapActions 'session',
 			-	'logout'
 	}
 </script>
 
 <style lang="stylus" scoped>
-#app > header
-	border-bottom 1px solid lightgrey
-	justify-content space-between
-	nav > *:not(:last-child)
-		margin-right 1.5em
-		display inline
+#app
+	> header
+		border-bottom 1px solid lightgrey
+		justify-content space-between
+		nav > *:not(:last-child)
+			margin-right 1.5em
+			display inline
+	> main
+		.error
+			max-width 100vw
+			overflow auto
 a.router-link-active
 	font-weight bold
 main

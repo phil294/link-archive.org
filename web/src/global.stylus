@@ -220,10 +220,8 @@ textarea {
 	width: 100%; }
 
 button // buttons, by default, should not have any specific styling so they can be used better semantically. for typical button-buttons, use .btn
+	// also see index ssr html
 	-webkit-appearance: none
-	background: initial
-	border: initial
-	padding: initial
 	color: inherit // FF bug
 
 button, input[type="submit"], input[type="reset"], input[type="button"], label
