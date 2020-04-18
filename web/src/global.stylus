@@ -93,10 +93,10 @@ details > summary {
 	flex-direction: row
 .justify-center
 	@extend .flex-base
-	justify-content: center
+	justify-content: safe center
 .align-center
 	@extend .flex-base
-	align-items: center
+	align-items: safe center
 .center
 	@extend .justify-center, .align-center
 .fill-w
