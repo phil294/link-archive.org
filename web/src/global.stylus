@@ -106,9 +106,7 @@ details > summary {
 .fill
 	@extend .fill-w, .fill-h
 .box
-	// box-shadow: 1px 2px 7px 1px #eee
-	box-shadow: 1px 1px 1px 1px #ddd
-	// border: 1px solid #ddd
+	box-shadow 1px 1px 3px 0px #ababab
 	background: rgba(255,255,255,0.93)
 
 .danger, .error
