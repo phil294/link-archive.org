@@ -113,9 +113,6 @@ details > summary {
 .no-click button
 	pointer-events none
 
-.force-hidden
-	display none !important
-
 .moveable
 	cursor move
 
@@ -260,55 +257,17 @@ button, input[type="submit"], input[type="reset"], input[type="button"], label
 	border-width 0 $right_border_width $bottom_border_width 0
 	border-color transparent #ccc #bbb transparent
 	background-clip padding-box
-	// some 0815 bottom/right shadow
-	$basic_shadow = 1px 2px 5px -3px grey
-	box-shadow \
-		$basic_shadow, \
-		/* top + left border, only subtle and thin */ \
-		-1px -1px 0 0 #f3f3f3
-	// little transparent triangular spaces that cover the edges
-	// so they actually look 3d
-	&:before, &:after
-		content: '';
-		outline: none
-		position: absolute;
-		width: 0;
-		height: 0;
-		border-width: 0 5px 6px	0
-		border-style: solid;
-	&:before
-		bottom: -5px;
-		left: -1px;
-		border-color: transparent;
-		border-bottom-color: #FFF;
-	&:after
-		right: -5px;
-		top: -1px;
-		border-color: #FFF;
-		border-bottom-color: transparent;
-	&:active
-		opacity: 0.7
-		background unset
-		border-width \
-			/* Top border, from 0 to push width: Transparent:
-			 Only necessary to compensate for the now decreased bottom border width.
-			 This could also be achieved e.g. with a margin, but margins are
-			 often overwritten for layout purposes */ \
-			$push_in_width \
-			/* Right border: decreased */ \
-			$right_border_width - $push_in_width \
-			/* Bottom border: decreased */ \
-			$bottom_border_width - $push_in_width \
-			/* Left border: Compensate for decreased right border (equiv.) */ \
-			$push_in_width
-		box-shadow $basic_shadow
-		&:before
-			bottom -3px
-			left -2px
-		&:after
-			right -3px
-			top -2px
-	/*********************************/
+	/* top + left border, only subtle and thin */ \
+	box-shadow -1px -1px 0 0 #f3f3f3
+
+	// (not disabled)
+	&:enabled
+		&:hover
+			color var(--color-clickable)
+		&:active
+			opacity: 0.7
+			background unset
+			border-width 2px 0 0 1px
 
 textarea, select, input {
 	color: #4a4a4a;

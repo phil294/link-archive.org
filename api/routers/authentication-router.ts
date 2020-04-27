@@ -17,11 +17,11 @@ export default ((token_service: TokenService, mail_service: MailService,
         // todo determine if account with mail exists and give out the information to the user in the mail below. motivation: freecodecamp 180963
         // todo let user choose if he wants one-time or never-expiring token
         const token: string = token_service.create({
-            email: req.query.email, // validity check not necessary, nodemailer handles this
+            email: req.query.email as string, // validity check not necessary, nodemailer handles this
         });
         const login_url = `${WEB_ROOT}/logincallback?token=${token}`;
         const paste_url = `${WEB_ROOT}/logincallback`;
-        mail_service.send_mail(req.query.email, `Your Login Mail - ${WEBSITE_NAME}`, `
+        mail_service.send_mail(req.query.email as string, `Your Login Mail - ${WEBSITE_NAME}`, `
                     Hello, <br>
                     <br>
                     <a href="${login_url}" alt="login url">click here to log in to ${WEBSITE_NAME}.</a><br>
@@ -49,7 +49,7 @@ export default ((token_service: TokenService, mail_service: MailService,
         try {
             const login_ticket: LoginTicket | null = await google_oAuth2Client.verifyIdToken(({ // todo can this even throw?? docs pleeeease
                 audience: GOOGLE_CLIENT_ID,
-                idToken: req.query.token,
+                idToken: req.query.token as string,
             }));
             if (login_ticket) {
                 payload = login_ticket.getPayload();
