@@ -39,12 +39,20 @@ div
 				a @click=show_mail_sent=false ⮜ Send another mail
 		section#with-external.box.padding-l
 			legend Or
-			div.provider.center v-for="provider in external_login_providers" :key=provider.name
-				img.logo :src="'/img/'+provider.name+'.png'"
-				promise-button.btn.load v-if=!provider.initialized :action=external_initialize(provider)
-					| Load $provider.name login
+			div.provider v-for="provider in external_login_providers" :key=provider.name
+				div.row v-if=!provider.initialized
+					div.center
+						em Load login for:
+					promise-button.load :action=external_initialize(provider)
+						img.logo :src="'/img/'+provider.name+'-button.png'"
+				div.row v-else=""
+					div.center
+						div.column
+							em Click again: 
+							strong Sign in with:
+					promise-button.login :action=external_login(provider)
+						img.logo :src="'/img/'+provider.name+'-button.png'"
 				promise-button.btn.login v-else="" :action=external_login(provider)
-					| Click again to log in with $provider.name
 </template>
 
 <script lang="coffee">
@@ -92,10 +100,8 @@ section
 #with-email
 	> *
 		margin 10px
-#with-external .provider
-	margin 10px
-	img.logo 
-		margin-right 15px
-	button
-		width 250px
+#with-external
+	.provider
+		button.load, button.login
+			margin-left 12px
 </style>
