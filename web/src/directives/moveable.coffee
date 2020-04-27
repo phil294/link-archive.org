@@ -18,13 +18,16 @@ Vue.directive 'moveable',
 
 			el.style.position = 'absolute'
 
-			move_to = (mouse_event) =>
+			on_mousemove = (mouse_event) =>
 				el.style.left = el_start_left + mouse_event.pageX - mouse_start_x + 'px'
 				el.style.top = el_start_top + mouse_event.pageY - mouse_start_y + 'px'
 
-			document.addEventListener 'mousemove', move_to
-			document.addEventListener 'mouseup', ->
-				document.removeEventListener 'mousemove', move_to
-				document.removeEventListener 'mouseup', @
+			document.addEventListener 'mousemove', on_mousemove
+			
+			on_mouseup = ->
+				document.removeEventListener 'mousemove', on_mousemove
+				document.removeEventListener 'mouseup', on_mouseup
+			
+			document.addEventListener 'mouseup', on_mouseup
 			
 			target.ondragstart = => false
