@@ -16,22 +16,24 @@ export default
 			state.session = session
 	actions:
 		# validate token and set token & session. throws # todo rename this to set_token or set_session or similar
-		login_with_token: ({ commit }, token) -> # todo rename to set_token?
+		login_with_token: ({ commit, dispatch }, token) -> # todo rename to set_token?
 			try
 				payload = JSON.parse(window.atob(token.trim().split('.')[1].replace('-', '+').replace('_', '/')))
 			catch
+				dispatch 'logout'
 				throw new Error 'Malformed token'
 			session = payload.user
-			if !session.email && !session.external_type
-				throw new Error 'Invalid token: no email and no external_type'
+			if !session or !session.email && !session.external_type
+				dispatch 'logout'
+				throw new Error 'Invalid token: no session or no email and no external_type'
 			commit 'set_token', token
 			try
 				storage_service.set 'token', token
 			catch e
+				# If the user doesnt want Cookies, this is fine:
+				# The session store can work properly, but on page refresh,
+				# they will simply not be logged in.
 				if e.message != 'Cookie consent denied'
-					# If the user doesnt want Cookies, this is fine:
-					# The session store can work properly, but on page refresh,
-					# they will simply not be logged in.
 					throw e
 			commit 'set_session', session
 		request_token_mail: (_, email) ->

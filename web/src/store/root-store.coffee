@@ -44,7 +44,7 @@ export create_store = =>
 				commit 'set_default_focus_target', el
 			offer_focus: ({ state }) ->
 				if state.default_focus_target
-					state.default_focus_target.focus()
+					state.default_focus_target.focus(preventScroll: true)
 		modules:
 			session: session_module
 			# When adding here, see ssr docs. Global submodules *seem* to need a factory wrapper too

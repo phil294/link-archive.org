@@ -65,11 +65,18 @@ class FacebookLoginProvider extends ExternalLoginProvider
 		await super.initialize()
 		@initialized = true
 	login: ->
-		new Promise (ok, notok) =>
-			window.FB.login (response) =>
-				if response.status == 'connected'
-					ok response.auth_response.access_token
-				else
-					notok response
+		try
+			token = await new Promise (ok, notok) =>
+				window.FB.login (response) =>
+					if response.status == 'connected'
+						ok response.authResponse.accessToken
+					else
+						notok response
+		catch e
+			if e.status == "unknown" or e.status == "not_authorized"
+				return null
+			console.warn "unexpected fb login error status: " + e.status
+			throw e
+		return token
 
 export default [ new GoogleLoginProvider, new FacebookLoginProvider ]

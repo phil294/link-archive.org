@@ -8,12 +8,13 @@ enum ExternalType {
 
 @Entity()
 class User extends BaseEntity {
-    public static ADMIN_ID = 1; // TODO: change to is_admin field
+    // public static ADMIN_ID = 1; // TODO: change to is_admin field
     @ObjectIdColumn()
     @IsOptional()
     public _id!: ObjectID;
     @Column()
     @IsEmail()
+    @IsOptional()
     public email: string | undefined;
     @Column()
     @Min(0)
