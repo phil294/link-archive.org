@@ -248,20 +248,15 @@ button.btn, input[type="submit"], input[type="reset"], input[type="button"]
 	background-image: linear-gradient(rgba(255, 255, 255, 0.45) 50%, transparent 52%);
 	box-sizing: border-box
 	font-weight bolder
-	transition all .1s linear
+	transition all 0.1s linear
 	position: relative
 	border-radius 0
 
-	/** 3D effect via borders ********/
-	$right_border_width = 3px
-	$bottom_border_width = 2px
-	$push_in_width = 2px
 	border-style solid
-	// bottom + right border, 3d-y
-	border-width 0 $right_border_width $bottom_border_width 0
-	border-color transparent #ccc #bbb transparent
+	border-width 0 1px 2px 0
+	border-color transparent #e8e8e8 #e0e0e0 transparent
 	background-clip padding-box
-	/* top + left border, only subtle and thin */ \
+	/* top + left border, only subtle and thin */
 	box-shadow -1px -1px 0 0 #f3f3f3
 
 	// (not disabled)
