@@ -12,16 +12,18 @@ div
 					read-more.note
 						template #summary="" (Why no password?)
 						p
-							| You can simply login by requesting a login link via mail. If you are afraid someone v-else="" might have gained access to the login link, you can invalidate all current ones in the user settings.
+							| You can simply login by requesting a login link via mail. If you are afraid someone else might have gained access to the login link, you can invalidate all current ones in the user settings.
 						p
 							| The main reasons for implementing a password-less login can be found in 
 							a href="https://goo.gl/czxFnf" this article
 							|. In short: Passwords are more of a security threat than measurement.
 						p
-							| If you feel you <em>really</em> need to use a password, you can configure one in the account settings once you are logged in.
+							strike If you feel you <em>really</em> need to use a password, you can configure one in the account settings once you are logged in.
 						label
-							| If you did that, you can log in with it here:
+							strike If you did that, you can log in with it here:
 							input type=password name=password
+						span
+							| (not supported yet!)
 					template #button_label="" Request mail to log in
 			div#mail-sent.padding-l v-else=""
 				div

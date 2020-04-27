@@ -16,16 +16,11 @@ Vue.directive 'moveable',
 			el_start_left = el.offsetLeft
 			el_start_top = el.offsetTop
 
-			current_x = 0
-			current_y = 0
-
 			el.style.position = 'absolute'
 
 			move_to = (mouse_event) =>
-				current_x = el_start_left + mouse_event.pageX - mouse_start_x
-				el.style.left = current_x + 'px'
-				current_y = el_start_top + mouse_event.pageY - mouse_start_y
-				el.style.top = current_y + 'px'
+				el.style.left = el_start_left + mouse_event.pageX - mouse_start_x + 'px'
+				el.style.top = el_start_top + mouse_event.pageY - mouse_start_y + 'px'
 
 			document.addEventListener 'mousemove', move_to
 			document.addEventListener 'mouseup', ->
