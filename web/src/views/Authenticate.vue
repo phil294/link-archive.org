@@ -39,11 +39,12 @@ div
 				a @click=show_mail_sent=false ⮜ Send another mail
 		section#with-external.box.padding-l
 			legend Or
-			div.center v-for="provider in external_login_providers" :key=provider.name
-				promise-button.btn.center v-if=provider.initialized :action=external_login(provider)
-					img.logo :src="'/img/'+provider.name+'.png'"
-					div.flex-fill Log in with $provider.name
-				div.note v-else="" Loading $provider.name login scripts...
+			div.provider.center v-for="provider in external_login_providers" :key=provider.name
+				img.logo :src="'/img/'+provider.name+'.png'"
+				promise-button.btn.load v-if=!provider.initialized :action=external_initialize(provider)
+					| Load $provider.name login
+				promise-button.btn.login v-else="" :action=external_login(provider)
+					| Click again to log in with $provider.name
 </template>
 
 <script lang="coffee">
@@ -51,21 +52,13 @@ import Vue from 'vue'
 import external_login_providers from '@/external-login-providers'
 import TokenInput from '@/views/TokenInput'
 
-loaded_external_login_providers = {}
-
-export default Vue.extend
+export default
 	components: { TokenInput }
 	name: 'Authenticate'
 	data: =>
 		email: ''
 		show_mail_sent: false
 		external_login_providers: external_login_providers
-	created: ->
-		@external_login_providers.forEach (provider) =>
-			if !loaded_external_login_providers[provider.name]
-				await provider.load()
-				loaded_external_login_providers[provider.name] = true
-			await provider.setup()
 	methods:
 		request_mail: ({ values }) ->
 			if values.password
@@ -74,6 +67,13 @@ export default Vue.extend
 			else
 				await @$store.dispatch 'session/request_token_mail', values.email
 				@show_mail_sent = true
+		external_initialize: (provider) -> =>
+			try
+				await provider.initialize()
+			catch e
+				if e.message == 'Cookie consent denied'
+					return
+				throw e
 		external_login: (provider) -> =>
 			token = await provider.login()
 			if not token
@@ -89,9 +89,13 @@ export default Vue.extend
 <style lang="stylus" scoped>
 section
 	margin-bottom 20px
-#with-external button
-	width 200px
-	margin-bottom 10px
-#with-external button img.logo 
-	margin-right 5px
+#with-email
+	> *
+		margin 10px
+#with-external .provider
+	margin 10px
+	img.logo 
+		margin-right 15px
+	button
+		width 250px
 </style>

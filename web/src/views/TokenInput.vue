@@ -26,13 +26,7 @@ export default
 		login_with_token: ->
 			@token_error = ''
 			@$store.dispatch 'session/login_with_token', @token_model.trim()
-			try
-				await @$store.dispatch 'session/refresh_token' # make sure the passed token is valid by asking the server for a new one
-				@$emit 'success'
-			catch e # fixme network error etc
-				if e.status == 401
-					throw new Error('The token was not accepted. It probably expired. This was probably issued by the user itself. Please request a new login link above.')
-				throw e
+			@$emit 'success'
 </script>
 
 <style lang="stylus" scoped>

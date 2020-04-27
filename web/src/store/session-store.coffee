@@ -25,7 +25,14 @@ export default
 			if !session.email && !session.external_type
 				throw new Error 'Invalid token: no email and no external_type'
 			commit 'set_token', token
-			storage_service.set 'token', token
+			try
+				storage_service.set 'token', token
+			catch e
+				if e.message != 'Cookie consent denied'
+					# If the user doesnt want Cookies, this is fine:
+					# The session store can work properly, but on page refresh,
+					# they will simply not be logged in.
+					throw e
 			commit 'set_session', session
 		request_token_mail: (_, email) ->
 			await axios.get "authentication/requesttokenmail?email=#{email}"
