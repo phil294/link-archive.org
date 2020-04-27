@@ -3,6 +3,7 @@ details
 	summary
 		div#summary-content.align-center
 			slot name=summary
+				small Details
 	div#details.fade-in
 		slot
 </template>

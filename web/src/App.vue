@@ -15,7 +15,8 @@ section#app.column.fill-h
 				span v-if=session.name $session.name
 				span v-else-if=session.email $session.email
 				span v-else-if=session.external_type $session.external_identifier [$session.external_type]
-			router-link v-if=is_logged_in exact="" to=/settings Settings
+				| . 
+			router-link v-if=is_logged_in exact="" to=/settings Settings 
 			button.btn v-if=is_logged_in @click=logout Logout
 			button.btn v-if=!is_logged_in @click=show_authenticate_popup
 				| Sign in
@@ -61,9 +62,14 @@ export default
 	> header
 		border-bottom 1px solid lightgrey
 		justify-content space-between
-		nav > *:not(:last-child)
-			margin-right 1.5em
-			display inline
+		// nav:not(:last-child), nav > *:not(:last-child) // TODO
+		// 	margin-right 1.5vw
+		button
+			padding 1px 4px
+		.session-info
+			.logged-in-prompt
+				@media (max-width: 600px)
+					display none
 	> main
 		.error
 			max-width 100vw

@@ -24,7 +24,7 @@ export install_error_handler = ({ store, router }) =>
 				return
 			if 401 == status
 				store.dispatch 'session/logout'	
-				router.push '/login'
+				router.push('/login').catch(=>)
 				return
 			if 500 == status
 				store.dispatch 'set_global_error_message',

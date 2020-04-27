@@ -1,9 +1,9 @@
-import { Router } from 'express';
+import { Router, Response } from 'express';
 import { OAuth2Client } from 'google-auth-library';
 import { LoginTicket, TokenPayload } from 'google-auth-library/build/src/auth/loginticket';
 import { INTERNAL_SERVER_ERROR, UNAUTHORIZED } from 'http-status-codes';
 import * as request from 'request-promise-native';
-import { ExternalType } from '../models/User';
+import { ExternalType, User } from '../models/User';
 import MailService from '../services/MailService';
 import TokenService from '../services/TokenService';
 import user_secured from '../user-secured';
@@ -12,13 +12,24 @@ import { error } from '../utils';
 export default ((token_service: TokenService, mail_service: MailService,
                  WEB_ROOT: string, GOOGLE_CLIENT_ID: string, FACEBOOK_APP_ID: string, FACEBOOK_APP_SECRET: string, WEBSITE_NAME: string) => {
     const authentication_router: Router = Router();
-    /** an email for login was requested. login==register */
-    authentication_router.get('/requesttokenmail', (req, res) => {
+
+    /**
+     * An email for login was requested. login==register. Create a user if
+     * not yet existing.
+     */
+    authentication_router.get('/requesttokenmail', async (req, res) => {
         // todo determine if account with mail exists and give out the information to the user in the mail below. motivation: freecodecamp 180963
         // todo let user choose if he wants one-time or never-expiring token
-        const token: string = token_service.create({
-            email: req.query.email as string, // validity check not necessary, nodemailer handles this
-        });
+
+        const email = req.query.email as string;
+        let user = await User.findOne({ email });
+        if (!user) {
+            user = new User({ email });
+            await user.save();
+        }
+
+        const token = token_service.create(user);
+
         const login_url = `${WEB_ROOT}/logincallback?token=${token}`;
         const paste_url = `${WEB_ROOT}/logincallback`;
         mail_service.send_mail(req.query.email as string, `Your Login Mail - ${WEBSITE_NAME}`, `
@@ -42,6 +53,7 @@ export default ((token_service: TokenService, mail_service: MailService,
                 res.status(INTERNAL_SERVER_ERROR).send('Internal mail sending error');
             });
     });
+
     /** post google token, return jwt */
     authentication_router.post('/googletokenlogin', async (req, res) => {
         const google_oAuth2Client = await new OAuth2Client(GOOGLE_CLIENT_ID);
@@ -63,15 +75,27 @@ export default ((token_service: TokenService, mail_service: MailService,
             res.status(INTERNAL_SERVER_ERROR).send('Could not get google user ID');
             return;
         }
-        const token = token_service.create({
-            email: payload.email,
-            external_identifier: payload.sub,
+
+        let user = await User.findOne({
             external_type: ExternalType.GOOGLE,
-            name: payload.name,
-            picture: payload.picture,
+            external_identifier: payload.sub,
         });
+        if (!user) {
+            user = new User({
+                external_type: ExternalType.GOOGLE,
+                external_identifier: payload.sub,
+                email: payload.email,
+                name: payload.name,
+                picture: payload.picture,
+            });
+            await user.save();
+        }
+
+        const token = token_service.create(user);
+
         res.send(token);
     });
+
     /** post facebook token, return jwt */
     authentication_router.post('/facebooktokenlogin', async (req, res) => {
         let result = await request.get(`https://graph.facebook.com/debug_token?input_token=${req.query.token}&access_token=${FACEBOOK_APP_ID}|${FACEBOOK_APP_SECRET}`);
@@ -85,16 +109,29 @@ export default ((token_service: TokenService, mail_service: MailService,
             res.status(INTERNAL_SERVER_ERROR).send('Could not get user ID');
             return;
         }
-        const token = token_service.create({
-            external_identifier: data.id,
+
+        let user = await User.findOne({
             external_type: ExternalType.FACEBOOK,
-            name: data.name,
+            external_identifier: data.id,
         });
+        if (!user) {
+            user = new User({
+                external_type: ExternalType.FACEBOOK,
+                external_identifier: data.id,
+                name: data.name,
+            });
+            await user.save();
+        }
+
+        const token = token_service.create(user);
+
         return res.send(token);
     });
+
     authentication_router.get('/refreshtoken', user_secured, (_, res) => {
-        const token: string = token_service.create({ ...res.locals.user });
+        const token: string = token_service.create(res.locals.user as User);
         res.send(token);
     });
+
     return authentication_router;
 });

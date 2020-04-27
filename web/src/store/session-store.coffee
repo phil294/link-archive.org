@@ -52,3 +52,6 @@ export default
 			now = Math.round(Date.now() / 1000)
 			await dispatch 'refresh_token' # with current date
 			await axios.patch 'user', { min_iat: now - 5 } # with date -5. this might also log out the current user if his date is inaccurate. but can live with that
+		delete_account: ({ dispatch }) ->
+			await axios.delete 'user'
+			await dispatch 'logout'

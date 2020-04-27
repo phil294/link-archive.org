@@ -6,6 +6,7 @@
 	--color-hover: #c4c4c4;
 	--color-disabled: #a6a6a6;
 	--color-highlighted: darkorange;
+	--color-error: darkred;
 	--color-border: var(--color-hover);
 }
 
@@ -109,6 +110,9 @@ details > summary {
 	box-shadow: 1px 1px 1px 1px #ddd
 	// border: 1px solid #ddd
 	background: rgba(255,255,255,0.93)
+
+.danger, .error
+	color var(--color-error)
 
 .no-click button
 	pointer-events none
@@ -232,7 +236,7 @@ button, input[type="submit"], input[type="reset"], input[type="button"], label
 	color: var(--color-disabled)
 }
 // TODO: .btn = button-like styling, should not be used as button identifier
-.btn, input[type="submit"], input[type="reset"], input[type="button"]
+button.btn, input[type="submit"], input[type="reset"], input[type="button"]
 	display: inline-block
 	// padding: 6px 13px
 	padding: 0.5em 1.3em;
