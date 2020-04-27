@@ -12,7 +12,7 @@ import emitting_model from '@/mixins/EmittingModel'
  * Behaves like a normal <select> but allows quick search with a text field
  * next to it
 ###
-export default Vue.extend
+export default
 	name: 'FilterSelect'
 	mixins: [ emitting_model ]
 	props:
