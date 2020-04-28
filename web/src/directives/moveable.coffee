@@ -7,7 +7,7 @@ Vue.directive 'moveable',
 			el = target
 		else
 			el = target.parentElement
-		target.classList.add 'moveable'
+		target.draggable = true
 		target.onmousedown = (event) =>
 			
 			mouse_start_x = event.pageX

@@ -115,10 +115,6 @@ details > summary {
 .no-click button
 	pointer-events none
 
-.moveable
-	cursor move
-
-
 // The below code is partly adopted from the Sakura CSS style/reset
 // This will be redone and limited to what is only actually needed, probably
 // eliminating any 3rd party fragments. For the moment, here's the licence:

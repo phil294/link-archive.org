@@ -1,6 +1,6 @@
 import Vue from 'vue'
 
-apply = (target, { value: { scroll_target, on_dragscroll_start, on_dragscroll_end } }) =>
+apply = (target, { value: { scroll_target, on_dragscroll_start, on_dragscroll_end } = {} }) =>
 	if scroll_target == undefined
 		scroll_target = target
 	else if scroll_target == null
@@ -10,6 +10,10 @@ apply = (target, { value: { scroll_target, on_dragscroll_start, on_dragscroll_en
 		
 	target.classList.add 'moveable'
 	target.onmousedown = (event) =>
+		if event.path.some (el) => el.draggable or ['input','textarea'].includes el.tagName?.toLowerCase?()
+			return
+		event.stopPropagation()
+
 		mouse_start_x = event.pageX
 		mouse_start_y = event.pageY
 
@@ -39,8 +43,6 @@ apply = (target, { value: { scroll_target, on_dragscroll_start, on_dragscroll_en
 
 		document.addEventListener 'mouseup', on_mouseup
 		
-		target.ondragstart = => false
-
 Vue.directive 'dragscrollable',
 	inserted: (target, binding) =>
 		apply target, binding
