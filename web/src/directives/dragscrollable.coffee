@@ -10,7 +10,7 @@ apply = (target, { value: { scroll_target, on_dragscroll_start, on_dragscroll_en
 		
 	target.classList.add 'moveable'
 	target.onmousedown = (event) =>
-		if event.path.some (el) => el.draggable or ['input','textarea'].includes el.tagName?.toLowerCase?()
+		if (event.path or event.composedPath()).some (el) => el.draggable or ['input','textarea'].includes el.tagName?.toLowerCase?()
 			return
 		event.stopPropagation()
 
