@@ -8,7 +8,7 @@ apply = (target, { value: { scroll_target, on_dragscroll_start, on_dragscroll_en
 	else
 		scroll_target = scroll_target 
 		
-	target.classList.add 'moveable'
+	target.draggable = true
 	target.onmousedown = (event) =>
 		if (event.path or event.composedPath()).some (el) => el.draggable or ['input','textarea'].includes el.tagName?.toLowerCase?()
 			return
