@@ -87,8 +87,8 @@ export default
 			progress_callback = (progress) =>
 				if progress != undefined
 					@progress = progress
-				else if @$props.stepcount
-					@progress += 1/@$props.stepcount
+				else if @stepcount
+					@progress += 1/@stepcount
 				else
 					throw new Error "Unexpected  progress #{progress}"
 
