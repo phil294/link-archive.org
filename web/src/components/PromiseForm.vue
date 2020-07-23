@@ -113,11 +113,7 @@ export default
 .right
 	float right
 button
-	margin-right 5px
 	progress
 		width 100%
 		height 2px
-form:not(.row)
-	> *:not(:last-child):not(:first-child)
-		margin-bottom 1.2vh
 </style>
