@@ -1,9 +1,9 @@
 <template lang="slm">
-form.column :class.no-click=loading @submit.prevent=submit
+form.column :class.no-click=loading @submit.prevent=submit enctype="multipart/form-data"
 	legend
 		slot name=legend
 	slot
-	#actions.row.align-center
+	#actions.row.center.padding
 		/ todo pass loading as slotscope prop to parent
 		slot name=button
 			loading-button.btn :class.right=button_float_right :loading=button_loading :disabled=nosubmit
@@ -72,21 +72,32 @@ export default
 			@loading = true
 			@button_loading = true
 			@$emit 'submit', event
+
 			form_data = new FormData event.target
-			values = [...form_data.entries()]
-				.reduce((all, entry) =>
-					all[entry[0]] = entry[1]
-					all
-				, {})
+			
+			values = {}
+			# There can be multiple values for the same form data key, e.g.
+			# <input type=file multiple>
+			array_values = {}
+			for form_key from [...form_data.keys()]
+				form_values = form_data.getAll form_key
+				values[form_key] = form_values[0]
+				array_values[form_key] = form_values
+
+			progress_callback = (progress) =>
+				if progress != undefined
+					@progress = progress
+				else if @$props.stepcount
+					@progress += 1/@$props.stepcount
+				else
+					throw new Error "Unexpected  progress #{progress}"
+
 			try
-				progress_callback = (progress) =>
-					if progress != undefined
-						@progress = progress
-					else if @$props.stepcount
-						@progress += 1/@$props.stepcount
-					else
-						throw new Error "Unexpected  progress #{progress}"
-				await @$props.action { form_data, values, event, progress: progress_callback }
+				await @$props.action {
+					...values,
+					form_data, values, array_values, event,
+					progress: progress_callback
+				}
 				if not @onetime
 					@button_loading = false
 			catch e
