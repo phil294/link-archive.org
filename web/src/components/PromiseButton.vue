@@ -10,7 +10,7 @@ loading-button :loading=button_loading||disabled @click=clicked
 				progress :value=progress
 			span v-else=""
 				slot name=done_prompt
-					| Done!
+					| $done_prompt
 		slot name=error_prompt v-else="" :error=error
 			div.danger UNEXPECTED ERROR: $error
 </template>
@@ -45,6 +45,7 @@ export default
 		loading: false
 		button_loading: false
 		progress: 1
+		done_prompt: 'Done!'
 	methods:
 		clicked: ->
 			@error = ''
@@ -52,7 +53,7 @@ export default
 			@button_loading = true
 			try
 				if @action instanceof Promise
-					await @action
+					result = await @action
 				else
 					progress_callback = (progress) =>
 						if progress != undefined
@@ -67,8 +68,10 @@ export default
 					# ^ there is no reason not to accept non-promises here
 					# as promise-button also serves the purpose of displaying
 					# errors
-					await action_response
-				if not @onetime
+					result = await action_response
+				if @onetime or result
+					@done_prompt = result
+				else
 					@button_loading = false
 				# if the action fails, do not reenable the button. show error and become stale.
 			catch e
