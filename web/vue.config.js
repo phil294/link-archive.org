@@ -1,6 +1,4 @@
 const path = require('path');
-const https = require('https');
-const express = require('express');
 const coffeescript = require('coffeescript');
 const fs = require('fs');
 const fetch = require('node-fetch');
@@ -25,6 +23,10 @@ module.exports = {
       .rule('coffee')
         .after('vue')
         .test(/\.coffee$/)
+          // alternatively, maybe use coffee-loader transpile options? TODO. ...follow https://github.com/cxspxr/vue-cli-plugin-coffee/issues/4
+          .use('coffee/babel')
+            .loader('babel-loader')
+            .end()
           .use('coffee/loader')
             .loader('coffee-loader')
             .end()
