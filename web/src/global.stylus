@@ -112,7 +112,7 @@ details > summary {
 .danger, .error
 	color var(--color-error)
 
-.no-click button
+.no-click *
 	pointer-events none
 
 // The below code is partly adopted from the Sakura CSS style/reset
