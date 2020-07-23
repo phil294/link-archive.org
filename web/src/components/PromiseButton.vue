@@ -12,8 +12,7 @@ loading-button :loading=button_loading||disabled @click=clicked
 				slot name=done_prompt
 					| Done!
 		slot name=error_prompt v-else="" :error=error
-			| UNEXPECTED ERROR: 
-			span.warn $error
+			div.danger UNEXPECTED ERROR: $error
 </template>
 
 <script lang="coffee">
