@@ -23,7 +23,7 @@ export default
 			type: Boolean
 			default: false
 	mounted: ->
-		@model = @default_values[@field.name]
+		@model = @field.default_value or @default_values[@field.name]
 	computed:
 		id: ->
 			'_form_' + (@default_values.id or '') + @field.name
