@@ -4,7 +4,7 @@ loading-button :loading=button_loading||disabled @click=clicked
 	template #used_prompt=""
 		/ todo pass loading as slotscope (as in promiseform)
 		slot name=success_prompt v-if=!error
-			.column v-if=loading
+			.column v-if=loading||disabled
 				slot name=loading_prompt
 					| Loading...
 				progress :value=progress
