@@ -25,10 +25,9 @@ export default
 details
 	overflow hidden
 	&[open]
+		display contents
 		overflow visible
 		white-space pre-line
-#details > *
-	padding-left 2vw
 summary
 	white-space nowrap
 	&.no-list-style
