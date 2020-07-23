@@ -5,9 +5,7 @@ apply = (target, { value: { scroll_target, on_dragscroll_start, on_dragscroll_en
 		scroll_target = target
 	else if scroll_target == null
 		return
-	else
-		scroll_target = scroll_target 
-		
+	
 	target.draggable = true
 	target.onmousedown = (event) =>
 		if (event.path or event.composedPath()).some (el) => el.draggable or ['input','textarea'].includes el.tagName?.toLowerCase?()
@@ -44,7 +42,5 @@ apply = (target, { value: { scroll_target, on_dragscroll_start, on_dragscroll_en
 		document.addEventListener 'mouseup', on_mouseup
 		
 Vue.directive 'dragscrollable',
-	inserted: (target, binding) =>
-		apply target, binding
-	update: (target, binding) =>
-		apply target, binding
+	inserted: apply
+	update: apply
