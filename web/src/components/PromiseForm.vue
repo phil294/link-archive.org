@@ -14,6 +14,8 @@ form.column :class.no-click=loading @submit.prevent=submit enctype="multipart/fo
 						.column v-if=loading
 							span Loading...
 							progress :value=progress
+							small.time-est v-if=seconds_remaining_est
+								| Time est. remaining: {{ seconds_remaining_est | format_seconds }}
 						span v-else="" Done!
 		button.btn.btn-2.cancel v-if=cancelable :class.right=button_float_right :disabled=loading type=button @click=$emit('cancel')
 			slot name=cancel_button_label
@@ -30,6 +32,7 @@ form.column :class.no-click=loading @submit.prevent=submit enctype="multipart/fo
 </template>
 
 <script lang="coffee">
+import dayjs from 'dayjs'
 
 ###
  * Standardform component: includes only submit (progress-)button.
@@ -71,6 +74,8 @@ export default
 		loading: false
 		button_loading: false
 		progress: 1
+		action_start: null
+		seconds_remaining_est: null
 	methods:
 		submit: (event) ->
 			@error_response = ''
@@ -96,7 +101,13 @@ export default
 					@progress += 1/@stepcount
 				else
 					throw new Error "Unexpected  progress #{progress}"
+				if @progress > 0
+					time_passed = dayjs().diff(@action_start)
+					time_total_est = time_passed / @progress
+					if time_total_est > 10000
+						@seconds_remaining_est = Math.round((time_total_est - time_passed) / 1000)
 
+			@action_start = new Date
 			try
 				await @action {
 					...values,
@@ -112,6 +123,8 @@ export default
 				throw e
 			finally
 				@loading = false
+				@seconds_remaining_est = null
+				@action_start = null
 </script>
 
 <style lang="stylus" scoped>
