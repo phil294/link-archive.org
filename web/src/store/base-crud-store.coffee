@@ -3,9 +3,16 @@ import axios from 'axios'
 
 ### todo docs
 ###
-export default (resource_name, custom, deserializer) =>
+export default (...args) =>
+	if typeof args[0] == 'string'
+		resource_name = args[0]
+	else
+		{ resource_name, deserializer, endpoint } = args[0]
+	custom = args[1]
 	if not deserializer
 		deserializer = (r) => r
+	if not endpoint
+		endpoint = resource_name
 	resource_name_plural =
 		if resource_name.match /y$/
 			resource_name.slice(0, -1) + 'ies'
@@ -46,20 +53,20 @@ export default (resource_name, custom, deserializer) =>
 	actions: {
 		### send to server, upon response commit ###
 		["add_#{resource_name}_raw"]: ({ commit }, r) ->
-			response = await axios.post resource_name, r
+			response = await axios.post endpoint, r.form_data or r
 			resource = response.data
 			commit "add_#{resource_name}_raw", resource
 			resource
 		["get_#{resource_name_plural}_raw"]: ({ commit, state }, params) ->
-			response = await axios.get resource_name, { params }
+			response = await axios.get endpoint, { params }
 			commit "set_#{resource_name_plural}_raw", response.data
 			response.data
 		["get_#{resource_name}_raw"]: ({ commit }, id) ->
-			response = await axios.get "#{resource_name}/#{id}"
+			response = await axios.get "#{endpoint}/#{id}"
 			commit "add_#{resource_name}_raw", response.data
 			response.data
 		["update_#{resource_name}_raw"]: ({ commit }, r) ->
-			response = await axios.put "#{resource_name}/#{r._id}", r
+			response = await axios.put "#{endpoint}/#{r._id}", r.form_data or r
 			commit "update_#{resource_name}_raw", response.data
 			response.data
 		["delete_#{resource_name}_raw"]: ({ dispatch }, r) ->
@@ -67,7 +74,7 @@ export default (resource_name, custom, deserializer) =>
 				return false
 			dispatch "delete_#{resource_name}_raw_no_confirm", r
 		["delete_#{resource_name}_raw_no_confirm"]: ({ dispatch, commit }, r) ->
-			await axios.delete "#{resource_name}/#{r._id}"
+			await axios.delete "#{endpoint}/#{r._id}"
 			commit "remove_#{resource_name}_raw_by_id", r._id
 		...custom.actions
 	}
