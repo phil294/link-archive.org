@@ -1,7 +1,7 @@
 <template lang="slm">
 details
-	summary
-		div#summary-content.align-center
+	summary :class.no-list-style=noliststyle
+		div#summary-content.align-center.fill
 			slot name=summary
 				small Details
 	div#details.fade-in
@@ -15,28 +15,26 @@ details
 ###
 export default
 	name: 'ReadMore'
+	props:
+		noliststyle:
+			default: false
+			type: Boolean
 </script>
 
 <style lang="stylus" scoped>
 details
-	// max-width 15%
 	overflow hidden
 	&[open]
-	// 	width 85%
 		overflow visible
-		// max-width 80vw
-		width fit-content !important
-		max-width unset !important
 		white-space pre-line
-#details // todo rename
-	margin-top 4px
-	width fit-content
 #details > *
 	padding-left 2vw
 summary
 	white-space nowrap
+	&.no-list-style
+		list-style none
+		&::-webkit-details-marker
+			display none
 #summary-content
-	// float left
 	display inline-flex
-	margin-right 5px
 </style>
