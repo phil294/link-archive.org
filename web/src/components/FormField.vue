@@ -9,6 +9,8 @@ div.column :class.padding-s=!nolabel
 </template>
 
 <script lang="coffee">
+id_i = 0
+
 import emitting_model from '@/mixins/EmittingModel'
 export default
 	mixins: [ emitting_model ]
@@ -26,7 +28,7 @@ export default
 		@model = @field.default_value or @default_values[@field.name]
 	computed:
 		id: ->
-			'_form_' + (@default_values.id or '') + @field.name
+			"_form_#{@default_values.id or ''}_#{++id_i}_#{@field.name}"
 </script>
 
 <style lang="stylus" scoped>
