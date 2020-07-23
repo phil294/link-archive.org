@@ -1,7 +1,7 @@
 <template lang="slm">
 popup.column.center v-if=confirm_prompt @close=confirm_answer(false)
 	.prompt.center $confirm_prompt
-	.actions.row.center
+	.actions.row.align-center
 		button.confirm.btn @click=confirm_answer(true)
 			i.material-icons check 
 			| Confirm
@@ -27,7 +27,7 @@ export default
 <style lang="stylus">
 .prompt
 	max-width 350px
-.cancel
-	float right
-	margin-left 15px
+	overflow auto
+.actions
+	justify-content space-between
 </style>

@@ -26,6 +26,7 @@ export default
 <style lang="stylus" scoped>
 main
 	max-height 98vh
+	max-width 98vw
 	min-width 50px
 	min-height 50px
 	position relative
