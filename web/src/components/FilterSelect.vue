@@ -26,8 +26,9 @@ export default
 	methods:
 		check_model: ->
 			if not @model or not @filtered_options.map((o)=>o.value).includes @model
-				# do not use @model as it might result in an endless loop, freezing the site to death
-				@internal_value = @filtered_options[0]?.value
+				new_value = @filtered_options[0]?.value
+				if new_value
+					@model = new_value
 	computed:
 		filtered_options: ->
 			@$props.options.filter (option) =>
