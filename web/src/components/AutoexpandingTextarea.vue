@@ -31,7 +31,7 @@ export default
 			@focussed = true
 		on_blur: ->
 			await @$nextTick()
-			if not @$props.noshrink
+			if not @noshrink
 				# shrink to fit container. else: keep showing entire content height
 				@height = '100%'
 			@focussed = false

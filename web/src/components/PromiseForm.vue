@@ -93,7 +93,7 @@ export default
 					throw new Error "Unexpected  progress #{progress}"
 
 			try
-				await @$props.action {
+				await @action {
 					...values,
 					form_data, values, array_values, event,
 					progress: progress_callback

@@ -29,7 +29,7 @@ export default
 	methods:
 		clicked: (event) ->
 			@$emit 'click'
-			if @$props.load_on_click
+			if @load_on_click
 				if @type == 'submit' or event.currentTarget.form
 					# Do not set :disabled right away because that would prevent
 					# parent form submit events from happening. $nextTick doesnt do

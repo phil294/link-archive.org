@@ -47,10 +47,10 @@ export default
 	computed:
 		selected_options: ->
 			@model.map (value) =>
-				@$props.options.find (option) =>
+				@options.find (option) =>
 					option.value == value
 		unselected_options: ->
-			@$props.options.filter (option) =>
+			@options.filter (option) =>
 				not @selected_options.includes option
 	watch:
 		options: ->

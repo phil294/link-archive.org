@@ -19,8 +19,8 @@ export default
 			default: false
 	data: ->
 		### internal_value takes its value either from a
-		dynamically changed @$props.value or from user input directly. ###
-		internal_value: @$props.value
+		dynamically changed @value or from user input directly. ###
+		internal_value: @value
 	computed:
 		model:
 			get: -> @internal_value

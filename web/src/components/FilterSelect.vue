@@ -31,7 +31,7 @@ export default
 					@model = new_value
 	computed:
 		filtered_options: ->
-			@$props.options.filter (option) =>
+			@options.filter (option) =>
 				option.name.toLowerCase().includes @filter.toLowerCase()
 	watch:
 		filtered_options: ->
