@@ -1,5 +1,5 @@
 <template lang="slm">
-div#modal.center.fade-in :class.contained=contained @keyup.esc=close :tabindex="!contained?-1:null" ref=modal
+div#modal.center.fade-in :class.contained=contained @keydown.esc=close :tabindex="!contained?-1:null" ref=modal
 	div#background.fill @click=close
 	slot
 </template>
