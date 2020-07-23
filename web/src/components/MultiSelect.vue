@@ -9,7 +9,7 @@
 				small.disabled empty selection
 			.selected-options.row.justify-center.children-spacing
 				.selected-option.row.center.box v-for="selected_option, index in selected_options"
-					button.name.remove title="Remove this option" @click=remove(index) $selected_option.name ╳
+					button.name.remove type=button title="Remove this option" @click=remove(index) $selected_option.name ╳
 </template>
 
 <script lang="coffee">
