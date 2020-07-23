@@ -29,11 +29,11 @@ main
 #titlebar, #close
 	position absolute
 	line-height 1em
-	top 1.5rem
+	top 1.5vmax
 #close, #titlebar
-	right 1.5rem
+	right 1.5vmax
 #titlebar
-	left 1.5rem
+	left 1.5vmax
 	color var(--color-border)
 	user-select none
 </style>
