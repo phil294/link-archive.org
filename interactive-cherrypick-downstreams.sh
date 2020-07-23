@@ -11,5 +11,6 @@ while read -r hash; do
     echo $hash
     git cherry-pick --no-commit -x "$hash" ||:
     read -r -n 1 -s -u 3 -p 'Press any key to continue. . .'
+    sleep 0.5
     echo
 done 3<&0 <<<"$hashes"
