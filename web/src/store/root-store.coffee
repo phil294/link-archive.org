@@ -4,6 +4,8 @@ import session_module from './session-store'
 
 Vue.use Vuex
 
+confirm_resolve = null
+
 export create_store = =>
 	new Vuex.Store
 		# strict: process.env.NODE_ENV != 'production' # TODO: https://github.com/Akryum/vue-cli-plugin-ssr/issues/184
@@ -14,6 +16,7 @@ export create_store = =>
 			authenticate_popup: false
 			global_error_message: ''
 			default_focus_target: null
+			confirm_prompt: ''
 		mutations:
 			toggle_authenticate_popup: (state, show) ->
 				state.authenticate_popup = show
@@ -25,6 +28,8 @@ export create_store = =>
 				state.loading_counter--
 			set_global_error_message: (state, msg) ->
 				state.global_error_message = msg
+			set_confirm_prompt: (state, prompt) ->
+				state.confirm_prompt = prompt
 			set_default_focus_target: (state, el) ->
 				state.default_focus_target = el
 		actions:
@@ -40,6 +45,13 @@ export create_store = =>
 				commit 'set_global_error_message', msg
 			reset_global_error_message: ({ commit }) ->
 				commit 'set_global_error_message', ''
+			confirm_ask: ({ commit }, prompt) ->
+				commit 'set_confirm_prompt', prompt
+				new Promise (ok) =>
+					confirm_resolve = ok
+			confirm_answer: ({ commit }, answer) ->
+				confirm_resolve answer
+				commit 'set_confirm_prompt', ''
 			set_default_focus_target: ({ commit }, el) ->
 				commit 'set_default_focus_target', el
 			offer_focus: ({ state }) ->
