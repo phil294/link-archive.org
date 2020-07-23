@@ -39,17 +39,17 @@ details > summary {
 // CLASSES /////////////////////////
 
 .padding
-	padding: 0.5vw
+	padding: 0.5vmax
 .padding-l
-	padding: 1vw
+	padding: 1vmax
 .padding-xl
-	padding: 3vw
+	padding: 3vmax
 .margin
-	margin: 0.5vw
+	margin: 0.5vmax
 .margin-l
-	margin: 1vw
+	margin: 1vmax
 .margin-xl
-	margin: 3vw
+	margin: 3vmax
 .note
 	font-size:80%
 	opacity:0.8
