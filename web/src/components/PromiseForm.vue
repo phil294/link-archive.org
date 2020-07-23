@@ -35,6 +35,8 @@ form.column :class.no-click=loading @submit.prevent=submit enctype="multipart/fo
  * Standardform component: includes only submit (progress-)button.
  * Component fires $submit event and calls `action` prop just
  * like `promise-button` (?)+
+
+ todo duplicate code with promise button
 ###
 export default
 	name: 'PromiseForm'
