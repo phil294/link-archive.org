@@ -3,6 +3,7 @@ and adds the `model` property to this component for access.
 setting the `model` emits the value. ###
 export default
 	props:
+		# todo use v-bind="$attrs" or use normal base element inheritance instead and remove all props. note that this will break all components that currently use name prop etc.
 		value:
 			# Override this / type if necessary
 			default: ''
