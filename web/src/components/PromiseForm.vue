@@ -6,7 +6,7 @@ form.column :class.no-click=loading @submit.prevent=submit enctype="multipart/fo
 	#actions.row.center.padding
 		/ todo pass loading as slotscope prop to parent
 		slot name=button
-			loading-button.btn :class.right=button_float_right :loading=button_loading :disabled=nosubmit
+			loading-button.btn v-if="loading||!no_submit_button" :class.right=button_float_right :loading=button_loading :disabled=nosubmit
 				slot name=button_label
 					| Submit
 				template #used_prompt=""
@@ -40,6 +40,9 @@ export default
 	name: 'PromiseForm'
 	props:
 		button_float_right:
+			type: Boolean
+			default: false
+		no_submit_button:
 			type: Boolean
 			default: false
 		### docs ###
