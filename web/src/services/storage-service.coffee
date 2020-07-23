@@ -9,6 +9,7 @@ export default
 			cookies_accepted = @get 'cookies_accepted'
 			if not cookies_accepted
 				# TODO: link to privacy policy
+				# todo use await @$store.dispatch 'confirm_ask', '...' instead when store is available
 				if not confirm """
 					COOKIE WARNING
 					
