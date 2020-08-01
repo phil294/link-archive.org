@@ -1,5 +1,5 @@
 <template lang="slm">
-.column
+.multi-select.flex-base
 	slot name=add :add=add :options=unselected_options
 		promise-form.add-form.row.align-center.children-spacing-l :action=add_formdata
 			slot name=add_select :options=unselected_options
@@ -69,6 +69,8 @@ export default
 </script>
 
 <style lang="stylus" scoped>
+.multi-select
+	flex-direction column
 .add-form
 	width 100%
 .selected-options
@@ -77,4 +79,6 @@ export default
 	.selected-option
 		padding 4px 7px
 		margin 4px
+.list
+	overflow auto
 </style>
