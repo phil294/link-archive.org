@@ -2,7 +2,8 @@
 set -e
 
 # should be d-1 because the very first commit might be omitted otherwise (?)
-since="2020-07-23"
+since="$1"
+[ -z "$since" ] && echo 'arg1 = date in format YYYY-MM-DD' && exit 5
 
 git fetch --all
 
