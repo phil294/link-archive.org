@@ -1,15 +1,20 @@
 <template lang="slm">
 .column
-	form.add-form.row.align-center.children-spacing-l @submit.prevent=add
-		filter-select required="" v-model=new_option :options=unselected_options
-		button.btn Add
-	div.margin-l
+	slot name=add :add=add :options=unselected_options
+		promise-form.add-form.row.align-center.children-spacing-l :action=add_formdata
+			slot name=add_select :options=unselected_options
+				select v-if=nofilter required="" name=value
+					option v-for="option of unselected_options" :value="option.value||option"
+						| {{ option.name || option }}
+				filter-select v-else="" required="" name=value :options=unselected_options
+			template #button_label="" Add
+	.list.margin-l
 		slot name=rendered :selected_options=selected_options :add=add :remove=remove :move_up=move_up :move_down=move_down
 			.none-selected v-if=!selected_options.length
 				small.disabled empty selection
 			.selected-options.row.justify-center.children-spacing
 				.selected-option.row.center.box v-for="selected_option, index in selected_options"
-					button.name.remove type=button title="Remove this option" @click=remove(index) $selected_option.name ╳
+					button.name.remove title="Remove this option" @click=remove(index) {{ selected_option.name || selected_option }} ╳
 </template>
 
 <script lang="coffee">
@@ -26,15 +31,20 @@ export default
 			default: => []
 		value:
 			type: Array
+		nofilter:
+			type: Boolean
+			default: false
 	data: ->
 		new_option: ''
 	created: ->
 		if not @model
 			@model = []
 	methods:
-		add: ->
-			@model.push @new_option
+		add: (value) ->
+			@model.push value
 			@model = @model
+		add_formdata: ({ value }) ->
+			@add value
 		remove: (index) ->
 			@model.splice index, 1
 			@model = @model
@@ -47,8 +57,9 @@ export default
 	computed:
 		selected_options: ->
 			@model.map (value) =>
-				@options.find (option) =>
-					option.value == value
+				@options.find((option) =>
+					option.value == value or option == value) or
+				name: '?'
 		unselected_options: ->
 			@options.filter (option) =>
 				not @selected_options.includes option
