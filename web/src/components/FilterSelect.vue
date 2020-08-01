@@ -17,7 +17,7 @@ export default
 	mixins: [ emitting_model ]
 	props:
 		options:
-			type: Array
+			type: Array # todo str array (because emitted values are also always string)
 			default: => []
 	mounted: ->
 		@check_model()
@@ -31,8 +31,14 @@ export default
 					@model = new_value
 	computed:
 		filtered_options: ->
-			@options.filter (option) =>
-				option.name.toLowerCase().includes @filter.toLowerCase()
+			@options
+				.map (option) =>
+					if option.name
+						option
+					else
+						value: option, name: option
+				.filter (option) =>
+					option.name.toLowerCase().includes @filter.toLowerCase()
 	watch:
 		filtered_options: ->
 			@check_model()
