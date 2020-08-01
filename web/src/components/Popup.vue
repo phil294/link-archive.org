@@ -41,6 +41,6 @@ main
 	top 0
 	right 1.5vmax
 .popup-content
-	padding 0 3vmax 3vmax
+	padding 0 2vmax 3vmax
 	overflow auto
 </style>
