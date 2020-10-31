@@ -172,8 +172,7 @@ body {
 
 // basic font family reset, based on browserstyles font modifications
 input, textarea, keygen, select, button, optgroup, option
-	font-family unset
-	font-size unset
+	font inherit
 	margin 0
 
 h1, h2, h3, h4, h5, h6 {
@@ -237,8 +236,9 @@ textarea {
 	width: 100%; }
 
 button // buttons, by default, should not have any specific styling so they can be used better semantically. for typical button-buttons, use .btn
+	all inherit
 	// also see index ssr html
-	-webkit-appearance: none
+	appearance none
 	color: inherit // FF bug
 
 button, input[type="submit"], input[type="reset"], input[type="button"], label
