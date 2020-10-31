@@ -28,6 +28,11 @@ a {
 }
 fieldset {
 	border: 2px solid #eeeeee; // TODO: breaks .box in login, also has border or shadow or both
+	// chrome default paddings but without top padding
+	padding-block-start 0
+    padding-inline-start 0.75em
+    padding-inline-end 0.75em
+    padding-block-end 0.625em
 }
 details > summary {
 	cursor: pointer;
@@ -278,7 +283,7 @@ button.btn, input[type="submit"], input[type="reset"], input[type="button"]
 
 textarea, select, input:not([type=range]) {
 	color: #4a4a4a;
-	padding: 6px 10px;
+	padding: 4px 10px;
 	/* The 6px vertically centers text on FF, ignored by Webkit */
 	background-color #f1f1f1
 	border none
@@ -290,7 +295,7 @@ textarea:focus, select:focus, input[type]:focus
 	outline 0
 
 input[type=checkbox]
-	margin 3px 11px
+	margin 3px 11px 3px 0
 	&:focus
 		outline 1px dotted var(--color-border)
 
