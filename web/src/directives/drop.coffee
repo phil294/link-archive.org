@@ -1,9 +1,13 @@
 import Vue from 'vue'
 
+# This seems to be necessary as directives are pretty much stateless.
+# And the callback needs to reside somewhere as it can update or change.
+callbacks = new Map
+
 Vue.directive 'drop',
-	bind: (el, { value }) =>
+	bind: (el, { value }) ->
 		counter = 0
-		el.addEventListener 'dragover', (e) =>
+		el.addEventListener 'dragover', (e) ->
 			e.preventDefault()
 			e.dataTransfer.dropEffect = 'move'
 		el.addEventListener 'dragenter', (e) =>
@@ -20,4 +24,9 @@ Vue.directive 'drop',
 			counter = 0
 			el.classList.remove 'drop'
 			data = JSON.parse e.dataTransfer.getData('application/json')
-			value(data)
+			callbacks.get(el)(data)
+		callbacks.set(el, value)
+	update: (el, { value }) ->
+		callbacks.set(el, value)
+	unbind: (el) ->
+		callbacks.delete(el)
