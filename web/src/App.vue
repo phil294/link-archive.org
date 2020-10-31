@@ -26,15 +26,17 @@ section#app.column.fill-h
 			div.center
 				promise-button.btn :action=reset_global_error_message
 					| Hide
+		confirm
 		router-view
 </template>
 
 <script lang="coffee">
-import { mapState, mapGetters, mapActions } from 'vuex'
 import Authenticate from '@/views/Authenticate'
+import Confirm from './views/Confirm'
+import { mapState, mapGetters, mapActions } from 'vuex'
 
 export default
-	components: { Authenticate }
+	components: { Authenticate, Confirm }
 	name: 'App'
 	computed: {
 		...mapState
