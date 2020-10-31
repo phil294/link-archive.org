@@ -156,11 +156,6 @@ details > summary {
 
 // @import 'https://fonts.googleapis.com/css?family=Fira+Mono|Noto+Serif|Noto+Sans:300,400,500';
 
-/* Body */
-html {
-	font-family: "Noto Serif", "Arial", "Helvetica", sans-serif;
-}
-
 body {
 	color: var(--color-foreground);
 	background-color: #fff;
