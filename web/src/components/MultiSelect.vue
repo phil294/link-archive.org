@@ -7,6 +7,7 @@
 					option v-for="option of unselected_options" :value="option.value||option"
 						| {{ option.name || option }}
 				filter-select v-else="" required="" name=value :options=unselected_options
+			slot name=add_fields
 			template #button_label="" Add
 	.list.margin-l
 		slot name=rendered :selected_options=selected_options :add=add :remove=remove :move_up=move_up :move_down=move_down
@@ -36,6 +37,9 @@ export default
 		nofilter:
 			type: Boolean
 			default: false
+		add_action:
+			type: Function
+			default: null
 	data: ->
 		new_option: ''
 	created: ->
@@ -45,8 +49,11 @@ export default
 		add: (value) ->
 			@model.push value
 			@model = @model
-		add_formdata: ({ value }) ->
-			@add value
+		add_formdata: (promiseform_data) ->
+			if @add_action
+				@add_action promiseform_data
+			else
+				@add promiseform_data.value
 		remove: (index) ->
 			@model.splice index, 1
 			@model = @model
