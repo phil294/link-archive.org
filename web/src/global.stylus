@@ -136,9 +136,6 @@ details > summary {
 .no-click *
 	pointer-events none
 
-*
-	box-sizing border-box
-
 // The below code is partly adopted from the Sakura CSS style/reset
 // This will be redone and limited to what is only actually needed, probably
 // eliminating any 3rd party fragments. For the moment, here's the licence:
@@ -343,3 +340,6 @@ progress
 	// there is a polyfill, but it's 4 KB, zipped 1 KB :-(
 	&:not(:focus-visible)
 		background-color unset
+
+*
+	box-sizing border-box
