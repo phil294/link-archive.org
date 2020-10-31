@@ -48,6 +48,8 @@ app.use('/authentication', authentication_router(
 app.use('/user', user_router);
 app.use('/error', error_router(mail_service));
 
+app.set('query parser', 'simple');
+
 // @ts-ignore
 // Global error fallback handler, including promises
 app.use(async (err, req, res, next) => {
