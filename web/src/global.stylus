@@ -105,9 +105,18 @@ details > summary {
 	height: 100%
 .fill
 	@extend .fill-w, .fill-h
-.box
-	box-shadow 1px 1px 3px 0px #ababab
-	background: rgba(255,255,255,0.93)
+@media not print
+	.box, input:not([type=submit]):not([type=range]), select, textarea
+		// box-shadow: 1px 2px 7px 1px #eee
+		// box-shadow: 1px 1px 1px 1px #ddd
+		// box-shadow: 2px 1px 1px 0px #ddd
+		// box-shadow 1px 1px 4px 2px #eee
+		// box-shadow 1px 1px 1px 2px #e2e2e2
+		box-shadow 1px 1px 3px 0px #ababab
+	.box
+		margin-bottom 1px
+		// border: 1px solid #ddd
+		background: rgba(255,255,255,0.93)
 
 .danger, .error
 	color var(--color-error)
