@@ -14,7 +14,9 @@
 				small.disabled empty selection
 			.selected-options.row.justify-center.children-spacing
 				.selected-option.row.center.box v-for="selected_option, index in selected_options"
-					button.name.remove title="Remove this option" @click=remove(index) {{ selected_option.name || selected_option }} ╳
+					button.name.remove title="Remove this option" @click=remove(index)
+						| {{ selected_option.name || selected_option }} 
+						span.x ╳
 </template>
 
 <script lang="coffee">
@@ -79,8 +81,8 @@ export default
 	.selected-option
 		padding 4px 7px
 		margin 4px
-		.remove
-			font-family revert
+		.remove > .x
+			font-family initial
 .list
 	overflow auto
 </style>
