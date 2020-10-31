@@ -69,11 +69,11 @@ export default
 					# as promise-button also serves the purpose of displaying
 					# errors
 					result = await action_response
-				if @onetime or typeof result == 'string'
+				if typeof result == 'string'
 					# If @action returns a string, it will be shown in place of
 					# the normal button and the button will become onetime implicitly
 					@done_prompt = result
-				else
+				else if not @onetime
 					@button_loading = false
 				# if the action fails, do not reenable the button. show error and become stale.
 			catch e
