@@ -3,10 +3,8 @@ popup.column.center v-if=confirm_prompt @close=confirm_answer(false)
 	.prompt.center $confirm_prompt
 	.actions.row.align-center
 		button.confirm.btn @click=confirm_answer(true)
-			i.material-icons check 
 			| Confirm
 		button.cancel.btn.btn-2 @click=confirm_answer(false)
-			i.material-icons close 
 			| Cancel
 </template>
 
