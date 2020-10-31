@@ -9,7 +9,7 @@
 				filter-select v-else="" required="" name=value :options=unselected_options
 			slot name=add_fields
 			template #button_label="" Add
-	.list.margin-l
+	.list
 		slot name=rendered :selected_options=selected_options :add=add :remove=remove :move_up=move_up :move_down=move_down
 			.none-selected v-if=!selected_options.length
 				small.disabled empty selection
