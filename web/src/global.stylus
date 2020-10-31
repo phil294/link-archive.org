@@ -288,7 +288,7 @@ button.btn, input[type="submit"], input[type="reset"], input[type="button"]
 	&[disabled]
 		pointer-events auto // allow title popup
 
-textarea, select, input:not([type=range]) {
+textarea, select, input:not([type=range])
 	color: #4a4a4a;
 	padding: 4px 10px;
 	/* The 6px vertically centers text on FF, ignored by Webkit */
