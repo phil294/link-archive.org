@@ -36,6 +36,8 @@ main
 .titlebar, .close
 	line-height 2em
 	margin-top 1vmax
+.titlebar
+	color var(--color-border)
 .close
 	position absolute
 	top 0
