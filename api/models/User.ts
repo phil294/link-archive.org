@@ -1,5 +1,5 @@
-import { IsEmail, IsInt, IsOptional, IsString, Min, validateOrReject } from 'class-validator';
-import { BaseEntity, BeforeInsert, BeforeUpdate, Column, Entity, ObjectID, ObjectIdColumn } from 'typeorm';
+import { IsEmail, IsInt, IsOptional, IsString, Min } from 'class-validator';
+import { BaseEntity, Column, Entity, ObjectID, ObjectIdColumn } from 'typeorm';
 
 enum ExternalType {
     GOOGLE,
@@ -41,12 +41,6 @@ class User extends BaseEntity {
     public constructor(init: Partial<User>) {
         super();
         Object.assign(this, init);
-    }
-
-    @BeforeInsert()
-    @BeforeUpdate()
-    public async validate() {
-        await validateOrReject(this, { validationError: { target: false }, whitelist: true, forbidNonWhitelisted: true });
     }
 }
 

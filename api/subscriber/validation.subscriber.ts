@@ -1,19 +1,24 @@
-import { EntitySubscriberInterface, EventSubscriber, InsertEvent, UpdateEvent } from 'typeorm';
+import { validateOrReject } from 'class-validator';
+import { BaseEntity, EntitySubscriberInterface, EventSubscriber, InsertEvent, UpdateEvent } from 'typeorm';
 
-@EventSubscriber() // FIXME should work (?) but doesnt. manual injections into the entities for now. revise this
+@EventSubscriber()
 export class PostSubscriber implements EntitySubscriberInterface {
 
-    /**
-     * Called before entity insertion.
-     */
-    public beforeInsert(event: InsertEvent<any>) {
-        console.log(`BEFORE ENTITY INSERTED: `, event.entity);
-        // validation...
+    public beforeInsert(event: InsertEvent<any>): Promise<void> {
+        return this.validate(event.entity);
     }
 
-    public beforeUpdate(event: UpdateEvent<any>) {
-        console.log('before entity update');
-        console.log(event.entity);
-        // ...
+    public beforeUpdate(event: UpdateEvent<any>): Promise<void> {
+        return this.validate(event.entity);
+    }
+
+    private validate<E extends BaseEntity>(entity: E): Promise<void> {
+        return validateOrReject(entity, {
+            validationError: {
+                target: false,
+            },
+            whitelist: true,
+            forbidNonWhitelisted: true,
+        });
     }
 }
