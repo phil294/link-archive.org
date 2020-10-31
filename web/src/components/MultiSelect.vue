@@ -42,11 +42,17 @@ export default
 			default: null
 	data: ->
 		new_option: ''
+		values_type: 'string'
 	created: ->
 		if not @model
 			@model = []
+		if @options.length
+			@values_type = typeof (@options[0].value or @options[0])
 	methods:
 		add: (value) ->
+			# value is now inherently type string. maybe change that:
+			if @values_type == 'number'
+				value = value * 1
 			@model.push value
 			@model = @model
 		add_formdata: (promiseform_data) ->
