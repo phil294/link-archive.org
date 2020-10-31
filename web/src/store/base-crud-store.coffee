@@ -7,12 +7,14 @@ export default (...args) =>
 	if typeof args[0] == 'string'
 		resource_name = args[0]
 	else
-		{ resource_name, deserializer, endpoint } = args[0]
+		{ resource_name, deserializer, endpoint, unique } = args[0]
 	custom = args[1]
 	if not deserializer
 		deserializer = (r) => r
 	if not endpoint
 		endpoint = resource_name
+	if unique == true
+		unique = '_id'
 	resource_name_plural =
 		if resource_name.match /y$/
 			resource_name.slice(0, -1) + 'ies'
@@ -36,9 +38,16 @@ export default (...args) =>
 	}
 	mutations: {
 		["add_#{resource_name}_raw"]: (state, r) ->
+			if unique and state["#{resource_name_plural}_raw"].some((exist) =>
+				exist[unique] == r[unique])
+					return
 			state["#{resource_name_plural}_raw"].unshift deserializer r
 		["add_#{resource_name_plural}_raw"]: (state, rs) ->
-			state["#{resource_name_plural}_raw"].unshift ...rs.map (r) => deserializer r
+			state["#{resource_name_plural}_raw"].unshift ...rs
+				.filter (r) =>
+					not unique or not state["#{resource_name_plural}_raw"].some (exist) =>
+						exist[unique] == r[unique]
+				.map (r) => deserializer r
 		["set_#{resource_name_plural}_raw"]: (state, rs) ->
 			state["#{resource_name_plural}_raw"] = rs.map (r) => deserializer r
 		["update_#{resource_name}_raw"]: (state, r) ->
