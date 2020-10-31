@@ -129,6 +129,9 @@ details > summary {
 .no-click *
 	pointer-events none
 
+*
+	box-sizing border-box
+
 // The below code is partly adopted from the Sakura CSS style/reset
 // This will be redone and limited to what is only actually needed, probably
 // eliminating any 3rd party fragments. For the moment, here's the licence:
@@ -250,16 +253,15 @@ button, input[type="submit"], input[type="reset"], input[type="button"], label
 }
 // TODO: .btn = button-like styling, should not be used as button identifier
 button.btn, input[type="submit"], input[type="reset"], input[type="button"]
-	display: inline-block
+	display inline-flex
+	align-items center
+	white-space pre-wrap
 	// padding: 6px 13px
 	padding: 0.5em 1.3em;
-	text-align: center
 	text-decoration: none
-	// white-space: nowrap
 	background-color: #f1f1f1
 	color: var(--color-foreground)
 	background-image: linear-gradient(rgba(255, 255, 255, 0.45) 50%, transparent 52%);
-	box-sizing: border-box
 	font-weight bolder
 	transition all 0.1s linear
 	position: relative
@@ -288,7 +290,6 @@ textarea, select, input:not([type=range]) {
 	background-color #f1f1f1
 	border none
 	box-shadow none
-	box-sizing border-box
 
 textarea:focus, select:focus, input[type]:focus
 	border 1px solid var(--color-border)
