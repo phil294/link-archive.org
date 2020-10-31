@@ -4,13 +4,12 @@ import Vue from 'vue'
  # Client only: This will make console.error, Vue error handler and other
  # uncaught error handlers automatically send out an error report to the server,
  # and display an error banner to the user
- TODO dont show everything to the user, only the first line, with an option to expand the rest
+ TODO dont show everything to the user, only an option to expand+show
 ###
 export install_error_handler = ({ store, router }) =>
 	_console_error = console.error
 	depth = 0
 	error_handler = (...args) =>
-		# debugger
 		depth++
 		_console_error(...args);
 		if depth > 4
