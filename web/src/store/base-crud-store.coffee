@@ -76,8 +76,16 @@ export default (...args) =>
 			commit "add_#{resource_name}_raw", resource
 			resource
 		["get_#{resource_name_plural}_raw"]: ({ commit, state }, params) ->
+			options = params?.options
+			if options
+				params = params.params
+			else
+				options = {}
 			response = await axios.get endpoint, { params }
-			commit "set_#{resource_name_plural}_raw", response.data
+			if options.add
+				commit "add_#{resource_name_plural}_raw", response.data
+			else
+				commit "set_#{resource_name_plural}_raw", response.data
 			response.data
 		["get_#{resource_name}_raw"]: ({ commit }, id) ->
 			response = await axios.get "#{endpoint}/#{id}"
