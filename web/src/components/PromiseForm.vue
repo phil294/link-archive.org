@@ -114,7 +114,7 @@ export default
 							form_data, values, array_values, event,
 							progress: progress_callback
 						}
-					-	sleep 450 # force delay when the network response is quick, because overly fast button responses are confusing to the user imo
+					-	sleep 150 # force delay when the network response is quick, because overly fast button responses are confusing to the user imo
 				if not @onetime
 					@button_loading = false
 				@$emit 'success'
