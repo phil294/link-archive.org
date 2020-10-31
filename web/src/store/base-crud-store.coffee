@@ -43,11 +43,11 @@ export default (...args) =>
 					return
 			state["#{resource_name_plural}_raw"].unshift deserializer r
 		["add_#{resource_name_plural}_raw"]: (state, rs) ->
-			state["#{resource_name_plural}_raw"].unshift ...rs
+			state["#{resource_name_plural}_raw"].unshift ...(rs
 				.filter (r) =>
 					not unique or not state["#{resource_name_plural}_raw"].some (exist) =>
 						exist[unique] == r[unique]
-				.map (r) => deserializer r
+				.map (r) => deserializer r)
 		["set_#{resource_name_plural}_raw"]: (state, rs) ->
 			state["#{resource_name_plural}_raw"] = rs.map (r) => deserializer r
 		["update_#{resource_name}_raw"]: (state, r) ->
