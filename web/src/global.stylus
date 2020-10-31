@@ -23,9 +23,16 @@ form
 input[type=checkbox] + label {
 	display: inline;
 }
-a {
-	cursor: pointer;
-}
+a[href], .fakelink
+	cursor: pointer
+	&, &:visited
+		color var(--color-clickable)
+	&:hover
+		color var(--color-hover)
+	text-decoration none
+
+button
+	font-size 13px
 fieldset {
 	border: 2px solid #eeeeee; // TODO: breaks .box in login, also has border or shadow or both
 	// chrome default paddings but without top padding
@@ -210,9 +217,6 @@ blockquote {
 	margin-left: 1.5em;
 	padding-left: 1em;
 	border-left: 3px solid var(--color-main); }
-
-img {
-	max-width: 100%; }
 
 /* Pre and Code */
 pre {
