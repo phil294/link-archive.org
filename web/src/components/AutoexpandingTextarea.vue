@@ -55,6 +55,4 @@ export default
 textarea
 	resize none
 	overflow hidden
-	font-family unset
-	font-size unset
 </style>
