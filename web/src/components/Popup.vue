@@ -5,7 +5,7 @@ modal @close=close
 			div.titlebar.center v-moveable="{move_target}"
 				| ⠿⠿⠿⠿⠿
 			button.close @click=close type=button ╳
-		.popup-content v-dragscrollable=""
+		.popup-content
 			/ FIXME: Only on mobile, same as result table handles, via css
 			slot
 </template>
