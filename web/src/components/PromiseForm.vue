@@ -108,13 +108,16 @@ export default
 
 			@action_start = new Date
 			try
-				await @action {
-					...values,
-					form_data, values, array_values, event,
-					progress: progress_callback
-				}
+				await Promise.all
+					-	@action {
+							...values,
+							form_data, values, array_values, event,
+							progress: progress_callback
+						}
+					-	sleep 450 # force delay when the network response is quick, because overly fast button responses are confusing to the user imo
 				if not @onetime
 					@button_loading = false
+				@$emit 'success'
 			catch e
 				await @$nextTick() # enforce transition effect even if follow-up error+
 				@error_response = e.data || e
