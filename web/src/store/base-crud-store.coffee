@@ -48,6 +48,13 @@ export default (...args) =>
 		["remove_#{resource_name}_raw_by_id"]: (state, _id) ->
 			index = state["#{resource_name_plural}_raw"].findIndex (t) => t._id == _id
 			state["#{resource_name_plural}_raw"].splice index, 1
+		["sort_#{resource_name_plural}_raw"]: (state, sort_by) ->
+			if typeof sort_by == 'string'
+				sorter = (a, b) =>
+					a[sort_by].toString().localeCompare b[sort_by]
+			else
+				sorter = sort_by
+			state["#{resource_name_plural}_raw"].sort(sorter)
 		...custom.mutations
 	},
 	actions: {
