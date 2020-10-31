@@ -161,6 +161,11 @@ body {
 	background-color: #fff;
 }
 
+
+// basic font family reset, based on browserstyles font modifications
+input, textarea, keygen, select, button, optgroup, option
+	font-family unset
+
 h1, h2, h3, h4, h5, h6 {
 	line-height: 1.1;
 //	font-family: Verdana, Geneva, sans-serif;
