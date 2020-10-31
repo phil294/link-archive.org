@@ -274,17 +274,18 @@ button.btn, input[type="submit"], input[type="reset"], input[type="button"]
 			background unset
 			border-width 2px 0 0 1px
 
-textarea, select, input {
+textarea, select, input:not([type=range]) {
 	color: #4a4a4a;
 	padding: 6px 10px;
 	/* The 6px vertically centers text on FF, ignored by Webkit */
-	background-color: #f1f1f1;
-	border: none;
-	box-shadow: none;
-	box-sizing: border-box; }
-	textarea:focus, select:focus, input[type]:focus {
-		border: 1px solid var(--color-border);
-		outline: 0; }
+	background-color #f1f1f1
+	border none
+	box-shadow none
+	box-sizing border-box
+
+textarea:focus, select:focus, input[type]:focus
+	border 1px solid var(--color-border)
+	outline 0
 
 input[type="checkbox"]:focus {
 	outline: 1px dotted var(--color-border); }
