@@ -32,7 +32,8 @@ export default ((token_service: TokenService, mail_service: MailService,
 
         const login_url = `${WEB_ROOT}/logincallback?token=${token}`;
         const paste_url = `${WEB_ROOT}/logincallback`;
-        mail_service.send_mail(req.query.email as string, `Your Login Mail - ${WEBSITE_NAME}`, `
+        try {
+            mail_service.send_mail(req.query.email as string, `Your Login Mail - ${WEBSITE_NAME}`, `
                     Hello, <br>
                     <br>
                     <a href="${login_url}" alt="login url">click here to log in to ${WEBSITE_NAME}.</a><br>
@@ -46,12 +47,12 @@ export default ((token_service: TokenService, mail_service: MailService,
                     <br>
                     If your user account does not exist yet, it will be created once you log in.<br>
                     <br>
-                    Bye`)
-            .then(() => res.end())
-            .catch((e: any) => {
-                error(e);
-                res.status(INTERNAL_SERVER_ERROR).send('Internal mail sending error');
-            });
+                    Bye`);
+        } catch (e) {
+            error(e);
+            return res.status(INTERNAL_SERVER_ERROR).send('Internal mail sending error');
+        }
+        return res.end();
     });
 
     /** post google token, return jwt */
