@@ -2,10 +2,14 @@
 div.column :class.padding-s=!nolabel
 	label v-if=!nolabel :title=field.title :for=id
 		| $field.label
-	input :id=id v-if=!field.options v-model=model :name=field.name :type=field.type :required="field.required||!field.optional" :placeholder="field.placeholder||field.label" :maxlength=field.maxlength :step=field.step :min=field.min :max=field.max
-	select v-else="" :id=id v-model=model :name=field.name :required="field.required||!field.optional" :placeholder="field.placeholder||field.label"
+	select v-if="field.options||field.optgroups" :id=id v-model=model :name=field.name :required="field.required||!field.optional" :placeholder="field.placeholder||field.label"
+		optgroup v-for="optgroup of field.optgroups" :label=optgroup.label
+			/ kinda duplicate, not so pretty :-/
+			option v-for="option of optgroup.options" :value=option.value
+				| $option.name
 		option v-for="option of field.options" :value=option.value
 			| $option.name
+	input :id=id v-else="" v-model=model :name=field.name :type=field.type :required="field.required||!field.optional" :placeholder="field.placeholder||field.label" :maxlength=field.maxlength :step=field.step :min=field.min :max=field.max
 </template>
 
 <script lang="coffee">
