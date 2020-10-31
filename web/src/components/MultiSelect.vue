@@ -79,6 +79,8 @@ export default
 	.selected-option
 		padding 4px 7px
 		margin 4px
+		.remove
+			font-family revert
 .list
 	overflow auto
 </style>

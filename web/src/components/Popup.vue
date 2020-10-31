@@ -42,6 +42,7 @@ main
 	position absolute
 	top 0
 	right 1.5vmax
+	font-family revert
 .popup-content
 	padding 0 2vmax 3vmax
 	overflow auto
