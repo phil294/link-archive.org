@@ -31,13 +31,9 @@ export default
 			@$emit 'click'
 			if @load_on_click
 				if @type == 'submit' or event.currentTarget.form
-					# Do not set :disabled right away because that would prevent
-					# parent form submit events from happening. $nextTick doesnt do
-					# it, timeout 1 seems to be fine.
-					# Alternative: Manual event.currentTarget.form.submit() when
-					# available, but for some reason this doesnt trigger the form
-					# handler also
-					await new Promise (ok) => setTimeout(ok, 1)
+					# Necessary because the loading state eats this up.
+					# Alternative: 1ms timeout
+					event.currentTarget.form.requestSubmit()
 				@loading = true
 </script>
 
