@@ -1,5 +1,5 @@
 <template lang="slm">
-loading-button :loading=button_loading||disabled @click=clicked
+loading-button :loading=button_loading :disabled=disabled @click=clicked
 	slot
 	template #used_prompt=""
 		/ todo pass loading as slotscope (as in promiseform)
