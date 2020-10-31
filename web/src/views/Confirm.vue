@@ -28,6 +28,7 @@ export default
 .prompt
 	max-width 350px
 	overflow auto
+	white-space pre-wrap
 .actions
 	justify-content space-between
 </style>
