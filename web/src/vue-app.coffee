@@ -60,6 +60,7 @@ export create_app = ({ before_app = =>, after_app = => } = {}) ->
 		store
 		render: (h) => h(App)
 		beforeMount: ->
+			window.sleep = (ms) => new Promise (ok) => setTimeout(ok, ms)
 			await @$nextTick()
 			### ************* CLIENT-ONLY DOM MODIFICATION ***************
 			 * Needs to happen after $nextTick so the ssr hydration
