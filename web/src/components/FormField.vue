@@ -9,7 +9,7 @@ div.column :class.padding-s=!nolabel
 				| $option.name
 		option v-for="option of field.options" :value=option.value
 			| $option.name
-	input :id=id v-else="" v-model=model :name=field.name :type=field.type :required="field.required||!field.optional" :placeholder="field.placeholder||field.label" :maxlength=field.maxlength :step=field.step :min=field.min :max=field.max
+	input :id=id v-else="" v-model=model :name=field.name :type=field.type :required="field.required||!field.optional" :placeholder="field.placeholder||field.label" :maxlength=field.maxlength :step=field.step :min=field.min :max=field.max onfocus=select()
 </template>
 
 <script lang="coffee">
