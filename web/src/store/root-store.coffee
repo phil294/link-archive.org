@@ -12,6 +12,8 @@ export create_store = =>
 		state: ->
 			app_name: 'MEVN App name'
 			app_version: process.env.VUE_APP_APP_VERSION
+			store_history: []
+			max_store_history_size: if process.env.NODE_ENV == 'production' then 10 else 100
 			loading_counter: 0
 			authenticate_popup: false
 			global_error_message: ''
@@ -20,6 +22,17 @@ export create_store = =>
 		mutations:
 			toggle_authenticate_popup: (state, show) ->
 				state.authenticate_popup = show
+			push_store_history: (state, item) ->
+				try
+					item = JSON.stringify(item, null, 2)
+				catch e
+					debugger
+					return
+				if item == state.store_history[state.store_history.length-1]
+					return
+				state.store_history.push item
+				if state.store_history.length > state.max_store_history_size
+					state.store_history.shift()
 			set_app_name: (state, app_name) ->
 				state.app_name = app_name
 			increase_loading_counter: (state) ->
@@ -59,4 +72,14 @@ export create_store = =>
 					state.default_focus_target.focus(preventScroll: true)
 		modules:
 			session: session_module
-			# When adding here, see ssr docs. Global submodules *seem* to need a factory wrapper too
+	store.subscribe (mutation) =>
+		if mutation.type != 'push_store_history' and
+				not ['token', 'loading_counter', 'route'].some((match) => mutation.type.includes match) and
+				not Object.keys(mutation.payload or {}).some((key) => key.match(/token/i))
+			if Array.isArray mutation.payload
+				mutation.payload = "Array[#{mutation.payload.length}]"
+			store.commit 'push_store_history', mutation
+	store.subscribeAction (action) =>
+		store.commit 'push_store_history', action.type
+	
+	store
