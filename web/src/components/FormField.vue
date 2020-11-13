@@ -1,5 +1,5 @@
 <template lang="slm">
-div.column :class.padding-s=!nolabel
+.form-field.column :class.padding-s=!nolabel
 	label v-if=!nolabel :title=field.title :for=id
 		| $field.label
 	select v-if="field.options||field.optgroups" :id=id v-model=model :name=field.name :required="field.required||!field.optional" :placeholder="field.placeholder||field.label"
