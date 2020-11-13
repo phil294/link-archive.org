@@ -72,13 +72,24 @@ export create_store = =>
 					state.default_focus_target.focus(preventScroll: true)
 		modules:
 			session: session_module
-	store.subscribe (mutation) =>
-		if mutation.type != 'push_store_history' and
-				not ['token', 'loading_counter', 'route', 'error'].some((match) => mutation.type.includes match) and
-				not Object.keys(mutation.payload or {}).some((key) => key.match(/token/i))
-			if Array.isArray mutation.payload
-				mutation.payload = "Array[#{mutation.payload.length}]"
-			store.commit 'push_store_history', mutation
+	store.subscribe ({ type, payload }) =>
+		if not payload
+			payload = {}
+		if type != 'push_store_history' and
+				not ['loading_counter', 'route', 'error'].some((match) => type.includes match)
+			if ['token'].some((match) => type.includes match) or
+					Object.keys(payload).some((key) => key.match(/token/i))
+				payload = "[...]"
+			else if Array.isArray payload
+				payload = "Array[#{payload.length}]"
+			else
+				payload = Object.fromEntries(Object.entries(payload)
+					.map ([k, v]) =>
+						if k.match /_ref$/
+							[ k, '[...]' ]
+						else
+							[ k, v ])
+			store.commit 'push_store_history', { type, payload }
 	store.subscribeAction (action) =>
 		store.commit 'push_store_history', action.type
 	
