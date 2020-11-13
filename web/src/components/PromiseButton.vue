@@ -77,7 +77,10 @@ export default
 					@button_loading = false
 				# if the action fails, do not reenable the button. show error and become stale.
 			catch e
-				@error = e
+				if e.status == 0
+					@button_loading = false
+				else
+					@error = e
 				throw e
 			finally
 				@loading = false
