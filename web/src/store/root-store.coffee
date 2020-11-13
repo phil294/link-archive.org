@@ -74,7 +74,7 @@ export create_store = =>
 			session: session_module
 	store.subscribe (mutation) =>
 		if mutation.type != 'push_store_history' and
-				not ['token', 'loading_counter', 'route'].some((match) => mutation.type.includes match) and
+				not ['token', 'loading_counter', 'route', 'error'].some((match) => mutation.type.includes match) and
 				not Object.keys(mutation.payload or {}).some((key) => key.match(/token/i))
 			if Array.isArray mutation.payload
 				mutation.payload = "Array[#{mutation.payload.length}]"
