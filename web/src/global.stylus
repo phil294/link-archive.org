@@ -1,6 +1,7 @@
 // GLOBAL ///////////////////////// 
 
 :root {
+	// Also check process.env.VUE_APP_THEME_PRIMARY_COLOR
 	--color-main: #d8d8d8;
 	--color-foreground: #444;
 	--color-hover: #c4c4c4;
