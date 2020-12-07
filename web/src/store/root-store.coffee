@@ -82,7 +82,7 @@ export create_store = =>
 				payload = "[...]"
 			else if Array.isArray payload
 				payload = "Array[#{payload.length}]"
-			else
+			else if typeof payload == 'object'
 				payload = Object.fromEntries(Object.entries(payload)
 					.map ([k, v]) =>
 						if k.match /_ref$/
