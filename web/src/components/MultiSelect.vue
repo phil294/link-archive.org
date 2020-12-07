@@ -78,9 +78,6 @@ export default
 		unselected_options: ->
 			@options.filter (option) =>
 				not @selected_options.includes option
-	watch:
-		options: ->
-			@model = []
 </script>
 
 <style lang="stylus" scoped>
