@@ -22,7 +22,7 @@ export default
 	}
 </script>
 
-<style lang="stylus">
+<style lang="stylus" scoped>
 .prompt
 	max-width 350px
 	overflow auto
