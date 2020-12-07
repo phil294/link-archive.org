@@ -1,5 +1,8 @@
 <template lang="slm">
 section#app.column.fill-h
+	no-ssr
+		vue-progress-bar
+	confirm
 	popup v-if=authenticate_popup @close=hide_authenticate_popup
 		authenticate @authenticated=hide_authenticate_popup
 	modal v-if=loading_counter
@@ -26,18 +29,30 @@ section#app.column.fill-h
 			div.center
 				promise-button.btn :action=reset_global_error_message
 					| Hide
-		confirm
 		router-view
 </template>
 
 <script lang="coffee">
 import Authenticate from '@/views/Authenticate'
-import Confirm from './views/Confirm'
+import CategoryTree from '@/views/CategoryTree'
+import Confirm from '@/views/Confirm'
+import PathToCategory from '@/views/PathToCategory'
+# TODO: requiring a seperate package for this is annoying, solve it manually somehow.
+# v-if=!$isServer is not enough for vue-progress-bar
+# https://github.com/egoist/vue-client-only/blob/master/src/index.js
+import NoSsr from 'vue-no-ssr'
 import { mapState, mapGetters, mapActions } from 'vuex'
 
 export default
-	components: { Authenticate, Confirm }
-	name: 'App'
+	components: { NoSsr, Confirm, Authenticate, CategoryTree, PathToCategory }
+	metaInfo:
+		titleTemplate: (title) =>
+			"#{if title then title+' – ' else ''}Site name"
+		link:
+			-	rel: 'manifest', href: '/manifest.json' # not actually necessary..? pwa seems to also work without the link
+		meta:
+			# -	name: 'description', vmid: 'description', content: 'Site description'
+			-	name: 'theme-color', content: process.env.VUE_APP_THEME_PRIMARY_COLOR
 	computed: {
 		...mapState
 			-	'app_name'

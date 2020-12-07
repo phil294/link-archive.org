@@ -1,6 +1,8 @@
 import Vue from 'vue'
+import VueMeta from 'vue-meta'
 import axios from 'axios'
 import App from './App'
+import { install_error_handler } from './error-handler'
 import { create_router } from './vue-router'
 import { create_store } from './store/root-store'
 import storage_service from '@/services/storage-service'
@@ -18,8 +20,11 @@ import Popup from '@/components/Popup'
 import PromiseButton from '@/components/PromiseButton'
 import PromiseForm from '@/components/PromiseForm'
 import ReadMore from '@/components/ReadMore'
+import './register-service-worker'
 
 Vue.config.productionTip = false
+
+Vue.use VueMeta
 
 # For some global window declarations, see App.vue
 
@@ -33,12 +38,10 @@ Vue.component 'promise-button', PromiseButton
 Vue.component 'promise-form', PromiseForm
 Vue.component 'read-more', ReadMore
 
-export create_app = ({ before_app = =>, after_app = => } = {}) ->
+export default ->
 	store = create_store()
 	router = create_router(store)
 	
-	await before_app { router, store }
-
 	axios.defaults.baseURL = process.env.VUE_APP_API_ROOT
 	axios.interceptors.request.use (config) =>
 		store.dispatch 'server_reachable'
@@ -55,12 +58,13 @@ export create_app = ({ before_app = =>, after_app = => } = {}) ->
 			formatted_error.status = 0
 		Promise.reject(formatted_error)
 
-	app = new Vue {
+	new Vue {
 		router
 		store
-		render: (h) => h(App)
+		render: (h) => h App
 		beforeMount: ->
 			window.sleep = (ms) => new Promise (ok) => setTimeout(ok, ms)
+			install_error_handler { store, router }
 			await @$nextTick()
 			### ************* CLIENT-ONLY DOM MODIFICATION ***************
 			 * Needs to happen after $nextTick so the ssr hydration
@@ -76,9 +80,3 @@ export create_app = ({ before_app = =>, after_app = => } = {}) ->
 				@$store.dispatch 'session/login_with_token', token
 				@$store.dispatch 'session/refresh_token' # make sure the token is still valid by asking the server for a new one # this should probably be never-expiring and the email ones be shortlived instead TODO (or one-time?)
 	}
-
-	result = { app, router, store }
-
-	await after_app result
-
-	result
