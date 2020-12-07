@@ -1,9 +1,12 @@
 const path = require('path');
 const coffeescript = require('coffeescript');
 const fs = require('fs');
-const fetch = require('node-fetch');
 
 process.env.VUE_APP_APP_VERSION = require('./package.json').version;
+
+process.env.VUE_APP_THEME_PRIMARY_COLOR = '#000000';
+
+const is_production = process.env.NODE_ENV === 'production';
 
 module.exports = {
   productionSourceMap: true, // doesnt work: https://github.com/Akryum/vue-cli-plugin-ssr/issues/84
@@ -50,7 +53,7 @@ module.exports = {
       skipWaiting: true
     },
     name: 'MEVN Base InDev',
-    themeColor: '#000',
+    themeColor: process.env.VUE_APP_THEME_PRIMARY_COLOR,
     msTileColor: '#FFFFFF',
     manifestOptions: {
       // icons: []
