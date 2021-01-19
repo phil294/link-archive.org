@@ -29,7 +29,8 @@ export default
 			type: Boolean
 			default: false
 	mounted: ->
-		@model = @field.default_value ? @default_values[@field.name]
+		if not @model
+			@model = @field.default_value ? @default_values[@field.name]
 	computed:
 		id: ->
 			"_form_#{@default_values.id or ''}_#{++id_i}_#{@field.name}"
