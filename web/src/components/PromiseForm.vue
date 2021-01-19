@@ -5,7 +5,7 @@ form.column :class.no-click=loading @submit.prevent=submit enctype="multipart/fo
 	slot
 	#actions.row.center.padding
 		slot name=button :loading=loading
-			loading-button.btn v-if="!no_submit_button||loading" :class.right=button_float_right :loading=button_loading :disabled=nosubmit
+			loading-button.btn v-if="!no_submit_button||loading" :loading=button_loading :disabled=nosubmit
 				slot name=button_label
 					| Submit
 				template #used_prompt=""
@@ -16,11 +16,11 @@ form.column :class.no-click=loading @submit.prevent=submit enctype="multipart/fo
 							small.time-est v-if=seconds_remaining_est
 								| Time est. remaining: {{ seconds_remaining_est | format_seconds }}
 						span v-else="" Done!
-		button.btn.btn-2.cancel v-if=cancelable :class.right=button_float_right :disabled=loading type=button @click=$emit('cancel')
+		button.btn.btn-2.cancel v-if=cancelable :disabled=loading type=button @click=$emit('cancel')
 			slot name=cancel_button_label
 				| Cancel
 		/ TODO: disabled="" when form is unchanged
-		button.btn v-if=resetable :class.right=button_float_right :disabled=loading type=reset
+		button.btn v-if=resetable :disabled=loading type=reset
 			slot name=reset_button_label
 				| Reset
 	div.error.fade-in v-if=error_response
@@ -130,8 +130,6 @@ export default
 </script>
 
 <style lang="stylus" scoped>
-.right
-	float right
 button
 	progress
 		width 100%
