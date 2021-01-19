@@ -246,7 +246,10 @@ button // buttons, by default, should not have any specific styling so they can 
 	color: inherit // FF bug
 
 button, input[type="submit"], input[type="reset"], input[type="button"], label
-	cursor: pointer
+	&:not(:disabled)
+		cursor: pointer
+		&:hover
+			color var(--color-clickable)
 
 .no-click, .no-click button, *[disabled], *[disabled] button, *[disabled] input, *[disabled] select, *[readonly], *[readonly] button, *[readonly] input, *[readonly] select {
 	// opacity 0.7
@@ -290,8 +293,6 @@ button.btn, input[type="submit"], input[type="reset"], input[type="button"]
 
 	// (not disabled)
 	&:enabled
-		&:hover
-			color var(--color-clickable)
 		&:active
 			opacity: 0.7
 			background unset
