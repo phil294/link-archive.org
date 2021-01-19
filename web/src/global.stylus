@@ -265,18 +265,22 @@ button.btn, input[type="submit"], input[type="reset"], input[type="button"]
 	text-decoration: none
 	background-color: #f1f1f1
 	color: var(--color-foreground)
-	background-image: linear-gradient(rgba(255, 255, 255, 0.45) 50%, transparent 52%);
+	background-image: linear-gradient(rgba(255, 255, 255, 0.85) 50%, transparent 52%);
 	font-weight bolder
 	transition all 0.1s linear
-	position: relative
+	position relative
+	inset 0
 	border-radius 0
 
 	border-style solid
-	border-width 0 1px 2px 0
-	border-color transparent #e8e8e8 #e0e0e0 transparent
+	border-width 0 2px 2px 0
+	border-color transparent #e8e8e8 #ccc transparent
 	background-clip padding-box
 	/* top + left border, only subtle and thin */
 	box-shadow -1px -1px 0 0 #f3f3f3
+
+	// outline none !important
+	// border none !important
 
 	// (not disabled)
 	&:enabled
@@ -285,7 +289,9 @@ button.btn, input[type="submit"], input[type="reset"], input[type="button"]
 		&:active
 			opacity: 0.7
 			background unset
-			border-width 2px 0 0 1px
+			border none
+			box-shadow -1px 0px #ddd, 0px -1px #ccc
+			inset 2px 0 0 1px
 	&[disabled]
 		pointer-events auto // allow title popup
 
