@@ -322,17 +322,20 @@ progress
 		text-decoration-style dotted
 
 *:focus
-	&[tabindex="-1"], &:not(:focus-visible)
-		// tabindex=-1 exclusion doesnt work on FF mobile
-		outline none
-		border none
-	&::-moz-focus-inner
-		border initial
-input:focus
-	// Chrome shows an outline around focussed inputs, even after mouse click,
-	// FF doesnt. Unifying this:
+	// Overwrite the styling for focussed elements
 	outline none
-	background-color #fffdb5
+	&:not([tabindex="-1"])
+		&:focus-visible
+			outline 1px solid var(--color-highlighted)
+		&:-moz-focusring // doesnt work when joined together with focus-visible by comma??
+			outline 1px solid var(--color-highlighted)
+	&::-moz-focus-inner // seems to be outdated (?)
+		border initial
+
+// Chrome shows an outline around focussed inputs, even on mouse click,
+// FF doesnt.
+// input:focus
+//	but that's ok
 
 *
 	box-sizing border-box
