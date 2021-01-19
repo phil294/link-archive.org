@@ -295,7 +295,6 @@ textarea, select, input:not([type=range])
 	/* The 6px vertically centers text on FF, ignored by Webkit */
 	background-color #f1f1f1
 	border none
-	box-shadow none
 
 input[type=checkbox]
 	margin 3px 11px 3px 0
