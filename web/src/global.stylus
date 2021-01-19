@@ -297,14 +297,8 @@ textarea, select, input:not([type=range])
 	border none
 	box-shadow none
 
-textarea:focus, select:focus, input[type]:focus
-	border 1px solid var(--color-border)
-	outline 0
-
 input[type=checkbox]
 	margin 3px 11px 3px 0
-	&:focus
-		outline 1px dotted var(--color-border)
 
 legend, label {
 	display: inline-block;
@@ -331,18 +325,17 @@ progress
 		text-decoration-style dotted
 
 *:focus
-	// Overwrite the styling for focussed elements
-	// This can be removed once focus-visible works........
-	outline none
-	&:not([tabindex="-1"])
-		background-color #fffdb5
-	// ........... .
+	&[tabindex="-1"], &:not(:focus-visible)
+		// tabindex=-1 exclusion doesnt work on FF mobile
+		outline none
+		border none
 	&::-moz-focus-inner
 		border initial
-	// support for this is very patchy, chrome only with flag and firefox not at all
-	// there is a polyfill, but it's 4 KB, zipped 1 KB :-(
-	&:not(:focus-visible)
-		background-color unset
+input:focus
+	// Chrome shows an outline around focussed inputs, even after mouse click,
+	// FF doesnt. Unifying this:
+	outline none
+	background-color #fffdb5
 
 *
 	box-sizing border-box
