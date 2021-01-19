@@ -266,7 +266,10 @@ button.btn, input[type="submit"], input[type="reset"], input[type="button"]
 	background-color: #f1f1f1
 	color: var(--color-foreground)
 	background-image: linear-gradient(rgba(255, 255, 255, 0.85) 50%, transparent 52%);
-	font-weight bolder
+	font-weight normal
+	// font-weight bolder
+	font-family sans
+	font-size 13px
 	transition all 0.1s linear
 	position relative
 	inset 0
