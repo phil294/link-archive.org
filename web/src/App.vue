@@ -50,8 +50,9 @@ export default
 	metaInfo:
 		titleTemplate: (title) =>
 			"#{if title then title+' – ' else ''}Site name"
-		link:
-			-	rel: 'manifest', href: '/manifest.json' # not actually necessary..? pwa seems to also work without the link
+		# link:
+		#	TODO: multiple ssr vue instantiation bug
+		# 	-	rel: 'manifest', href: '/manifest.json' # not actually necessary..? pwa seems to also work without the link
 		meta:
 			# -	name: 'description', vmid: 'description', content: 'Site description'
 			-	name: 'theme-color', content: process.env.VUE_APP_THEME_PRIMARY_COLOR
