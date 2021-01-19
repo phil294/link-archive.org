@@ -1,5 +1,4 @@
 import Vue from 'vue'
-import axios from 'axios'
 
 ### todo docs
 ###
@@ -71,7 +70,7 @@ export default (...args) =>
 	actions: {
 		### send to server, upon response commit ###
 		["add_#{resource_name}_raw"]: ({ commit }, r) ->
-			response = await axios.post endpoint, r.form_data or r
+			response = await @$http.post endpoint, r.form_data or r
 			resource = response.data
 			commit "add_#{resource_name}_raw", resource
 			resource
@@ -81,18 +80,18 @@ export default (...args) =>
 				params = params.params
 			else
 				options = {}
-			response = await axios.get endpoint, { params }
+			response = await @$http.get endpoint, { params }
 			if options.add
 				commit "add_#{resource_name_plural}_raw", response.data
 			else
 				commit "set_#{resource_name_plural}_raw", response.data
 			response.data
 		["get_#{resource_name}_raw"]: ({ commit }, id) ->
-			response = await axios.get "#{endpoint}/#{id}"
+			response = await @$http.get "#{endpoint}/#{id}"
 			commit "add_#{resource_name}_raw", response.data
 			response.data
 		["update_#{resource_name}_raw"]: ({ commit }, r) ->
-			response = await axios.put "#{endpoint}/#{r._id}", r.form_data or r
+			response = await @$http.put "#{endpoint}/#{r._id}", r.form_data or r
 			commit "update_#{resource_name}_raw", response.data
 			response.data
 		["delete_#{resource_name}_raw"]: ({ dispatch }, r) ->
@@ -100,7 +99,7 @@ export default (...args) =>
 				return false
 			dispatch "delete_#{resource_name}_raw_no_confirm", r
 		["delete_#{resource_name}_raw_no_confirm"]: ({ dispatch, commit }, r) ->
-			await axios.delete "#{endpoint}/#{r._id}"
+			await @$http.delete "#{endpoint}/#{r._id}"
 			commit "remove_#{resource_name}_raw_by_id", r._id
 		...custom.actions
 	}

@@ -1,5 +1,4 @@
 import storage_service from '@/services/storage-service'
-import axios from 'axios'
 
 export default
 	namespaced: true
@@ -37,13 +36,13 @@ export default
 					throw e
 			commit 'set_session', session
 		request_token_mail: (_, email) ->
-			await axios.get "authentication/requesttokenmail?email=#{email}"
+			await @$http.get "authentication/requesttokenmail?email=#{email}"
 		external_login_provider_login_with_token: ({ dispatch }, { token, provider_name }) ->
-			response = await axios.post "authentication/#{provider_name}tokenlogin?token=#{token}"
+			response = await @$http.post "authentication/#{provider_name}tokenlogin?token=#{token}"
 			jwt = response.data
 			dispatch 'login_with_token', jwt
 		refresh_token: ({ dispatch }) ->
-			response = await axios.get 'authentication/refreshtoken'
+			response = await @$http.get 'authentication/refreshtoken'
 			jwt = response.data
 			await dispatch 'login_with_token', jwt
 		logout: ({ commit }) ->
@@ -53,7 +52,7 @@ export default
 		invalidate_all_tokens: ({ dispatch }) ->
 			now = Math.round(Date.now() / 1000)
 			await dispatch 'refresh_token' # with current date
-			await axios.patch 'user', { min_iat: now - 5 } # with date -5. this might also log out the current user if his date is inaccurate. but can live with that
+			await @$http.patch 'user', { min_iat: now - 5 } # with date -5. this might also log out the current user if his date is inaccurate. but can live with that
 		delete_account: ({ dispatch }) ->
-			await axios.delete 'user'
+			await @$http.delete 'user'
 			await dispatch 'logout'
