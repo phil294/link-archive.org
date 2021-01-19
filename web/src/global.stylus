@@ -270,7 +270,10 @@ button.btn, input[type="submit"], input[type="reset"], input[type="button"]
 	// font-weight bolder
 	font-family sans
 	font-size 13px
-	transition all 0.1s linear
+	transition-duration .1s
+	// Imitate pressure resistance
+	transition-timing-function cubic-bezier(1,.32,1,.13)
+	transition-property inset
 	position relative
 	inset 0
 	border-radius 0
