@@ -9,7 +9,8 @@
 				| $option.name
 		option v-for="option of fielddata.options" :value=option.value
 			| $option.name
-	input :id=id v-else="" v-model=model :name=fielddata.name :type=fielddata.type :required="fielddata.required||!fielddata.optional" :placeholder="fielddata.placeholder||fielddata.label" :maxlength=fielddata.maxlength :step=fielddata.step :min=fielddata.min :max=fielddata.max onfocus=select()
+	slot v-else=""
+		input :id=id v-model=model :name=fielddata.name :type=fielddata.type :required="fielddata.required||!fielddata.optional" :placeholder="fielddata.placeholder||fielddata.label" :maxlength=fielddata.maxlength :step=fielddata.step :min=fielddata.min :max=fielddata.max onfocus=select()
 </template>
 
 <script lang="coffee">
