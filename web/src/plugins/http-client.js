@@ -15,12 +15,18 @@ export default {
 		})
 
 		http_client.interceptors.response.use((response => response), (axios_error) => {
-			const resp = axios_error.response
+			const resp = axios_error.response;
 			if (resp) {
-				// catch and handle
-				return error(resp.data || resp.statusText || 'unknown error message', resp.status)
+				let data = resp.data || resp.statusText || 'unknown error message';
+				const http_query_url = `${axios_error.config.baseURL}/${axios_error.config.url}`;
+				if(typeof data == 'object')
+					data.http_query_url = http_query_url;
+				else
+					data += ` --- http_query_url: ${http_query_url}`
+				return error(data, resp.status)
+			} else {
+				return error({ status: 0 }, 0)
 			}
-			return Promise.reject(axios_error)
 		})
 
 		inject('http', http_client)
