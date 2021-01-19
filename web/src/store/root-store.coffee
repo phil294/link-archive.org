@@ -8,7 +8,7 @@ confirm_resolve = null
 
 export create_store = =>
 	new Vuex.Store
-		# strict: process.env.NODE_ENV != 'production' # TODO: https://github.com/Akryum/vue-cli-plugin-ssr/issues/184
+		strict: true
 		state: ->
 			app_name: 'MEVN App name'
 			app_version: process.env.VUE_APP_APP_VERSION

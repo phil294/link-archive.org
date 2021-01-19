@@ -24,6 +24,8 @@ section#app.column.fill-h
 			button.btn v-if=!is_logged_in @click=show_authenticate_popup
 				| Sign in
 	main.flex-fill.column
+		div.error v-if=$errorHandler.error
+			pre 500 | Internal Server Error :-( [{{$errorHandler.error.message}}]
 		div.error.fade-in.column v-if=global_error_message
 			pre $global_error_message
 			div.center
@@ -53,6 +55,15 @@ export default
 		meta:
 			# -	name: 'description', vmid: 'description', content: 'Site description'
 			-	name: 'theme-color', content: process.env.VUE_APP_THEME_PRIMARY_COLOR
+	created: ->
+		if @$isServer
+			if @$errorHandler.error
+				# Needs extra handling because the error-plugin only catches
+				# *unexpected ssr renderer errors* outside fetch(). Here, we
+				# consider errors that still allow a full page to be rendered
+				# (500 status but no 500.html)
+				{ ssr_build_error_report } = await import('@/server/error-plugin')
+				await ssr_build_error_report @$errorHandler.error
 	computed: {
 		...mapState
 			-	'app_name'

@@ -3,6 +3,13 @@ export default {
 		main: './src/vue-app',
 	},
 	plugins: [
+		[
+			'@uvue/core/plugins/vuex',
+			{
+				fetch: true,
+			},
+		],
+		'@uvue/core/plugins/errorHandler',
 		'@uvue/core/plugins/middlewares',
 		'@/plugins/nav-loader'
 	],
