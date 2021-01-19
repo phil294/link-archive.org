@@ -1,5 +1,5 @@
 <template lang="slm">
-modal @close=close
+modal.popup @close=close
 	main.box.column ref=main
 		header
 			div.titlebar.center v-moveable="{move_target}"
