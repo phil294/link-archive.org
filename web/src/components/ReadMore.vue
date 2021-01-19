@@ -4,7 +4,7 @@ details
 		div#summary-content.align-center.fill
 			slot name=summary
 				small Details
-	div#details.fade-in
+	div.details.fade-in
 		slot
 </template>
 
