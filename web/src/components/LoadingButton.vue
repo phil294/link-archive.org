@@ -38,4 +38,6 @@ export default
 </script>
 
 <style lang="stylus" scoped>
+button:disabled
+	cursor progress
 </style>
