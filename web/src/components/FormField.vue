@@ -37,7 +37,7 @@ export default
 		fielddata: ->
 			{ ...@field, ...@$attrs }
 		id: ->
-			"_form_#{@default_values.id or ''}_#{++id_i}_#{@fielddata.name}"
+			"_form_#{@default_values.id or ''}_#{++id_i}_#{@fielddata.name or ''}"
 </script>
 
 <style lang="stylus" scoped>
