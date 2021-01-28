@@ -245,7 +245,7 @@ button.btn, input[type="submit"], input[type="reset"], input[type="button"]
 	align-items center
 	white-space pre-wrap
 	// padding: 6px 13px
-	padding: 0.5em 1.3em;
+	padding: 0.2em 1.3em;
 	text-decoration: none
 	background-color: #f1f1f1
 	color: var(--color-foreground)
