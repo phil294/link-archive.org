@@ -1,8 +1,8 @@
 <template lang="slm">
 .form-field.column :class.padding-s=!nolabel
-	label v-if=!nolabel :title=fielddata.title :for=id
+	label v-if=!nolabel :title=fielddata.title :for=id :disabled=fielddata.disabled
 		| $fielddata.label
-	select v-if="fielddata.options||fielddata.optgroups" :id=id v-model=model :name=fielddata.name :required="fielddata.required||!fielddata.optional" :placeholder="fielddata.placeholder||fielddata.label"
+	select v-if="fielddata.options||fielddata.optgroups" :id=id v-model=model v-bind=fielddata :required="fielddata.required||!fielddata.optional" :placeholder="fielddata.placeholder||fielddata.label"
 		optgroup v-for="optgroup of fielddata.optgroups" :label=optgroup.label
 			/ kinda duplicate, not so pretty :-/
 			option v-for="option of optgroup.options" :value=option.value
@@ -10,7 +10,7 @@
 		option v-for="option of fielddata.options" :value=option.value
 			| $option.name
 	slot v-else=""
-		input :id=id v-model=model :name=fielddata.name :type=fielddata.type :required="fielddata.required||!fielddata.optional" :placeholder="fielddata.placeholder||fielddata.label" :maxlength=fielddata.maxlength :step=fielddata.step :min=fielddata.min :max=fielddata.max onfocus=select()
+		input :id=id v-model=model v-bind=fielddata :required="fielddata.required||!fielddata.optional" :placeholder="fielddata.placeholder||fielddata.label" onfocus=select()
 </template>
 
 <script lang="coffee">
@@ -27,6 +27,9 @@ export default
 		nolabel:
 			type: Boolean
 			default: false
+		field:
+			type: Object
+			default: => {}
 	mounted: ->
 		if not @model
 			@model = @fielddata.default_value ? @default_values[@fielddata.name]
