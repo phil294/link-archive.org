@@ -10,7 +10,7 @@
 		option v-for="option of fielddata.options" :value=option.value
 			| $option.name
 	slot v-else=""
-		input :id=id v-model=model v-bind=fielddata :required="fielddata.required||!fielddata.optional" :placeholder="fielddata.placeholder||fielddata.label" onfocus=select()
+		input :id=id v-model=model v-bind=fielddata @keypress="$emit('keypress',$event)" :required="fielddata.required||!fielddata.optional" :placeholder="fielddata.placeholder||fielddata.label" onfocus=select()
 </template>
 
 <script lang="coffee">
