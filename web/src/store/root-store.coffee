@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import dayjs from 'dayjs'
 import Vuex from 'vuex'
 import session_module from './session-store'
 
@@ -28,6 +29,7 @@ export create_store = =>
 				catch e
 					debugger
 					return
+				item = dayjs().format('YYYY-MM-DD HH:mm:ss ') + item
 				if item == state.store_history[state.store_history.length-1]
 					return
 				state.store_history.push item
