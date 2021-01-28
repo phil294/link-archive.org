@@ -174,9 +174,7 @@ body {
 
 
 // basic font family reset, based on browserstyles font modifications
-input:not([type=checkbox]), textarea, keygen, select, button, optgroup, option
-	font inherit
-	line-height 1em
+input:not([type=checkbox]):not([type=submit]), textarea, keygen, select, optgroup, option
 	height 2em
 	margin 0
 
