@@ -327,6 +327,18 @@ progress
 			outline 1px solid var(--color-highlighted)
 	&::-moz-focus-inner // seems to be outdated (?)
 		border initial
+// Somehow, when tabbing, summary outline is invisible. Setting it
+// to auto instead of solid helps on Chrome. On Firefox, only when expanded (so pretty much not).
+// Setting all solid to auto above is no good because the border is then sometimes 2px in width,
+// and on FF, the color is not applied (falls back to black).
+// This hack probably applies to more elements than just summary, but it is the only one I noticed
+// so far.
+summary
+	&:focus:not([tabindex="-1"])
+		&:focus-visible
+			outline-style auto
+		&:-moz-focusring
+			outline-style auto
 
 // Chrome shows an outline around focussed inputs, even on mouse click,
 // FF doesnt.
