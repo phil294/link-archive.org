@@ -134,4 +134,6 @@ button
 	progress
 		width 100%
 		height 2px
+form.no-click
+	cursor progress
 </style>
