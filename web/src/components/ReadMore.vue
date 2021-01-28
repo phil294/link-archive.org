@@ -1,7 +1,7 @@
 <template lang="slm">
-details
+details @toggle=on_toggle ref=details
 	summary :class.no-list-style=noliststyle
-		div#summary-content.align-center.fill
+		div.summary-content.align-center.fill
 			slot name=summary
 				small Details
 	div.details.fade-in
@@ -9,16 +9,26 @@ details
 </template>
 
 <script lang="coffee">
-
+import emitting_model from '@/mixins/EmittingModel'
 ###
  * <details>-wrapper
 ###
 export default
 	name: 'ReadMore'
+	mixins: [ emitting_model ]
 	props:
 		noliststyle:
 			default: false
 			type: Boolean
+	methods:
+		on_toggle: (e) ->
+			@model = !!e.target.open
+	mounted: ->
+		@$refs.details.open = !!@model
+	watch:
+		model:
+			handler: (v) ->
+				@$refs.details.open = !!v
 </script>
 
 <style lang="stylus" scoped>
@@ -34,6 +44,6 @@ summary
 		list-style none
 		&::-webkit-details-marker
 			display none
-#summary-content
-	display inline-flex
+.summary-content
+	display contents
 </style>
