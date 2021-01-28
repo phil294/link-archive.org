@@ -36,9 +36,7 @@ section#app.column.fill-h
 
 <script lang="coffee">
 import Authenticate from '@/views/Authenticate'
-import CategoryTree from '@/views/CategoryTree'
 import Confirm from '@/views/Confirm'
-import PathToCategory from '@/views/PathToCategory'
 # TODO: requiring a seperate package for this is annoying, solve it manually somehow.
 # v-if=!$isServer is not enough for vue-progress-bar
 # https://github.com/egoist/vue-client-only/blob/master/src/index.js
@@ -46,15 +44,16 @@ import NoSsr from 'vue-no-ssr'
 import { mapState, mapGetters, mapActions } from 'vuex'
 
 export default
-	components: { NoSsr, Confirm, Authenticate, CategoryTree, PathToCategory }
+	components: { NoSsr, Confirm, Authenticate }
 	metaInfo:
 		titleTemplate: (title) =>
 			"#{if title then title+' – ' else ''}Site name"
 		# link:
 		#	TODO: multiple ssr vue instantiation bug
 		# 	-	rel: 'manifest', href: '/manifest.json' # not actually necessary..? pwa seems to also work without the link
-		meta:
+			
 			# -	name: 'description', vmid: 'description', content: 'Site description'
+		meta:
 			-	name: 'theme-color', content: process.env.VUE_APP_THEME_PRIMARY_COLOR
 	created: ->
 		if @$isServer

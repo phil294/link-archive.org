@@ -7,7 +7,7 @@ Vue.use Vuex
 confirm_resolve = null
 
 export create_store = =>
-	new Vuex.Store
+	store = new Vuex.Store
 		strict: true
 		state: ->
 			app_name: 'MEVN App name'
