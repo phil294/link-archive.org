@@ -31,6 +31,10 @@ a[href], .fakelink
 	&:hover
 		color var(--color-hover)
 	text-decoration none
+	&[target=_blank]
+		&:after
+			content '🡥'
+			padding-left 2px
 
 button
 	font-size 13px
