@@ -138,6 +138,9 @@ details > summary {
 .danger, .error
 	color var(--color-error)
 
+.capitalize:first-letter
+	text-transform uppercase
+
 .no-click *
 	pointer-events none
 
