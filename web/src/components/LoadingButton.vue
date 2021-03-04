@@ -16,7 +16,7 @@ export default
 	props:
 		type:
 			type: String
-			default: ''
+			default: 'submit'
 		disabled:
 			type: Boolean
 			default: false
