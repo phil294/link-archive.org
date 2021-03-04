@@ -249,7 +249,7 @@ button, input[type="submit"], input[type="reset"], input[type="button"], label
 	color graytext !important
 }
 // TODO: .btn = button-like styling, should not be used as button identifier
-button.btn, input[type="submit"], input[type="reset"], input[type="button"]
+.btn, input[type="submit"], input[type="reset"], input[type="button"]
 	display inline-flex
 	align-items center
 	white-space pre-wrap
