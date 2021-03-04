@@ -74,7 +74,7 @@ export default
 			@model.map (value) =>
 				@options.find((option) =>
 					option.value == value or option == value) or
-				name: '?'
+				{ value }
 		unselected_options: ->
 			@options.filter (option) =>
 				not @selected_options.includes option
