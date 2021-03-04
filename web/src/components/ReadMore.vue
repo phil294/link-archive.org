@@ -1,6 +1,7 @@
 <template lang="slm">
 details @toggle=on_toggle ref=details
 	summary :class.no-list-style=noliststyle
+		/ This is invalid HTML :-(
 		div.summary-content.align-center.fill
 			slot name=summary
 				small Details
