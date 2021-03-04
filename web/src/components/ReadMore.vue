@@ -33,10 +33,7 @@ export default
 
 <style lang="stylus" scoped>
 details
-	overflow hidden
 	&[open]
-		display contents
-		overflow visible
 		white-space pre-line
 summary
 	white-space nowrap
