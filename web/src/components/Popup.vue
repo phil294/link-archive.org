@@ -1,6 +1,6 @@
 <template lang="slm">
 modal.popup @close=close
-	main.box.column ref=main
+	.main.box.column ref=main
 		header
 			div.titlebar.center v-moveable="{move_target}"
 				| ⠿⠿⠿⠿⠿
@@ -24,7 +24,7 @@ export default
 </script>
 
 <style lang="stylus" scoped>
-main
+.main
 	max-height 98vh
 	max-width 98vw
 	min-width 50px
