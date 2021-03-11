@@ -34,8 +34,13 @@ export default
 		if not @model?
 			@model = @fielddata.default_value ? @default_values[@fielddata.name]
 	computed:
-		fielddata: ->
-			{ ...@field, ...@$attrs }
+		fielddata: -> {
+			# When passed as a $prop, name is somehow ignored, thats why it is
+			# listed extra here
+			name: @name
+			...@field
+			...@$attrs
+		}
 		id: ->
 			"_form_#{@default_values.id or ''}_#{++id_i}_#{@fielddata.name or ''}"
 </script>
