@@ -31,7 +31,7 @@ export default
 			type: Object
 			default: => {}
 	mounted: ->
-		if not @model
+		if not @model?
 			@model = @fielddata.default_value ? @default_values[@fielddata.name]
 	computed:
 		fielddata: ->
