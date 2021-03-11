@@ -43,5 +43,5 @@ summary
 		&::-webkit-details-marker
 			display none
 .summary-content
-	display contents
+	display inline-flex
 </style>
