@@ -36,7 +36,9 @@ export default
 					throw e
 			commit 'set_session', session
 		request_token_mail: (_, email) ->
-			await @$http.get "authentication/requesttokenmail?email=#{email}"
+			await @$http.get "authentication/requesttokenmail",
+				params:
+					email: email
 		external_login_provider_login_with_token: ({ dispatch }, { token, provider_name }) ->
 			response = await @$http.post "authentication/#{provider_name}tokenlogin?token=#{token}"
 			jwt = response.data
