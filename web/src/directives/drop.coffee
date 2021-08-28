@@ -3,72 +3,77 @@ import Vue from 'vue'
 # For testing:
 # https://jsfiddle.net/5Lmpxb1r/
 
-enable_drop = (el) =>
+#
+###* @type {Map<HTMLElement,{
+	ondragover: (this: HTMLElement, ev: DragEvent) => any
+	ondragenter: (this: HTMLElement, ev: DragEvent) => any
+	ondragleave: (this: HTMLElement, ev: DragEvent) => any
+	ondrop: (this: HTMLElement, ev: DragEvent) => any
+	ondrop_cb: () => any
+}>} ### 
+drag_data_by_el = new Map
+
+set_drop = (###* @type {HTMLElement} ### el, ###* @type {() => any} ### drop_cb) =>
+	existing_drag_data = drag_data_by_el.get el
+	if existing_drag_data
+		existing_drag_data.ondrop_cb = drop_cb
+		return
+
 	el.classList.add 'drop-target'
 	counter = 0
 	
-	ondragover = (e) ->
-		e.preventDefault()
-		e.dataTransfer.dropEffect = 'move'
-	el.addEventListener 'dragover', ondragover
-	el.__vue_ondragover = ondragover
-	
-	ondragenter = (e) =>
-		e.preventDefault() # preventdefaults here are needed? some only for IE. todo
-		counter++
-		if counter == 1
-			el.classList.add 'dragenter'
-	el.addEventListener 'dragenter', ondragenter
-	el.__vue_ondragenter = ondragenter
-
-	ondragleave = (e) =>
-		counter--
-		if counter == 0
+	drag_data =
+		ondragover: (###* @type {DragEvent} ### e) ->
+			e.preventDefault()
+			if e.dataTransfer
+				e.dataTransfer.dropEffect = 'move'
+		ondragenter: (###* @type {DragEvent} ### e) =>
+			e.preventDefault() # preventDefaults here are needed? some only for IE. todo
+			counter++
+			if counter == 1
+				el.classList.add 'dragenter'
+		ondragleave: =>
+			counter--
+			if counter == 0
+				el.classList.remove 'dragenter'
+		ondrop: (###* @type {DragEvent} ### e) =>
+			e.preventDefault()
+			counter = 0
 			el.classList.remove 'dragenter'
-	el.addEventListener 'dragleave', ondragleave
-	el.__vue_ondragleave = ondragleave
+			try
+				data = JSON.parse e.dataTransfer?.getData('application/json') || ''
+			catch e
+				# TODO stackoverflow.com/q/65775496
+				throw e
+			drag_data.ondrop_cb(data)
+		ondrop_cb: Boolean
+	el.addEventListener 'dragover', drag_data.ondragover
+	el.addEventListener 'dragenter', drag_data.ondragenter
+	el.addEventListener 'dragleave', drag_data.ondragleave
+	el.addEventListener 'drop', drag_data.ondrop
 
-	ondrop = (e) =>
-		e.preventDefault()
-		counter = 0
-		el.classList.remove 'dragenter'
-		try
-			data = JSON.parse e.dataTransfer.getData('application/json')
-		catch e
-			# TODO stackoverflow.com/q/65775496
-			throw e
-		el.__vue_ondrop_cb(data)
-	el.addEventListener 'drop', ondrop
-	el.__vue_ondrop = ondrop
+	drag_data_by_el.set el, drag_data
 
-disable_drop = (el) =>
-	el.removeEventListener 'dragover', el.__vue_ondragover
-	el.removeEventListener 'dragenter', el.__vue_ondragenter
-	el.removeEventListener 'dragleave', el.__vue_ondragleave
-	el.removeEventListener 'drop', el.__vue_ondrop
-	el.__vue_ondragover = null
-	el.__vue_ondragenter = null
-	el.__vue_ondragleave = null
-	el.__vue_ondrop = null
+disable_drop = (###* @type {HTMLElement} ### el) =>
 	el.classList.remove 'drop-target'
+	drag_data = drag_data_by_el.get el
+	if not drag_data
+		return
+	el.removeEventListener 'dragover', drag_data.ondragover
+	el.removeEventListener 'dragenter', drag_data.ondragenter
+	el.removeEventListener 'dragleave', drag_data.ondragleave
+	el.removeEventListener 'drop', drag_data.ondrop
+	drag_data_by_el.delete el
 
 Vue.directive 'drop',
 	bind: (el, { value }) ->
 		if value
-			enable_drop el
-			el.__vue_ondrop_cb = value
-		else
-			el.__vue_ondrop_cb = null
+			set_drop el, value
 	update: (el, { value }) ->
 		value = value or null
-		if value == el.__vue_ondrop_cb
-			return
 		if not value
-			if el.__vue_ondrop_cb
-				disable_drop el
-		else if not el.__vue_ondrop_cb
-			enable_drop el
-		el.__vue_ondrop_cb = value
+			disable_drop el
+		else
+			set_drop el, value
 	unbind: (el) ->
 		disable_drop el
-		el.__vue_ondrop_cb = null

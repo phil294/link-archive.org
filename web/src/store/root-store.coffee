@@ -1,11 +1,11 @@
 import Vue from 'vue'
 import dayjs from 'dayjs'
 import Vuex from 'vuex'
-import session_module from './session-store'
+import session_module from './session-store.coffee'
 
 Vue.use Vuex
 
-confirm_resolve = null
+confirm_resolve = (_) =>
 
 export create_store = =>
 	store = new Vuex.Store

@@ -1,5 +1,6 @@
-import Vue from 'vue'
-
+import Vue, { DirectiveFunction } from 'vue'
+#
+###* @type {DirectiveFunction} ###
 apply = (target, { value: { move_target } = {} }) =>
 	if move_target == undefined
 		move_target = target
@@ -8,7 +9,7 @@ apply = (target, { value: { move_target } = {} }) =>
 
 	target.draggable = true
 	target.onmousedown = (event) =>
-		
+
 		mouse_start_x = event.pageX
 		mouse_start_y = event.pageY
 
@@ -17,7 +18,7 @@ apply = (target, { value: { move_target } = {} }) =>
 
 		move_target.style.position = 'absolute'
 
-		on_mousemove = (mouse_event) =>
+		on_mousemove = (###* @type MouseEvent ### mouse_event) =>
 			move_target.style.left = el_start_left + mouse_event.pageX - mouse_start_x + 'px'
 			move_target.style.top = el_start_top + mouse_event.pageY - mouse_start_y + 'px'
 
@@ -30,6 +31,7 @@ apply = (target, { value: { move_target } = {} }) =>
 		document.addEventListener 'mouseup', on_mouseup
 		
 		target.ondragstart = => false
+	undefined
 
 ### this makes the element become position absolute permanently ###
 Vue.directive 'moveable',

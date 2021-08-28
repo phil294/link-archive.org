@@ -1,5 +1,6 @@
-import Vue from 'vue'
-
+import Vue, { DirectiveFunction } from 'vue'
+#
+###* @type {DirectiveFunction} ###
 apply = (target, { value: { scroll_target, on_dragscroll_start, on_dragscroll_end } = {} }) =>
 	if scroll_target == undefined
 		scroll_target = target
@@ -19,7 +20,7 @@ apply = (target, { value: { scroll_target, on_dragscroll_start, on_dragscroll_en
 
 		did_move = false
 
-		on_mousemove = (mouse_event) =>
+		on_mousemove = (###* @type MouseEvent ### mouse_event) =>
 			if not did_move and on_dragscroll_start
 				on_dragscroll_start()
 			did_move = true
@@ -39,6 +40,7 @@ apply = (target, { value: { scroll_target, on_dragscroll_start, on_dragscroll_en
 				on_dragscroll_end()
 
 		document.addEventListener 'mouseup', on_mouseup
+	undefined
 		
 Vue.directive 'dragscrollable',
 	inserted: apply
