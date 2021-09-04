@@ -31,16 +31,13 @@ export create_router = (store) ->
 	router.beforeEach (to, from, next) =>
 		if to.matched.some (record) => record.meta.requires_auth
 			if ! store.getters['session/is_logged_in']
-				next
-					# Example:
-					# Possible redirection to login and further
-					# path: '/login'
-					# query:
-					# 	redirect: to.fullPath # In /login: @$router.push @$route.query.redirect || '/'
-					# Here, simply redirect to Index: TODO
-					path: '/'
-			else
-				next()
-		else
-			next()
+				return next
+					path: '/login'
+					query:
+						redirect: to.fullPath
+			else if to.matched.some (record) => record.meta.requires_admin
+				if ! store.getters['session/is_admin']
+					return next '/'
+		next()
+
 	router
