@@ -1,4 +1,3 @@
-#@ts-check
 import axios from 'axios'
 
 export default (store) =>
@@ -25,6 +24,7 @@ export default (store) =>
 		store.commit 'decrease_loading_counter'
 		response
 	, (error) =>
+		store.commit 'decrease_loading_counter'
 		formatted_error =
 			######## s.a.
 			original_stack: error.config?.error_context?.stack
@@ -34,7 +34,7 @@ export default (store) =>
 			message: error.message
 			data: error.response?.data or error.response?.statusText or null
 			status: error.response?.status or 0
-		if error.response?.status == 401
+		if error.response?.status == 401 or error.response?.status == 403
 			store.dispatch 'session/logout'
 		else if error.response?.status == 409
 			formatted_error.data = 'Error 409 CONFLICT – The request could not be completed because it would result in an unexpected data conflict (duplicate name, missing reference or the like).'

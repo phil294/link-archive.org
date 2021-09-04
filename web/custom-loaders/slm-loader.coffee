@@ -11,7 +11,7 @@ module.exports = (slmdoc) ->
 		[///
 			(?<=\s)				# before: whitespace
 			\$					# dollar
-			([\w.\[\]()$/="'+-]+)	# myVar_[0].$prop+12-5/7==="a"
+			([\w.?\[\]()$/="'+-]+)	# myVar_[0].$prop+12-5/7==="a"
 		///g, '{{$1}}']
 		# :class.myclass="condition" to :class="{'myclass':condition}"
 		[///

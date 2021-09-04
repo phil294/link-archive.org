@@ -65,15 +65,19 @@ disable_drop = (###* @type {HTMLElement} ### el) =>
 	el.removeEventListener 'drop', drag_data.ondrop
 	drag_data_by_el.delete el
 
-Vue.directive 'drop',
-	bind: (el, { value }) ->
+#
+###* @type {Vue.Directive} ###
+directive =
+	mounted: (el, { value }) ->
 		if value
 			set_drop el, value
-	update: (el, { value }) ->
+	updated: (el, { value }) ->
 		value = value or null
 		if not value
 			disable_drop el
 		else
 			set_drop el, value
-	unbind: (el) ->
+	unmounted: (el) ->
 		disable_drop el
+
+export default directive

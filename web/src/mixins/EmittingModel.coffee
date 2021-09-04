@@ -5,7 +5,7 @@ I dont know whats going on here but it works great. ###
 export default
 	props:
 		# todo use v-bind="$attrs" or use normal base element inheritance instead and remove all props. note that this will break all components that currently use name prop etc.
-		value:
+		modelValue:
 			# Override this / type if necessary
 			default: ''
 		# Some standard input props
@@ -18,16 +18,19 @@ export default
 		readonly:
 			type: Boolean
 			default: false
+	emits: [ 'update:modelValue' ]
 	data: ->
 		### internal_value takes its value either from a
-		dynamically changed @value or from user input directly. ###
-		internal_value: @value
+		dynamically changed @modelValue or from user input directly. ###
+		internal_value: @modelValue
 	computed:
 		model:
 			get: -> @internal_value
 			set: (new_value) ->
 				@internal_value = new_value
-				@$emit 'input', new_value
+				@$emit 'update:modelValue', new_value
 	watch:
-		value: (new_value) ->
-			@internal_value = new_value
+		modelValue:
+			handler: (new_value) ->
+				@internal_value = new_value
+			deep: true

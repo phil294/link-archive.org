@@ -24,8 +24,9 @@ import { mapState, mapGetters, mapActions } from 'vuex'
 export default
 	name: 'Settings'
 	methods: {
-		...mapActions 'session',
-			-	'invalidate_all_tokens'
+		...mapActions 'session', [
+			'invalidate_all_tokens'
+		]
 		delete_account: ->
 			if not await @$store.dispatch 'confirm_ask', 'Are you sure you want to delete your account?'
 				return

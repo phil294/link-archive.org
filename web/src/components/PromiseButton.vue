@@ -27,9 +27,7 @@ export default
 	name: 'PromiseButton'
 	props:
 		action:
-			type:
-				-	Function
-				-	Promise
+			type: [ Function, Promise ]
 			required: true
 		onetime:
 			type: Boolean

@@ -18,9 +18,9 @@ div
 							a href="https://goo.gl/czxFnf" this article
 							|. In short: Passwords are more of a security threat than measurement.
 						p
-							strike If you feel you <em>really</em> need to use a password, you can configure one in the account settings once you are logged in.
+							s If you feel you <em>really</em> need to use a password, you can configure one in the account settings once you are logged in.
 						label
-							strike If you did that, you can log in with it here:
+							s If you did that, you can log in with it here:
 							input type=password name=password
 						span
 							| (not supported yet!)
@@ -63,6 +63,7 @@ import TokenInput from '@/views/TokenInput'
 export default
 	components: { TokenInput }
 	name: 'Authenticate'
+	emits: [ 'authenticated' ]
 	data: =>
 		email: ''
 		show_mail_sent: false

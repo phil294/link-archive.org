@@ -1,6 +1,10 @@
-import Vue, { DirectiveFunction } from 'vue'
+import Vue from 'vue'
+
 #
-###* @type {DirectiveFunction} ###
+###*
+@type {Vue.DirectiveHook<HTMLElement>}
+This makes the element become position absolute permanently
+###
 apply = (target, { value: { move_target } = {} }) =>
 	if move_target == undefined
 		move_target = target
@@ -33,7 +37,4 @@ apply = (target, { value: { move_target } = {} }) =>
 		target.ondragstart = => false
 	undefined
 
-### this makes the element become position absolute permanently ###
-Vue.directive 'moveable',
-	inserted: apply
-	update: apply
+export default apply

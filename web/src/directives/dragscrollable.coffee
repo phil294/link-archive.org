@@ -1,6 +1,7 @@
-import Vue, { DirectiveFunction } from 'vue'
+import Vue from 'vue'
+
 #
-###* @type {DirectiveFunction} ###
+###* @type {Vue.DirectiveHook<HTMLElement>} ###
 apply = (target, { value: { scroll_target, on_dragscroll_start, on_dragscroll_end } = {} }) =>
 	if scroll_target == undefined
 		scroll_target = target
@@ -41,7 +42,5 @@ apply = (target, { value: { scroll_target, on_dragscroll_start, on_dragscroll_en
 
 		document.addEventListener 'mouseup', on_mouseup
 	undefined
-		
-Vue.directive 'dragscrollable',
-	inserted: apply
-	update: apply
+
+export default apply

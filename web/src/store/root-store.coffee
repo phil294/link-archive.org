@@ -1,14 +1,11 @@
-import Vue from 'vue'
+import { createStore } from 'vuex'
 import dayjs from 'dayjs'
-import Vuex from 'vuex'
 import session_module from './session-store.coffee'
-
-Vue.use Vuex
 
 confirm_resolve = (_) =>
 
-export create_store = =>
-	store = new Vuex.Store
+export default =>
+	store = createStore
 		strict: true
 		state: ->
 			app_name: 'MEVN App name'
@@ -58,8 +55,6 @@ export create_store = =>
 				commit 'set_global_error_message', ''
 			set_global_error_message: ({ commit }, msg) ->
 				commit 'set_global_error_message', msg
-			reset_global_error_message: ({ commit }) ->
-				commit 'set_global_error_message', ''
 			confirm_ask: ({ commit }, prompt) ->
 				commit 'set_confirm_prompt', prompt
 				new Promise (ok) =>
@@ -100,5 +95,5 @@ export create_store = =>
 			store.commit 'push_store_history', { type, payload }
 	store.subscribeAction (action) =>
 		store.commit 'push_store_history', action.type
-	
+
 	store

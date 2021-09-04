@@ -137,6 +137,9 @@ details > summary {
 	.box
 		background: rgba(255,255,255,0.93)
 
+.force-hidden
+	display none !important
+
 .danger, .error
 	color var(--color-error)
 

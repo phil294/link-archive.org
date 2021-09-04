@@ -11,6 +11,7 @@ export default
 		contained:
 			type: Boolean
 			default: false
+	emits: [ 'close' ]
 	methods:
 		close: -> @$emit 'close'
 	mounted: ->

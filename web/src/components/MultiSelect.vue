@@ -32,7 +32,7 @@ export default
 		options:
 			type: Array
 			default: => []
-		value:
+		modelValue:
 			type: Array
 		nofilter:
 			type: Boolean

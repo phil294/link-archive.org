@@ -1,14 +1,18 @@
 <template lang="slm">
-section#app.column.fill-h
+div.fill.center.column.app
+	.error.fade-in.padding-l v-if=global_error_message
+		button.btn.margin @click="set_global_error_message('')" Hide
+		pre $global_error_message
+	strong.force-hidden Your browser is not working properly (CSS disabled)
 	confirm
 	popup v-if=authenticate_popup @close=hide_authenticate_popup
 		authenticate @authenticated=hide_authenticate_popup
 	modal v-if=loading_counter
 		.box.padding-l
 			| Loading... ({{ loading_counter }})
-	header.center.padding
+	header.center.padding.fill-w
 		nav
-			router-link exact="" to=/ [LOGO]
+			router-link to=/ [LOGO]
 		nav
 			/ todo
 			div v-if=is_logged_in
@@ -17,16 +21,11 @@ section#app.column.fill-h
 				span v-else-if=session.email $session.email
 				span v-else-if=session.external_type $session.external_identifier [$session.external_type]
 				| . 
-			router-link v-if=is_logged_in exact="" to=/settings Settings 
+			router-link v-if=is_logged_in to=/settings Settings 
 			button.btn v-if=is_logged_in @click=logout Logout
 			button.btn v-if=!is_logged_in @click=show_authenticate_popup
 				| Sign in
 	main.flex-fill.column
-		div.error.fade-in.column v-if=global_error_message
-			pre $global_error_message
-			div.center
-				promise-button.btn :action=reset_global_error_message
-					| Hide
 		router-view
 </template>
 
@@ -38,28 +37,33 @@ import { mapState, mapGetters, mapActions } from 'vuex'
 export default
 	components: { Confirm, Authenticate }
 	computed: {
-		...mapState
-			-	'app_name'
-			-	'loading_counter'
-			-	'authenticate_popup'
-			-	'global_error_message'
-		...mapState 'session',
-			-	'session'
-		...mapGetters 'session',
-			-	'is_logged_in'
+		...mapState [
+			'app_name'
+			'loading_counter'
+			'authenticate_popup'
+			'global_error_message'
+		]
+		...mapState 'session', [
+			'session'
+		]
+		...mapGetters 'session', [
+			'is_logged_in'
+		]
 	}
 	methods: {
-		...mapActions
-			-	'hide_authenticate_popup'
-			-	'show_authenticate_popup'
-			-	'reset_global_error_message'
-		...mapActions 'session',
-			-	'logout'
+		...mapActions [
+			'hide_authenticate_popup'
+			'show_authenticate_popup'
+			'set_global_error_message'
+		]
+		...mapActions 'session', [
+			'logout'
+		]
 	}
 </script>
 
 <style lang="stylus" scoped>
-#app
+.app
 	> header
 		border-bottom 1px solid lightgrey
 		justify-content space-between

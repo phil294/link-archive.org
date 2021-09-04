@@ -3,7 +3,9 @@ textarea :name=name rows=1 :maxlength=maxlength :required=required :placeholder=
 </template>
 
 <script lang="coffee">
+import { nextTick } from 'vue'
 import emitting_model from '@/mixins/EmittingModel'
+import VueObserveVisibility from 'vue-observe-visibility';
 export default
 	name: 'AutoexpandingTextarea'
 	mixins: [ emitting_model ]
@@ -17,6 +19,10 @@ export default
 		placeholder:
 			type: String
 			default: ''
+		noshrink:
+			type: Boolean
+			default: false
+	emits: [ 'change' ]
 	mounted: ->
 		await @on_blur()
 	data: ->
@@ -28,6 +34,8 @@ export default
 			if visible
 				# This can happen and this is all necessary when this component (noshrink=true)
 				# is somewhere initially hidden via v-show=false, the scrollheight is falsely 0
+				# (Edit: Cannot reproduce this anymore? Was it fixed with Vue3? Maybe we can remove
+				# VueObserveVisibility completely now)
 				if @content_height == "0px"
 					@update_content_height()
 		on_focus: ->
@@ -36,7 +44,7 @@ export default
 			@focussed_content = @model
 		on_blur: ->
 			await @update_content_height()
-			await @$nextTick()
+			await nextTick()
 			if not @noshrink
 				# shrink to fit container. else: keep showing entire content height
 				@height = '100%'
@@ -44,7 +52,7 @@ export default
 		update_content_height: ->
 			# Determine scroll height (aka height based on content)
 			@height = '1px' # stackoverflow.com/a/3341669/3779853
-			await @$nextTick()
+			await nextTick()
 			if @$refs.ref # idk, was buggy
 				@content_height = @$refs.ref.scrollHeight + 'px'
 				if @focussed or @noshrink

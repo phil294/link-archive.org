@@ -1,7 +1,9 @@
 import Vue from 'vue'
 
-Vue.directive 'filedrop',
-	bind: (el, { value }) =>
+#
+###* @type {Vue.Directive<HTMLElement>} ###
+directive =
+	mounted: (el, { value }) =>
 		original_background = ''
 		original_opacity = ''
 		el.addEventListener 'dragenter', (e) =>
@@ -24,3 +26,5 @@ Vue.directive 'filedrop',
 			files = e.dataTransfer?.files
 			if files?.length
 				value files
+
+export default directive

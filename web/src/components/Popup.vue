@@ -15,6 +15,7 @@ export default
 	name: 'Popup'
 	data: ->
 		move_target: null
+	emits: [ 'close' ]
 	methods:
 		close: ->
 			@$store.dispatch 'offer_focus'

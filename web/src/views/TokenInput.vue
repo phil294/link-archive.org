@@ -16,6 +16,7 @@ export default
 		token:
 			type: String
 			default: ''
+	emits: [ 'success' ]
 	data: ->
 		token_model: @token
 	mounted: ->

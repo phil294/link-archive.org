@@ -1,4 +1,4 @@
-import Vue from 'vue'
+import { $http } from '@/vue-app.coffee'
 
 ### todo docs
 ###
@@ -38,7 +38,7 @@ export default (...args) =>
 	mutations: {
 		["add_#{resource_name}_raw"]: (state, r) ->
 			if unique and state["#{resource_name_plural}_raw"].some((exist) =>
-				exist[unique] == r[unique])
+				exist[unique].id == r[unique].id)
 					return
 			state["#{resource_name_plural}_raw"].unshift deserializer r
 		["add_#{resource_name_plural}_raw"]: (state, rs) ->
@@ -51,7 +51,7 @@ export default (...args) =>
 			state["#{resource_name_plural}_raw"] = rs.map (r) => deserializer r
 		["update_#{resource_name}_raw"]: (state, r) ->
 			index = state["#{resource_name_plural}_raw"].findIndex (t) => t._id == r._id
-			Vue.set state["#{resource_name_plural}_raw"], index, deserializer r
+			state["#{resource_name_plural}_raw"][index] = deserializer r
 		["remove_#{resource_name}_raw"]: (state, r) ->
 			index = state["#{resource_name_plural}_raw"].indexOf r
 			state["#{resource_name_plural}_raw"].splice index, 1
@@ -70,7 +70,7 @@ export default (...args) =>
 	actions: {
 		### send to server, upon response commit ###
 		["add_#{resource_name}_raw"]: ({ commit }, r) ->
-			response = await @$http.post endpoint, r.form_data or r
+			response = await $http.post endpoint, r.form_data or r
 			resource = response.data
 			commit "add_#{resource_name}_raw", resource
 			resource
@@ -80,7 +80,7 @@ export default (...args) =>
 				params = params.params
 			else
 				options = {}
-			response = await @$http.get endpoint, { params }
+			response = await $http.get endpoint, { params }
 			if options.add
 				commit "add_#{resource_name_plural}_raw", response.data
 			else
@@ -94,7 +94,7 @@ export default (...args) =>
 				commit "update_#{resource_name}_raw", response.data
 			response.data
 		["update_#{resource_name}_raw"]: ({ commit }, r) ->
-			response = await @$http.put "#{endpoint}/#{r._id}", r.form_data or r
+			response = await $http.put "#{endpoint}/#{r._id}", r.form_data or r
 			commit "update_#{resource_name}_raw", response.data
 			response.data
 		["delete_#{resource_name}_raw"]: ({ dispatch }, r) ->
@@ -102,7 +102,7 @@ export default (...args) =>
 				return false
 			dispatch "delete_#{resource_name}_raw_no_confirm", r
 		["delete_#{resource_name}_raw_no_confirm"]: ({ dispatch, commit }, r) ->
-			await @$http.delete "#{endpoint}/#{r._id}"
+			await $http.delete "#{endpoint}/#{r._id}"
 			commit "remove_#{resource_name}_raw_by_id", r._id
 		...custom.actions
 	}

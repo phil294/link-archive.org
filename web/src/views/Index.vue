@@ -8,7 +8,8 @@ import { mapState } from 'vuex'
 export default
 	name: 'Index'
 	computed: {
-		...mapState
-			-	'app_version'
+		...mapState [
+			'app_version'
+		]
 	}
 </script>

@@ -1,4 +1,4 @@
-import storage_service from './services/storage-service'
+import storage_service from './services/storage-service.coffee'
 
 append_script = (url) ->
 	script_el = document.createElement 'script'

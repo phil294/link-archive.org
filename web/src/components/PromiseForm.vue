@@ -14,7 +14,7 @@ form.column :class.no-click=loading @submit.prevent=submit enctype="multipart/fo
 							span Loading...
 							progress :value="progress_display || progress"
 							small.time-est v-if=time_remaining_est
-								| Time est. remaining: {{ time_remaining_est/1000 | format_seconds }}
+								| Time est. remaining: {{ utils.format_seconds(time_remaining_est/1000) }}
 						span v-else="" Done!
 		button.btn.btn-2.cancel v-if=cancelable :disabled=loading type=button @click=$emit('cancel')
 			slot name=cancel_button_label
@@ -32,6 +32,7 @@ form.column :class.no-click=loading @submit.prevent=submit enctype="multipart/fo
 
 <script lang="coffee">
 import dayjs from 'dayjs'
+import { nextTick } from 'vue'
 
 ###
  * Standardform component: includes only submit (progress-)button.
@@ -68,6 +69,7 @@ export default
 		stepcount:
 			type: [ Number, String ]
 			default: null
+	emits: [ 'cancel', 'submit', 'success' ]
 	data: =>
 		error_response: ''
 		loading: false
@@ -117,18 +119,20 @@ export default
 
 			@action_start = new Date
 			try
-				await Promise.all
-					-	@action {
-							...values,
-							form_data, values, array_values, event,
-							progress: progress_callback
-						}
-					-	sleep 150 # force delay when the network response is quick, because overly fast button responses are confusing to the user imo
+				await Promise.all [
+					@action {
+						...values,
+						form_data, values, array_values, event,
+						progress: progress_callback
+					}
+				,
+					window.utils.sleep 150 # force delay when the network response is quick, because overly fast button responses are confusing to the user imo
+				]
 				if not @onetime
 					@button_loading = false
 				@$emit 'success'
 			catch e
-				await @$nextTick() # enforce transition effect even if follow-up error+
+				await nextTick() # enforce transition effect even if follow-up error+
 				@error_response = e.data || e
 				@button_loading = false
 				throw e

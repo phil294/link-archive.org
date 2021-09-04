@@ -1,28 +1,29 @@
-import VueRouter from 'vue-router'
-import Vue from 'vue'
+import { createRouter, createWebHistory } from 'vue-router'
 
-Vue.use VueRouter
+export default (store) =>
+	router = createRouter
+		history: createWebHistory process.env.BASE_URL
+		routes: [
+			path: '/'
+			name: 'Index'
+			component: => `import('@/views/Index')` # todo this is soon supported natively by cs
+		,
+			path: '/logincallback'
+			name: 'LoginCallbackHandler'
+			component: => `import('@/views/callback-handlers/LoginCallbackHandler')`
+		,
+			path: '/settings'
+			name: 'Settings'
+			component: => `import('@/views/secure/Settings')`
+			meta:
+				requires_auth: true
+		,
+			path: '/:pathMatch(.*)'
+			redirect: '/a'
+		# corresponding store modules can also be lazyloaded. see ssr vuejs docs
+		]
 
-export create_router = (store) ->
-	router = new VueRouter
-		mode: 'history'
-		base: process.env.BASE_URL
-		routes:
-			-	path: '/'
-				name: 'Index'
-				component: => `import('@/views/Index')` # todo this is soon supported natively by cs
-			-	path: '/logincallback'
-				name: 'LoginCallbackHandler'
-				component: => `import('@/views/callback-handlers/LoginCallbackHandler')`
-			-	path: '/settings'
-				name: 'Settings'
-				component: => `import('@/views/secure/Settings')`
-				meta:
-					requires_auth: true
-			-	path: '*'
-				redirect: '/'
-			# corresponding store modules can also be lazyloaded
-	router.beforeEach (to, from, next) =>
+	router.beforeEach (to, fromm, next) =>
 		if to.matched.some (record) => record.meta.requires_auth
 			if ! store.getters['session/is_logged_in']
 				return next

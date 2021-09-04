@@ -13,12 +13,10 @@ import { mapActions, mapState } from 'vuex'
 
 export default
 	computed: {
-		...mapState
-			-	'confirm_prompt'
+		...mapState [ 'confirm_prompt' ]
 	}
 	methods: {
-		...mapActions
-			-	'confirm_answer'
+		...mapActions [ 'confirm_answer' ]
 	}
 </script>
 

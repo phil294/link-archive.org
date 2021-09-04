@@ -6,7 +6,7 @@ import Vue from 'vue'
  # and display an error banner to the user
  TODO dont show everything to the user, only an option to expand+show
 ###
-export install_error_handler = ({ store, router }) =>
+export install_error_handler = ({ app, store, router }) =>
 	_console_error = console.error
 	depth = 0
 	error_handler = (...args) =>
@@ -23,7 +23,6 @@ export install_error_handler = ({ store, router }) =>
 				return
 			if 401 == status
 				store.dispatch 'session/logout'	
-				router.push('/login').catch(=>)
 				return
 			if 500 == status
 				store.dispatch 'set_global_error_message',
@@ -69,9 +68,9 @@ export install_error_handler = ({ store, router }) =>
 		catch e3
 			console.log e3
 	
-	Vue.config.errorHandler = error_handler;
+	app.config.errorHandler = error_handler;
 	# ignored in production
-	Vue.config.warnHandler = error_handler;
+	app.config.warnHandler = error_handler;
 	window.onerror = error_handler;
 	console.error = error_handler;
 	window.addEventListener('unhandledrejection', (e) => error_handler(e.reason));
