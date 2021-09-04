@@ -46,8 +46,6 @@ export default
 	created: ->
 		if not @model
 			@model = []
-		if @options.length
-			@values_type = typeof (@options[0].value or @options[0])
 	methods:
 		add: (value) ->
 			# value is now inherently type string. maybe change that:
@@ -78,6 +76,12 @@ export default
 		unselected_options: ->
 			@options.filter (option) =>
 				not @selected_options.includes option
+	watch:
+		options:
+			immediate: true
+			handler: ->
+				if @options.length
+					@values_type = typeof (@options[0].value or @options[0])
 </script>
 
 <style lang="stylus" scoped>
