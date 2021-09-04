@@ -21,6 +21,10 @@ export default
 	mixins: [ emitting_model ]
 	inheritAttrs: false
 	props:
+		### @Override ###
+		value:
+			default:
+				null
 		default_values:
 			default: => {}
 			type: Object
@@ -30,7 +34,7 @@ export default
 		field:
 			type: Object
 			default: => {}
-	mounted: ->
+	created: ->
 		if not @model?
 			@model = @fielddata.default_value ? @default_values[@fielddata.name]
 	computed:
