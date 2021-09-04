@@ -43,7 +43,7 @@ export install_error_handler = ({ store, router }) =>
 					#{Error().stack}
 				"""
 				.join '<br>'
-			try store_history_str = JSON.stringify(store.state.store_history, null, 2)
+			try store_history_str = JSON.stringify([...store.state.store_history].reverse(), null, 2)
 			error_stringified += ' --- ' + store_history_str
 			console.log error_stringified
 			# console.trace()
