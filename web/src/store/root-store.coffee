@@ -87,10 +87,16 @@ export create_store = =>
 			else if typeof payload == 'object'
 				payload = Object.fromEntries(Object.entries(payload)
 					.map ([k, v]) =>
-						if k.match /_ref$/
-							[ k, '[...]' ]
-						else
-							[ k, v ])
+						v =
+							if k.match /_ref$/
+								'[...]'
+							else if Array.isArray v
+								"Array[#{v.length}]"
+							else if typeof v == 'object'
+								'{...}'
+							else
+								v
+						[ k, v ])
 			store.commit 'push_store_history', { type, payload }
 	store.subscribeAction (action) =>
 		store.commit 'push_store_history', action.type
