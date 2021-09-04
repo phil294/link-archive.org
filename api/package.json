@@ -9,9 +9,9 @@
     "dev": "ts-node-dev --inspect=4321 --respawn --transpile-only index.ts",
     "build": "tsc",
     "start": "environment=production node index.js",
-    "initialize-dev": "yarn ts-node-debug initializers/dev.ts",
-    "initialize-random": "yarn ts-node-debug initializers/random.ts",
-    "upgrade-all": "ncu -u && yarn install && yarn upgrade"
+    "upgrade-all": "ncu -u && yarn install && yarn upgrade",
+    "typeorm-cli": "set -a && . ./run-dev.env && set +a && environment=development yarn ts-node -T ./node_modules/typeorm/cli.js",
+    "migrate": "yarn run typeorm-cli migration --help"
   },
   "dependencies": {
     "@types/jwt-simple": "^0.5.33",
