@@ -2,6 +2,7 @@
 div.row.children-spacing
 	input type=number :min=min_year :max=max_year :required=required :readonly=year_readonly :disabled=disabled v-model=year title=Year placeholder=Year
 	select v-model=month :required=required :readonly=readonly :disabled=disabled
+		option v-if=!required
 		option v-for="option of month_options" :value=option.value :disabled=option.disabled
 			| $option.name
 	input type=hidden :name=name :value=model
