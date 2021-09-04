@@ -7,10 +7,16 @@ export default {
 		})
 
 		http_client.interceptors.request.use(config => {
-			store.dispatch('server_reachable')
+			// Not a good idea as it will reset any present error displays
+			// store.dispatch 'server_reachable'
 			const { method, url, params } = config
+			const data = (() => {
+				try {
+					return JSON.stringify(config.data)
+				} catch(e){}
+			})()
 			/* TODO: Remove once https://github.com/axios/axios/issues/3606 is fixed and move to response interceptor error handling below instad: */
-			store.commit('push_store_history', { method, url, params })
+			store.commit('push_store_history', { method, url, params, data })
 			const token = store.state.session.token
 			if(token)
 				config.headers.Authorization = `Bearer ${token}`
