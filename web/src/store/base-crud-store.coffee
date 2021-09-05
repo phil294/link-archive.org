@@ -86,9 +86,12 @@ export default (...args) =>
 			else
 				commit "set_#{resource_name_plural}_raw", response.data
 			response.data
-		["get_#{resource_name}_raw"]: ({ commit }, id) ->
-			response = await @$http.get "#{endpoint}/#{id}"
-			commit "add_#{resource_name}_raw", response.data
+		["get_#{resource_name}_raw"]: ({ commit }, { id, add = false }) ->
+			response = await axios.get "#{endpoint}/#{id}"
+			if add
+				commit "add_#{resource_name}_raw", response.data
+			else
+				commit "update_#{resource_name}_raw", response.data
 			response.data
 		["update_#{resource_name}_raw"]: ({ commit }, r) ->
 			response = await @$http.put "#{endpoint}/#{r._id}", r.form_data or r
