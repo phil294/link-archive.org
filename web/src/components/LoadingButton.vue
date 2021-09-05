@@ -1,5 +1,5 @@
 <template lang="slm">
-button :disabled="loading || disabled" :type=type @click=clicked
+button :disabled="loading || disabled" :type=type @click=clicked :class.loading=loading
 	slot v-if=!loading Click me
 	slot v-else="" name=used_prompt Loading...
 </template>
@@ -38,6 +38,6 @@ export default
 </script>
 
 <style lang="stylus" scoped>
-button:disabled
+button.loading
 	cursor progress
 </style>
