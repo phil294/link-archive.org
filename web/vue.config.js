@@ -15,9 +15,13 @@ module.exports = {
 	},
 
 	chainWebpack: (config) => {
+		config
+			.entry('app')
+			.clear()
+			.add('./src/vue-app.coffee')
+
 		config.resolve.extensions
 			.add('.coffee')
-
 
 		config.module
 			.rule('coffee')

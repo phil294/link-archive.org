@@ -11,20 +11,15 @@
     "upgrade-all": "ncu -u && yarn install && yarn upgrade"
   },
   "dependencies": {
-    "compression": "^1.7.3",
-    "connect": "^3.6.6",
-    "cookie-parser": "^1.4.3",
     "core-js": "^3.6.5",
     "dayjs": "^1.9.4",
-    "node-fetch": "^2.6.0",
-    "npm-check-updates": "^7.0.2",
     "register-service-worker": "^1.7.1",
-    "serve-static": "^1.13.2",
     "vue": "^2.6.11",
     "vue-router": "^3.3.4",
     "vuex": "^3.5.1"
   },
   "devDependencies": {
+    "npm-check-updates": "^7.0.2",
     "@types/gapi.auth2": "^0.0.52",
     "@vue/cli-plugin-babel": "~4.4.6",
     "@vue/cli-plugin-e2e-nightwatch": "~4.4.6",
