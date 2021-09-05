@@ -22,6 +22,7 @@ export default
 <style lang="stylus" scoped>
 .click-to-interact
 	position relative
+	// overflow auto
 	.overlay
 		position absolute
 		inset 0
@@ -38,5 +39,4 @@ export default
 			color white
 			font-weight bold
 			font-size 170%
-	overflow auto
 </style>
