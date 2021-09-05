@@ -232,7 +232,7 @@ textarea {
 	width: 100%; }
 
 button // buttons, by default, should not have any specific styling so they can be used better semantically. for typical button-buttons, use .btn
-	// also see index ssr html
+	// also see index html
 	appearance none
 	font inherit
 	color: inherit // FF bug

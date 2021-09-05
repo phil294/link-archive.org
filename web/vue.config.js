@@ -10,10 +10,9 @@ const is_production = process.env.NODE_ENV === 'production';
 
 module.exports = {
 	productionSourceMap: true,
-	// css: {
-		// TODO: multiple ssr vue instantiation bug
-	// 	sourceMap: true,
-	// },
+	css: {
+		sourceMap: true,
+	},
 
 	chainWebpack: (config) => {
 		config.resolve.extensions

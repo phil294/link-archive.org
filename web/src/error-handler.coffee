@@ -1,7 +1,7 @@
 import Vue from 'vue'
 
 ###
- # Client only: This will make console.error, Vue error handler and other
+ # This will make console.error, Vue error handler and other
  # uncaught error handlers automatically send out an error report to the server,
  # and display an error banner to the user
  TODO dont show everything to the user, only an option to expand+show

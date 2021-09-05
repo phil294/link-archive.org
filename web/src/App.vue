@@ -1,7 +1,5 @@
 <template lang="slm">
 section#app.column.fill-h
-	no-ssr
-		vue-progress-bar
 	confirm
 	popup v-if=authenticate_popup @close=hide_authenticate_popup
 		authenticate @authenticated=hide_authenticate_popup
@@ -24,8 +22,6 @@ section#app.column.fill-h
 			button.btn v-if=!is_logged_in @click=show_authenticate_popup
 				| Sign in
 	main.flex-fill.column
-		div.error v-if=$errorHandler.error
-			pre 500 | Internal Server Error :-( [{{$errorHandler.error.message}}]
 		div.error.fade-in.column v-if=global_error_message
 			pre $global_error_message
 			div.center
@@ -37,33 +33,10 @@ section#app.column.fill-h
 <script lang="coffee">
 import Authenticate from '@/views/Authenticate'
 import Confirm from '@/views/Confirm'
-# TODO: requiring a seperate package for this is annoying, solve it manually somehow.
-# v-if=!$isServer is not enough for vue-progress-bar
-# https://github.com/egoist/vue-client-only/blob/master/src/index.js
-import NoSsr from 'vue-no-ssr'
 import { mapState, mapGetters, mapActions } from 'vuex'
 
 export default
-	components: { NoSsr, Confirm, Authenticate }
-	metaInfo:
-		titleTemplate: (title) =>
-			"#{if title then title+' – ' else ''}Site name"
-		# link:
-		#	TODO: multiple ssr vue instantiation bug
-		# 	-	rel: 'manifest', href: '/manifest.json' # not actually necessary..? pwa seems to also work without the link
-			
-			# -	name: 'description', vmid: 'description', content: 'Site description'
-		meta:
-			-	name: 'theme-color', content: process.env.VUE_APP_THEME_PRIMARY_COLOR
-	created: ->
-		if @$isServer
-			if @$errorHandler.error
-				# Needs extra handling because the error-plugin only catches
-				# *unexpected ssr renderer errors* outside fetch(). Here, we
-				# consider errors that still allow a full page to be rendered
-				# (500 status but no 500.html)
-				{ ssr_build_error_report } = await import('@/server/error-plugin')
-				await ssr_build_error_report @$errorHandler.error
+	components: { Confirm, Authenticate }
 	computed: {
 		...mapState
 			-	'app_name'
