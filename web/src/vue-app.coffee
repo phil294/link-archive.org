@@ -3,7 +3,7 @@ import App from './App'
 import { install_error_handler } from './error-handler'
 import { create_router } from './vue-router'
 import { create_store } from './store/root-store'
-import http_client from './services/http-client.js'
+import http from './services/http.coffee'
 import storage_service from '@/services/storage-service'
 import './directives/drag'
 import './directives/drop'
@@ -38,7 +38,7 @@ Vue.component 'read-more', ReadMore
 store = create_store()
 router = create_router(store)
 
-Vue.prototype.$http = http_client store
+Vue.prototype.$http = http store
 
 app = new Vue {
 	router
