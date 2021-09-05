@@ -1,20 +1,20 @@
 <template lang="slm">
-form.column :class.no-click=loading @submit.prevent=submit enctype="multipart/form-data"
+form.column :class.no-click=loading @submit.prevent=submit enctype="multipart/form-data" :disabled=disabled
 	legend
 		slot name=legend
 	slot
 	#actions.row.center.padding
 		slot name=button :loading=loading
-			loading-button.btn v-if="!no_submit_button||loading" :loading=button_loading :disabled=nosubmit
+			loading-button.btn v-if="!no_submit_button||loading" :loading=button_loading :disabled=disabled
 				slot name=button_label
 					| Submit
 				template #used_prompt=""
 					slot name=button_label_loading
 						.column v-if=loading
 							span Loading...
-							progress :value=progress
-							small.time-est v-if=seconds_remaining_est
-								| Time est. remaining: {{ seconds_remaining_est | format_seconds }}
+							progress :value="progress_display || progress"
+							small.time-est v-if=time_remaining_est
+								| Time est. remaining: {{ time_remaining_est/1000 | format_seconds }}
 						span v-else="" Done!
 		button.btn.btn-2.cancel v-if=cancelable :disabled=loading type=button @click=$emit('cancel')
 			slot name=cancel_button_label
@@ -62,7 +62,7 @@ export default
 		onetime:
 			type: Boolean
 			default: false
-		nosubmit:
+		disabled:
 			type: Boolean
 			default: false
 		stepcount:
@@ -73,8 +73,10 @@ export default
 		loading: false
 		button_loading: false
 		progress: 1
+		progress_display: 1
 		action_start: null
-		seconds_remaining_est: null
+		time_remaining_est: null
+		time_remaining_est_timer: null
 	methods:
 		submit: (event) ->
 			@error_response = ''
@@ -104,7 +106,14 @@ export default
 					time_passed = dayjs().diff(@action_start)
 					time_total_est = time_passed / @progress
 					if time_total_est > 10000
-						@seconds_remaining_est = Math.round((time_total_est - time_passed) / 1000)
+						# Show estimated time remaining to the user after ever progress step
+						@time_remaining_est = time_total_est - time_passed
+						if not @time_remaining_est_timer
+							# Steadily decrease the time est sec by sec
+							@time_remaining_est_timer = setInterval ( =>
+								@time_remaining_est = Math.max(1000, @time_remaining_est - 1000)
+								@progress_display = 1 - @time_remaining_est / time_total_est
+							), 1000
 
 			@action_start = new Date
 			try
@@ -125,7 +134,10 @@ export default
 				throw e
 			finally
 				@loading = false
-				@seconds_remaining_est = null
+				@time_remaining_est = null
+				@progress_display = null
+				clearInterval @time_remaining_est_timer
+				@time_remaining_est_timer = null
 				@action_start = null
 </script>
 
