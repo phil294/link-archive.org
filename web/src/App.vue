@@ -7,7 +7,7 @@ section#app.column.fill-h
 		authenticate @authenticated=hide_authenticate_popup
 	modal v-if=loading_counter
 		.box.padding-l
-			| Loading... ($loading_counter)
+			| Loading... ({{ loading_counter }})
 	header.center.padding
 		nav
 			router-link exact="" to=/ [LOGO]
