@@ -80,7 +80,7 @@ export default
 				if e.status == 0
 					@button_loading = false
 				else
-					@error = e.data or e.message or e
+					@error = e.message or e.data or e
 				throw e
 			finally
 				@loading = false
