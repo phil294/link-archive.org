@@ -34,9 +34,7 @@ export default (store) =>
 			message: error.message
 			data: error.response?.data or error.response?.statusText or null
 			status: error.response?.status or 0
-		if error.response?.status == 401 or error.response?.status == 403
-			store.dispatch 'session/logout'
-		else if error.response?.status == 409
+		if error.response?.status == 409
 			formatted_error.data = 'Error 409 CONFLICT – The request could not be completed because it would result in an unexpected data conflict (duplicate name, missing reference or the like).'
 		else if (error.response == undefined || error.code == 'ECONNABORTED') && !formatted_error.stack
 			# not really necessary as the exception will lead to
