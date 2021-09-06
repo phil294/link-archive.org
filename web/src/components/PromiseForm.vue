@@ -1,11 +1,13 @@
 <template lang="slm">
-form.column :class.no-click=loading @submit.prevent=submit enctype="multipart/form-data" :disabled=disabled
-	legend
-		slot name=legend
-	slot
+form.column @submit.prevent=submit enctype="multipart/form-data"
+	/ using an invisible fieldset wrapper to group disable attribute for all children (does not work on <form> directly)
+	fieldset.low-key.column :disabled=disabled_or_loading
+		legend
+			slot name=legend
+		slot
 	#actions.row.center.padding
 		slot name=button :loading=loading
-			loading-button.btn v-if="!no_submit_button||loading" :loading=button_loading :disabled=disabled
+			loading-button.btn v-if="!no_submit_button||loading" :loading=button_loading :disabled=disabled_or_loading
 				slot name=button_label
 					| Submit
 				template #used_prompt=""
@@ -20,7 +22,7 @@ form.column :class.no-click=loading @submit.prevent=submit enctype="multipart/fo
 			slot name=cancel_button_label
 				| Cancel
 		/ TODO: disabled="" when form is unchanged
-		button.btn v-if=resetable :disabled=loading type=reset
+		button.btn v-if=resetable :disabled=disabled_or_loading type=reset
 			slot name=reset_button_label
 				| Reset
 	div.error.fade-in v-if=error_response
@@ -143,6 +145,9 @@ export default
 				clearInterval @time_remaining_est_timer
 				@time_remaining_est_timer = null
 				@action_start = null
+	computed:
+		disabled_or_loading: ->
+			@disabled or @loading
 </script>
 
 <style lang="stylus" scoped>
@@ -152,4 +157,8 @@ button
 		height 2px
 form.no-click
 	cursor progress
+fieldset.low-key
+	margin 0
+	padding 0
+	border none
 </style>

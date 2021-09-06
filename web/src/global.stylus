@@ -246,7 +246,7 @@ button, input[type="submit"], input[type="reset"], input[type="button"], label
 		&:hover
 			color var(--color-clickable)
 
-.no-click, .no-click button, *[disabled], *[disabled] * {
+.no-click, .no-click button, *:disabled {
 	// opacity 0.7
 	pointer-events none
 	cursor: not-allowed;
@@ -294,7 +294,7 @@ button, input[type="submit"], input[type="reset"], input[type="button"], label
 			border none
 			box-shadow -1px 0px #ddd, 0px -1px #ccc
 			inset 2px 0 0 1px
-	&[disabled]
+	&:disabled
 		pointer-events auto // allow title popup
 
 textarea, select, input:not([type=range])
