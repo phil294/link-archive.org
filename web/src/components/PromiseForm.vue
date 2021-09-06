@@ -133,7 +133,7 @@ export default
 				@$emit 'success'
 			catch e
 				await nextTick() # enforce transition effect even if follow-up error+
-				@error_response = e.data || e
+				@error_response = e.message or e.data or e
 				@button_loading = false
 				throw e
 			finally
