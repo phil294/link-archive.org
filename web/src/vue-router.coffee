@@ -25,11 +25,9 @@ export default (store) =>
 
 	router.beforeEach (to, fromm, next) =>
 		if to.matched.some (record) => record.meta.requires_auth
-			if ! store.getters['session/is_logged_in']
-				return next
-					path: '/login'
-					query:
-						redirect: to.fullPath
+			if not store.getters['session/is_logged_in']
+				store.dispatch 'session/logout', redirect: to.fullPath
+				return
 			else if to.matched.some (record) => record.meta.requires_admin
 				if ! store.getters['session/is_admin']
 					return next '/'

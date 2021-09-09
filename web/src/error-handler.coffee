@@ -1,5 +1,3 @@
-# new error handler
-import Vue from 'vue'
 import { store } from './vue-app.coffee'
 
 export notify_admin = (text_str) =>
@@ -60,7 +58,7 @@ export handle_error = (prompt_to_user = true, ...args) =>
  # and display an error banner to the user
  # TODO dont show everything to the user, only an option to expand+show
 ###
-export install_error_handler = =>
+export install_error_handler = ({ app, store }) =>
 	_console_error = console.error
 	count = 0
 	global_error_callback = (...args) =>
@@ -72,10 +70,10 @@ export install_error_handler = =>
 			return
 		count++
 		_console_error(...args, store.state.store_history)
-		utils.whereami 'error encountered'
 		if count > 15
 			return
 		try
+			utils.whereami 'error encountered'
 			status = args[0]?.status
 			# failed to fetch is a dropbox error https://github.com/dropbox/dropbox-sdk-js/issues/415
 			if 0 == status or args[0]?.message == 'Failed to fetch'
@@ -105,9 +103,9 @@ export install_error_handler = =>
 		catch e3
 			console.log e3
 	
-	Vue.config.errorHandler = global_error_callback
+	app.errorHandler = global_error_callback
 	# ignored in production
-	Vue.config.warnHandler = global_error_callback
+	app.warnHandler = global_error_callback
 	window.onerror = global_error_callback
 	console.error = global_error_callback
 	window.addEventListener 'unhandledrejection', (e) =>

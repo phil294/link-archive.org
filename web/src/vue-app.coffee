@@ -5,6 +5,7 @@ import { install_error_handler } from './error-handler'
 import create_router from './vue-router.coffee'
 import create_store from './store/root-store.coffee'
 import http from './services/http.coffee'
+import storage_service from '@/services/storage-service.coffee'
 import drag from './directives/drag.coffee'
 import drop from './directives/drop.coffee'
 import filedrop from './directives/filedrop.coffee'
@@ -27,13 +28,13 @@ import utils from './utils.coffee'
 window._dayjs = dayjs
 window.utils = utils
 
+app = createApp App
 store = create_store()
+
+install_error_handler { app, store }
+
 router = create_router(store)
 $http = http store
-
-app = createApp App
-
-install_error_handler { app, store, router }
 
 app.use router
 app.use store
@@ -66,7 +67,7 @@ app.directive 'moveable', moveable
 app.directive 'dragscrollable', dragscrollable
 
 do =>
-	await store.dispatch 'session/initialize'
+	await store.dispatch 'session/initialize', storage_service.get 'token'
 	await router.isReady()
 	app.mount('#app')
 

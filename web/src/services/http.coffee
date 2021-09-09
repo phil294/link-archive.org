@@ -37,10 +37,6 @@ export default (store) =>
 		if error.response?.status == 409
 			formatted_error.data = 'Error 409 CONFLICT – The request could not be completed because it would result in an unexpected data conflict (duplicate name, missing reference or the like).'
 		else if (error.response == undefined || error.code == 'ECONNABORTED') && !formatted_error.stack
-			# not really necessary as the exception will lead to
-			# error_handler using set_global_error_message anyway.
-			# also see note on 'server_reachable' above.
-			# store.dispatch 'server_unreachable'
 			formatted_error.data = 'Cannot reach server'
 		# todo class-validation errors: format properly
 		return Promise.reject formatted_error

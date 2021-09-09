@@ -4,7 +4,7 @@ import { router, $http } from '@/vue-app.coffee'
 export default
 	namespaced: true
 	state: ->
-		token: storage_service.get 'token'
+		token: null
 		session: null
 		initialized: false
 	getters:
@@ -39,10 +39,10 @@ export default
 				if e.message != 'Cookie consent denied'
 					throw e
 			commit 'set_session', session
-		initialize: ({ state, dispatch, getters, commit }) ->
-			if state.token
+		initialize: ({ dispatch, commit }, token) ->
+			if token
 				try
-					dispatch 'login_with_token', state.token
+					dispatch 'login_with_token', state
 					dispatch 'refresh_token' # make sure the token is still valid by asking the server for a new one # this should probably be never-expiring and the email ones be shortlived instead TODO (or one-time?)
 			commit 'set_initialized', true
 		request_token_mail: (_, email) ->
@@ -57,8 +57,10 @@ export default
 			response = await $http.get 'authentication/refreshtoken'
 			jwt = response.data
 			await dispatch 'login_with_token', jwt
-		logout: ({ commit }) ->
-			try await router.push '/login'
+		logout: ({ commit }, { redirect = '' } = {}) ->
+			try await router.push
+				path: '/login'
+				query: { redirect }
 			commit 'set_token', null
 			commit 'set_session', null
 			storage_service.set 'token', null

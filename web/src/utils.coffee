@@ -134,6 +134,36 @@ export default
 
 	sleep: (ms) => new Promise (ok) => setTimeout(ok, ms)
 
+	# Only really makes sense in dev mode where stack traces quickly become unreadable
+	# TODO: revise for vue3 if it even still makes sense at all
+	stacktrace_to_pretty_array: (stack) =>
+		# debugger
+		stack
+			.split('\n')
+			.map (l) =>
+				l.trim()
+				.replace /^at | at |\(?eval/g, ' '
+				# .replace /\w+@webpack-internal:\/\/\/\.\/node_modules\/[a-zA-Z_\/-]+\.js[:0-9]?/, ''
+				.replace /[(@]webpack-internal:.+\/src\/(.+)/, ' $1'
+				.replace '?vue&type=script&lang=coffee&', ''
+				.replace /&type=template&id=[a-f0-9]+&scoped=true&lang=slm&/, ''
+				.replace /[()"<>*]|(, )?<?anonymous>?:1:[0-9]+|_callee[0-9]+\$/g, ''
+				# .replace /webpack-internal:.+/, ''
+				.trim()
+				.replace(/ {2,}/g, ' ')
+			.filter (l) => not l.includes('webpack')
+			.filter (l) => l != 'Error' and not l.includes('whereami')
+			.filter Boolean
+	whereami: (label) =>
+		stack = new Error().stack
+		console.groupCollapsed("whereami: #{label or ''}")
+		console.groupCollapsed('expand to see console.trace() and unfiltered trace')
+		console.trace()
+		console.log(stack)
+		console.groupEnd()
+		console.log(utils.stacktrace_to_pretty_array(stack))
+		console.groupEnd()
+
 	ascii_nest: (v, nest_level) =>
 		"#{if nest_level then '└' + '─'.repeat(nest_level - 1) else ''}
 		#{v}"
