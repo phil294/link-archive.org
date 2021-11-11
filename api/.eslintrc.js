@@ -145,7 +145,7 @@ module.exports = {
 		"no-new-wrappers": "error",
 		"no-shadow": "error",
 		"no-throw-literal": "off",
-		"no-trailing-spaces": "error",
+		"no-trailing-spaces": ["error", { "skipBlankLines": true }],
 		"no-undef-init": "error",
 		"no-underscore-dangle": "off",
 		"no-unsafe-finally": "error",
