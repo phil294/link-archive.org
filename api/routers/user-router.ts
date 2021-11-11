@@ -8,7 +8,7 @@ user_router.patch('/', user_secured, async (req, res) => {
 	[
 		'min_iat', // If set, this will lead to the invalidation of all tokens prior to the date
 	].forEach((prop) => {
-		if (req.body[prop])
+		if (req.body[prop] !== undefined)
 		// @ts-ignore
 			user[prop] = req.body[prop]
 	})
