@@ -33,5 +33,9 @@ export default
 			data.required = data.required or not data.optional?
 			data.placeholder = data.placeholder or data.label
 			data
+		# Some properties are not allowed to be set on html elements
+		bindable_fielddata: ->
+			{ options, ...bindable } = @fielddata
+			bindable
 		id: ->
 			"_form_#{++id_i}_#{@default_values.id or ''}_#{@fielddata.name or ''}"
