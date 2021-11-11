@@ -1,24 +1,35 @@
-import { validateOrReject } from 'class-validator'
-import { BaseEntity, EntitySubscriberInterface, EventSubscriber, InsertEvent, UpdateEvent } from 'typeorm'
+import { validate, ValidationError } from 'class-validator'
+import { BaseEntity, EntitySubscriberInterface, EventSubscriber, InsertEvent, ObjectLiteral, UpdateEvent } from 'typeorm'
+
+export function do_validate(entity: ObjectLiteral): Promise<ValidationError[]> {
+	return validate(entity, {
+		validationError: {
+			target: false,
+		},
+		whitelist: true,
+		forbidNonWhitelisted: true,
+	})
+}
 
 @EventSubscriber()
 export class PostSubscriber implements EntitySubscriberInterface {
 
-	public beforeInsert(event: InsertEvent<any>): Promise<void> {
-		return this.validate(event.entity)
+	/**
+     * Called before entity insertion.
+     */
+	public async beforeInsert(event: InsertEvent<any>): Promise<void> {
+		await this._validate_or_reject(event.entity)
 	}
 
-	public beforeUpdate(event: UpdateEvent<any>): Promise<void> {
-		return this.validate(event.entity)
+	public async beforeUpdate(event: UpdateEvent<any>): Promise<void> {
+		await this._validate_or_reject(event.entity)
 	}
 
-	private validate<E extends BaseEntity>(entity: E): Promise<void> {
-		return validateOrReject(entity, {
-			validationError: {
-				target: false,
-			},
-			whitelist: true,
-			forbidNonWhitelisted: true,
-		})
+	private async _validate_or_reject(entity?: ObjectLiteral): Promise<void> {
+		if(!entity)
+			return Promise.resolve(console.warn("entity missing for validation"))
+		const errors = await do_validate(entity)
+		if(errors.length)
+			return Promise.reject(errors)
 	}
 }
