@@ -28,7 +28,7 @@ export default (...args) =>
 	getters: {
 		[resource_name_plural]: (state) ->
 			state["#{resource_name_plural}_raw"]
-		["#{resource_name}_by_id"]: (state, getters) ->
+		["#{resource_name}_by_id"]: (_, getters) ->
 			getters[resource_name_plural].reduce (all, r) =>
 				all[r._id] = r
 				all
@@ -74,7 +74,7 @@ export default (...args) =>
 			resource = response.data
 			commit "add_#{resource_name}_raw", resource
 			resource
-		["get_#{resource_name_plural}_raw"]: ({ commit, state }, params) ->
+		["get_#{resource_name_plural}_raw"]: ({ commit }, params) ->
 			options = params?.options
 			if options
 				params = params.params
@@ -94,14 +94,14 @@ export default (...args) =>
 				commit "update_#{resource_name}_raw", response.data
 			response.data
 		["update_#{resource_name}_raw"]: ({ commit }, r) ->
-			response = await $http.put "#{endpoint}/#{r._id}", r.form_data or r
+			response = await axios.put "#{endpoint}/#{r._id or r.get('_id')}", r.form_data or r
 			commit "update_#{resource_name}_raw", response.data
 			response.data
 		["delete_#{resource_name}_raw"]: ({ dispatch }, r) ->
 			if not await dispatch 'confirm_ask', "Do you really want to delete '#{r.name}'?", root: true
 				return false
 			dispatch "delete_#{resource_name}_raw_no_confirm", r
-		["delete_#{resource_name}_raw_no_confirm"]: ({ dispatch, commit }, r) ->
+		["delete_#{resource_name}_raw_no_confirm"]: ({ commit }, r) ->
 			await $http.delete "#{endpoint}/#{r._id}"
 			commit "remove_#{resource_name}_raw_by_id", r._id
 		...custom.actions
