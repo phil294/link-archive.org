@@ -28,7 +28,6 @@ export default
 			default: false
 	methods:
 		clicked: (event) ->
-			@$emit 'click'
 			if @load_on_click
 				if @type == 'submit' or event.currentTarget.form
 					# Necessary because the loading state eats this up.
