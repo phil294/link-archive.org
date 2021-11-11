@@ -24,9 +24,12 @@ import ReadMore from '@/components/ReadMore.vue'
 import FormField from '@/components/FormField.vue'
 import './register-service-worker.js'
 import utils from './utils.coffee'
+import { polyfill as mobile_drag_drop_polyfill } from "mobile-drag-drop"
 
 window._dayjs = dayjs
 window.utils = utils
+
+mobile_drag_drop_polyfill()
 
 app = createApp App
 store = create_store()
