@@ -18,6 +18,7 @@ export default (store) =>
 			config.headers.Authorization = "Bearer #{token}"
 		# TODO: Remove setting error_content and its references once https://github.com/axios/axios/issues/2387 is fixed:
 		config.error_context = new Error("Thrown at:")
+		config.headers.common['x-app-version'] = store.state.app_version
 		return config
 
 	http_client.interceptors.response.use (response) =>

@@ -6,6 +6,7 @@ import expressFormData from 'express-form-data'
 import { NO_CONTENT, UNPROCESSABLE_ENTITY } from 'http-status-codes'
 import 'reflect-metadata'
 import authentication_middleware from './authentication-middleware'
+import version_check_middleware from './version-check-middleware'
 import authentication_router from './routers/authentication-router'
 import error_router from './routers/error-router'
 import user_router from './routers/user-router'
@@ -29,7 +30,7 @@ app.use(expressFormData.parse())
 app.use((req, res, next) => {
 	res.header('Access-Control-Allow-Origin', '*') // fixme
 
-	res.header('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+	res.header('Access-Control-Allow-Headers', 'Content-Type,Authorization,x-app-version')
 	if (req.method === 'OPTIONS') {
 		res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS,PATCH')
 		res.sendStatus(NO_CONTENT)
@@ -40,6 +41,7 @@ app.use((req, res, next) => {
 	next()
 })
 
+app.use(version_check_middleware)
 app.use(authentication_middleware(token_service))
 app.use('/error', error_router(mail_service))
 app.use((req, res, next) => {

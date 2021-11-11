@@ -2,7 +2,7 @@ const path = require('path');
 const coffeescript = require('coffeescript');
 const fs = require('fs');
 
-process.env.VUE_APP_APP_VERSION = require('./package.json').version;
+process.env.VUE_APP_APP_VERSION = require('../api/package.json').version;
 
 process.env.VUE_APP_THEME_PRIMARY_COLOR = '#000000';
 
@@ -20,7 +20,7 @@ const options = {
       .entry('app')
       .clear()
       .add('./src/vue-app.coffee')
-    
+
     config.resolve.extensions
       .add('.coffee')
     
