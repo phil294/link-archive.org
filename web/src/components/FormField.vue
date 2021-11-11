@@ -5,9 +5,9 @@
 	select v-if="fielddata.options||fielddata.optgroups" :id=id v-model=model v-bind=bindable_fielddata
 		optgroup v-for="optgroup of fielddata.optgroups" :label=optgroup.label
 			/ kinda duplicate, not so pretty :-/
-			option v-for="option of optgroup.options" :value=option.value
+			option v-for="option of optgroup.options" :value="option.value || ''"
 				| {{ option.name || option.value }}
-		option v-for="option of fielddata.options" :value=option.value
+		option v-for="option of fielddata.options" :value="option.value || ''"
 			| {{ option.name || option.value }}
 	slot v-else=""
 		input :id=id v-model=model v-bind=bindable_fielddata onfocus=select()
