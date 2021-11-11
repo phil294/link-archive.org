@@ -87,7 +87,7 @@ export default =>
 								'[...]'
 							else if Array.isArray v
 								"Array[#{v.length}]"
-							else if typeof v == 'object'
+							else if typeof v == 'object' and v != null
 								'{...}'
 							else
 								v
