@@ -1,7 +1,7 @@
-import { User } from '../models/User';
+import { User } from '../models/User'
 
 interface Locals {
-    user: User;
+	user: User;
 }
 
 /* TODO whatsup

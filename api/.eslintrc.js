@@ -170,4 +170,4 @@ module.exports = {
 		"valid-typeof": "off",
 		"semi": ["error", "never"]
 	}
-};
+}
