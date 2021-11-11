@@ -41,12 +41,23 @@ app.use((req, res, next) => {
 })
 
 app.use(authentication_middleware(token_service))
+app.use('/error', error_router(mail_service))
+app.use((req, res, next) => {
+	const status_orig = res.status
+	res.status = the_status => {
+		if(!the_status.toString().startsWith("2")) {
+			log(`A request failed with non-200 status ${the_status}: ${req.method} ${req.originalUrl}, ${JSON.stringify(req.body)} - ${res.locals.user?.email||'NOUSER'}`)
+		}
+		res.status = status_orig
+		return res.status(the_status)
+	}
+	next()
+})
 app.use('/authentication', authentication_router(
 	token_service, mail_service,
 	env('WEB_ROOT'), env('GOOGLE_CLIENT_ID'), env('FACEBOOK_APP_ID'), env('FACEBOOK_APP_SECRET'), env('WEBSITE_NAME'),
 ))
 app.use('/user', user_router)
-app.use('/error', error_router(mail_service))
 
 app.set('query parser', 'simple')
 
