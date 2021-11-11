@@ -59,7 +59,7 @@ app.use(async (err, req, res, next) => {
 		'FIXME - Insert desired error message receiving email here',
 		'API 500 / 422',
 		html_escape(info))
-	if (err.length && (err[0] instanceof ValidationError || err[0].constraints)) { // TODO: class-validator whitelisting errors arent instanceof ValidationError. Probably a bug?
+	if (err?.[0] instanceof ValidationError) {
 		return res.status(UNPROCESSABLE_ENTITY).send(err)
 	}
 	const user_message = 'Internal Server Error'
