@@ -1,5 +1,5 @@
 import { createTransport, SentMessageInfo } from 'nodemailer';
-import Mail from 'nodemailer/lib/mailer'; // tslint:disable-line:import-name
+import Mail from 'nodemailer/lib/mailer'; // eslint-disable-line
 import { log } from '../utils';
 
 class MailService {
