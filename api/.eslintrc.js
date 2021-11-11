@@ -48,6 +48,9 @@ module.exports = {
 		],
 		"camelcase": "off",
 		"@typescript-eslint/naming-convention": [
+			// This cannot be "error" yet because https://github.com/typescript-eslint/typescript-eslint/issues/2244
+			// - vars passed as params, arguments *should* only be checked if their definition
+			// is not from 3rd party libraries :/ staying at "warn" for the meantime
 			"warn",
 			{
 				"selector": "default",
