@@ -45,16 +45,19 @@ export default
 		minutes = (''+minutes).padStart 2, '0'
 		"#{hours}:#{minutes}"
 
-	format_seconds: (seconds) =>
-		if not seconds
+	format_seconds: (input_seconds) =>
+		if not input_seconds
 			return '00:00:00'
-		hours = Math.floor(seconds / 3600)
+		hours = Math.floor(input_seconds / 3600)
 		hours = (''+hours).padStart 2, '0'
-		minutes = Math.floor((seconds - hours * 3600) / 60)
+		minutes = Math.floor((input_seconds - hours * 3600) / 60)
 		minutes = (''+minutes).padStart 2, '0'
-		seconds = seconds - hours * 3600 - minutes * 60
+		seconds = Math.floor(input_seconds - hours * 3600 - minutes * 60)
 		seconds = (''+seconds).padStart 2, '0'
-		"#{hours}:#{minutes}:#{seconds}"
+		fraction = input_seconds - hours * 3600 - minutes * 60 - seconds or ''
+		if fraction
+			fraction = '.' + (''+Math.round(fraction*100)/100).substr(2)
+		"#{hours}:#{minutes}:#{seconds}#{fraction}"
 
 	format_number: (number) =>
 		if not number
