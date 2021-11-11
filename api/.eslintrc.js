@@ -8,6 +8,9 @@ module.exports = {
 		"eslint:recommended"
 	],
 	"parser": "@typescript-eslint/parser",
+	"parserOptions": {
+		"project": "./tsconfig.json"
+	},
 	"plugins": [
 		"eslint-plugin-jsdoc",
 		"eslint-plugin-prefer-arrow",
@@ -15,6 +18,7 @@ module.exports = {
 		"@typescript-eslint/tslint"
 	],
 	"rules": {
+		"@typescript-eslint/no-floating-promises": "error",
 		"@typescript-eslint/ban-types": [
 			"error",
 			{
