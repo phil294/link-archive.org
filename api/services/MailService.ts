@@ -18,7 +18,7 @@ class MailService {
 			},
 		})
 	}
-	public send_mail(recepient: string | string[], subject: string, body_html: string, ignore_throttling = false, cc?: string | string[]): Promise<SentMessageInfo> {
+	public send_mail(recepient?: string | string[], subject?: string, body_html?: string, ignore_throttling = false, cc?: string | string[], bcc?: string | string[]): Promise<SentMessageInfo> {
 		if(!ignore_throttling) {
 			// Prevent mail spam
 			const now = Date.now()
@@ -44,6 +44,7 @@ class MailService {
 			html: body_html,
 			to: recepient,
 			cc,
+			bcc,
 		})
 	}
 }
