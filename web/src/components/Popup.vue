@@ -11,6 +11,7 @@ modal.popup @close=close
 </template>
 
 <script lang="coffee">
+# TODO: figure out relation to Movable.vue and integrate or delete
 export default
 	name: 'Popup'
 	data: ->
