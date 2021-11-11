@@ -3,17 +3,21 @@ import Vue from 'vue'
 # For testing:
 # https://jsfiddle.net/5Lmpxb1r/
 
-#
-###* @type {Map<HTMLElement,{
+###* @typedef {({ data: any, event: DragEvent }) => void} DropCallback ###
+
+###* @typedef {{
 	ondragover: (this: HTMLElement, ev: DragEvent) => any
 	ondragenter: (this: HTMLElement, ev: DragEvent) => any
 	ondragleave: (this: HTMLElement, ev: DragEvent) => any
 	ondrop: (this: HTMLElement, ev: DragEvent) => any
-	ondrop_cb: () => any
-}>} ### 
+	ondrop_cb: DropCallback
+}} DragData
+###
+
+###* @type {Map<HTMLElement,DragData>} ### 
 drag_data_by_el = new Map
 
-set_drop = (###* @type {HTMLElement} ### el, ###* @type {() => any} ### drop_cb) =>
+set_drop = (###* @type {HTMLElement} ### el, ###* @type {DropCallback} ### drop_cb) =>
 	existing_drag_data = drag_data_by_el.get el
 	if existing_drag_data
 		existing_drag_data.ondrop_cb = drop_cb
@@ -22,12 +26,14 @@ set_drop = (###* @type {HTMLElement} ### el, ###* @type {() => any} ### drop_cb)
 	el.classList.add 'drop-target'
 	counter = 0
 	
+	#
+	###* @type DragData ###
 	drag_data =
-		ondragover: (###* @type {DragEvent} ### e) ->
+		ondragover: (e) ->
 			e.preventDefault()
 			if e.dataTransfer
 				e.dataTransfer.dropEffect = 'move'
-		ondragenter: (###* @type {DragEvent} ### e) =>
+		ondragenter: (e) =>
 			e.preventDefault() # preventDefaults here are needed? some only for IE. todo
 			counter++
 			if counter == 1
@@ -36,7 +42,7 @@ set_drop = (###* @type {HTMLElement} ### el, ###* @type {() => any} ### drop_cb)
 			counter--
 			if counter == 0
 				el.classList.remove 'dragenter'
-		ondrop: (###* @type {DragEvent} ### e) =>
+		ondrop: (e) =>
 			e.preventDefault()
 			counter = 0
 			el.classList.remove 'dragenter'
@@ -44,9 +50,12 @@ set_drop = (###* @type {HTMLElement} ### el, ###* @type {() => any} ### drop_cb)
 				data = JSON.parse e.dataTransfer?.getData('application/json') || ''
 			catch e
 				# TODO stackoverflow.com/q/65775496
-				throw e
-			drag_data.ondrop_cb(data)
-		ondrop_cb: Boolean
+				# throw e
+				console.warn e
+			drag_data.ondrop_cb
+				data: data
+				event: e
+		ondrop_cb: drop_cb
 	el.addEventListener 'dragover', drag_data.ondragover
 	el.addEventListener 'dragenter', drag_data.ondragenter
 	el.addEventListener 'dragleave', drag_data.ondragleave
