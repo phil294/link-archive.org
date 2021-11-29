@@ -18,7 +18,7 @@ body, html {
 	height: 100%;
 }
 form
-	input:not([type=checkbox]), label, select {
+	input:not([type=checkbox]):not([type=radio]), label, select {
 		width: 100%;
 	}
 input[type=checkbox] + label {
@@ -132,7 +132,7 @@ details > summary {
 		// box-shadow 1px 1px 4px 2px #eee
 		// box-shadow 1px 1px 1px 2px #e2e2e2
 		box-shadow 1px 1px 3px 0px #ababab
-	input:not([type=submit]):not([type=range]):not([type=checkbox]), select, textarea
+	input:not([type=submit]):not([type=range]):not([type=checkbox]):not([type=radio]), select, textarea
 		box-shadow 0px 1px 3px #ababab inset
 	.box
 		background: rgba(255,255,255,0.93)
@@ -188,7 +188,7 @@ body {
 
 
 // basic font family reset, based on browserstyles font modifications
-input:not([type=checkbox]):not([type=submit]), textarea, keygen, select, optgroup, option
+input:not([type=checkbox]):not([type=radio]):not([type=submit]), textarea, keygen, select, optgroup, option
 	height 2em
 	margin 0
 
@@ -301,7 +301,8 @@ button, input[type="submit"], input[type="reset"], input[type="button"], label
 	&:disabled
 		pointer-events auto // allow title popup
 
-textarea, select, input:not([type=range])
+// cannot apply this to range inputs because range input + padding = big big mess
+textarea, select, input:not([type=range]):not([type=radio])
 	color: #4a4a4a;
 	padding: 4px 10px;
 	/* The 6px vertically centers text on FF, ignored by Webkit */
