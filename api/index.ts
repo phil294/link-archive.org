@@ -1,8 +1,9 @@
 /// <reference types="./types/express-form-data" />
 import bodyParser from 'body-parser'
 import { ValidationError } from 'class-validator'
-import express from 'express'
+import express, { Request } from 'express'
 import expressFormData from 'express-form-data'
+import { File as MultipartyFile } from 'multiparty'
 import { NO_CONTENT, UNPROCESSABLE_ENTITY } from 'http-status-codes'
 import 'reflect-metadata'
 import authentication_middleware from './authentication-middleware'
@@ -14,11 +15,39 @@ import MailService from './services/MailService'
 import TokenService from './services/TokenService'
 import { env, error, log, html_escape } from './utils'
 import { createConnection } from 'typeorm'
+import { promisify } from 'util'
+import fs from 'fs'
 
 // ///////////////// CONFIG
 
 const mail_service = new MailService(env('MAIL_SENDER_SMTP_HOST'), env('MAIL_SENDER_USER'), env('MAIL_SENDER_PASSWORD'))
 const token_service = new TokenService(env('TOKEN_SECRET'))
+
+// When changing this, a files moving migration is required
+export const FILES_DIR = "files/"
+
+/**
+ * @param file_param the form data file key name.
+ * @param filename you must make sure that this param is escaped properly and
+ * that the respective file name does not yet exist! (somewhat solvable by e.g. prefixing with `Date.now()`).
+ *
+ * When this function returns successfully, you can then in future access the file with
+ * `readFile` @ `FILES_DIR + filename`
+ * ```
+ */
+export const save_uploaded_file = async (req: Request, file_param: string, filename: string): Promise<boolean> => {
+	const file_in_upload_tmp: MultipartyFile | undefined = (req as any).files[file_param]
+	if(!file_in_upload_tmp)
+		return false
+	// return new Binary(await promisify(fs.readFile)(tmp_path))
+	const dest_path = FILES_DIR + filename
+	if(await promisify(fs.exists)(dest_path)) {
+		error(`Tried to save uploaded file to path "${dest_path}" but it already exists!"`) // " (quote for micro editor syntax highlighting bug)
+		return false
+	}
+	await promisify(fs.rename)(file_in_upload_tmp.path, dest_path)
+	return true
+}
 
 // ////////////////// ROUTES
 

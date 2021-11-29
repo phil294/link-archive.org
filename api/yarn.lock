@@ -243,6 +243,14 @@
   dependencies:
     es6-promise "*"
 
+"@types/express-form-data@^2.0.1":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@types/express-form-data/-/express-form-data-2.0.2.tgz#72e214973a5987362726a73c2f6e773250db440f"
+  integrity sha512-3vIwpv+NQHPam4ONrWbfuEt9cmY0ib1cyZV96x7ZNXbZHcEay37iAT1coVPH7da7aRCtKvjx1SjCSx319soWGg==
+  dependencies:
+    "@types/connect" "*"
+    "@types/multiparty" "*"
+
 "@types/express-serve-static-core@^4.17.18":
   version "4.17.24"
   resolved "https://registry.yarnpkg.com/@types/express-serve-static-core/-/express-serve-static-core-4.17.24.tgz#ea41f93bf7e0d59cd5a76665068ed6aab6815c07"
@@ -283,6 +291,13 @@
   integrity sha512-WcdpPJCakFzcWWD9juKoZbRtQxKIMYF/JIAM4JrNHrMcnJL6/a2NWjXxW7fo9hxboxxkg+icff8d7+WIEvKgYQ==
   dependencies:
     "@types/bson" "*"
+    "@types/node" "*"
+
+"@types/multiparty@*":
+  version "0.0.33"
+  resolved "https://registry.yarnpkg.com/@types/multiparty/-/multiparty-0.0.33.tgz#60a5c23a3bb313961afe1fb49ba418559c30c34a"
+  integrity sha512-Il6cJUpSqgojT7NxbVJUvXkCblm50/yEJYtblISDsNIeNYf4yMAhdizzidUk6h8pJ8yhwK/3Fkb+3Dwcgtwl8w==
+  dependencies:
     "@types/node" "*"
 
 "@types/node@*":
