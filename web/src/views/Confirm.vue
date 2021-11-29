@@ -1,6 +1,6 @@
 <template lang="slm">
 popup.column.center v-if=confirm_prompt @close=confirm_answer(false)
-	.prompt.center $confirm_prompt
+	.prompt.padding.center $confirm_prompt
 	.actions.row.align-center
 		button.confirm.btn @click=confirm_answer(true)
 			| Confirm
@@ -23,7 +23,6 @@ export default
 <style lang="stylus" scoped>
 .prompt
 	max-width 350px
-	overflow auto
 	white-space pre-wrap
 .actions
 	justify-content space-between
