@@ -14,46 +14,8 @@ Other issues:
 1. Because of this, Vetur/Volar is basically useless regarding CS code. Most importantly, imports would not resolve properly and result in type errors, if it were not for `vue-shims.d.ts`. But this breaks go to component actions, but [it's expected to be like that](https://github.com/vuejs/vue/issues/5298)?
 1. Where a CS part has been externalized, any references to the component *must* include the `.vue` suffix, as otherwise the CS file would wrongly be imported in runtime.
 1. For Vue import errors to not occur in CS, component *should* include the `.vue` suffix, but it's only for typing. In general, just always add the suffix and you're good
-1. Autocompletion might not work properly (esp. `this`/`@` context in methods etc.), unless these conditions are met:
-	1.
-		- `watch` handlers
-		- lifecycle hooks (`mounted`, `created` etc.)
-
-		...that include a `this` reference *must not return anything*.
-		Solve this by categorically removing CS's implicit returns from them. Change e.g.
-		```coffeescript
-		watch:
-			abc: ->
-				@def()
-		mounted: ->
-			@jkl()
-		```
-		to
-		```coffeescript
-		watch:
-			abc: ->
-				@def()
-				return
-		mounted: ->
-			@jkl()
-			return
-		```
-	1. `components` option should not point to invalid components. Most of the time however, it's the handlers/hooks' return values (see above) that are to be blamed
-	1. In the compiled JS, methods and watch handlers need to be in [method definition shorthand](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Method_definitions) syntax. This means that
-		```coffeescript
-		methods: {
-			ghi: function() { }
-		}
-		```
-		breaks Vue/TS' IntelliSense (no idea why). It needs to be
-		```coffeescript
-		methods: {
-			ghi() { }
-		}
-		```
-		instead. The CS compiler however always outputs the former syntax.
-		CoffeeSense already handles this internally, so this is only relevant outside of the IDE.
-	1. There are other issues not related to Vue, but TS<->CS, most prevalently `var`/`let` and splitting of declarations and assignments. These issues are not covered in this doc, but they are handled by CoffeeSense.
+1. `components` option must not point to invalid components / paths
+1. There are other issues not related to Vue, but TS<->CS, most prevalently `var`/`let` and splitting of declarations and assignments. These issues are not covered in this doc, but they are handled by CoffeeSense.
 
 ### Vue Composition API
 
