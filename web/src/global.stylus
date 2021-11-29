@@ -137,6 +137,13 @@ details > summary {
 	.box
 		background: rgba(255,255,255,0.93)
 
+.gap-5
+	gap 5px
+.gap-10
+	gap 10px
+.gap-20
+	gap 20px
+
 .force-hidden
 	display none !important
 
