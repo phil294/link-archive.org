@@ -76,7 +76,9 @@ export install_error_handler = ({ app, store }) =>
 			utils.whereami 'error encountered'
 			status = args[0]?.status
 			# failed to fetch is a dropbox error https://github.com/dropbox/dropbox-sdk-js/issues/415
-			if 0 == status or args[0]?.message == 'Failed to fetch'
+			# Changed from status==0 to message match because axios *itself* can also throw with status 0,
+			# e.g. in JSON circular conversion issue.
+			if [ 'Network Error', 'Failed to fetch' ].includes args[0]?.message
 				return store.dispatch 'server_unreachable'
 			if 401 == status or 403 == status
 				store.dispatch 'session/logout'	
