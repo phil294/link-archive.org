@@ -5,7 +5,7 @@ form.column @submit.prevent=submit enctype="multipart/form-data"
 		legend
 			slot name=legend
 		slot
-	#actions.row.center.padding
+	#actions.row.center.padding.gap-10
 		slot name=button :loading=loading
 			loading-button.btn v-if="!no_submit_button||loading" :loading=button_loading :disabled=disabled_or_loading
 				slot name=button_label
