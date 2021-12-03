@@ -64,7 +64,6 @@ app.directive 'observe-visibility',
 
 app.directive 'drag', drag
 app.directive 'drop', drop
-app.directive 'filedrop', filedrop
 app.directive 'moveable', moveable
 app.directive 'dragscrollable', dragscrollable
 
