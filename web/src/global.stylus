@@ -257,7 +257,7 @@ button, input[type="submit"], input[type="reset"], input[type="button"], label
 		&:hover
 			color var(--color-clickable)
 
-.no-click, .no-click button, *:disabled, *:read-only {
+.no-click, .no-click button, *:disabled, *:disabled *, input:read-only textarea:read-only select:read-only {
 	// opacity 0.7
 	pointer-events none
 	cursor: not-allowed;
