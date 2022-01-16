@@ -39,8 +39,8 @@ export handle_error = (prompt_to_user = true, ...args) =>
 	try user_info = store.state.session.session?.name
 	error_report = error_stringified + '<br>\nuser: ' + user_info
 	try
-		# if process.env.NODE_ENV == 'production'
-		text = await notify_admin error_report
+		if process.env.NODE_ENV == 'production'
+			text = await notify_admin error_report
 		console.log "succcessful error report status:", text
 		user_prompt += "\n\n######### Error was sent to the administrator ✓. We'll check this very soon. #{text} #########"
 	catch e1
