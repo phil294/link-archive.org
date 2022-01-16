@@ -20,7 +20,6 @@
     "class-validator": "^0.12.2",
     "express": "^5.0.0-alpha.7",
     "express-form-data": "^2.0.14",
-    "google-auth-library": "^6.0.6",
     "http-status-codes": "^1.4.0",
     "jwt-simple": "^0.5.6",
     "node-fetch": "2",
