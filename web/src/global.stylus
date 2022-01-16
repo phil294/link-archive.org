@@ -26,10 +26,10 @@ input[type=checkbox] + label {
 }
 a[href], .fakelink
 	cursor: pointer
-	&, &:visited
-		color var(--color-clickable)
-	&:hover
-		color var(--color-hover)
+	// &, &:visited
+	// 	color var(--color-clickable)
+	// &:hover
+	// 	color var(--color-hover)
 	text-decoration none
 	&[target=_blank]
 		&:after
@@ -229,6 +229,7 @@ pre {
 	background-color: #f1f1f1;
 	display: block;
 	padding: 1em;
+	margin: 0;
 	overflow-x: auto; }
 
 code {

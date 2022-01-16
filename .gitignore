@@ -25,3 +25,10 @@ deploy.sh
 *.sln
 *.sw?
 *.code-workspace
+
+*.wat
+.history
+sqlite
+db.*
+*.db
+CC-MAIN-*

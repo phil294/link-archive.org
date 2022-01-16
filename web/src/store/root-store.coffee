@@ -1,6 +1,5 @@
 import { createStore } from 'vuex'
 import dayjs from 'dayjs'
-import session_module from './session-store.coffee'
 
 confirm_resolve = (_) =>
 
@@ -13,7 +12,6 @@ export default =>
 			store_history: []
 			max_store_history_size: if process.env.NODE_ENV == 'production' then 10 else 100
 			loading_counter: 0
-			authenticate_popup: false
 			global_error_message: ''
 			default_focus_target: null
 			confirm_prompt: ''
@@ -21,6 +19,7 @@ export default =>
 			toggle_authenticate_popup: (state, show) ->
 				state.authenticate_popup = show
 			push_store_history: (state, item) ->
+				return
 				try
 					item = JSON.stringify(item, null, 2)
 				catch e
@@ -35,9 +34,10 @@ export default =>
 			set_app_name: (state, app_name) ->
 				state.app_name = app_name
 			increase_loading_counter: (state) ->
-				state.loading_counter++
+				# TODO: search input loses focus
+				# state.loading_counter++
 			decrease_loading_counter: (state) ->
-				state.loading_counter--
+				# state.loading_counter--
 			set_global_error_message: (state, msg) ->
 				state.global_error_message = msg
 			set_confirm_prompt: (state, prompt) ->
@@ -66,10 +66,9 @@ export default =>
 				commit 'set_default_focus_target', el
 			offer_focus: ({ state }) ->
 				if state.default_focus_target
-					state.default_focus_target.focus(preventScroll: true)
-		modules:
-			session: session_module
+					state.default_focus_target.focus()
 	store.subscribe ({ type, payload }) =>
+		return
 		if not payload
 			payload = {}
 		if type != 'push_store_history' and
@@ -94,6 +93,7 @@ export default =>
 						[ k, v ])
 			store.commit 'push_store_history', { type, payload }
 	store.subscribeAction (action) =>
+		return
 		store.commit 'push_store_history', action.type
 
 	store

@@ -51,7 +51,7 @@ const options = {
       skipWaiting: true,
     directoryIndex: 'null', // TODO test if this actually did anything
     },
-    name: 'MEVN Base InDev',
+    name: 'link-archive.org',
 	themeColor: process.env.VUE_APP_THEME_PRIMARY_COLOR,
 	msTileColor: '#FFFFFF',
 	manifestOptions: {

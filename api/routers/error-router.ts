@@ -17,7 +17,7 @@ export default (mail_service: MailService) => {
 		if (!req.body.error)
 			return res.status(UNPROCESSABLE_ENTITY).send('field error missing')
 		await mail_service.send_mail(
-			'FIXME - Insert desired error message receiving email here',
+			'error@link-archive.org',
 			'Error message received',
 			html_escape(req.body.error.replace(/\\n/g, '\n')))
 		return res.end()

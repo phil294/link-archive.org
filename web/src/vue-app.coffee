@@ -68,7 +68,6 @@ app.directive 'moveable', moveable
 app.directive 'dragscrollable', dragscrollable
 
 do =>
-	await store.dispatch 'session/initialize', storage_service.get 'token'
 	await router.isReady()
 	app.mount('#app')
 

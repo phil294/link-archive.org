@@ -21,27 +21,27 @@
     "vuex": "^4.0.2"
   },
   "devDependencies": {
-    "npm-check-updates": "^7.0.2",
     "@types/gapi.auth2": "^0.0.52",
-    "@vue/compiler-sfc": "^3.1.0",
-    "vue-cli-plugin-coffee": "~1.0.0",
-    "vue-slm-lang-loader": "^1.0.0",
     "@vue/cli-plugin-e2e-nightwatch": "~4.4.6",
     "@vue/cli-plugin-pwa": "~4.4.6",
     "@vue/cli-plugin-router": "~4.4.6",
     "@vue/cli-plugin-unit-mocha": "~4.4.6",
     "@vue/cli-plugin-vuex": "~4.4.6",
     "@vue/cli-service": "^4.4.6",
+    "@vue/compiler-sfc": "^3.1.0",
     "@vue/test-utils": "1.0.3",
     "chai": "^4.2.0",
     "chromedriver": "^84.0.1",
     "coffee-loader": "^1.0.0",
     "coffeescript": "^2.5.1",
     "geckodriver": "^1.20.0",
+    "npm-check-updates": "^7.0.2",
     "slm": "^2.0.0",
     "slm-loader": "^1.0.0-beta.2",
     "stylus": "^0.54.8",
-    "stylus-loader": "^3.0.2"
+    "stylus-loader": "^3.0.2",
+    "vue-cli-plugin-coffee": "~1.0.0",
+    "vue-slm-lang-loader": "^1.0.0"
   },
   "license": "MIT",
   "resolutions": {
