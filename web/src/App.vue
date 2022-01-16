@@ -1,7 +1,7 @@
 <template lang="slm">
 div.fill.center.column.app
-	.error.center.column.fade-in.padding-l v-if=global_error_message
-		pre $global_error_message
+	.error.center.column.fade-in.padding-l.fill-w v-if=global_error_message
+		pre.fill-w $global_error_message
 		button.btn.margin @click="set_global_error_message('')" Hide
 	strong.force-hidden Your browser is not working properly (CSS disabled)
 	confirm
@@ -44,10 +44,9 @@ export default
 		// 	margin-right 1.5vw
 		button
 			padding 1px 4px
-	> main
-		.error
-			max-width 100vw
-			overflow auto
+	.error pre
+		word-break break-word
+		white-space pre-line
 a.router-link-active
 	font-weight bold
 main
