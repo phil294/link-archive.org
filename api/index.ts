@@ -3,13 +3,13 @@ import bodyParser from 'body-parser'
 import express, { Request } from 'express'
 import expressFormData from 'express-form-data'
 import { File as MultipartyFile } from 'multiparty'
-import { NO_CONTENT, UNPROCESSABLE_ENTITY } from 'http-status-codes'
+import { BAD_REQUEST, NO_CONTENT, UNPROCESSABLE_ENTITY } from 'http-status-codes'
 import 'reflect-metadata'
 import version_check_middleware from './version-check-middleware'
 import error_router from './routers/error-router'
 import MailService from './services/MailService'
 import { env, error, log, html_escape } from './utils'
-import { createConnection, getManager } from 'typeorm'
+import { createConnection, EntityManager, getConnection, getManager } from 'typeorm'
 import { promisify } from 'util'
 import fs from 'fs'
 import { ValidationError } from 'class-validator'
@@ -83,12 +83,56 @@ app.use((req, res, next) => {
 	next()
 })
 
-app.get('/search', async (req, res) => {
+const entity_manager_with_timeout = async <T>(callback: (em: EntityManager) => Promise<T>, timeout_after: number): Promise<T | undefined> => {
+	const connection = getConnection()
+	const query_runner = connection.createQueryRunner()
+	await query_runner.connect()
+	
+	let timeout
+	let is_timeout = false
+	try {
+		const result = await Promise.race([
+			new Promise<undefined>((resolve) => {
+				timeout = setTimeout(() => {
+					is_timeout = true
+					resolve(undefined)
+				}, timeout_after)
+			}),
+			callback(query_runner.manager)
+		])
+		if(is_timeout) {
+			throw new Error('timeout')
+		}
+		return result
+	} finally {
+		// @ts-ignore
+		clearTimeout(timeout)
+		await query_runner.release()
+	}
+}
+
+app.get('/', async (req, res) => {
 	const limit = Math.min(Number(req.query.l) || 100, 500)
 	try {
-		const result = await getManager().query(`select fts.site, fts.title from fts where fts match ? limit ?`, [req.query.q, limit])
+		const match_terms = req.query.q
+		const query = 'select fts.site, fts.title from fts where fts match ? limit ?'
+		
+		// // for testing (much slower)
+		// const match_terms = `%${req.query.q}%`
+		// const query = 'select fts.site, fts.title from fts where title like ? limit ?'
+		
+		/** ms */
+		const timeout = 15
+		const result = await entity_manager_with_timeout((manager) =>
+			manager.query(query, [match_terms, limit])
+		, timeout)
+		
 		return res.send(result)
-	} catch(e) {
+	} catch(e: any) {
+		if(e.message === 'timeout') {
+			console.log('-> timeout')
+			return res.status(BAD_REQUEST).send('timeout')
+		}
 		console.warn(e)
 		return res.send([])
 	}

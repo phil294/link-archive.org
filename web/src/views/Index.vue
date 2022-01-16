@@ -7,8 +7,10 @@
 			form-field v-model=limit type=number label=Limit
 	div v-if=loading
 		| Loading...
-	div v-if="search_text && !results.length && !loading"
+	div v-if="search_text && !results.length && !loading && !timeout"
 		| No results found! Only whole words are matched.
+	div v-if=timeout
+		| Search timeout. Keep typing...
 	ul#results.flex-fill v-if=results.length
 		li.row.center v-for="result of results"
 			.link-container.flex-fill
@@ -51,6 +53,7 @@ export default
 	data: ->
 		results: []
 		loading: false
+		timeout: false
 		search_text: ''
 		filter_spam: true
 		limit: 100
@@ -61,17 +64,26 @@ export default
 	methods:
 		search: ->
 			@loading = true
+			@timeout = false
 			clearTimeout search_debouncer
 			@$router.replace
 				query:
 					q: @search_text
 					l: @limit
 			search_debouncer = setTimeout (=>
-				@results = (await $http.get 'search',
-					params:
-						q: @search_text
-						l: @limit
-				).data
+				try
+					@results = (await $http.get '/',
+						params:
+							q: @search_text
+							l: @limit
+					).data
+				catch e
+					if e.status == 400 and e.data == 'timeout'
+						@timeout = true
+						@loading = false
+						@results = []
+						return
+					throw e
 				@loading = false
 				# @$store.dispatch 'offer_focus'
 			), 100
