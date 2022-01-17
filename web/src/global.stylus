@@ -6,7 +6,7 @@
 	--color-foreground: #444;
 	--color-hover: #c4c4c4;
 	--color-disabled: #a6a6a6;
-	--color-highlighted: darkorange;
+	--color-highlighted: #ed4530;
 	--color-error: darkred;
 	--color-border: var(--color-hover);
 }
@@ -135,7 +135,7 @@ details > summary {
 	input:not([type=submit]):not([type=range]):not([type=checkbox]):not([type=radio]), select, textarea
 		box-shadow 0px 1px 3px #ababab inset
 	.box
-		background: rgba(255,255,255,0.93)
+		background: rgba(252,252,252,0.93)
 
 .gap-5
 	gap 5px

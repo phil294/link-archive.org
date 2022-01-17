@@ -8,8 +8,8 @@ import 'reflect-metadata'
 import version_check_middleware from './version-check-middleware'
 import error_router from './routers/error-router'
 import MailService from './services/MailService'
-import { env, error, log, html_escape } from './utils'
-import { createConnection, EntityManager, getConnection, getManager } from 'typeorm'
+import { env, error, log, html_escape, is_production } from './utils'
+import { createConnection, EntityManager, getConnection, getManager, If } from 'typeorm'
 import { promisify } from 'util'
 import fs from 'fs'
 import { ValidationError } from 'class-validator'
@@ -141,7 +141,7 @@ app.get('/', async (req, res) => {
 const cached_cache = new VolatileMap(40000)
 
 app.get('/cached', async (req, res) => {
-	//@ts-ignore
+	// @ts-ignore
 	const url = `http://index.commoncrawl.org/CC-MAIN-2021-43-index?` + new URLSearchParams({
 		url: req.query.site + '',
 		output: 'json',
@@ -151,8 +151,11 @@ app.get('/cached', async (req, res) => {
 		return res.send(cached_cached)
 	
 	let response = await fetch(url)
-	if(!response.ok)
+	if(!response.ok) {
+		if(response.statusText.includes('503 Server Error: Slow Down'))
+			return res.status(503).send('Could not reach Common Crawl index: AWS says 503')
 		return res.status(500).send('Could not reach Common Crawl index')
+	}
 	const json = (await response.text())
 		.split('\n').filter(Boolean)
 		.map((line: string) => JSON.parse(line))
@@ -162,8 +165,11 @@ app.get('/cached', async (req, res) => {
 			Range: `bytes=${json.offset}-${json.offset*1+json.length*1}`
 		}
 	})
-	if(!response.ok)
+	if(!response.ok) {
+		if(response.statusText.includes('503 Server Error: Slow Down'))
+			return res.status(503).send('Could not reach Common Crawl index: AWS says 503')
 		return res.status(500).send('Could not reach Common Crawl data')
+	}
 	const gzipped_buffer: ArrayBuffer = await response.arrayBuffer()
 
 	// Would work, but unexpected eof will fail:
@@ -179,12 +185,12 @@ app.get('/cached', async (req, res) => {
 				resolve(Buffer.concat(buffer_builder))
 			}).on('error', (err) => {
 				// EOF: expected
-				//@ts-ignore
+				// @ts-ignore
 				if(err.errno !== -5)
 					reject(err)
 				else
 					resolve(Buffer.concat(buffer_builder))
-			});
+			})
 		decompress_stream.write(Buffer.from(gzipped_buffer))
 		decompress_stream.end()
 	})
@@ -212,16 +218,18 @@ app.set('query parser', 'simple')
 app.use(async (err, req, res, next) => {
 	error(err)
 	const info = err && (err.stack || err.status || err.errmsg || err.message || err) || 'no error message available'
-	await mail_service.send_mail(
-		'error@link-archive.org',
-		'API 500 / 422',
-		html_escape(info))
+	if(is_production) {
+		await mail_service.send_mail(
+			'error@link-archive.org',
+			'API 500 / 422',
+			html_escape(info))
+	}
 	if (err?.[0] instanceof ValidationError) {
 		return res.status(UNPROCESSABLE_ENTITY).send(err)
 	}
-	const user_message = 'Internal Server Error'
-	// if (!is_production) // TODO revert
-	//  user_message += ' - ' + info;
+	let user_message = 'Internal Server Error'
+	if (!is_production)
+		user_message += ' - ' + info
 	return res.status(500).send(user_message)
 });
 

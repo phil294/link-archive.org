@@ -1,9 +1,9 @@
 <template lang="slm">
-#search.padding.center.column.padding-xl
+#index.padding.column.padding-xl.box.margin-l
+	h1 Link Archive
 	input#search-text v-model=search_text ref=search_text autofocus="" type=search placeholder="Type..."
 	aside#settings
 		read-more.disabled
-			/ form-field v-model=filter_spam type=checkbox label="Filter spam"
 			form-field v-model=limit type=number label=Limit
 	div v-if=loading
 		| Loading...
@@ -26,13 +26,13 @@
 						a.cache-url no-js
 					a.archive.cache-url :href="'https://web.archive.org/web/' + result.site"
 						| archived
-			/ promise-button.spam.btn :action=report_spam(result)
-			/ 	| Spam?
 	#about v-else=""
-		h1 URL Archive
 		h2 Start typing above to show results
 		/ 472,354 93,505 46,288
-		h3 Currently 46,288 unique URLs stored*
+		h3
+			| Currently 
+			span.highlighted 46,288
+			|  unique URLs stored*
 		p Your search terms will be matched against all saved URLs *and* titles.<br>No page content. Whole word matches only. Case insensitive.
 		p This search engine is dumb. Only exact matches are returned. No synonyms, no content filters, no NLP, no stem words.
 		p The order of results is undefined. You cannot sort by anything. Pages are not ranked.
@@ -55,7 +55,6 @@ export default
 		loading: false
 		timeout: false
 		search_text: ''
-		filter_spam: true
 		limit: 100
 	mounted: ->
 		@$store.dispatch 'set_default_focus_target', @$refs.search_text
@@ -70,6 +69,10 @@ export default
 				query:
 					q: @search_text
 					l: @limit
+			if not @search_text
+				@loading = false
+				@results = []
+				return
 			search_debouncer = setTimeout (=>
 				try
 					@results = (await $http.get '/',
@@ -88,11 +91,18 @@ export default
 				# @$store.dispatch 'offer_focus'
 			), 100
 		open_cache_url: (result, transformer = (x)=>x) ->
-			html = (await $http.get 'cached',
+			try
+				response = await $http.get 'cached',
 				params:
 					crawl: result.last_crawl
-					site: result.site).data
-			html = transformer html
+						site: result.site
+			catch e
+				if e.status == 503
+					return alert 'Cannot reach CommonCrawl API because of AWS rate limiting. There\'s nothing we can do about that, sorry. Please try again later.'
+				throw e
+			if not response
+				return
+			html = transformer response.data
 			new_window = window.open()
 			new_window?.document.write html
 		open_cache_url_original: (result) -> =>
@@ -106,8 +116,6 @@ export default
 				tmp.write html
 				txt = tmp.documentElement.outerText or tmp.documentElement.textContent
 				"<pre>#{txt}</pre>"
-		report_spam: (result) -> =>
-			alert "not yet implemented, sorry!"
 	computed: {}
 	watch:
 		search_text: -> @search()
@@ -115,15 +123,16 @@ export default
 </script>
 
 <style lang="stylus" scoped>
-#search
-	font-family sans
+#index
 	max-width 100vw
-#about
 	font-size larger
+	min-height fit-content
 	font-family monospace
-	max-width 600px
 	h1
 		color #ed4530
+		margin 0 0 1.2vh
+#about
+	max-width 600px
 input#search-text, aside#settings
 	width 700px
 	max-width 80vw
@@ -143,6 +152,8 @@ aside#settings
 			text-align center
 ul#results
 	max-width 100%
+	font-family sans
+	font-size smaller
 	word-break break-word
 	list-style-type none
 	white-space nowrap
@@ -154,9 +165,6 @@ ul#results
 	padding 0
 	> li
 		margin-bottom 10px
-		button.spam
-			padding 3px
-			height 1.5em
 		.link-container
 			margin-right 1vw
 			overflow hidden
@@ -164,7 +172,7 @@ ul#results
 			overflow hidden
 			text-overflow ellipsis
 		a.title
-			color #3955ff
+			color #2739a4
 		.urls
 			font-size small
 			gap 1vw

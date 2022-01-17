@@ -12,3 +12,5 @@ export const html_escape = (s: string) =>
 		.replace(/>/g, '&gt;')
 		.replace(/"/g, '&quot;')
 		.replace(/'/g, '&#039;')
+
+export const is_production = process.env.NODE_ENV === 'production'

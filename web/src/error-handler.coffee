@@ -85,7 +85,7 @@ export install_error_handler = ({ app, store }) =>
 				return
 			if 500 == status
 				store.dispatch 'set_global_error_message',
-					'Internal Server Error :-( Sorry! Please try reloading the page!\n\nStatus 500\nAdministrator should have received a notification. We will try to fix this quickly.'
+					'Unexpected Internal Server Error :-( Sorry! Please try reloading the page!\n\nStatus 500\nAdministrator should have received a notification. We will try to fix this quickly.'
 				return handle_error false, ...args
 			# ignore_stati = [ 403 ]
 			# if ignore_stati.includes status

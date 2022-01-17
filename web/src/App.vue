@@ -11,8 +11,9 @@ div.fill.center.column.app
 	/ header.center.padding.fill-w
 		nav
 			router-link to=/ [LOGO]
-	main.flex-fill.column
-		router-view
+	main.flex-fill.fill-w.column
+		.view-wrapper.column
+			router-view
 </template>
 
 <script lang="coffee">
@@ -51,6 +52,8 @@ a.router-link-active
 	font-weight bold
 main
 	overflow: auto // FF
+.view-wrapper
+	margin 0 auto
 </style>
 
 <style lang="stylus" src="./global.stylus"></style>

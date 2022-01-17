@@ -58,8 +58,8 @@ const options = {
 		// icons: []
 	},
 	iconPaths: {
-		favicon32: 'img/icons/logo.svg',
-		favicon16: 'img/icons/logo.svg',
+		favicon32: 'img/icons/logo32.png',
+		favicon16: 'img/icons/logo16.png',
 		appleTouchIcon: false,
 		maskIcon: false,
 		msTileImage: false
