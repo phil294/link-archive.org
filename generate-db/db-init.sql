@@ -1,0 +1,1 @@
+create virtual table fts using fts5(site, title, columnsize=0, detail=none);
