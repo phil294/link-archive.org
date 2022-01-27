@@ -23,8 +23,11 @@ if ! [ -f wat.paths ]; then
         > wat.paths
 fi
 
+
+# Batch size 4 at once
+
 : ''
-cat wat.paths | while readarray -tn 3 batch && ((${#batch[@]})); do
+cat wat.paths | while readarray -tn 4 batch && ((${#batch[@]})); do
     for line in "${batch[@]}"; do
         (
             filename=tmpi/$(basename "$line")

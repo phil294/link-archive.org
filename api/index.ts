@@ -9,15 +9,12 @@ import version_check_middleware from './version-check-middleware'
 import error_router from './routers/error-router'
 import MailService from './services/MailService'
 import { env, error, log, html_escape, is_production } from './utils'
-import { createConnection, EntityManager, getConnection, getManager, If } from 'typeorm'
 import { promisify } from 'util'
 import fs from 'fs'
+import http from 'http'
+import https from 'https'
 import { ValidationError } from 'class-validator'
-//@ts-ignore
-import fetch from 'node-fetch'
-import zlib from 'zlib'
-//@ts-ignore
-import VolatileMap from 'volatile-map'
+import cp from 'child_process'
 
 // ///////////////// CONFIG
 
@@ -56,12 +53,14 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 app.use(expressFormData.parse())
 
+app.use('/db', express.static('../api'))
+
 app.use((req, res, next) => {
-	res.header('Access-Control-Allow-Origin', '*') // fixme
+	res.header('Access-Control-Allow-Origin', '*')
 
 	res.header('Access-Control-Allow-Headers', 'Content-Type,Authorization,x-app-version')
 	if (req.method === 'OPTIONS') {
-		res.header('Access-Control-Allow-Methods', 'GET')
+		res.header('Access-Control-Allow-Methods', 'GET,POST')
 		res.sendStatus(NO_CONTENT)
 		return
 	}
@@ -83,132 +82,37 @@ app.use((req, res, next) => {
 	next()
 })
 
-const entity_manager_with_timeout = async <T>(callback: (em: EntityManager) => Promise<T>, timeout_after: number): Promise<T | undefined> => {
-	const connection = getConnection()
-	const query_runner = connection.createQueryRunner()
-	await query_runner.connect()
-	
-	let timeout
-	let is_timeout = false
-	try {
-		const result = await Promise.race([
-			new Promise<undefined>((resolve) => {
-				timeout = setTimeout(() => {
-					is_timeout = true
-					resolve(undefined)
-				}, timeout_after)
-			}),
-			callback(query_runner.manager)
-		])
-		if(is_timeout) {
-			throw new Error('timeout')
-		}
-		return result
-	} finally {
-		// @ts-ignore
-		clearTimeout(timeout)
-		await query_runner.release()
-	}
-}
-
 app.get('/', async (req, res) => {
 	const limit = Math.min(Number(req.query.l) || 100, 500)
-	try {
-		const match_terms = req.query.q
-		const query = 'select fts.site, fts.title from fts where fts match ? limit ?'
-		
-		// // for testing (much slower)
-		// const match_terms = `%${req.query.q}%`
-		// const query = 'select fts.site, fts.title from fts where title like ? limit ?'
-		
-		/** ms */
-		const timeout = 15
-		const result = await entity_manager_with_timeout((manager) =>
-			manager.query(query, [match_terms, limit])
-		, timeout)
-		
-		return res.send(result)
-	} catch(e: any) {
-		if(e.message === 'timeout') {
-			console.log('-> timeout')
-			return res.status(BAD_REQUEST).send('timeout')
-		}
-		console.warn(e)
-		return res.send([])
-	}
-})
-
-const cached_cache = new VolatileMap(40000)
-
-app.get('/cached', async (req, res) => {
-	// @ts-ignore
-	const url = `http://index.commoncrawl.org/CC-MAIN-2021-43-index?` + new URLSearchParams({
-		url: req.query.site + '',
-		output: 'json',
-	})
-	const cached_cached = cached_cache.get(url)
-	if(cached_cached)
-		return res.send(cached_cached)
+	let match_terms = req.query.q
+	if(!match_terms)
+		return res.status(BAD_REQUEST).send('query param `q` (search terms) and/or `l` (limit) missing!')
+	// to avoid boring empty responses
+	match_terms = (match_terms+'').replace(/[!#$%^&*()+=\-\][}{\\|/?.:;><~@]/g, ' ')
 	
-	let response = await fetch(url)
-	if(!response.ok) {
-		if(response.statusText.includes('503 Server Error: Slow Down'))
-			return res.status(503).send('Could not reach Common Crawl index: AWS says 503')
-		return res.status(500).send('Could not reach Common Crawl index')
-	}
-	const json = (await response.text())
-		.split('\n').filter(Boolean)
-		.map((line: string) => JSON.parse(line))
-		.find((j: any) => j.status == 200)
-	response = await fetch(`https://commoncrawl.s3.amazonaws.com/${json.filename}`, {
-		headers: {
-			Range: `bytes=${json.offset}-${json.offset*1+json.length*1}`
-		}
+	const timeout = 2100
+
+	// console.time('dbquery')
+	// no idea how to better achieve sqlite process max execution timeout / interrupt calls in nodejs
+	const result = await new Promise(resolve => {
+		const child = cp.fork('./db_query.js', [
+			match_terms+'', limit+''
+		])
+		const kill_child_timeout = setTimeout(() => {
+			child.kill()
+			resolve(null)
+		}, timeout)
+		child.on('message', child_result => {
+			clearTimeout(kill_child_timeout)
+			resolve(child_result)
+		})
 	})
-	if(!response.ok) {
-		if(response.statusText.includes('503 Server Error: Slow Down'))
-			return res.status(503).send('Could not reach Common Crawl index: AWS says 503')
-		return res.status(500).send('Could not reach Common Crawl data')
+	// console.timeEnd('dbquery')
+	if(result === null) {
+		console.log('-> timeout')
+		return res.status(BAD_REQUEST).send('timeout')
 	}
-	const gzipped_buffer: ArrayBuffer = await response.arrayBuffer()
-
-	// Would work, but unexpected eof will fail:
-	// const gunzipped_buffer = await promisify(zlib.gunzip)(gzipped_buffer)
-	// Instead, custom processing via stackoverflow.com/q/33926969
-	const gunzipped_buffer: Buffer = await new Promise((resolve, reject) => {
-		const buffer_builder: Buffer[] = []
-		const decompress_stream = zlib.createGunzip()
-			.on('data', (chunk: Buffer) => {
-				buffer_builder.push(chunk)
-				// decompress_stream.pause()
-			}).on('close', () => {
-				resolve(Buffer.concat(buffer_builder))
-			}).on('error', (err) => {
-				// EOF: expected
-				// @ts-ignore
-				if(err.errno !== -5)
-					reject(err)
-				else
-					resolve(Buffer.concat(buffer_builder))
-			})
-		decompress_stream.write(Buffer.from(gzipped_buffer))
-		decompress_stream.end()
-	})
-	
-	const lines = gunzipped_buffer.toString().split('\n')
-	let c_blank_line = 0
-	let i = 0
-	for(; i < lines.length; i++) {
-		if(lines[i] === '' || lines[i] === '\r')
-			c_blank_line++
-		if(c_blank_line === 2)
-			break
-	}
-	const text = lines.slice(i).join('\n')
-
-	cached_cache.set(url, text)
-
-	return res.send(text)
+	return res.send(result)
 })
 
 app.set('query parser', 'simple')
@@ -234,10 +138,18 @@ app.use(async (err, req, res, next) => {
 });
 
 (async () => {
-	await createConnection()
-	const PORT = Number(env('PORT'))
-	const HOST = env('HOST')
-	app.listen(PORT, HOST, () => log(`running on ${PORT}`))
+	const http_server = http.createServer(app)
+	
+	// http_server.listen(7070, '0.0.0.0', () => log(`running on 8080`))
+	
+	// /*
+	http_server.listen(80, '0.0.0.0', () => log(`running on 80`))
+	const private_key  = fs.readFileSync('/etc/ssl_hi/key.pem', 'utf8')
+	const certificate = fs.readFileSync('/etc/ssl_hi/cert.pem', 'utf8')
+	const credentials = {key: private_key, cert: certificate}
+	const https_server = https.createServer(credentials, app)
+	https_server.listen(443, '0.0.0.0', () => log(`running on 443`))
+	// */
 })().catch((e) => {
 	error(e)
 	process.exit(1)

@@ -1,11 +1,10 @@
 <template lang="slm">
-textarea :name=name rows=1 :maxlength=maxlength :required=required :placeholder=placeholder v-model=model @focus=on_focus @blur=on_blur ref=ref :style=style v-observe-visibility="{callback:on_first_visible,once:true}"
+textarea :name=name rows=1 :maxlength=maxlength :required=required :placeholder=placeholder v-model=model @focus=on_focus @blur=on_blur ref=ref :style=style
 </template>
 
 <script lang="coffee">
 import { nextTick } from 'vue'
 import emitting_model from '@/mixins/EmittingModel'
-import VueObserveVisibility from 'vue-observe-visibility';
 export default
 	name: 'AutoexpandingTextarea'
 	mixins: [ emitting_model ]
@@ -30,14 +29,6 @@ export default
 		content_height: 0
 		focussed: false
 	methods:
-		on_first_visible: (visible) ->
-			if visible
-				# This can happen and this is all necessary when this component (noshrink=true)
-				# is somewhere initially hidden via v-show=false, the scrollheight is falsely 0
-				# (Edit: Cannot reproduce this anymore? Was it fixed with Vue3? Maybe we can remove
-				# VueObserveVisibility completely now)
-				if @content_height == "0px"
-					@update_content_height()
 		on_focus: ->
 			@focussed = true
 			await @update_content_height()

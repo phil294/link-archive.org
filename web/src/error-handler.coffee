@@ -31,14 +31,15 @@ export handle_error = (prompt_to_user = true, ...args) =>
 			trace
 		].join '<br>\n'
 		.join '<br>\n'
+	store_history_str = ''
 	try store_history_str = JSON.stringify([...store.state.store_history].reverse(), null, 2)
 	error_stringified += '<br>\n ' + store_history_str
 	console.log error_stringified
 	# console.trace()
 	user_prompt = "An unexpected error happened :-( Sorry! Please try reloading the page!\n\n#{error_stringified}"
-	try user_info = store.state.session.session?.name
-	error_report = error_stringified + '<br>\nuser: ' + user_info
+	error_report = error_stringified
 	try
+		text = ''
 		if process.env.NODE_ENV == 'production'
 			text = await notify_admin error_report
 		console.log "succcessful error report status:", text
@@ -80,9 +81,6 @@ export install_error_handler = ({ app, store }) =>
 			# e.g. in JSON circular conversion issue.
 			if [ 'Network Error', 'Failed to fetch' ].includes args[0]?.message
 				return store.dispatch 'server_unreachable'
-			if 401 == status or 403 == status
-				store.dispatch 'session/logout'	
-				return
 			if 500 == status
 				store.dispatch 'set_global_error_message',
 					'Unexpected Internal Server Error :-( Sorry! Please try reloading the page!\n\nStatus 500\nAdministrator should have received a notification. We will try to fix this quickly.'

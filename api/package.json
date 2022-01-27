@@ -8,14 +8,9 @@
     "dev": "ts-node-dev --inspect=4321 --respawn --transpile-only index.ts",
     "build": "tsc",
     "start": "environment=production node index.js",
-    "upgrade-all": "ncu -u && yarn install && yarn upgrade",
-    "typeorm-cli": "set -a && . ./run-dev.env && set +a && environment=development yarn ts-node -T ./node_modules/typeorm/cli.js",
-    "migrate": "yarn run typeorm-cli migration --help"
+    "upgrade-all": "ncu -u && yarn install && yarn upgrade"
   },
   "dependencies": {
-    "@types/jwt-simple": "^0.5.33",
-    "@types/node": "^14.0.27",
-    "@types/nodemailer": "^6.4.0",
     "body-parser": "^1.19.0",
     "class-validator": "^0.12.2",
     "express": "^5.0.0-alpha.7",
@@ -24,16 +19,19 @@
     "jwt-simple": "^0.5.6",
     "node-fetch": "2",
     "nodemailer": "^6.4.11",
-    "npm-check-updates": "^7.0.2",
     "reflect-metadata": "^0.1.13",
     "request": "^2.88.2",
     "request-promise-native": "^1.0.9",
     "sqlite3": "^5.0.2",
-    "ts-node": "^8.10.2",
-    "typeorm": "^0.3.0-alpha.22",
     "volatile-map": "^1.0.2"
   },
   "devDependencies": {
+    "ts-node": "^8.10.2",
+    "npm-check-updates": "^7.0.2",
+    "@types/jwt-simple": "^0.5.33",
+    "@types/node": "^14.0.27",
+    "@types/nodemailer": "^6.4.0",
+    "@types/sqlite3": "^3.1.8",
     "@types/body-parser": "^1.19.0",
     "@types/es6-promise": "^3.3.0",
     "@types/express": "^4.17.7",
@@ -49,7 +47,6 @@
     "ts-node-dev": "^1.1.6",
     "tslint": "^6.1.3",
     "tslint-config-airbnb": "^5.11.2",
-    "typeorm-naming-strategies": "^2.0.0",
     "typescript": "^4.4.2"
   }
 }

@@ -1,16 +1,14 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import dayjs from 'dayjs'
-import { install_error_handler } from './error-handler'
+import { install_error_handler } from './error-handler.coffee'
 import create_router from './vue-router.coffee'
 import create_store from './store/root-store.coffee'
 import http from './services/http.coffee'
-import storage_service from '@/services/storage-service.coffee'
 import drag from './directives/drag.coffee'
 import drop from './directives/drop.coffee'
 import moveable from './directives/moveable.coffee'
 import dragscrollable from './directives/dragscrollable.coffee'
-import VueObserveVisibility from 'vue-observe-visibility'
 import AutoexpandingTextarea from '@/components/AutoexpandingTextarea.vue'
 import FilterSelect from '@/components/FilterSelect.vue'
 import LoadingButton from '@/components/LoadingButton.vue'
@@ -23,12 +21,9 @@ import ReadMore from '@/components/ReadMore.vue'
 import FormField from '@/components/FormField.vue'
 import './register-service-worker.js'
 import utils from './utils.coffee'
-import { polyfill as mobile_drag_drop_polyfill } from "mobile-drag-drop"
 
 window._dayjs = dayjs
 window.utils = utils
-
-mobile_drag_drop_polyfill()
 
 app = createApp App
 store = create_store()
@@ -52,15 +47,6 @@ app.component 'promise-button', PromiseButton
 app.component 'promise-form', PromiseForm
 app.component 'read-more', ReadMore
 app.component 'form-field', FormField
-
-# app.use VueObserveVisibility
-# https://github.com/Akryum/vue-observe-visibility/issues/219#issuecomment-683460059
-# Fix when released for vue 3
-# FIXME: check if this workaround actually works
-app.directive 'observe-visibility',
-	beforeMount: VueObserveVisibility.beforeMount
-	update: VueObserveVisibility.update
-	unmounted: VueObserveVisibility.unbind
 
 app.directive 'drag', drag
 app.directive 'drop', drop
