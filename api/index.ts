@@ -1,5 +1,6 @@
 /// <reference types="./types/express-form-data" />
 import bodyParser from 'body-parser'
+import sqlite3 from 'sqlite3'
 import express, { Request } from 'express'
 import expressFormData from 'express-form-data'
 import { File as MultipartyFile } from 'multiparty'
@@ -14,7 +15,6 @@ import fs from 'fs'
 import http from 'http'
 import https from 'https'
 import { ValidationError } from 'class-validator'
-import cp from 'child_process'
 
 // ///////////////// CONFIG
 
@@ -82,6 +82,11 @@ app.use((req, res, next) => {
 	next()
 })
 
+const db = new sqlite3.Database('db.db')
+
+setInterval(() => {
+	db.interrupt()
+}, 180000)
 app.get('/', async (req, res) => {
 	const limit = Math.min(Number(req.query.l) || 100, 500)
 	let match_terms = req.query.q
@@ -91,23 +96,30 @@ app.get('/', async (req, res) => {
 	match_terms = (match_terms+'').replace(/[!#$%^&*()+=\-\][}{\\|/?.:;><~@]/g, ' ')
 	
 	const timeout = 2100
+	// const timeout = 30
 
-	// console.time('dbquery')
-	// no idea how to better achieve sqlite process max execution timeout / interrupt calls in nodejs
-	const result = await new Promise(resolve => {
-		const child = cp.fork('./db_query.js', [
-			match_terms+'', limit+''
-		])
+	console.time('dbquery')
+	
+	let query = 'select fts.site, fts.title from fts where fts match ? limit ?'
+	// match_terms = `%${match_terms}%`
+	// query = 'select fts.site, fts.title from fts where site like ? limit ?'
+
+	const result = await new Promise((resolve, reject) => {
 		const kill_child_timeout = setTimeout(() => {
-			child.kill()
+			db.interrupt()
 			resolve(null)
 		}, timeout)
-		child.on('message', child_result => {
+		db.all(query, match_terms, limit, (err: any, rows: any[]) => {
+			if(err) {
+				reject(err)
+			}
 			clearTimeout(kill_child_timeout)
-			resolve(child_result)
+			resolve(rows)
 		})
 	})
-	// console.timeEnd('dbquery')
+
+	console.timeEnd('dbquery')
+
 	if(result === null) {
 		console.log('-> timeout')
 		return res.status(BAD_REQUEST).send('timeout')
