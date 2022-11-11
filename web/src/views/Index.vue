@@ -52,7 +52,7 @@
 		p There should be limited support for search operators is available, such as quotes or wildcards (see <a href="https://www.sqlite.org/fts5.html#full_text_query_syntax">FTS5</a>) but since the db has detail=none set (which was probably not the best idea), this does not work and would also be throttled by the search timeout.
 		p There is a public API that you can use. Feel free to query it directly in fair usage. For any slightly more complicated computations, you will need to get the database mirror above and work with it locally, as all search requests have a small max execution time limit, and you cannot do anything other than search by match term (like this site does). To get to the API, just replace the host <code>link-archive.org</code> with <code>api.link-archive.org</code>.
 		h3 Contact
-		p I&apos;d love to hear from you, be it ideas, comments or opinions - via <a target="_blank" href="https://waritschlager.de/">here</a> or <a href="mailto:info@link-archive.org">info@link-archive.org</a> or in the <a href="XYZ">HN announcement comments</a> or as a GitHub issue.
+		p I&apos;d love to hear from you, be it ideas, comments or opinions - via <a target="_blank" href="https://waritschlager.de/">here</a> or <a href="mailto:info@link-archive.org">info@link-archive.org</a> or in the <a href="https://news.ycombinator.com/item?id=30108209">HN announcement comments</a> or as a GitHub issue.
 		p
 			small
 				| Created 2022-01-27
