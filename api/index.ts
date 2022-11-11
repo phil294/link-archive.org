@@ -87,8 +87,9 @@ const db = new sqlite3.Database('db.db')
 setInterval(() => {
 	db.interrupt()
 }, 180000)
+
 app.get('/', async (req, res) => {
-	const limit = Math.min(Number(req.query.l) || 100, 500)
+	const limit = Math.min(Number(req.query.l) || 20, 500)
 	let match_terms = req.query.q
 	if(!match_terms)
 		return res.status(BAD_REQUEST).send('query param `q` (search terms) and/or `l` (limit) missing!')

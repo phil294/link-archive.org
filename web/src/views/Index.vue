@@ -73,11 +73,11 @@ export default
 		loading: false
 		timeout: false
 		search_text: ''
-		limit: 100
+		limit: 20
 	mounted: ->
 		@$store.dispatch 'set_default_focus_target', @$refs.search_text
 		@search_text = @$route.query.q or ''
-		@limit = @$route.query.l or 100
+		@limit = @$route.query.l or 20
 	methods:
 		search: ->
 			@loading = true
